@@ -1,0 +1,31 @@
+
+
+GET  http://localhost:3001/api/accounts/6465e867a1794851a684d9bf
+###
+
+POST  http://localhost:3001/api/accounts/login
+Content-Type: application/json
+
+{
+  "email":"thiengk@gmail.com",
+  "password":"123456@"
+}
+###
+DELETE    http://localhost:3001/api/accounts/64650d6163615c5820904cf8
+
+###
+POST http://localhost:3001/api/accounts/register
+Content-Type: application/json
+
+{
+  "username": "Thien",
+  "email":"thiengk@gmail.com",
+  "password":"123456@"
+}
+###
+
+
+###
+
+
+
