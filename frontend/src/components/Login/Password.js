@@ -2,18 +2,17 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../assets/profile.png";
 import styles from "../../styles/Username.module.css";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { passwordValidate } from "../../helper/validate";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyPassword } from "../../redux/actions";
-import { userSelector, getAllState } from "../../redux/selectors";
-
+import { verifyPassword, getUser } from "../../helper/loginAPI";
+import { userSelector } from "../../redux/selectors";
+import { setDataLogin } from "../../redux/actions";
 function Password() {
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const allState = useSelector(getAllState);
 
   const formik = useFormik({
     initialValues: {
@@ -22,18 +21,28 @@ function Password() {
     validate: passwordValidate,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit: async (values) => {
-      function B() {
-        console.log(allState);
-      }
+    onSubmit: (values) => {
+      let loginPromise = verifyPassword({
+        email: user.email,
+        password: values.password,
+      });
+      toast.promise(loginPromise, {
+        loading: "Checking...",
+        success: <b>Login Successfully...!</b>,
+        error: <b>Password Not Match!</b>,
+      });
 
-      async function A(B) {
-        values = await Object.assign(values, user);
-        await dispatch(verifyPassword(values));
-        B();
-      }
-
-      A(B);
+      loginPromise.then((res) => {
+        const token = res.data.token
+        const id = res.data._id;
+        let getUserData = getUser({ id });
+        getUserData.then((res) => {
+          res.data = Object.assign(res.data,{token})
+          console.log(res.data);
+          dispatch(setDataLogin(res.data)); //reducer là kho lưu trữ nhận giá trị lưu trữ không phải phần xử lí
+          navigate("/profile");
+        });
+      });
       // function asyncFunction1() {
       //   return new Promise((resolve, reject) => {
       //     setTimeout(() => {

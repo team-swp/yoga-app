@@ -23,7 +23,7 @@ export async function getUser({id}){
 /** register user function */
 export async function registerUser(credentials){
   try {
-    console.log(process.env.REACT_APP_SERVER_DOMAIN);
+    console.log('zo');
       const { data : { msg }, status } = await axios.post(`/api/accounts/register`, credentials);
       console.log('msg',msg);
 
@@ -66,13 +66,12 @@ export async function verifyPassword({ email, password }){//sửa lại phần n
 /** update user profile function */
 export async function updateUser(response){
     try {
-        
+ 
         const token = await localStorage.getItem('token');
         const data = await axios.patch('/api/accounts', response, { headers : { "Authorization" : `Bearer ${token}`}});
-
         return Promise.resolve({ data })
     } catch (error) {
-        return Promise.reject({ error : "Couldn't Update Profile...!"})
+        return Promise.reject({ error : "Couldn't Update Profile...!" + error})
     }
 }
 /** generate OTP */

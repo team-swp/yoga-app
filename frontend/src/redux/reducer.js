@@ -7,6 +7,8 @@ const initState = {
     username: "",
     email: "",
     role: "user",
+    phone:"",
+    avatar:"",
   },
   courses: [
     {
@@ -41,60 +43,21 @@ const rootReducer = (state = initState, action) => {
       };
       return newState;
     }
-    case "login/verifypassword": {
-      const { email, password } = action.payload;
-      let loginPromise = verifyPassword({ email, password });
-      return loginPromise
-        .then((res) => {
-          let { token } = res.data;
-          localStorage.setItem("token", token);
-          const newState = {
-            ...state,
-            user: {
-              ...state.user,
-              _id: res.data._id,
-              username: res.data.username,
-            },
-          };
-          state = {};
-          state = Object.assign({}, newState);
-        })
-        .catch((res) => {
-          const newState = {
-            ...state,
-            user: {
-              ...state.user,
-              _id: res.data._id,
-              username: res.data.username,
-            },
-          };
-          state = {};
-          state = Object.assign({}, newState);
-        });
-      // hàm bị bất đòng bộ về sửa
-      // tạo 1 async func nhét nó vào lưu await return về 1 biến promise
-      // return (async function getData() {
-      //   const { email, password } = action.payload;
-      //   let { data } = await verifyPassword({ email, password });//dính lỗi chỗ này dùng promise là đẹp
-      //   let newState = {};
-      //   if (data) {
-      //     let token = data.token;
-      //     localStorage.setItem("token", token);
-      //     newState = {
-      //       ...state,
-      //       user: { ...state.user, _id: data._id, username: data.username },
-      //       page_uri:'/profile'
-      //     };
-      //   } else {
-      //     newState = {
-      //       ...state,
-      //       user: { ...state.user, email: "" },
-      //       page_uri:'/'
-      //     };
-      //   }
-      //   return newState;
-      // })();
+    case "login/setDataLogin": {
+      const { _id, token, username,phone,avatar } = action.payload;
+      localStorage.setItem("token", token);
+      return {
+        ...state,
+        user: { ...state.user, _id, username, phone,avatar },
+      };
+
     }
+    case "login/updateData":{
+      const {username,phone, avatar} = action.payload
+      return {
+        ...state,
+        user: { ...state.user, username, phone,avatar },
+      };}
     default:
       return state;
   }
