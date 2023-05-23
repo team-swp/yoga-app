@@ -7,8 +7,9 @@ const initState = {
     username: "",
     email: "",
     role: "user",
-    phone:"",
-    avatar:"",
+    phone: "",
+    avatar: "",
+    OTP: false,
   },
   courses: [
     {
@@ -44,20 +45,31 @@ const rootReducer = (state = initState, action) => {
       return newState;
     }
     case "login/setDataLogin": {
-      const { _id, token, username,phone,avatar } = action.payload;
+      const { _id, token, username, phone, avatar } = action.payload;
       localStorage.setItem("token", token);
       return {
         ...state,
-        user: { ...state.user, _id, username, phone,avatar },
+        user: { ...state.user, _id, username, phone, avatar },
       };
-
     }
-    case "login/updateData":{
-      const {username,phone, avatar} = action.payload
+    case "login/updateData": {
+      const { username, phone, avatar } = action.payload;
       return {
         ...state,
-        user: { ...state.user, username, phone,avatar },
-      };}
+        user: { ...state.user, username, phone, avatar },
+      };
+    }
+    case "login/setOTP": {
+      const { OTP } = action.payload;
+      if (OTP === false) {
+        localStorage.removeItem("email");
+      }
+      console.log(OTP);
+      return {
+        ...state,
+        user: { ...state.user, OTP },
+      };
+    }
     default:
       return state;
   }

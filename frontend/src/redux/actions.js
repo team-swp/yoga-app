@@ -19,6 +19,13 @@ export const setDataLogin =  (data) => {
   }
 }
 
+export const setActionOTP =  (data) => {
+  return {
+    type: "login/setOTP",
+    payload: data,
+  }
+}
+
 export const updateData =  (data) => {
   return {
     type: "login/updateData",

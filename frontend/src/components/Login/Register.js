@@ -88,7 +88,7 @@ function Register() {
           <div className="title flex flex-col items-center">
             <h4 className="text-5xl font-bold">Register</h4>
             <span className="py-4 text-xl w-2/3 text-center text-grey-500">
-              Happy to join you!
+             Remember ! Let's choose a beautiful avatar 
             </span>
           </div>
           <form className="py-1" onSubmit={formik.handleSubmit}>

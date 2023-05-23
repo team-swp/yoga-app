@@ -21,3 +21,13 @@ export const ProtectRoute = ({ children }) => {
     }
     return children;
 }
+
+export const ProtectRouteOTP = ({ children }) => {
+    const user =  useSelector(userSelector);
+    const checkOTP = user.OTP;
+    console.log('checkOTP',checkOTP);
+    if(!checkOTP){
+        return <Navigate to={'/'} replace={true}></Navigate>
+    }
+    return children;
+}
