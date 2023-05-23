@@ -12,9 +12,23 @@ export const addUserLogin = (data) => {
   }
 }
 
-export const verifyPassword =  (data) => {
+export const setDataLogin =  (data) => {
   return {
-    type: "login/verifypassword",
+    type: "login/setDataLogin",
+    payload: data,
+  }
+}
+
+export const setActionOTP =  (data) => {
+  return {
+    type: "login/setOTP",
+    payload: data,
+  }
+}
+
+export const updateData =  (data) => {
+  return {
+    type: "login/updateData",
     payload: data,
   }
 }

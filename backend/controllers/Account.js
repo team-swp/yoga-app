@@ -22,6 +22,7 @@ module.exports.getAllAccount = async (req, res) => {
 
 module.exports.getAccountByIdAuth = async (req, res, next) => {
   let account;
+  console.log('222',req);
   try {
     account = await Account.findById(req.account.userId);
     if (account === null) {
@@ -73,6 +74,7 @@ module.exports.delete = async (req, res) => {
 }
 
 module.exports.update = async (req, res) => {
+  console.log(req.account);
   if (req.body.username != null) {
     res.account.username = req.body.username;
   }
@@ -110,13 +112,11 @@ module.exports.register =  async (req, res) => {
           username: username,
           email: email,
           password: hashedPassword,
-          phone: phone,
-          avatar: avatar, //base 64
+          phone: phone||'',
+          avatar: avatar||'', //base 64
         });
-
         // return save result as a response
-        account
-          .save()
+        account.save()
           .then((result) =>
             res.status(201).send({ msg: "User Register Successfully" })
           )
