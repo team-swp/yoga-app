@@ -1,0 +1,8 @@
+.IconButton {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .IconButton:hover {
+    transform: rotate(-90deg);
+  }
+  
