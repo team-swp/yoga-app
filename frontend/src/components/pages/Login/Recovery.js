@@ -1,27 +1,20 @@
-<<<<<<< HEAD:frontend/src/components/pages/Login/Recovery.js
-import React from "react";
-import { Link } from "react-router-dom";
-import avatar from "../../../assets/profile.png";
-import styles from "../../../styles/Username.module.css";
-import { Toaster } from "react-hot-toast";
-
-function Recovery() {
-=======
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import avatar from "../../assets/profile.png";
-import styles from "../../styles/Username.module.css";
+import avatar from "../../../assets/profile.png";
+import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
-import { userSelector } from "../../redux/selectors";
-import { useDispatch,useSelector } from "react-redux";
-import { verifyOTP, generateOTP } from "../../helper/loginAPI";
-import { setActionOTP } from "../../redux/actions";
+import { userSelector } from "../../../redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { verifyOTP, generateOTP } from "../../../helper/loginAPI";
+import { setActionOTP } from "../../../redux/actions";
 function Recovery() {
   const user = useSelector(userSelector);
-  const dispatch= useDispatch()
+  const dispatch = useDispatch();
   const [OTP, setOTP] = useState();
   const navigate = useNavigate();
-  const[email,setEmail]= useState(user.email||JSON.parse(localStorage.getItem("email")))
+  const [email, setEmail] = useState(
+    user.email || JSON.parse(localStorage.getItem("email"))
+  );
   console.log(user);
   useEffect(() => {
     generateOTP(email).then((OTP) => {
@@ -39,7 +32,7 @@ function Recovery() {
       let { status } = await verifyOTP({ email, code: OTP });
       if (status === 201) {
         toast.success("Verify Successfully!");
-        dispatch(setActionOTP({OTP : true }))
+        dispatch(setActionOTP({ OTP: true }));
         return navigate("/reset");
       }
     } catch (error) {
@@ -49,7 +42,7 @@ function Recovery() {
 
   function resendOTP() {
     console.log(email);
-    let sentPromise = generateOTP('resend',email);
+    let sentPromise = generateOTP("resend", email);
     toast.promise(sentPromise, {
       loading: "Sending...",
       success: <b>OTP has been send to your email!</b>,
@@ -60,7 +53,6 @@ function Recovery() {
       console.log("resend", OTP);
     });
   }
->>>>>>> ded8bc2346c5400b366988cf45a254ceaa054dea:frontend/src/components/Login/Recovery.js
   return (
     <div className="container mx-auto">
       <Toaster position="top-center" reverseOrder={false}></Toaster>

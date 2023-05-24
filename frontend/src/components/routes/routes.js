@@ -7,6 +7,11 @@ import Register from "../../components/pages/Login/Register";
 import Reset from "../../components/pages/Login/Reset";
 import Username from "../../components/pages/Login/Username";
 import Profile from "../../components/pages/Profile/Profile";
+import {
+  AuthorizeUser,
+  ProtectRoute,
+  ProtectRouteOTP,
+} from "../../middleware/auth";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -22,15 +27,27 @@ const routers = createBrowserRouter([
   },
   {
     path: "/password",
-    element: <Password></Password>,
+    element: (
+      <ProtectRoute>
+        <Password />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/profile",
-    element: <Profile></Profile>,
+    element: (
+      <AuthorizeUser>
+        <Profile />
+      </AuthorizeUser>
+    ),
   },
   {
     path: "/reset",
-    element: <Reset></Reset>,
+    element: (
+      <ProtectRouteOTP>
+        <Reset />
+      </ProtectRouteOTP>
+    ),
   },
   {
     path: "/recovery",

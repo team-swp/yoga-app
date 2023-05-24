@@ -1,26 +1,14 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-<<<<<<< HEAD:frontend/src/components/pages/Login/Password.js
 import avatar from "../../../assets/profile.png";
 import styles from "../../../styles/Username.module.css";
-import { Toaster } from "react-hot-toast";
-=======
-import avatar from "../../assets/profile.png";
-import styles from "../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
->>>>>>> ded8bc2346c5400b366988cf45a254ceaa054dea:frontend/src/components/Login/Password.js
 import { useFormik } from "formik";
 import { passwordValidate } from "../../../helper/validate";
 import { useDispatch, useSelector } from "react-redux";
-<<<<<<< HEAD:frontend/src/components/pages/Login/Password.js
-import { verifyPassword } from "../../../redux/actions";
-import { userSelector, getAllState } from "../../../redux/selectors";
-
-=======
-import { verifyPassword, getUser } from "../../helper/loginAPI";
-import { userSelector } from "../../redux/selectors";
-import { setDataLogin } from "../../redux/actions";
->>>>>>> ded8bc2346c5400b366988cf45a254ceaa054dea:frontend/src/components/Login/Password.js
+import { verifyPassword, getUser } from "../../../helper/loginAPI";
+import { userSelector } from "../../../redux/selectors";
+import { setDataLogin } from "../../../redux/actions";
 function Password() {
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
@@ -45,11 +33,11 @@ function Password() {
       });
 
       loginPromise.then((res) => {
-        const token = res.data.token
+        const token = res.data.token;
         const id = res.data._id;
         let getUserData = getUser({ id });
         getUserData.then((res) => {
-          res.data = Object.assign(res.data,{token})
+          res.data = Object.assign(res.data, { token });
           console.log(res.data);
           dispatch(setDataLogin(res.data)); //reducer là kho lưu trữ nhận giá trị lưu trữ không phải phần xử lí
           navigate("/profile");

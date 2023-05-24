@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url(//db.onlinewebfonts.com/c/5ebc09361aef4dbfa14ad8492b8cca11?family=SangBleu+Sunrise);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* > *{
-    font-family: 'Poppins', sans-serif;
+* > * {
+  font-family: "SangBleu Sunrise";
 }
 
-body{
-    background: #dcdce6;
-    background-image: url('./assets/Background.png');
+body {
+  background: #dcdce6;
+  background-image: url("./assets/Background.png");
 }

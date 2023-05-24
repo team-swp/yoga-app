@@ -1,0 +1,75 @@
+::selection {
+  background-color: black;
+  color: white;
+}
+
+.text-in-video_icon {
+}
+.text-in-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.text-in-video_header {
+  font-size: 50px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.text-in-video:hover {
+  border: 1px solid #fff;
+}
+
+.class-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+
+.class-item {
+  position: relative;
+}
+
+.class-img img {
+  width: 100%;
+  height: 450px;
+  border-radius: 5px;
+  filter: brightness(75%);
+}
+
+.class-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+}
+.class-place {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  transition: transform 0.3s ease-out, opacity 0.5s ease-out;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+}
+
+.class-item:hover .class-place {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.background-img {
+  background-image: url("../../../assets/ocean.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
