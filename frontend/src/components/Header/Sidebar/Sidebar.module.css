@@ -1,0 +1,13 @@
+.sidebar {
+  padding: 5px 0px;
+}
+
+.sidebar li {
+  margin-bottom: 5px;
+  padding: 0 20px;
+}
+
+.sidebar li:hover {
+  color: rgb(94, 90, 90);
+  background-color: #efeaea;
+}
