@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../../assets/profile.png";
-import styles from "../../styles/Username.module.css";
+import avatar from "../../../assets/profile.png";
+import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { profileValidation } from "../../../helper/validate";

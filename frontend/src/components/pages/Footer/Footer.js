@@ -1,4 +1,4 @@
-import logo from "../../Heartbeat.svg";
+import logo from "../../../Heartbeat.svg";
 function Footer() {
   return (
     <footer class="bg-white dark:bg-gray-200">

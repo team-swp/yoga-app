@@ -3,7 +3,8 @@ import { Container, Box, Button, Typography, Grid } from "@mui/material";
 import classNames from "classnames/bind";
 import styles from "./Home.module.css";
 import { itemData, itemData2 } from "./ClassList";
-
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -16,9 +17,9 @@ function Home() {
     threshold: 0,
     rootMargin: "-100px",
   });
-
   return (
     <div>
+      <Header />
       <div className={cx("video-main")} style={{ position: "relative" }}>
         <video autoPlay muted loop playsInline>
           <source src="/video.mp4" type="video/mp4" />
@@ -186,6 +187,7 @@ function Home() {
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </div>
   );
 }

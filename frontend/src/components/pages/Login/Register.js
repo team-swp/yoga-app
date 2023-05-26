@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../../assets/profile.png";
-import styles from "../../styles/Username.module.css";
+import avatar from "../../../assets/profile.png";
+import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { registerValidation } from "../../../helper/validate";
@@ -140,7 +140,7 @@ function Register() {
             <div className="text-center py-4">
               <span className="text-gray-500">
                 Already Register?
-                <Link className="text-red-500" to="/">
+                <Link className="text-red-500" to="/login">
                   Login Now
                 </Link>
               </span>
