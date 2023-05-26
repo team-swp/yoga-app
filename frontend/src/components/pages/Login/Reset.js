@@ -1,13 +1,18 @@
 import React from "react";
-import styles from "../../../styles/Username.module.css";
-import { Toaster } from "react-hot-toast";
+import styles from "../../styles/Username.module.css";
+import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
-import {
-  passwordValidate,
-  resetPasswordValidation,
-} from "../../../helper/validate";
-
+import { resetPasswordValidation } from "../../../helper/validate";
+import { resetPassword } from "../../../helper/loginAPI";
+import { userSelector } from "../../../redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setActionOTP } from "../../../redux/actions";
 function Reset() {
+  const user = useSelector(userSelector);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -17,7 +22,19 @@ function Reset() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      console.log(values);
+      const email = user.email || JSON.parse(localStorage.getItem("email"));
+      let resetPromise = resetPassword({ email, password: values.password });
+
+      toast.promise(resetPromise, {
+        loading: "Updating...",
+        success: <b>Reset Successfully...!</b>,
+        error: <b>Could not Reset!</b>,
+      });
+
+      resetPromise.then(function () {
+        dispatch(setActionOTP({ OTP: false }));
+        navigate("/");
+      });
     },
   });
 
@@ -47,7 +64,7 @@ function Reset() {
                 placeholder="Repeat Password..."
               />
               <button className={styles.btn} type="submit">
-                Sign In
+                Confirm
               </button>
             </div>
           </form>

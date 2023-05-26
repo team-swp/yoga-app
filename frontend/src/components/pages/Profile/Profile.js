@@ -1,36 +1,96 @@
-import React, { useState } from "react";
-import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import avatar from "../../../assets/profile.png";
-import styles from "../../../styles/Username.module.css";
+import avatar from "../../assets/profile.png";
+import styles from "../../styles/Username.module.css";
+import toast, { Toaster } from "react-hot-toast";
+import { useFormik } from "formik";
 import { profileValidation } from "../../../helper/validate";
 import convertToBase64 from "../../../helper/convert";
-import { userSelector, getAllState } from "../../../redux/selectors";
-
+import { useDispatch, useSelector } from "react-redux";
+import { userSelector } from "../../../redux/selectors";
+import { updateUser } from "../../../helper/loginAPI";
+import { updateData } from "../../../redux/actions";
 function Profile() {
-  const allState = useSelector(getAllState);
-  const [file, setFile] = useState("");
-  console.log(allState);
+  const user = useSelector(userSelector);
+  const [file, setFile] = useState(user.avatar || "");
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      email: "thiengk563@gmail.com",
-      username: "",
-      phone: "",
+      email: user.email,
+      username: user.username,
+      phone: user.phone || "",
     },
     validate: profileValidation,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      values = await Object.assign(values, { avatar: file || "" });
-      console.log(values);
+      values = await Object.assign(values, {
+        avatar: file || user.avatar || "",
+      });
+      let updatePromise = updateUser(values);
+      toast.promise(updatePromise, {
+        loading: "Updating...",
+        success: <b>Update Successfully...!</b>,
+        error: <b>Could not Update!</b>,
+      });
+      updatePromise.then((res) => {
+        dispatch(updateData(res.data.data));
+        console.log(user);
+      });
     },
   });
 
+  const resizeImage = (image, maxWidth, maxHeight) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = image;
+
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        // Kiểm tra và điều chỉnh kích thước ảnh nếu nó vượt quá kích thước tối đa
+        if (width > maxWidth || height > maxHeight) {
+          const aspectRatio = width / height;
+
+          if (width > maxWidth) {
+            width = maxWidth;
+            height = width / aspectRatio;
+          }
+
+          if (height > maxHeight) {
+            height = maxHeight;
+            width = height * aspectRatio;
+          }
+        }
+
+        // Tạo một canvas mới để vẽ ảnh đã điều chỉnh kích thước
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Chuyển đổi canvas thành base64 và trả về
+        const resizedImage = canvas.toDataURL("image/jpeg");
+        resolve(resizedImage);
+      };
+    });
+  };
   const onUpload = async (e) => {
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64);
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+
+    // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
+    const maxWidth = 500;
+    const maxHeight = 500;
+
+    // Thay đổi kích thước ảnh
+    const resizedImage = resizeImage(base64, maxWidth, maxHeight);
+    resizedImage.then((resize) => {
+      console.log(resize);
+      setFile(resize);
+    });
   };
 
   return (
@@ -58,6 +118,7 @@ function Profile() {
                 type="file"
                 id="profile"
                 name="avatar"
+                style={{ width: 500, height: 500 }}
               />
             </div>
 
@@ -82,7 +143,7 @@ function Profile() {
                 placeholder="phone"
               />
               <button className={styles.btn} type="submit">
-                Register
+                Update
               </button>
             </div>
             <div className="text-center py-4">

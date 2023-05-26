@@ -12,10 +12,15 @@ import {
   ProtectRoute,
   ProtectRouteOTP,
 } from "../../middleware/auth";
+import Courses from "../pages/Courses/Courses";
 const routers = createBrowserRouter([
   {
     path: "/",
     element: <Home></Home>,
+  },
+  {
+    path: "/courses",
+    element: <Courses></Courses>,
   },
   {
     path: "/login",

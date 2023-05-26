@@ -7,6 +7,7 @@ import { userSelector } from "../../../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyOTP, generateOTP } from "../../../helper/loginAPI";
 import { setActionOTP } from "../../../redux/actions";
+
 function Recovery() {
   const user = useSelector(userSelector);
   const dispatch = useDispatch();

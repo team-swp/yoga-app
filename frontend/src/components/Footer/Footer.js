@@ -74,9 +74,9 @@ function Footer() {
         <div class="sm:flex sm:items-center sm:justify-between">
           <span class="text-sm text-black-500 sm:text-center dark:text-black-400">
             © 2023{" "}
-            <a href="https://flowbite.com/" class="hover:underline">
-              Flowbite™
-            </a>
+            <a href="/" class="hover:underline">
+              HEARTCORE™
+            </a>{" "}
             . All Rights Reserved.
           </span>
           <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../../../assets/profile.png";
-import styles from "../../../styles/Username.module.css";
+import avatar from "../../assets/profile.png";
+import styles from "../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { registerValidation } from "../../../helper/validate";
@@ -32,10 +32,52 @@ function Register() {
       });
     },
   });
+  const resizeImage = (image, maxWidth, maxHeight) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = image;
 
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        // Kiểm tra và điều chỉnh kích thước ảnh nếu nó vượt quá kích thước tối đa
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+
+        // Tạo một canvas mới để vẽ ảnh đã điều chỉnh kích thước
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Chuyển đổi canvas thành base64 và trả về
+        const resizedImage = canvas.toDataURL("image/jpeg");
+        resolve(resizedImage);
+      };
+    });
+  };
   const onUpload = async (e) => {
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64);
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+
+    // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
+    const maxWidth = 500;
+    const maxHeight = 500;
+
+    // Thay đổi kích thước ảnh
+    const resizedImage = resizeImage(base64, maxWidth, maxHeight);
+    resizedImage.then((resize) => {
+      console.log(resize);
+      setFile(resize);
+    });
   };
 
   return (
@@ -46,7 +88,7 @@ function Register() {
           <div className="title flex flex-col items-center">
             <h4 className="text-5xl font-bold">Register</h4>
             <span className="py-4 text-xl w-2/3 text-center text-grey-500">
-              Happy to join you!
+              Remember ! Let's choose a beautiful avatar
             </span>
           </div>
           <form className="py-1" onSubmit={formik.handleSubmit}>
