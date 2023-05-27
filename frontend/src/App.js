@@ -1,4 +1,5 @@
 import "./App.css";
+<<<<<<< HEAD
 import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 /*import all component*/
 import PageNotFound from "./components/Login/PageNotFound";
@@ -58,10 +59,14 @@ const router = createBrowserRouter([
   },
 ]);
 
+=======
+import { RouterProvider } from "react-router-dom";
+import routers from "./components/routes/routes";
+>>>>>>> e697625aaa18f634c78bddc9ab01c290efb117ea
 function App() {
   return (
     <main>
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={routers}></RouterProvider>
     </main>
   );
 }

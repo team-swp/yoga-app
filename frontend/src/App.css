@@ -1,19 +1,16 @@
-* > *{
-  font-family: 'Poppins', sans-serif;
-}
-
-body{
-  background: #dcdce6;
-  background-image: url('./assets/Background.png');
-}
-@tailwind base;
 @tailwind components;
+@tailwind base;
 @tailwind utilities;
-* > *{
-  font-family: 'Poppins', sans-serif;
+
+body {
+  background-color: #f7f8f6;
+  color: #0b101e;
+}
+* > * {
+  font-family: "SangBleu Sunrise";
 }
 
-body{
-  background: #dcdce6;
-  background-image: url('./assets/Background.png');
+main {
+  position: relative;
+  z-index: 1;
 }

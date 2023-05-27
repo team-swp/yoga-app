@@ -1,0 +1,181 @@
+::selection {
+  background-color: black;
+  color: white;
+}
+.video-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-in-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.text-in-video_header {
+  font-size: 50px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.text-in-video:hover {
+  border: 1px solid #fff;
+}
+
+.class-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.class-item {
+  position: relative;
+}
+
+.class-container.in-view {
+  opacity: 1;
+}
+
+.class-container .class-item:first-child {
+  top: 0px;
+}
+
+.class-container .class-item:nth-child(2n) {
+  position: relative;
+  top: 100px;
+}
+
+.class-img img {
+  width: 100%;
+  height: 450px;
+  border-radius: 5px;
+  filter: brightness(75%);
+}
+
+.class-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+}
+
+.class-place {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  transition: transform 0.3s ease-out, opacity 0.5s ease-out;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+}
+
+.class-item:hover .class-place {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.class-item-second {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.class-container .class-item-second:first-child {
+  top: 0px;
+}
+
+.class-container .class-item-second:nth-child(2n) {
+  position: relative;
+  top: 100px;
+}
+
+.class-img-second img {
+  width: 100%;
+  height: 586px;
+  object-fit: cover;
+  border-radius: 2.5%;
+  margin-bottom: 20px;
+}
+
+.class-date {
+  margin-bottom: 30px;
+}
+
+.class-author {
+  margin-top: 30px;
+}
+
+.class-content {
+  color: #676767;
+}
+
+.background-img {
+  background-image: url("../../../assets/ocean.jpg");
+  background-size: cover;
+  height: 100vh;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 100px;
+  text-align: left;
+  padding: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .class-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 10px;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+    margin-bottom: 10px;
+  }
+
+  .class-container.in-view {
+    opacity: 1;
+  }
+  .class-item {
+    position: relative;
+  }
+
+  .class-container .class-item:first-child {
+    top: 0px;
+  }
+
+  .class-container .class-item:nth-child(2n) {
+    position: relative;
+    top: 0px;
+  }
+
+  .class-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    filter: brightness(75%);
+  }
+
+  .class-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+  }
+}
