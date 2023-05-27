@@ -1,5 +1,5 @@
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 /*import all component*/
 import PageNotFound from "./components/Login/PageNotFound";
 import Password from "./components/Login/Password";
@@ -8,6 +8,7 @@ import Register from "./components/Login/Register";
 import Reset from "./components/Login/Reset";
 import Username from "./components/Login/Username";
 import Profile from "./components/Profile/Profile";
+
 import {
   AuthorizeUser,
   ProtectRoute,

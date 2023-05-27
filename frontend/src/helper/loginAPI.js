@@ -20,10 +20,21 @@ export async function getUser({ id }) {
   }
 }
 
+export async function getUserByToken() {
+  try {
+    const token = await localStorage.getItem("token");
+    const data = await axios.get("/api/accessToken", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error: "Couldn't Update Profile...!" + error });
+  }
+}
+
 /** register user function */
 export async function registerUser(credentials) {
   try {
-    console.log("zo");
     const {
       data: { msg },
       status,
@@ -130,6 +141,29 @@ export async function resetPassword({ email, password }) {
       password,
     });
     return Promise.resolve({ data, status });
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}
+
+
+/*
+Handle Image
+*/
+
+export async function postAvatarToAWS(formData){
+  try {
+    const {data,status} = await axios.post('api/image/post', formData, { headers: {'Content-Type': 'multipart/form-data'}})
+    return ({ data, status });
+  } catch (error) {
+    return ({ error });
+  }
+}
+
+export async function getAvatarToAWS({imageName}){
+  try {
+    const {data} = await axios.get('api/image/get', { params: {imageName}})
+    return Promise.resolve(data)
   } catch (error) {
     return Promise.reject({ error });
   }

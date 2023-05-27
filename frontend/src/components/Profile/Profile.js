@@ -1,40 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, location } from "react-router-dom";
 import avatar from "../../assets/profile.png";
 import styles from "../../styles/Username.module.css";
-import toast,{ Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { profileValidation } from "../../helper/validate";
 import convertToBase64 from "../../helper/convert";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../redux/selectors";
-import { updateUser } from "../../helper/loginAPI";
-import { updateData } from "../../redux/actions";
+
+import {
+  getAvatarToAWS,
+  postAvatarToAWS,
+  updateUser,
+} from "../../helper/loginAPI";
+import { updateData, logOut } from "../../redux/actions";
 function Profile() {
   const user = useSelector(userSelector);
-  const [file, setFile] = useState(user.avatar||'');
+  const [file, setFile] = useState(user.avatar || "");
+  const [imageTemp, setImageTemp] = useState();
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       email: user.email,
       username: user.username,
-      phone: user.phone||'',
+      phone: user.phone || "",
     },
     validate: profileValidation,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      values = await Object.assign(values, { avatar: file ||user.avatar || "" });
+      values = await Object.assign(values, {
+        avatar: file || user.avatar || "",
+      });
       let updatePromise = updateUser(values);
       toast.promise(updatePromise, {
-        loading: 'Updating...',
-        success : <b>Update Successfully...!</b>,
-        error: <b>Could not Update!</b>
+        loading: "Updating...",
+        success: <b>Update Successfully...!</b>,
+        error: <b>Could not Update!</b>,
       });
-      updatePromise.then(res => {
-        dispatch(updateData(res.data.data))
-        console.log(user);
-      })
+      updatePromise.then((res) => {
+        dispatch(updateData(res.data.data));
+      });
     },
   });
 
@@ -46,16 +53,16 @@ function Profile() {
       img.onload = () => {
         let width = img.width;
         let height = img.height;
-  
+
         // Kiểm tra và điều chỉnh kích thước ảnh nếu nó vượt quá kích thước tối đa
         if (width > maxWidth || height > maxHeight) {
           const aspectRatio = width / height;
-  
+
           if (width > maxWidth) {
             width = maxWidth;
             height = width / aspectRatio;
           }
-  
+
           if (height > maxHeight) {
             height = maxHeight;
             width = height * aspectRatio;
@@ -75,20 +82,59 @@ function Profile() {
       };
     });
   };
+  // const onUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   const base64 = await convertToBase64(file);
+
+  //   // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
+  //   const maxWidth = 500;
+  //   const maxHeight = 500;
+
+  //   // Thay đổi kích thước ảnh
+  //   const resizedImage = resizeImage(base64, maxWidth, maxHeight);
+  //   resizedImage.then((resize) => {
+  //     console.log(resize);
+  //     setFile(resize);
+  //   });
+  // };
+
   const onUpload = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
+    const avatar = e.target.files[0];
+    if (avatar) {
+      if (avatar.type.startsWith("image/")) {
+        const base64 = await convertToBase64(avatar);
 
-    // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
-    const maxWidth = 500;
-    const maxHeight = 500;
+        // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
+        const maxWidth = 500;
+        const maxHeight = 500;
 
-    // Thay đổi kích thước ảnh
-    const resizedImage =  resizeImage(base64, maxWidth, maxHeight);
-    resizedImage.then((resize)=>{
-      console.log(resize);
-      setFile(resize);
-    })
+        // Thay đổi kích thước ảnh
+        const resizedImage = resizeImage(base64, maxWidth, maxHeight);
+        resizedImage.then((resize) => {
+          console.log(resize);
+          setImageTemp(resize);
+        });
+
+        const formData = new FormData();
+        formData.append("avatar", avatar);
+        formData.append("imageName", user._id);
+
+        const { data, status } = await postAvatarToAWS(formData);
+
+        if (status === 200) {
+          data.imageName = user._id;
+          const { url } = await getAvatarToAWS(data);
+          setFile(url);
+        }
+      } else {
+        toast.error("Please select an image");
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logOut(""));
   };
 
   return (
@@ -103,12 +149,13 @@ function Profile() {
             </span>
           </div>
           <form className="py-1" onSubmit={formik.handleSubmit}>
-            <div  className="profile flex justify-center py-4">
+            <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
                 <img
-                  src={file || avatar}
+                  src={imageTemp ||user.avatar||avatar}
                   className={styles.profile_img}
                   alt="avatar"
+                  
                 />
               </label>
               <input
@@ -116,7 +163,7 @@ function Profile() {
                 type="file"
                 id="profile"
                 name="avatar"
-                style={{width:500, height:500}}
+                style={{ width: 500, height: 500 }}
               />
             </div>
 
@@ -147,9 +194,9 @@ function Profile() {
             <div className="text-center py-4">
               <span className="text-gray-500">
                 Come back later
-                <Link className="text-red-500" to="/">
+                <button onClick={handleLogout} className="text-red-500" to="/">
                   Logout Now
-                </Link>
+                </button>
               </span>
             </div>
           </form>

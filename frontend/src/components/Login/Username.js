@@ -1,15 +1,30 @@
-import React from "react";
-import { Link,useNavigate  } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../assets/profile.png";
 import styles from "../../styles/Username.module.css";
 import { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { emailValidation } from "../../helper/validate";
 import { useDispatch } from "react-redux";
-import { addUserLogin } from "../../redux/actions";
+import { addUserLogin,setDataLogin } from "../../redux/actions";
+import { getUserByToken } from "../../helper/loginAPI";
 function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  
+    if(token&&token!=='undefined'){
+      let getUserToken = getUserByToken()
+      getUserToken.then((res)=>{
+        res.data.data= Object.assign(res.data.data,{token})
+        dispatch(addUserLogin(res.data.data))
+        dispatch(setDataLogin(res.data.data))
+        navigate('/profile')
+      })
+    }else{
+
+    }
+  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -23,10 +38,10 @@ function Username() {
     //   console.log('test 2');
     // }
 
-    onSubmit: async values=>{
-      await dispatch(addUserLogin(values))//reRender mới bắt đầu update state
-      navigate('/password')
-    }
+    onSubmit: async (values) => {
+      await dispatch(addUserLogin(values)); //reRender mới bắt đầu update state
+      navigate("/password");
+    },
   });
 
   return (

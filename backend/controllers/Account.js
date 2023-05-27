@@ -35,6 +35,8 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
   next();
 }
 
+
+
 module.exports.getAccountById = async (req, res, next) => {
   let account;
   try {
@@ -74,7 +76,6 @@ module.exports.delete = async (req, res) => {
 }
 
 module.exports.update = async (req, res) => {
-  console.log(req.account);
   if (req.body.username != null) {
     res.account.username = req.body.username;
   }
@@ -102,9 +103,36 @@ module.exports.update = async (req, res) => {
   }
 }
 
+// module.exports.register =  async (req, res) => {
+//   try {
+//     const { username, email, password, phone,avatar,meta_data } = req.body;
+//     if (password) {
+//       bcrypt.hash(password, 10)
+//       .then((hashedPassword) => {
+//         const account = new Account({
+//           username: username,
+//           email: email,
+//           password: hashedPassword,
+//           phone: phone||'',
+//           avatar: avatar||'',
+//           meta_data:meta_data||'' //base 64
+//         });
+//         // return save result as a response
+//         account.save()
+//           .then((result) =>
+//             res.status(201).send({ msg: "User Register Successfully" })
+//           )
+//           .catch((error) => res.status(500).send({ error }));
+//       });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// }
+
 module.exports.register =  async (req, res) => {
-  const { username, email, password, phone, avatar } = req.body;
   try {
+    const { username, email, password, phone,avatar,meta_data } = req.body;
     if (password) {
       bcrypt.hash(password, 10)
       .then((hashedPassword) => {
@@ -113,7 +141,8 @@ module.exports.register =  async (req, res) => {
           email: email,
           password: hashedPassword,
           phone: phone||'',
-          avatar: avatar||'', //base 64
+          avatar: avatar||'',
+          meta_data:meta_data||'' //base 64
         });
         // return save result as a response
         account.save()
@@ -167,3 +196,4 @@ module.exports.Login =  async (req, res) => {
     return res.status(500).send({ error });
   }
 }
+
