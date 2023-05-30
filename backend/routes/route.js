@@ -52,6 +52,7 @@ const {
 } = require("../controllers/Class");
 const { addPaymentMethod, getPaymentMethod, getPaymentMethodById, updatePaymentMethod, addPayment, getPayment, getPaymentById, updatePayment } = require("../controllers/Payment");
 const { addBooking, getBooking, updateBooking } = require("../controllers/Booking");
+const Semester = require("../models/semesters");
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -115,7 +116,6 @@ router.get("/image/get", getImage);
 router.post("/semester/add", AuthStaff, addSemester); //thêm phần auth xác thực xem người dùng có mang role là staff hay không
 router.get("/semester/get", getSemester); //ai cũng có thể get
 router.patch("/semester/update", AuthStaff, getSemesterById, updateSemester); //thêm phần auth xác thực xem người dùng có mang role là staff hay không
-
 //course , thêm auth y chang semester
 //chưa check down
 router.post("/course/add", AuthStaff, addCourse);
@@ -131,15 +131,15 @@ router.patch("/schedule/update", AuthStaff, getScheduleById, updateSchedule);
 router.post("/class/add", AuthStaff, addClass);
 router.get("/class/get", getClasses);
 router.patch("/class/update", AuthStaff, getClassById, updateClass);
-//payment Method
-router.post("/payment/method/add",AuthStaff,addPaymentMethod);
-router.get("/payment/method/get", getPaymentMethod);
-router.patch("/payment/method/update", AuthStaff, getPaymentMethodById, updatePaymentMethod);
 //payment
 router.post("/payment/add",Auth,addPayment);
 router.get("/payment/get", getPayment);
 router.patch("/payment/update", AuthStaff, getPaymentById, updatePayment);
+//payment Method
+router.post("/payment/method/add",AuthStaff,addPaymentMethod);
+router.get("/payment/method/get", getPaymentMethod);
+router.patch("/payment/method/update", AuthStaff, getPaymentMethodById, updatePaymentMethod);
 //booking
-router.post("/booking/add",addBooking);
+router.post("/booking/add",Auth,addBooking);// có tài khoản thì mới đucợ book
 router.get("/booking/get", getBooking);
-router.patch("/boinokg/update",updateBooking)//người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa
+router.patch("/booking/update",Auth,updateBooking)//người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt

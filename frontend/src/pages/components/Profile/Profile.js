@@ -15,8 +15,10 @@ import {
   postAvatarToAWS,
 } from "../../../helper/loginAPI";
 import {logOut } from "../../../redux/actions";
+import { addSemester, getSemester, updateSemester } from "../../../helper/semesterAPI";
 
 function Profile() {
+  
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
   const [imageTemp,setImageTemp] = useState()
