@@ -1,18 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../../components/pages/Home/Home";
-import PageNotFound from "../../components/pages/Login/PageNotFound";
-import Password from "../../components/pages/Login/Password";
-import Recovery from "../../components/pages/Login/Recovery";
-import Register from "../../components/pages/Login/Register";
-import Reset from "../../components/pages/Login/Reset";
-import Username from "../../components/pages/Login/Username";
-import Profile from "../../components/pages/Profile/Profile";
+import Home from "../pages/components/Home/Home";
+import PageNotFound from "../pages/components/Login/PageNotFound";
+import Password from "../pages/components/Login/Password";
+import Recovery from "../pages/components/Login/Recovery";
+import Register from "../pages/components/Login/Register";
+import Reset from "../pages/components/Login/Reset";
+import Username from "../pages/components/Login/Username";
+import Profile from "../pages/components/Profile/Profile";
+import Courses from "../pages/components/Courses/Courses";
+import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
 import {
   AuthorizeUser,
   ProtectRoute,
   ProtectRouteOTP,
-} from "../../middleware/auth";
-import Courses from "../pages/Courses/Courses";
+} from "../middleware/auth";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +22,10 @@ const routers = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses></Courses>,
+  },
+  {
+    path: "/course/:id",
+    element: <CourseDetail></CourseDetail>,
   },
   {
     path: "/login",

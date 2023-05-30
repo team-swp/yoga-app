@@ -1,4 +1,5 @@
 import "./App.css";
+<<<<<<< HEAD
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 /*import all component*/
 // import PageNotFound from "./components/Login/PageNotFound";
@@ -58,10 +59,17 @@ import routers from './components/routes/routes'
 //   },
 // ]);
 
+=======
+import { RouterProvider } from "react-router-dom";
+import routers from "./routes/routes";
+import ScrollToTop from "./ScrollToTop";
+>>>>>>> origin/minhNVA
 function App() {
   return (
     <main>
-      <RouterProvider router={routers}></RouterProvider>
+      <RouterProvider router={routers}>
+        <ScrollToTop />
+      </RouterProvider>
     </main>
   );
 }
