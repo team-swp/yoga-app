@@ -2,40 +2,37 @@ const express = require("express");
 const router = express.Router();
 const Account = require("../models/accounts");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
-const Auth = require('../middleware/auth')
+const jwt = require("jsonwebtoken");
+const Auth = require("../middleware/auth");
 require("dotenv").config();
 
 module.exports.getAllAccount = async (req, res) => {
   try {
     const accounts = await Account.find();
     const temp = [];
-    accounts.filter((acc,index)=>{
-      const{password,...rest } = Object.assign({}, acc.toJSON());
-      temp[index]= rest
-    })
+    accounts.filter((acc, index) => {
+      const { password, ...rest } = Object.assign({}, acc.toJSON());
+      temp[index] = rest;
+    });
     res.send(temp);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
 module.exports.getAccountByIdAuth = async (req, res, next) => {
   let account;
-  console.log('222',req);
   try {
-    account = await Account.findById(req.account.userId);
+    account = await Account.findById(req.account.userId); //lấy req tìm còn có .role
     if (account === null) {
       return res.status(404).json({ message: "Cannot Find Account" });
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-  res.account = account;
+  res.account = account; //gửi respone account qa bên kia
   next();
-}
-
-
+};
 
 module.exports.getAccountById = async (req, res, next) => {
   let account;
@@ -49,22 +46,20 @@ module.exports.getAccountById = async (req, res, next) => {
   }
   res.account = account;
   next();
-}
+};
 
-module.exports.verifyUser = async function (req, res, next){
+module.exports.verifyUser = async function (req, res, next) {
   try {
-      
-      const { email } = req.method == "GET" ? req.query : req.body;
+    const { email } = req.method == "GET" ? req.query : req.body;
 
-      // check the user existance
-      let exist = await Account.findOne({ email });
-      if(!exist) return res.status(404).send({ error : "Can't find User!"});
-      next();
-
+    // check the user existance
+    let exist = await Account.findOne({ email });
+    if (!exist) return res.status(404).send({ error: "Can't find User!" });
+    next();
   } catch (error) {
-      return res.status(404).send({ error: "Authentication Error"});
+    return res.status(404).send({ error: "Authentication Error" });
   }
-}
+};
 
 module.exports.delete = async (req, res) => {
   try {
@@ -73,7 +68,7 @@ module.exports.delete = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
 module.exports.update = async (req, res) => {
   if (req.body.username != null) {
@@ -101,7 +96,7 @@ module.exports.update = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}
+};
 
 // module.exports.register =  async (req, res) => {
 //   try {
@@ -130,22 +125,22 @@ module.exports.update = async (req, res) => {
 //   }
 // }
 
-module.exports.register =  async (req, res) => {
+module.exports.register = async (req, res) => {
   try {
-    const { username, email, password, phone,avatar,meta_data } = req.body;
+    const { username, email, password, phone, avatar, meta_data } = req.body;
     if (password) {
-      bcrypt.hash(password, 10)
-      .then((hashedPassword) => {
+      bcrypt.hash(password, 10).then((hashedPassword) => {
         const account = new Account({
           username: username,
           email: email,
           password: hashedPassword,
-          phone: phone||'',
-          avatar: avatar||'',
-          meta_data:meta_data||'' //base 64
+          phone: phone || "",
+          avatar: avatar || "",
+          meta_data: meta_data || "", //base 64
         });
         // return save result as a response
-        account.save()
+        account
+          .save()
           .then((result) =>
             res.status(201).send({ msg: "User Register Successfully" })
           )
@@ -155,39 +150,47 @@ module.exports.register =  async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}
+};
 
-module.exports.Login =  async (req, res) => {
+module.exports.Login = async (req, res) => {
   const { email, password } = req.body;
   try {
     Account.findOne({ email })
       .then((account) => {
-        bcrypt.compare(password,account.password)
-          .then((passwordCheck) => {
-            if (!passwordCheck)
-              return res.status(500).send({ error: "Don't have Password" });
+        if (account.status) {
+          bcrypt
+            .compare(password, account.password)
+            .then((passwordCheck) => {
+              if (!passwordCheck)
+                return res.status(500).send({ error: "Don't have Password" });
 
-            // create jwt token
-            const token = jwt.sign(
-              {
-                userId: account._id,
+              // create jwt token
+              const token = jwt.sign(
+                {
+                  userId: account._id,
+                  email: account.email,
+                  role: account.role,
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: "24h" }
+              );
+              return res.status(200).send({
+                msg: "Login Successful...!",
                 email: account.email,
-              },
-              process.env.JWT_SECRET,
-              { expiresIn: "24h" }
-            );
-          
-            return res.status(200).send({
-              msg: "Login Successful...!",
-              email: account.email,
-              token,
-              username:account.username,
-              _id:account._id
+                token,
+                username: account.username,
+                _id: account._id,
+                role: account.role,
+              });
+            })
+            .catch((error) => {
+              return res.status(500).send({ error: "Password does not Match" });
             });
-          })
-          .catch((error) => {
-            return res.status(500).send({ error: "Password does not Match" });
-          });
+        } else {
+          return res
+            .status(500)
+            .send({ error: "Your account have been banned" });
+        }
       })
       .catch((error) => {
         return res.status(500).send({ error: "Username not Found" });
@@ -195,5 +198,4 @@ module.exports.Login =  async (req, res) => {
   } catch (error) {
     return res.status(500).send({ error });
   }
-}
-
+};

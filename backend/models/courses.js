@@ -4,6 +4,7 @@ const courseSchema = new mongoose.Schema({
   coursename: {
     type: String,
     required: true,
+    unique: true,
   },
   description:{
     type:String,
@@ -13,11 +14,39 @@ const courseSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  willLearn:{
+    type: String,
+    required: false,
+  },
+  requirement:{
+    type: String,
+    required: false,
+  },
+  forWho:{
+    type: String,
+    required: false,
+  }
+  ,
   semester_id:{
     type: mongoose.Schema.Types.ObjectId,
     ref:'Semester',
     required: true,
   },
+  images:{
+    type:Array,
+    required: false,
+  },
+  videos:{
+    type:Array,
+    required: false,
+  }
+  ,
+  status:{
+    type:Boolean,
+    default: true,
+    required:true
+  }
+  ,
   meta_data: {
     type: String,
     required: false,

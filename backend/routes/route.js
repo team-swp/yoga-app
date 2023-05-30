@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Account = require("../models/accounts");
-const { Auth, localVariables } = require("../middleware/auth");
+const { Auth, localVariables, AuthStaff } = require("../middleware/auth");
 require("dotenv").config();
 const { registerMail } = require("../controllers/Mailer");
 const {
@@ -26,16 +26,40 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const { postImage, getImage } = require("../AWS/StoreImageS3");
+const {
+  addSemester,
+  getSemester,
+  updateSemester,
+  getSemesterById,
+} = require("../controllers/Semester");
+const {
+  addCourse,
+  getCourses,
+  getCourseById,
+  updateCourse,
+} = require("../controllers/Course");
+const {
+  addSchedule,
+  getSchedules,
+  getScheduleById,
+  updateSchedule,
+} = require("../controllers/Schedule");
+const {
+  addClass,
+  getClasses,
+  getClassById,
+  updateClass,
+} = require("../controllers/Class");
+const { addPaymentMethod, getPaymentMethod, getPaymentMethodById, updatePaymentMethod, addPayment, getPayment, getPaymentById, updatePayment } = require("../controllers/Payment");
+const { addBooking, getBooking, updateBooking } = require("../controllers/Booking");
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
 const accessKey = process.env.ACCESS_KEY;
 
-
-
 //Getting all
-router.get("/accounts", getAllAccount);
+router.get("/accounts", getAllAccount); // thêm phần kiểm tra role người dùng
 //Getting one
 router.get("/accounts/:id", getAccountById, (req, res) => {
   const { password, ...rest } = Object.assign({}, res.account.toJSON());
@@ -46,7 +70,7 @@ router.get("/accounts/:id", getAccountById, (req, res) => {
 router.post("/accounts/login", verifyUser, Login);
 
 //Creating one
-router.post("/accounts/register",register);
+router.post("/accounts/register", register);
 //Updating one
 router.patch("/accounts", Auth, getAccountByIdAuth, update);
 
@@ -87,6 +111,35 @@ router.post("/image/post", upload.single("avatar"), postImage);
 
 router.get("/image/get", getImage);
 
+//semester
+router.post("/semester/add", AuthStaff, addSemester); //thêm phần auth xác thực xem người dùng có mang role là staff hay không
+router.get("/semester/get", getSemester); //ai cũng có thể get
+router.patch("/semester/update", AuthStaff, getSemesterById, updateSemester); //thêm phần auth xác thực xem người dùng có mang role là staff hay không
 
-//
-router.post("/courses/add", );
+//course , thêm auth y chang semester
+//chưa check down
+router.post("/course/add", AuthStaff, addCourse);
+router.get("/course/get", getCourses);
+router.patch("/course/update", AuthStaff, getCourseById, updateCourse);
+
+//schedule thêm auth y chang semester
+router.post("/schedule/add", AuthStaff, addSchedule);
+router.get("/schedule/get", getSchedules);
+router.patch("/schedule/update", AuthStaff, getScheduleById, updateSchedule);
+
+//class thêm auth
+router.post("/class/add", AuthStaff, addClass);
+router.get("/class/get", getClasses);
+router.patch("/class/update", AuthStaff, getClassById, updateClass);
+//payment Method
+router.post("/payment/method/add",AuthStaff,addPaymentMethod);
+router.get("/payment/method/get", getPaymentMethod);
+router.patch("/payment/method/update", AuthStaff, getPaymentMethodById, updatePaymentMethod);
+//payment
+router.post("/payment/add",Auth,addPayment);
+router.get("/payment/get", getPayment);
+router.patch("/payment/update", AuthStaff, getPaymentById, updatePayment);
+//booking
+router.post("/booking/add",addBooking);
+router.get("/booking/get", getBooking);
+router.patch("/boinokg/update",updateBooking)//người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa

@@ -1,40 +1,25 @@
-<<<<<<< HEAD:frontend/src/components/Profile/Profile.js
 import React, { useEffect, useRef, useState } from "react";
 import { Link, location } from "react-router-dom";
-import avatar from "../../assets/profile.png";
-import styles from "../../styles/Username.module.css";
-=======
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import avatar from "../../../assets/profile.png";
 import styles from "../../../styles/Username.module.css";
->>>>>>> e697625aaa18f634c78bddc9ab01c290efb117ea:frontend/src/components/pages/Profile/Profile.js
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { profileValidation } from "../../../helper/validate";
 import convertToBase64 from "../../../helper/convert";
 import { useDispatch, useSelector } from "react-redux";
-<<<<<<< HEAD:frontend/src/components/Profile/Profile.js
-import { userSelector } from "../../redux/selectors";
-
-import {
-  getAvatarToAWS,
-  postAvatarToAWS,
-  updateUser,
-} from "../../helper/loginAPI";
-import { updateData, logOut } from "../../redux/actions";
-function Profile() {
-  const user = useSelector(userSelector);
-  const [file, setFile] = useState(user.avatar || "");
-  const [imageTemp, setImageTemp] = useState();
-=======
 import { userSelector } from "../../../redux/selectors";
 import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
+import {
+  getAvatarToAWS,
+  postAvatarToAWS,
+} from "../../../helper/loginAPI";
+import {logOut } from "../../../redux/actions";
+
 function Profile() {
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
->>>>>>> e697625aaa18f634c78bddc9ab01c290efb117ea:frontend/src/components/pages/Profile/Profile.js
+  const [imageTemp,setImageTemp] = useState()
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -54,18 +39,10 @@ function Profile() {
         loading: "Updating...",
         success: <b>Update Successfully...!</b>,
         error: <b>Could not Update!</b>,
-<<<<<<< HEAD:frontend/src/components/Profile/Profile.js
       });
       updatePromise.then((res) => {
         dispatch(updateData(res.data.data));
       });
-=======
-      });
-      updatePromise.then((res) => {
-        dispatch(updateData(res.data.data));
-        console.log(user);
-      });
->>>>>>> e697625aaa18f634c78bddc9ab01c290efb117ea:frontend/src/components/pages/Profile/Profile.js
     },
   });
 
@@ -132,7 +109,6 @@ function Profile() {
         const maxWidth = 500;
         const maxHeight = 500;
 
-<<<<<<< HEAD:frontend/src/components/Profile/Profile.js
         // Thay đổi kích thước ảnh
         const resizedImage = resizeImage(base64, maxWidth, maxHeight);
         resizedImage.then((resize) => {
@@ -160,14 +136,6 @@ function Profile() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(logOut(""));
-=======
-    // Thay đổi kích thước ảnh
-    const resizedImage = resizeImage(base64, maxWidth, maxHeight);
-    resizedImage.then((resize) => {
-      console.log(resize);
-      setFile(resize);
-    });
->>>>>>> e697625aaa18f634c78bddc9ab01c290efb117ea:frontend/src/components/pages/Profile/Profile.js
   };
 
   return (

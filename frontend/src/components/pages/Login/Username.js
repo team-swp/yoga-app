@@ -1,24 +1,13 @@
-<<<<<<< HEAD:frontend/src/components/Login/Username.js
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import avatar from "../../assets/profile.png";
-import styles from "../../styles/Username.module.css";
-=======
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../../assets/profile.png";
 import styles from "../../../styles/Username.module.css";
->>>>>>> e697625aaa18f634c78bddc9ab01c290efb117ea:frontend/src/components/pages/Login/Username.js
 import { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { emailValidation } from "../../../helper/validate";
 import { useDispatch } from "react-redux";
-<<<<<<< HEAD:frontend/src/components/Login/Username.js
-import { addUserLogin,setDataLogin } from "../../redux/actions";
-import { getUserByToken } from "../../helper/loginAPI";
-=======
-import { addUserLogin } from "../../../redux/actions";
->>>>>>> e697625aaa18f634c78bddc9ab01c290efb117ea:frontend/src/components/pages/Login/Username.js
+import { addUserLogin,setDataLogin } from "../../../redux/actions";
+import { getUserByToken } from "../../../helper/loginAPI";
 function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

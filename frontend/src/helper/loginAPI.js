@@ -161,7 +161,7 @@ export async function postAvatarToAWS(formData){
 }
 
 export async function getAvatarToAWS({imageName}){
-  try {
+  try { 
     const {data} = await axios.get('api/image/get', { params: {imageName}})
     return Promise.resolve(data)
   } catch (error) {

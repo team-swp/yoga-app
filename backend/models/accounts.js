@@ -27,6 +27,11 @@ const accountSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  status:{
+    type:Boolean,
+    required:true,
+    default:true
+  },
   meta_data: {
     type: String,
     required: false,
@@ -34,5 +39,6 @@ const accountSchema = new mongoose.Schema({
 },
 {timestamps:true}
 );  
+
 
 module.exports = mongoose.model("Account", accountSchema);
