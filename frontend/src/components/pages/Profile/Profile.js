@@ -98,7 +98,11 @@ function Profile() {
   //     setFile(resize);
   //   });
   // };
-
+  const loadImageAgain=(e)=>{
+    if(user.avatar){
+      e.target.src=file
+    }
+  }
   const onUpload = async (e) => {
     const avatar = e.target.files[0];
     if (avatar) {
@@ -156,7 +160,7 @@ function Profile() {
                   src={imageTemp ||user.avatar||avatar}
                   className={styles.profile_img}
                   alt="avatar"
-                  
+                  onError={loadImageAgain}
                 />
               </label>
               <input
