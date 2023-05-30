@@ -32,13 +32,23 @@ const scheduleSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-scheduleSchema.pre('save', async function (next) {
-  const allowedDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+scheduleSchema.pre("save", async function (next) {
+  const allowedDays = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
 
   // Kiểm tra startTime và endTime có định dạng hh:mm AM/PM
   const timeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
   if (!timeRegex.test(this.startTime) || !timeRegex.test(this.endTime)) {
-    const error = new Error('Invalid startTime or endTime format. Please use hh:mm AM/PM format.');
+    const error = new Error(
+      "Invalid startTime or endTime format. Please use hh:mm AM/PM format."
+    );
     return next(error);
   }
 
@@ -47,22 +57,30 @@ scheduleSchema.pre('save', async function (next) {
   const endDateTime = new Date(`01/01/2023 ${this.endTime}`);
   const timeDifferenceInMinutes = Math.abs(endDateTime - startDateTime) / 60000;
   if (startDateTime >= endDateTime || timeDifferenceInMinutes < 90) {
-    const error = new Error('Invalid startTime and endTime. startTime must be before endTime and they should be at least 90 minutes apart.');
+    const error = new Error(
+      "Invalid startTime and endTime. startTime must be before endTime and they should be at least 90 minutes apart."
+    );
     return next(error);
   }
 
   // Kiểm tra startTime và endTime nằm trong phạm vi giờ hợp lệ (1-12 AM/PM)
-  const startHour = parseInt(this.startTime.split(':')[0]);
-  const endHour = parseInt(this.endTime.split(':')[0]);
-  if ((startHour < 1 || startHour > 12) || (endHour < 1 || endHour > 12)) {
-    const error = new Error('Invalid startTime or endTime. Please use valid hour range (1-12 AM/PM).');
+  const startHour = parseInt(this.startTime.split(":")[0]);
+  const endHour = parseInt(this.endTime.split(":")[0]);
+  if (startHour < 1 || startHour > 12 || endHour < 1 || endHour > 12) {
+    const error = new Error(
+      "Invalid startTime or endTime. Please use valid hour range (1-12 AM/PM)."
+    );
     return next(error);
   }
 
   // Kiểm tra days chỉ chứa các giá trị thứ hợp lệ
-  const invalidDays = this.days.filter(day => !allowedDays.includes(day.toLowerCase()));
+  const invalidDays = this.days.filter(
+    (day) => !allowedDays.includes(day.toLowerCase())
+  );
   if (invalidDays.length > 0) {
-    const error = new Error('Invalid days. Please use valid weekdays (e.g., Monday, Tuesday, etc.).');
+    const error = new Error(
+      "Invalid days. Please use valid weekdays (e.g., Monday, Tuesday, etc.)."
+    );
     return next(error);
   }
 
@@ -72,12 +90,14 @@ scheduleSchema.pre('save', async function (next) {
     days: { $in: this.days },
     $or: [
       { startTime: { $lte: this.startTime, $gt: this.endTime } },
-      { endTime: { $gte: this.endTime, $lt: this.startTime } }
-    ]
+      { endTime: { $gte: this.endTime, $lt: this.startTime } },
+    ],
   });
 
   if (existingSchedule) {
-    const error = new Error(`A schedule (${existingSchedule.schedulename}) with the same date and overlapping time already exists.`);
+    const error = new Error(
+      `A schedule (${existingSchedule.schedulename}) with the same date and overlapping time already exists.`
+    );
     return next(error);
   }
 
@@ -87,12 +107,14 @@ scheduleSchema.pre('save', async function (next) {
     days: { $in: this.days },
     $or: [
       { startTime: { $gte: this.startTime, $lt: this.endTime } },
-      { endTime: { $gt: this.startTime, $lte: this.endTime } }
-    ]
+      { endTime: { $gt: this.startTime, $lte: this.endTime } },
+    ],
   });
 
   if (conflictingSchedule) {
-    const error = new Error(`The startTime or endTime conflicts with an existing (${conflictingSchedule.schedulename}) schedule. `);
+    const error = new Error(
+      `The startTime or endTime conflicts with an existing (${conflictingSchedule.schedulename}) schedule. `
+    );
     return next(error);
   }
 

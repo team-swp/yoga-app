@@ -4,10 +4,8 @@ import avatar from "../../../assets/profile.png";
 import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
-import { registerValidation } from "../../../helper/validate"
-import {
-  registerUser,
-} from "../../../helper/loginAPI";
+import { registerValidation } from "../../../helper/validate";
+import { registerUser } from "../../../helper/loginAPI";
 function Register() {
   const navigate = useNavigate();
   const formData = new FormData();
@@ -22,7 +20,6 @@ function Register() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-     
       let registerPromise = registerUser(values); //func registerUser trả lại 1 promise
       toast.promise(registerPromise, {
         loading: "Creating...",
@@ -30,16 +27,14 @@ function Register() {
         error: <b>Could not Register or Email has been existed</b>,
       });
       registerPromise
-        .then(() => {    
-          navigate("/");
+        .then(() => {
+          navigate("/login");
         })
         .catch(() => {
-        console.log('1234');
           <b>Could not Register or Email has been existed</b>;
         });
     },
   });
-
 
   return (
     <div className="container mx-auto">
@@ -55,13 +50,8 @@ function Register() {
           <form className="py-1" onSubmit={formik.handleSubmit}>
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                <img
-                  src={ avatar}
-                  className={styles.profile_img}
-                  alt="avatar"
-                  />
+                <img src={avatar} className={styles.profile_img} alt="avatar" />
               </label>
-
             </div>
 
             <div className="textbox flex flex-col items-center gap-6">
@@ -96,8 +86,8 @@ function Register() {
             <div className="text-center py-4">
               <span className="text-gray-500">
                 Already Register?
-                <Link className="text-red-500" to="/">
-                    Login Now
+                <Link className="text-red-500" to="/login">
+                  Login Now
                 </Link>
               </span>
             </div>

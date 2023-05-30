@@ -40,7 +40,7 @@ function Password() {
           res.data = Object.assign(res.data, { token });
           console.log(res.data);
           dispatch(setDataLogin(res.data)); //reducer là kho lưu trữ nhận giá trị lưu trữ không phải phần xử lí
-          navigate("/profile");
+          navigate("/");
         });
       });
       // function asyncFunction1() {

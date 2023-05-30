@@ -50,8 +50,21 @@ const {
   getClassById,
   updateClass,
 } = require("../controllers/Class");
-const { addPaymentMethod, getPaymentMethod, getPaymentMethodById, updatePaymentMethod, addPayment, getPayment, getPaymentById, updatePayment } = require("../controllers/Payment");
-const { addBooking, getBooking, updateBooking } = require("../controllers/Booking");
+const {
+  addPaymentMethod,
+  getPaymentMethod,
+  getPaymentMethodById,
+  updatePaymentMethod,
+  addPayment,
+  getPayment,
+  getPaymentById,
+  updatePayment,
+} = require("../controllers/Payment");
+const {
+  addBooking,
+  getBooking,
+  updateBooking,
+} = require("../controllers/Booking");
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -132,14 +145,19 @@ router.post("/class/add", AuthStaff, addClass);
 router.get("/class/get", getClasses);
 router.patch("/class/update", AuthStaff, getClassById, updateClass);
 //payment Method
-router.post("/payment/method/add",AuthStaff,addPaymentMethod);
+router.post("/payment/method/add", AuthStaff, addPaymentMethod);
 router.get("/payment/method/get", getPaymentMethod);
-router.patch("/payment/method/update", AuthStaff, getPaymentMethodById, updatePaymentMethod);
+router.patch(
+  "/payment/method/update",
+  AuthStaff,
+  getPaymentMethodById,
+  updatePaymentMethod
+);
 //payment
-router.post("/payment/add",Auth,addPayment);
+router.post("/payment/add", Auth, addPayment);
 router.get("/payment/get", getPayment);
 router.patch("/payment/update", AuthStaff, getPaymentById, updatePayment);
 //booking
-router.post("/booking/add",addBooking);
+router.post("/booking/add", addBooking);
 router.get("/booking/get", getBooking);
-router.patch("/boinokg/update",updateBooking)//người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa
+router.patch("/boinokg/update", updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa

@@ -6,25 +6,24 @@ import { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { emailValidation } from "../../../helper/validate";
 import { useDispatch } from "react-redux";
-import { addUserLogin,setDataLogin } from "../../../redux/actions";
+import { addUserLogin, setDataLogin } from "../../../redux/actions";
 import { getUserByToken } from "../../../helper/loginAPI";
 function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  
-    if(token&&token!=='undefined'){
-      let getUserToken = getUserByToken()
-      getUserToken.then((res)=>{
-        res.data.data= Object.assign(res.data.data,{token})
-        dispatch(addUserLogin(res.data.data))
-        dispatch(setDataLogin(res.data.data))
-        navigate('/profile')
-      })
-    }else{
 
-    }
-  
+  if (token && token !== "undefined") {
+    let getUserToken = getUserByToken();
+    getUserToken.then((res) => {
+      res.data.data = Object.assign(res.data.data, { token });
+      dispatch(addUserLogin(res.data.data));
+      dispatch(setDataLogin(res.data.data));
+      navigate("/");
+    });
+  } else {
+  }
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -73,7 +72,7 @@ function Username() {
             </div>
             <div className="text-center py-4">
               <span className="text-gray-500">
-                Not a member{" "}
+                Not a member
                 <Link className="text-red-500" to="/register">
                   Register Now
                 </Link>

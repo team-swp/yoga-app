@@ -1,5 +1,11 @@
-import { useBlocker, Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-
+import {
+  useBlocker,
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import { useState } from "react";
 function YourComponent() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -8,7 +14,7 @@ function YourComponent() {
   useBlocker(
     (tx) => {
       if (isBlocking) {
-        tx.block('Are you sure you want to leave this page?');
+        tx.block("Are you sure you want to leave this page?");
       }
     },
     [isBlocking]

@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 import styles from "./CourseDetail.module.css";
 import classNames from "classnames/bind";
 import Footer from "../Footer/Footer";
@@ -9,15 +10,38 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import CheckIcon from "@mui/icons-material/Check";
 import ScrollToTopOnMount from "../../ScrollToTopOnMount";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 const cx = classNames.bind(styles);
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 function CourseDetail() {
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+
   const courseName = useParams();
   const course = itemData3.find((obj) => {
     return obj.id === courseName.id;
   });
 
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleSubmit = () => console.log("Submit");
   return (
     <div>
       <ScrollToTopOnMount />
@@ -81,9 +105,47 @@ function CourseDetail() {
               </div>
               <p className={cx("course-price")}>{course.price}$</p>
               <div class="flex justify-evenly align-center">
-                <button className={cx("course-button")}>
-                  <p>JOIN US NOW</p>
+                <button className={cx("course-button")} onClick={handleOpen}>
+                  JOIN US NOW
                 </button>
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style}>
+                    <div className={cx("close")} onClick={handleClose}>
+                      &times;
+                    </div>
+                    <label className={cx("popup-lable")} for="class-select">
+                      Choose class:
+                    </label>
+                    <select
+                      className={cx("popup-select")}
+                      name="class"
+                      id="class-select"
+                    >
+                      <option value="246 7g30-9g">Class 246 - 7g30-9g</option>
+                      <option value="357 7g30-9g">Class 357 - 7g30-9g</option>
+                      <option value="7/CN 8g15-10g">
+                        Class 7/CN - 8g15-10g
+                      </option>
+                    </select>
+                    <button
+                      className={cx("popup-button")}
+                      onClick={() => {
+                        if (token) {
+                          handleSubmit();
+                        } else {
+                          navigate("/login");
+                        }
+                      }}
+                    >
+                      Submit
+                    </button>
+                  </Box>
+                </Modal>
                 <FavoriteIcon
                   sx={{
                     mt: "8px",

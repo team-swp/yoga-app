@@ -33,14 +33,14 @@ const bookingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-bookingSchema.pre('save', async function (next) {
+bookingSchema.pre("save", async function (next) {
   try {
-    const Account = require('./accounts')
+    const Account = require("./accounts");
     const booking = this;
     const member = await Account.findOne({ _id: booking.member_id });
 
-    if (member.role !== 'user') {
-      throw new Error('Invalid member role');
+    if (member.role !== "user") {
+      throw new Error("Invalid member role");
     }
     next();
   } catch (error) {

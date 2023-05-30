@@ -10,16 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../redux/selectors";
 import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
-import {
-  getAvatarToAWS,
-  postAvatarToAWS,
-} from "../../../helper/loginAPI";
-import {logOut } from "../../../redux/actions";
+import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
+import { logOut } from "../../../redux/actions";
 
 function Profile() {
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
-  const [imageTemp,setImageTemp] = useState()
+  const [imageTemp, setImageTemp] = useState();
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -153,10 +150,9 @@ function Profile() {
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
                 <img
-                  src={imageTemp ||user.avatar||avatar}
+                  src={imageTemp || user.avatar || avatar}
                   className={styles.profile_img}
                   alt="avatar"
-                  
                 />
               </label>
               <input
