@@ -12,6 +12,13 @@ export const addUserLogin = (data) => {
   }
 }
 
+export const logOut = (data) => {
+  return {
+    type: "logout",
+    payload: data,
+  }
+}
+
 export const setDataLogin =  (data) => {
   return {
     type: "login/setDataLogin",

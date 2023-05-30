@@ -70,6 +70,14 @@ const rootReducer = (state = initState, action) => {
         user: { ...state.user, OTP },
       };
     }
+    case "logout":{
+
+      return{
+        ...state,
+        user:{}
+      }
+    }
+    
     default:
       return state;
   }

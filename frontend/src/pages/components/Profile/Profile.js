@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, location } from "react-router-dom";
 import avatar from "../../../assets/profile.png";
 import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
@@ -10,9 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../redux/selectors";
 import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
+import {
+  getAvatarToAWS,
+  postAvatarToAWS,
+} from "../../../helper/loginAPI";
+import {logOut } from "../../../redux/actions";
+
 function Profile() {
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
+  const [imageTemp,setImageTemp] = useState()
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -35,7 +42,6 @@ function Profile() {
       });
       updatePromise.then((res) => {
         dispatch(updateData(res.data.data));
-        console.log(user);
       });
     },
   });
@@ -77,20 +83,59 @@ function Profile() {
       };
     });
   };
+  // const onUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   const base64 = await convertToBase64(file);
+
+  //   // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
+  //   const maxWidth = 500;
+  //   const maxHeight = 500;
+
+  //   // Thay đổi kích thước ảnh
+  //   const resizedImage = resizeImage(base64, maxWidth, maxHeight);
+  //   resizedImage.then((resize) => {
+  //     console.log(resize);
+  //     setFile(resize);
+  //   });
+  // };
+
   const onUpload = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
+    const avatar = e.target.files[0];
+    if (avatar) {
+      if (avatar.type.startsWith("image/")) {
+        const base64 = await convertToBase64(avatar);
 
-    // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
-    const maxWidth = 500;
-    const maxHeight = 500;
+        // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
+        const maxWidth = 500;
+        const maxHeight = 500;
 
-    // Thay đổi kích thước ảnh
-    const resizedImage = resizeImage(base64, maxWidth, maxHeight);
-    resizedImage.then((resize) => {
-      console.log(resize);
-      setFile(resize);
-    });
+        // Thay đổi kích thước ảnh
+        const resizedImage = resizeImage(base64, maxWidth, maxHeight);
+        resizedImage.then((resize) => {
+          console.log(resize);
+          setImageTemp(resize);
+        });
+
+        const formData = new FormData();
+        formData.append("avatar", avatar);
+        formData.append("imageName", user._id);
+
+        const { data, status } = await postAvatarToAWS(formData);
+
+        if (status === 200) {
+          data.imageName = user._id;
+          const { url } = await getAvatarToAWS(data);
+          setFile(url);
+        }
+      } else {
+        toast.error("Please select an image");
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logOut(""));
   };
 
   return (
@@ -108,9 +153,10 @@ function Profile() {
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
                 <img
-                  src={file || avatar}
+                  src={imageTemp ||user.avatar||avatar}
                   className={styles.profile_img}
                   alt="avatar"
+                  
                 />
               </label>
               <input
@@ -149,9 +195,9 @@ function Profile() {
             <div className="text-center py-4">
               <span className="text-gray-500">
                 Come back later
-                <Link className="text-red-500" to="/">
+                <button onClick={handleLogout} className="text-red-500" to="/">
                   Logout Now
-                </Link>
+                </button>
               </span>
             </div>
           </form>
