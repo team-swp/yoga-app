@@ -15,7 +15,6 @@ module.exports.Auth = async function (req, res, next) {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     req.account = decodedToken; //chuyển qa cho thg tiếp theo
     next();
-    console.log(decodedToken);
   } catch (error) {
     res.status(401).json({ error: "Authentication Failed!" });
   }

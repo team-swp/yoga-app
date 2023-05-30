@@ -10,10 +10,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../redux/selectors";
 import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
+<<<<<<< HEAD
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { logOut } from "../../../redux/actions";
+=======
+import {
+  getAvatarToAWS,
+  postAvatarToAWS,
+} from "../../../helper/loginAPI";
+import {logOut } from "../../../redux/actions";
+import { addSemester, getSemester, updateSemester } from "../../../helper/semesterAPI";
+>>>>>>> main
 
 function Profile() {
+  
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
   const [imageTemp, setImageTemp] = useState();
@@ -95,7 +105,11 @@ function Profile() {
   //     setFile(resize);
   //   });
   // };
-
+  const loadImageAgain=(e)=>{
+    if(user.avatar){
+      e.target.src=file
+    }
+  }
   const onUpload = async (e) => {
     const avatar = e.target.files[0];
     if (avatar) {
@@ -153,6 +167,10 @@ function Profile() {
                   src={imageTemp || user.avatar || avatar}
                   className={styles.profile_img}
                   alt="avatar"
+<<<<<<< HEAD
+=======
+                  onError={loadImageAgain}
+>>>>>>> main
                 />
               </label>
               <input

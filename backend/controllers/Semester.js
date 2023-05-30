@@ -68,14 +68,10 @@ module.exports.updateSemester = async (req, res) => {
 module.exports.getSemesterById = async (req, res, next) => {
   let semester;
   try {
-    if (req.account.role === "staff") {
       semester = await Semester.findById(req.body._id);
       if (semester === null) {
         return res.status(404).json({ message: "Cannot Find Semester" });
       }
-    } else {
-      return res.status(500).json({ message: error.message });
-    }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
