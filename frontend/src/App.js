@@ -1,5 +1,5 @@
 import "./App.css";
-import { RouterProvider } from "react-router-dom";
+import{ RouterProvider } from "react-router-dom";
 import routers from "./routes/routes";
 import ScrollToTop from "./ScrollToTop";
 function App() {
