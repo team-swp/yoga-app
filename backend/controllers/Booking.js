@@ -1,10 +1,6 @@
 const Booking = require("../models/bookings");
 module.exports.addBooking = async (req, res) => {
-<<<<<<< HEAD
   const { member_id, class_id, booking_date, status, meta_data } = req.body;
-=======
-  const {class_id,booking_date,status,meta_data } = req.body;
->>>>>>> main
   try {
     const booking = new Booking({
       member_id: req.account.userId,
@@ -14,13 +10,9 @@ module.exports.addBooking = async (req, res) => {
       meta_data,
     });
     // return save result as a response
-<<<<<<< HEAD
     console.log(booking);
     booking
       .save()
-=======
-    booking.save()
->>>>>>> main
       .then((result) =>
         res.status(201).send({ msg: "Add Booking Successfully" })
       )
@@ -74,11 +66,3 @@ module.exports.getBookingById = async (req, res, next) => {
   res.booking = booking;
   next();
 };
-<<<<<<< HEAD
-=======
-
-//kiểm tra xem nếu thg đó ở trong lớp đó rồi thì không cho book nữa
-//chỉ được book tiếp khi không trong lớp hoặc lớp đó chứa course đó đã hết hạn
-//nếu update thì thg có id mới được chỉnh sửa
-//nếu lớp đó được book thì thg kia phải hết hạn
->>>>>>> main
