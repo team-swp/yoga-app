@@ -5,6 +5,7 @@ import styles from "./Home.module.css";
 import { itemData, itemData2 } from "./ClassList";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import { Link } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -76,15 +77,17 @@ function Home() {
             >
               {itemData.map((item) => (
                 <div key={item.id} className={cx("class-item")}>
-                  <div className={cx("class-img")}>
-                    <img src={item.img} alt={item.title} />
-                  </div>
-                  <div className={cx("class-info")}>
-                    <h3>{item.title}</h3>
-                  </div>
-                  <div className={cx("class-place")}>
-                    <p>{item.place}</p>
-                  </div>
+                  <Link to={`course/${item.id}`}>
+                    <div className={cx("class-img")}>
+                      <img src={item.img} alt={item.title} />
+                    </div>
+                    <div className={cx("class-info")}>
+                      <h3>{item.title}</h3>
+                    </div>
+                    <div className={cx("class-place")}>
+                      <p>{item.place}</p>
+                    </div>
+                  </Link>
                 </div>
               ))}
             </div>

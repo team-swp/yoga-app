@@ -1,7 +1,3 @@
-::selection {
-  background-color: black;
-  color: white;
-}
 .video-main {
   display: flex;
   justify-content: center;
@@ -36,12 +32,12 @@
   transition: opacity 0.6s ease-in-out;
 }
 
-.class-item {
-  position: relative;
-}
-
 .class-container.in-view {
   opacity: 1;
+}
+
+.class-item {
+  position: relative;
 }
 
 .class-container .class-item:first-child {

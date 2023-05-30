@@ -1,0 +1,119 @@
+.course-header {
+  font-weight: 700;
+  font-size: 30px;
+  margin: 20px 0;
+}
+
+.course-container {
+  border: 1px solid #0b101e;
+  padding: 20px;
+  border-radius: 1%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.course-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 5%;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transition: all 0.3s ease-in-out;
+}
+
+.course-image img:hover {
+  box-shadow: rgba(100, 100, 111, 0.6) 0px 8px 40px 0px;
+}
+
+.course-price {
+  text-align: center;
+  font-size: x-large;
+  margin: 15px 0;
+}
+
+.course-button {
+  border: 1px solid #0b101e;
+  background-color: #0b101e;
+  color: #fff;
+  padding: 5px 30px;
+  border-radius: 50px;
+  font-size: 18px;
+}
+
+.course-button p {
+  padding-top: 5px;
+}
+
+.course-button:hover {
+  border: 1px solid #0b101e;
+  background-color: #fff;
+  color: #0b101e;
+}
+
+.course-policy h6 {
+  font-size: 18px;
+}
+
+.course-policy p {
+  margin-left: 10px;
+}
+
+.course-policy p:hover {
+  text-decoration: underline;
+}
+
+.course-learn {
+  padding: 30px;
+  border: 1px solid #0b101e;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.course-learn p {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.course-learn-list {
+  column-count: 2;
+  column-gap: 25px;
+}
+
+.course-requirement {
+  padding: 30px;
+  margin-top: 20px;
+}
+
+.course-requirement p {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.course-requirement-list {
+  padding-left: 15px;
+  list-style: disc;
+}
+
+.course-description {
+  padding: 30px;
+  margin-top: 20px;
+}
+
+.course-description p {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.course-description-content {
+  padding: 20px;
+  display: inline-block;
+  text-align: justify;
+  color: #fff;
+  background-color: rgb(165, 165, 165);
+  border: 1px solid rgb(165, 165, 165);
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}

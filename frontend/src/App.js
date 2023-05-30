@@ -1,10 +1,13 @@
 import "./App.css";
 import { RouterProvider } from "react-router-dom";
-import routers from "./components/routes/routes";
+import routers from "./routes/routes";
+import ScrollToTop from "./ScrollToTop";
 function App() {
   return (
     <main>
-      <RouterProvider router={routers}></RouterProvider>
+      <RouterProvider router={routers}>
+        <ScrollToTop />
+      </RouterProvider>
     </main>
   );
 }

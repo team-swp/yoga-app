@@ -14,3 +14,8 @@ main {
   position: relative;
   z-index: 1;
 }
+
+::selection {
+  background-color: black;
+  color: white;
+}

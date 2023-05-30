@@ -1,0 +1,42 @@
+export const itemData3 = [
+  {
+    id: "1",
+    img: "/assets/img/1.jpg",
+    title: "BASIC YOGA",
+    price: "999",
+    desc: "This is a great course for beginners who are new to yoga and want to learn about the basic postures (asanas), breathwork (pranayama), and meditation techniques. The focus of this course would be on building a strong foundation in yoga practice.",
+    time: "Lasts 4 to 8 weeks",
+  },
+  {
+    id: "2",
+    img: "/assets/img/2.jpg",
+    title: "HATHA YOGA",
+    price: "999",
+    desc: "Hatha Yoga is a traditional form of yoga that emphasizes physical postures and breathing techniques. It is a gentle and slow-paced form of yoga that is suitable for beginners as well as advanced practitioners. In this course, students will learn classic hatha yoga poses and sequences, along with proper alignment and modifications to suit their individual needs.",
+    time: "Lasts 4 to 8 weeks",
+  },
+  {
+    id: "3",
+    img: "/assets/img/3.jpg",
+    title: "VINYASA YOGA",
+    price: "999",
+    desc: "Vinyasa Yoga is a more dynamic and flowing style of yoga that connects movement with breath. This course is ideal for those who enjoy a faster-paced practice and want to build strength, flexibility, and endurance. Students will learn how to flow through sequences of postures while synchronizing their breath with movement.",
+    time: "Lasts 4 to 8 weeks",
+  },
+  {
+    id: "4",
+    img: "/assets/img/4.jpg",
+    title: "YIN YOGA",
+    price: "999",
+    desc: "Yin Yoga is a slower and more meditative form of yoga that targets the deeper connective tissues and joints in the body. The postures are held for longer periods of time (usually 3-5 minutes or more) to allow for a deeper release and stretch. This course is ideal for those who want to improve their flexibility, balance and cultivate a sense of relaxation and inner peace.",
+    time: "Lasts 4 to 8 weeks",
+  },
+  {
+    id: "5",
+    img: "/assets/img/5.jpg",
+    title: "KUNDALINI YOGA",
+    price: "999",
+    desc: "Kundalini Yoga is a unique and powerful style of yoga that combines physical postures, breathwork, chanting, and meditation to awaken the dormant energy at the base of the spine (known as Kundalini). This course would be ideal for those interested in spiritual growth and self-discovery, as Kundalini Yoga is known to be a transformative practice that can help individuals connect with their inner selves and unleash their full potential.",
+    time: "Lasts 4 to 8 weeks",
+  },
+];
