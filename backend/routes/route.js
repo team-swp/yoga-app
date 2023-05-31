@@ -50,6 +50,8 @@ const {
   getClassById,
   updateClass,
 } = require("../controllers/Class");
+
+const{verifyTokenGoogle, CheckExistAccount}= require("../Firebase/Firebase-admin")
 const { addPaymentMethod, getPaymentMethod, getPaymentMethodById, updatePaymentMethod, addPayment, getPayment, getPaymentById, updatePayment } = require("../controllers/Payment");
 const { addBooking, getBooking, updateBooking } = require("../controllers/Booking");
 const Semester = require("../models/semesters");
@@ -143,3 +145,6 @@ router.patch("/payment/method/update", AuthStaff, getPaymentMethodById, updatePa
 router.post("/booking/add",Auth,addBooking);// có tài khoản thì mới đucợ book
 router.get("/booking/get", getBooking);
 router.patch("/booking/update",Auth,updateBooking)//người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
+
+//google 
+router.post("/google/verify",verifyTokenGoogle,CheckExistAccount);

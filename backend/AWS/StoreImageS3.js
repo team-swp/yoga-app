@@ -58,7 +58,6 @@ module.exports.getImage = async(req,res)=>{
     Key: imageName,
   };
   const command = new GetObjectCommand(getObjectParams);
-  const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-  console.log(url);
+  const url = await getSignedUrl(s3, command, { expiresIn: 3600*24*6 });
   res.send({ url });
 }

@@ -181,6 +181,7 @@ module.exports.Login = async (req, res) => {
                 username: account.username,
                 _id: account._id,
                 role: account.role,
+                avatar:account.avatar
               });
             })
             .catch((error) => {

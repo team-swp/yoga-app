@@ -10,18 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../redux/selectors";
 import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
-import {
-  getAvatarToAWS,
-  postAvatarToAWS,
-} from "../../../helper/loginAPI";
-import {logOut } from "../../../redux/actions";
-import { addSemester, getSemester, updateSemester } from "../../../helper/semesterAPI";
+import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
+import { logOut } from "../../../redux/actions";
+import { UserAuth } from "../../../context/AuthGoogleContext";
+import { addBooking } from "../../../helper/bookingAPI";
 
 function Profile() {
-  
+  const{logOut} = UserAuth()
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
-  const [imageTemp,setImageTemp] = useState()
+  const [imageTemp, setImageTemp] = useState();
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -33,7 +31,7 @@ function Profile() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      values = await Object.assign(values, {
+      values =  Object.assign(values, {
         avatar: file || user.avatar || "",
       });
       let updatePromise = updateUser(values);
@@ -100,11 +98,11 @@ function Profile() {
   //     setFile(resize);
   //   });
   // };
-  const loadImageAgain=(e)=>{
-    if(user.avatar){
-      e.target.src=file
+  const loadImageAgain = (e) => {
+    if (user.avatar) {
+      e.target.src = file;
     }
-  }
+  };
   const onUpload = async (e) => {
     const avatar = e.target.files[0];
     if (avatar) {
@@ -127,7 +125,6 @@ function Profile() {
         formData.append("imageName", user._id);
 
         const { data, status } = await postAvatarToAWS(formData);
-
         if (status === 200) {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
@@ -139,11 +136,10 @@ function Profile() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    dispatch(logOut(""));
+  const handleLogout =  () => {
+    logOut();
   };
-
+ 
   return (
     <div className="container mx-auto">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
@@ -159,7 +155,7 @@ function Profile() {
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
                 <img
-                  src={imageTemp ||user.avatar||avatar}
+                  src={imageTemp || user.avatar || avatar}
                   className={styles.profile_img}
                   alt="avatar"
                   onError={loadImageAgain}

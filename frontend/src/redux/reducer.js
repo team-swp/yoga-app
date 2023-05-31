@@ -70,14 +70,14 @@ const rootReducer = (state = initState, action) => {
         user: { ...state.user, OTP },
       };
     }
-    case "logout":{
-
-      return{
+    case "logout": {
+      localStorage.removeItem("token");
+      return {
         ...state,
-        user:{}
-      }
+        user: {},
+      };
     }
-    
+
     default:
       return state;
   }

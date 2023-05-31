@@ -18,6 +18,8 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "firebase-admin": "^11.9.0",
+    "google-auth-library": "^8.8.0",
     "jsonwebtoken": "^9.0.0",
     "mailgen": "^2.0.27",
     "mongoose": "^7.1.1",
