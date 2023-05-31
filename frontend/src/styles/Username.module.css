@@ -19,8 +19,9 @@ margin: 0 auto;
 }
 
 .profile_img{
-  @apply border-4 border-gray-100 w-[135px] rounded-full shadow-lg cursor-pointer;
+  @apply border-4 border-gray-100 w-[100vw] rounded-full shadow-lg cursor-pointer;
   @apply hover:border-gray-200;
+
 }
 
 .textbox{

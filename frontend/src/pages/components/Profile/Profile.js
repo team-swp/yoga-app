@@ -139,11 +139,12 @@ function Profile() {
   const handleLogout =  () => {
     logOut();
   };
- 
+ const imgStyle=`${styles.profile_img} object-cover h-44  `
   return (
+    <div className={styles.background_all}>
     <div className="container mx-auto">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center">
         <div className={styles.glass}>
           <div className="title flex flex-col items-center">
             <h4 className="text-5xl font-bold">Profile</h4>
@@ -152,11 +153,11 @@ function Profile() {
             </span>
           </div>
           <form className="py-1" onSubmit={formik.handleSubmit}>
-            <div className="profile flex justify-center py-4">
+            <div style={{width:150,height:"auto",margin:"auto"}} className="profile flex justify-center py-4">
               <label htmlFor="profile">
-                <img
+                <img 
                   src={imageTemp || user.avatar || avatar}
-                  className={styles.profile_img}
+                  className={imgStyle}
                   alt="avatar"
                   onError={loadImageAgain}
                 />
@@ -205,6 +206,7 @@ function Profile() {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 }

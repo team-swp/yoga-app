@@ -33,7 +33,8 @@ const s3 = new S3Client({
 module.exports.postImage = async (req, res) => {
 try {
   if(req.file.mimetype.startsWith('image/')){ 
-  const buffer = await sharp(req.file.buffer).resize({ height: 500, width: 500, fit: "contain" }).toBuffer();
+  // const buffer = await sharp(req.file.buffer).resize({ height: 500, width: 500, fit: "contain" }).toBuffer();
+  const buffer = req.file.buffer
   const imageName =req.body.imageName|| randomImageName();
   const params = {
     Bucket: bucketName,

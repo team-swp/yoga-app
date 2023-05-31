@@ -107,7 +107,7 @@ function Username() {
                   onClick={() => {
                     socialLoginComing("Facebook");
                   }}
-                  className="h-9 w-9"
+                  className="h-8 w-8"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
