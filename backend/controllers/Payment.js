@@ -30,20 +30,20 @@ module.exports.getPaymentMethod = async (req, res) => {
 };
 
 module.exports.updatePaymentMethod = async (req, res) => {
-  const fieldsToUpdate = ['paymentname','status' , 'meta_data'];
+  const fieldsToUpdate = ["paymentname", "status", "meta_data"];
 
-for (const field of fieldsToUpdate) {
-  if (req.body[field] != null) {
-    res.paymentMethod[field] = req.body[field];
+  for (const field of fieldsToUpdate) {
+    if (req.body[field] != null) {
+      res.paymentMethod[field] = req.body[field];
+    }
   }
-}
   try {
     const updatePaymentMethod = await res.paymentMethod.save();
     res.json(updatePaymentMethod);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}; 
+};
 
 module.exports.getPaymentMethodById = async (req, res, next) => {
   let paymentMethod;
@@ -80,7 +80,16 @@ module.exports.addPaymentMethod = async (req, res) => {
 //------------------------------------------------------------------------------------------------------//
 //payment chưa làm ghim lại
 module.exports.addPayment = async (req, res) => {
-  const { recipient,paymentDate,paymentAmount,paymentMethod_id,booking_id,description,status,meta_data } = req.body;
+  const {
+    recipient,
+    paymentDate,
+    paymentAmount,
+    paymentMethod_id,
+    booking_id,
+    description,
+    status,
+    meta_data,
+  } = req.body;
   try {
     const payment = new Payment({
       recipient,
@@ -90,7 +99,7 @@ module.exports.addPayment = async (req, res) => {
       booking_id,
       description,
       status,
-      meta_data
+      meta_data,
     });
     // return save result as a response
     payment
@@ -114,20 +123,29 @@ module.exports.getPayment = async (req, res) => {
 };
 
 module.exports.updatePayment = async (req, res) => {
-  const fieldsToUpdate = ['recipient','paymentDate','paymentAmount','paymentMethod_id','booking_id','description','status' , 'meta_data'];
+  const fieldsToUpdate = [
+    "recipient",
+    "paymentDate",
+    "paymentAmount",
+    "paymentMethod_id",
+    "booking_id",
+    "description",
+    "status",
+    "meta_data",
+  ];
 
-for (const field of fieldsToUpdate) {
-  if (req.body[field] != null) {
-    res.payment[field] = req.body[field];
+  for (const field of fieldsToUpdate) {
+    if (req.body[field] != null) {
+      res.payment[field] = req.body[field];
+    }
   }
-}
   try {
     const updatePayment = await res.payment.save();
     res.json(updatePayment);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}; 
+};
 
 module.exports.getPaymentById = async (req, res, next) => {
   let payment;
@@ -142,4 +160,3 @@ module.exports.getPaymentById = async (req, res, next) => {
   res.payment = payment;
   next();
 };
-

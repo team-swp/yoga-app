@@ -1,7 +1,7 @@
 export const userSelector = (state) => {
-  return state.user
-}
+  return state.user;
+};
 
 export const getAllState = (state) => {
-  return state
-}
+  return state;
+};

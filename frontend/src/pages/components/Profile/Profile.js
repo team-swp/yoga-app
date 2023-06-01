@@ -12,11 +12,16 @@ import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { logOut } from "../../../redux/actions";
+<<<<<<< .merge_file_HZrJwa
 import { UserAuth } from "../../../context/AuthGoogleContext";
 import { addBooking } from "../../../helper/bookingAPI";
 
 function Profile() {
   const{logOut} = UserAuth()
+=======
+
+function Profile() {
+>>>>>>> .merge_file_O6ShwP
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
   const [imageTemp, setImageTemp] = useState();
@@ -155,11 +160,16 @@ function Profile() {
           <form className="py-1" onSubmit={formik.handleSubmit}>
             <div style={{width:150,height:"auto",margin:"auto"}} className="profile flex justify-center py-4">
               <label htmlFor="profile">
+<<<<<<< .merge_file_HZrJwa
                 <img 
                   src={imageTemp || user.avatar || avatar}
                   className={imgStyle}
+=======
+                <img
+                  src={imageTemp || user.avatar || avatar}
+                  className={styles.profile_img}
+>>>>>>> .merge_file_O6ShwP
                   alt="avatar"
-                  onError={loadImageAgain}
                 />
               </label>
               <input

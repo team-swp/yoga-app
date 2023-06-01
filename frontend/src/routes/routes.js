@@ -14,6 +14,7 @@ import {
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+import Timetable from "../pages/components/Profile/Timtable";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -26,6 +27,14 @@ const routers = createBrowserRouter([
   {
     path: "/course/:id",
     element: <CourseDetail></CourseDetail>,
+  },
+  {
+    path: "/timetable",
+    element: (
+      <AuthorizeUser>
+        <Timetable></Timetable>
+      </AuthorizeUser>
+    ),
   },
   {
     path: "/login",

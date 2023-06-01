@@ -13,6 +13,7 @@ module.exports.Auth = async function (req, res, next) {
     const token = req.headers.authorization.split(" ")[1];
     // retrive the user details fo the logged in user
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decodedToken);
     req.account = decodedToken; //chuyển qa cho thg tiếp theo
     next();
   } catch (error) {

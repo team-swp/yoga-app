@@ -1,17 +1,36 @@
+import { useState, useEffect } from "react";
 import { Container } from "@mui/material";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./Courses.module.css";
-import { itemData3 } from "./CoursesList";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import yoga2 from "../../../assets/yoga2.jpg";
 import Calendar from "react-calendar";
+import { getCourse } from "../../../helper/courseAPI";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
 function Courses() {
+  const [courseList, setCourseList] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getCourse();
+        setCourseList(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const user = useSelector(userSelector);
+  console.log(user);
   const [ref, inView] = useInView({
     threshold: 0,
     rootMargin: "-100px",
@@ -39,15 +58,15 @@ function Courses() {
           className={cx("courses-container", { "in-view": inView })}
           ref={ref}
         >
-          {itemData3.map((item) => (
-            <div className={cx("courses-items")} key={item.id}>
-              <Link to={`/course/${item.id}`}>
+          {courseList.map((course) => (
+            <div className={cx("courses-items")} key={course._id}>
+              <Link to={`/course/${course._id}`}>
                 <div className={cx("courses-image")}>
-                  <img src={item.img} alt={item.title} />
+                  <img src={course.images[0]} alt={course.coursename} />
                 </div>
               </Link>
-              <h6 className={cx("courses-title")}>{item.title}</h6>
-              <p className={cx("courses-price")}>${item.price}</p>
+              <h6 className={cx("courses-title")}>{course.coursename}</h6>
+              <p className={cx("courses-price")}>${course.price}</p>
             </div>
           ))}
         </div>
