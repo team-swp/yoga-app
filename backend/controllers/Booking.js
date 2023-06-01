@@ -2,12 +2,14 @@ const Booking = require("../models/bookings");
 module.exports.addBooking = async (req, res) => {
   const { member_id, class_id, booking_date, status, meta_data } = req.body;
   try {
+    console.log(req.body, "123");
+
     const booking = new Booking({
       member_id: req.account.userId,
       class_id,
       booking_date,
       status,
-      meta_data,
+      meta_data: meta_data || "",
     });
     // return save result as a response
     console.log(booking);

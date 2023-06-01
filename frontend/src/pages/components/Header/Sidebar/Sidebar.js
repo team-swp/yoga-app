@@ -9,6 +9,7 @@ import { logOut } from "../../../../redux/actions";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { Link } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -50,7 +51,7 @@ function Sidebar() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
-    <>
+    <div>
       <IconButton
         disableRipple
         onClick={handleOpenUserMenu}
@@ -84,48 +85,55 @@ function Sidebar() {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <div className={cx("sidebar")} onClick={handleCloseUserMenu}>
-          <ul>
-            <li>Profile</li>
-            <li>Dashboard</li>
-            <li>
-              <button onClick={handleOpen}>Log Out</button>
-              <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                    sx={{ mb: 5 }}
-                  >
-                    Are you sure you want to Log Out ?
-                  </Typography>
-                  <div className={cx("modal-modal-button")}>
-                    <button
-                      className={cx("modal-modal-button-yes")}
-                      onClick={handleLogout}
+        {
+          <div className={cx("sidebar")} onClick={handleCloseUserMenu}>
+            <ul>
+              <li>Profile</li>
+              <li>
+                <Link to="/timetable">
+                  <button>Weekly Timetable</button>
+                </Link>
+              </li>
+              <li>Dashboard</li>
+              <li>
+                <button onClick={handleOpen}>Log Out</button>
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style}>
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                      sx={{ mb: 5 }}
                     >
-                      <a href="/"> Yes, Log Out</a>
-                    </button>
-                    <button
-                      className={cx("modal-modal-button-no")}
-                      onClick={handleClose}
-                    >
-                      No, Cancel
-                    </button>
-                  </div>
-                </Box>
-              </Modal>
-            </li>
-          </ul>
-        </div>
+                      Are you sure you want to Log Out ?
+                    </Typography>
+                    <div className={cx("modal-modal-button")}>
+                      <button
+                        className={cx("modal-modal-button-yes")}
+                        onClick={handleLogout}
+                      >
+                        <a href="/"> Yes, Log Out</a>
+                      </button>
+                      <button
+                        className={cx("modal-modal-button-no")}
+                        onClick={handleClose}
+                      >
+                        No, Cancel
+                      </button>
+                    </div>
+                  </Box>
+                </Modal>
+              </li>
+            </ul>
+          </div>
+        }
       </Menu>
-    </>
+    </div>
   );
 }
 

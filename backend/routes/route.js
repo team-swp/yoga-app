@@ -166,6 +166,6 @@ router.patch(
   updatePaymentMethod
 );
 //booking
-router.post("/booking/add", addBooking);
+router.post("/booking/add", Auth, addBooking);
 router.get("/booking/get", getBooking);
-router.patch("/boinokg/update", updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa
+router.patch("/boinokg/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa
