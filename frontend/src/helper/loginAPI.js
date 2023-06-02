@@ -168,3 +168,12 @@ export async function getAvatarToAWS({imageName}){
     return Promise.reject({ error });
   }
 }
+
+export async function verifyTokenGoogle(tokenID){
+  try {
+    const {data} = await axios.post('api/google/verify', {authToken:tokenID})
+    return Promise.resolve(data)
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}

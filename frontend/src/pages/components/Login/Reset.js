@@ -39,6 +39,7 @@ function Reset() {
   });
 
   return (
+    <div className={styles.background_all}>
     <div className="container mx-auto">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
       <div className="flex justify-center items-center h-screen">
@@ -70,6 +71,7 @@ function Reset() {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 }

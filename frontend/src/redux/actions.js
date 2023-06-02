@@ -12,7 +12,7 @@ export const addUserLogin = (data) => {
   };
 };
 
-export const logOut = (data) => {
+export const logOutNormal = (data) => {
   return {
     type: "logout",
     payload: data,

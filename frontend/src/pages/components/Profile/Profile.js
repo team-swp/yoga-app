@@ -12,8 +12,16 @@ import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { logOut } from "../../../redux/actions";
+<<<<<<< HEAD
 
 function Profile() {
+=======
+import { UserAuth } from "../../../context/AuthGoogleContext";
+import { addBooking } from "../../../helper/bookingAPI";
+
+function Profile() {
+  const{logOut} = UserAuth()
+>>>>>>> 10f6438e6475b94ecf969e4023a9dd8268dbcaf0
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
   const [imageTemp, setImageTemp] = useState();
@@ -28,7 +36,7 @@ function Profile() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      values = await Object.assign(values, {
+      values =  Object.assign(values, {
         avatar: file || user.avatar || "",
       });
       let updatePromise = updateUser(values);
@@ -122,7 +130,6 @@ function Profile() {
         formData.append("imageName", user._id);
 
         const { data, status } = await postAvatarToAWS(formData);
-
         if (status === 200) {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
@@ -134,15 +141,15 @@ function Profile() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    dispatch(logOut(""));
+  const handleLogout =  () => {
+    logOut();
   };
-
+ const imgStyle=`${styles.profile_img} object-cover h-44  `
   return (
+    <div className={styles.background_all}>
     <div className="container mx-auto">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center">
         <div className={styles.glass}>
           <div className="title flex flex-col items-center">
             <h4 className="text-5xl font-bold">Profile</h4>
@@ -151,11 +158,17 @@ function Profile() {
             </span>
           </div>
           <form className="py-1" onSubmit={formik.handleSubmit}>
-            <div className="profile flex justify-center py-4">
+            <div style={{width:150,height:"auto",margin:"auto"}} className="profile flex justify-center py-4">
               <label htmlFor="profile">
+<<<<<<< HEAD
                 <img
                   src={imageTemp || user.avatar || avatar}
                   className={styles.profile_img}
+=======
+                <img 
+                  src={imageTemp || user.avatar || avatar}
+                  className={imgStyle}
+>>>>>>> 10f6438e6475b94ecf969e4023a9dd8268dbcaf0
                   alt="avatar"
                 />
               </label>
@@ -203,6 +216,7 @@ function Profile() {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 }

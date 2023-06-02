@@ -37,6 +37,7 @@ function Register() {
   });
 
   return (
+    <div className={styles.background_all}>
     <div className="container mx-auto">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
       <div className="flex justify-center items-center h-screen">
@@ -44,40 +45,43 @@ function Register() {
           <div className="title flex flex-col items-center">
             <h4 className="text-5xl font-bold">Register</h4>
             <span className="py-4 text-xl w-2/3 text-center text-grey-500">
-              Happy to join with us !
+              BECOME A HEARTBEAT MEMBER
             </span>
           </div>
           <form className="py-1" onSubmit={formik.handleSubmit}>
+<<<<<<< HEAD
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
                 <img src={avatar} className={styles.profile_img} alt="avatar" />
               </label>
             </div>
 
+=======
+>>>>>>> 10f6438e6475b94ecf969e4023a9dd8268dbcaf0
             <div className="textbox flex flex-col items-center gap-6">
               <input
                 {...formik.getFieldProps("email")}
                 className={styles.textbox}
                 type="email"
-                placeholder="Email*"
+                placeholder="Your Email*"
               />
               <input
                 {...formik.getFieldProps("username")}
                 className={styles.textbox}
                 type="text"
-                placeholder="Your Fullname*"
+                placeholder="What's Your Fullname*"
               />
               <input
                 {...formik.getFieldProps("password")}
                 className={styles.textbox}
                 type="password"
-                placeholder="password*"
+                placeholder="Your Password*"
               />
               <input
                 {...formik.getFieldProps("phone")}
                 className={styles.textbox}
                 type="text"
-                placeholder="phone"
+                placeholder="Your Phone Number"
               />
               <button className={styles.btn} type="submit">
                 Register
@@ -94,6 +98,7 @@ function Register() {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 }
