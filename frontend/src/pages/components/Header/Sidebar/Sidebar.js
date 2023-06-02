@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Link } from "react-router-dom";
+import { UserAuth } from "../../../../context/AuthGoogleContext";
 
 const style = {
   position: "absolute",
@@ -27,6 +28,7 @@ const cx = classNames.bind(styles);
 
 function Sidebar() {
   const dispatch = useDispatch();
+  const { logOut } = UserAuth();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
@@ -43,9 +45,7 @@ function Sidebar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    dispatch(logOutNormal(""));
-    setOpen(false);
+    logOut()
   };
 
   const handleOpen = () => setOpen(true);
