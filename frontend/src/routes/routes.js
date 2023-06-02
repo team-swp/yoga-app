@@ -8,6 +8,7 @@ import Reset from "../pages/components/Login/Reset";
 import Username from "../pages/components/Login/Username";
 import Profile from "../pages/components/Profile/Profile";
 import Courses from "../pages/components/Courses/Courses";
+import WeeklyTimetable from "../pages/components/WeeklyTimetable/WeekTimtable";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
 import {
   AuthorizeUser,
@@ -26,6 +27,10 @@ const routers = createBrowserRouter([
   {
     path: "/course/:id",
     element: <CourseDetail></CourseDetail>,
+  },
+  {
+    path: "/timetable",
+    element: <WeeklyTimetable />,
   },
   {
     path: "/login",

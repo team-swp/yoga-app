@@ -61,14 +61,16 @@ paymentSchema.pre("save", async function (next) {
       if (booking) {
         booking.status = 5;
         await booking.save();
-      }  
-    }else if (paymentMethod &&
-      paymentMethod.paymentname !== "Pay at the yoga center"){
-        const booking = await Booking.findOne({ _id: payment.booking_id });
-        if (booking) {
-          booking.status = 10;
-          await booking.save();
-        }
+      }
+    } else if (
+      paymentMethod &&
+      paymentMethod.paymentname !== "Pay at the yoga center"
+    ) {
+      const booking = await Booking.findOne({ _id: payment.booking_id });
+      if (booking) {
+        booking.status = 10;
+        await booking.save();
+      }
     }
     next();
   } catch (error) {

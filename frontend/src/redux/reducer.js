@@ -44,6 +44,7 @@ const rootReducer = (state = initState, action) => {
       };
       return newState;
     }
+
     case "login/setDataLogin": {
       const { _id, token, username, phone, avatar } = action.payload;
       localStorage.setItem("token", token);

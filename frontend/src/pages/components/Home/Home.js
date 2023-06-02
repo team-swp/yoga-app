@@ -1,14 +1,31 @@
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Container, Box, Button, Typography, Grid } from "@mui/material";
-import classNames from "classnames/bind";
+import { Link } from "react-router-dom";
 import styles from "./Home.module.css";
-import { itemData, itemData2 } from "./ClassList";
+import classNames from "classnames/bind";
+import { Container, Box, Button, Typography, Grid } from "@mui/material";
+import { itemData2 } from "./ClassList";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { Link } from "react-router-dom";
+import { getCourse } from "../../../helper/courseAPI";
+
 const cx = classNames.bind(styles);
 
 function Home() {
+  const [courseList, setCourseList] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await getCourse();
+        setCourseList(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
+
   const [refFirts, inViewFirst] = useInView({
     threshold: 0,
     rootMargin: "-100px",
@@ -75,17 +92,17 @@ function Home() {
               className={cx("class-container", { "in-view": inViewFirst })}
               ref={refFirts}
             >
-              {itemData.map((item) => (
-                <div key={item.id} className={cx("class-item")}>
-                  <Link to={`course/${item.id}`}>
+              {courseList.map((course) => (
+                <div key={course._id} className={cx("class-item")}>
+                  <Link to={`course/${course._id}`}>
                     <div className={cx("class-img")}>
-                      <img src={item.img} alt={item.title} />
+                      <img src={course.images[0]} alt={course.coursename} />
                     </div>
                     <div className={cx("class-info")}>
-                      <h3>{item.title}</h3>
+                      <h3>{course.coursename}</h3>
                     </div>
                     <div className={cx("class-place")}>
-                      <p>{item.place}</p>
+                      <p>In studios</p>
                     </div>
                   </Link>
                 </div>

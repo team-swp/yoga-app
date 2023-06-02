@@ -1,13 +1,13 @@
 const Schedule = require("../models/schedules");
 
 module.exports.addSchedule = async (req, res) => {
-  const { schedulename, startTime, endTime,days ,meta_data } = req.body;
+  const { schedulename, startTime, endTime, days, meta_data } = req.body;
   try {
     const schedule = new Schedule({
       schedulename: schedulename,
       startTime: startTime,
       endTime: endTime,
-      days:days,
+      days: days,
       meta_data: meta_data || "", //to store side data
     });
 
@@ -33,22 +33,28 @@ module.exports.getSchedules = async (req, res) => {
   }
 };
 
-
 module.exports.updateSchedule = async (req, res) => {
-  const fieldsToUpdate = ['schedulename', 'startTime', 'endTime', 'days','status', 'meta_data'];
+  const fieldsToUpdate = [
+    "schedulename",
+    "startTime",
+    "endTime",
+    "days",
+    "status",
+    "meta_data",
+  ];
 
-for (const field of fieldsToUpdate) {
-  if (req.body[field] != null) {
-    res.schedule[field] = req.body[field];
+  for (const field of fieldsToUpdate) {
+    if (req.body[field] != null) {
+      res.schedule[field] = req.body[field];
+    }
   }
-}
   try {
     const updateSchedule = await res.schedule.save();
     res.json(updateSchedule);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}; 
+};
 
 module.exports.getScheduleById = async (req, res, next) => {
   let schedule;
