@@ -41,8 +41,13 @@ function Password() {
           console.log(res.data);
           dispatch(setDataLogin(res.data)); //reducer là kho lưu trữ nhận giá trị lưu trữ không phải phần xử lí
           navigate("/");
-        });
-      });
+        })
+        .catch((res)=>{
+          navigate("/login");
+        })
+      })
+      .catch((res)=>{
+        navigate("/login")});
       // function asyncFunction1() {
       //   return new Promise((resolve, reject) => {
       //     setTimeout(() => {

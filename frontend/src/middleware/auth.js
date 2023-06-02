@@ -3,14 +3,14 @@ import { userSelector } from "../redux/selectors";
 import { useSelector } from "react-redux";
 
 export const AuthorizeUser = ({ children }) => {
-  const token = localStorage.getItem("token");
   const user = useSelector(userSelector);
+  const token = localStorage.getItem("token");
   if (!token) {
-    return <Navigate to={"/"} replace={true}></Navigate>;
+    return <Navigate to={"/login"} replace={true}></Navigate>;
   } else {
     if (!user.email) {
       if (user.email === "") {
-        return <Navigate to={"/"} replace={true}></Navigate>;
+        return <Navigate to={"/login"} replace={true}></Navigate>;
       }
     }
   }
