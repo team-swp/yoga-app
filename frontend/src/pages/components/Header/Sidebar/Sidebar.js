@@ -5,7 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import classNames from "classnames/bind";
 import styles from "./Sidebar.module.css";
 import { useDispatch } from "react-redux";
-import { logOut } from "../../../../redux/actions";
+import { logOutNormal } from "../../../../redux/actions";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -44,7 +44,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    dispatch(logOut(""));
+    dispatch(logOutNormal(""));
     setOpen(false);
   };
 

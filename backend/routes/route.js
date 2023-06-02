@@ -50,7 +50,11 @@ const {
   getClassById,
   updateClass,
 } = require("../controllers/Class");
-<<<<<<< HEAD
+
+const {
+  verifyTokenGoogle,
+  CheckExistAccount,
+} = require("../Firebase/Firebase-admin");
 const {
   addPaymentMethod,
   getPaymentMethod,
@@ -66,13 +70,7 @@ const {
   getBooking,
   updateBooking,
 } = require("../controllers/Booking");
-=======
-
-const{verifyTokenGoogle, CheckExistAccount}= require("../Firebase/Firebase-admin")
-const { addPaymentMethod, getPaymentMethod, getPaymentMethodById, updatePaymentMethod, addPayment, getPayment, getPaymentById, updatePayment } = require("../controllers/Payment");
-const { addBooking, getBooking, updateBooking } = require("../controllers/Booking");
 const Semester = require("../models/semesters");
->>>>>>> 10f6438e6475b94ecf969e4023a9dd8268dbcaf0
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -176,11 +174,7 @@ router.patch(
 //booking
 router.post("/booking/add", Auth, addBooking);
 router.get("/booking/get", getBooking);
-<<<<<<< HEAD
-router.patch("/boinokg/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa
-=======
-router.patch("/booking/update",Auth,updateBooking)//người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
+router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
 
-//google 
-router.post("/google/verify",verifyTokenGoogle,CheckExistAccount);
->>>>>>> 10f6438e6475b94ecf969e4023a9dd8268dbcaf0
+//google
+router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);

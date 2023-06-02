@@ -72,10 +72,7 @@ const rootReducer = (state = initState, action) => {
       };
     }
     case "logout": {
-<<<<<<< HEAD
-=======
       localStorage.removeItem("token");
->>>>>>> 10f6438e6475b94ecf969e4023a9dd8268dbcaf0
       return {
         ...state,
         user: {},
