@@ -11,3 +11,33 @@
   color: rgb(94, 90, 90);
   background-color: #efeaea;
 }
+
+.modal-modal-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-modal-button button {
+  padding: 2px 6px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+.modal-modal-button-yes {
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+.modal-modal-button-no {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.modal-modal-button-yes:hover,
+.modal-modal-button-no:hover {
+  opacity: 0.8;
+}

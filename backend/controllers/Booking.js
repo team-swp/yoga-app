@@ -1,16 +1,20 @@
-const Booking = require('../models/bookings')
+const Booking = require("../models/bookings");
 module.exports.addBooking = async (req, res) => {
-  const {class_id,booking_date,status,meta_data } = req.body;
+  const { member_id, class_id, booking_date, status, meta_data } = req.body;
   try {
+    console.log(req.body, "123");
+
     const booking = new Booking({
       member_id: req.account.userId,
       class_id,
       booking_date,
       status,
-      meta_data
+      meta_data: meta_data || "",
     });
     // return save result as a response
-    booking.save()
+    console.log(booking);
+    booking
+      .save()
       .then((result) =>
         res.status(201).send({ msg: "Add Booking Successfully" })
       )
@@ -30,20 +34,26 @@ module.exports.getBooking = async (req, res) => {
 };
 
 module.exports.updateBooking = async (req, res) => {
-  const fieldsToUpdate = ['member_id','class_id','booking_date','status' , 'meta_data'];
+  const fieldsToUpdate = [
+    "member_id",
+    "class_id",
+    "booking_date",
+    "status",
+    "meta_data",
+  ];
 
-for (const field of fieldsToUpdate) {
-  if (req.body[field] != null) {
-    res.booking[field] = req.body[field];
+  for (const field of fieldsToUpdate) {
+    if (req.body[field] != null) {
+      res.booking[field] = req.body[field];
+    }
   }
-}
   try {
     const updateBooking = await res.booking.save();
     res.json(updateBooking);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}; 
+};
 
 module.exports.getBookingById = async (req, res, next) => {
   let booking;
@@ -58,8 +68,3 @@ module.exports.getBookingById = async (req, res, next) => {
   res.booking = booking;
   next();
 };
-
-//kiểm tra xem nếu thg đó ở trong lớp đó rồi thì không cho book nữa
-//chỉ được book tiếp khi không trong lớp hoặc lớp đó chứa course đó đã hết hạn
-//nếu update thì thg có id mới được chỉnh sửa
-//nếu lớp đó được book thì thg kia phải hết hạn

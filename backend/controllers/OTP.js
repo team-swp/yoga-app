@@ -47,15 +47,15 @@ module.exports.resetPassword = async function (req, res) {
                 { email },
                 { password: hashedPassword }
               );
-              if(check) {
+              if (check) {
                 req.app.locals.resetSession = false; // reset session
                 return res.status(201).send({ msg: "Record Updated...!" });
-              }else{
+              } else {
                 return res.status(500).send({
                   error: "Can't change password",
                 });
               }
-             
+
               //  Account.findOneAndUpdate({ email: user.email },{ password: hashedPassword },{
               //   run: (async function (err, data) {
               //     if (err) throw err;
