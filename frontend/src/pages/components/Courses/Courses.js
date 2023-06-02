@@ -7,10 +7,7 @@ import styles from "./Courses.module.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import yoga2 from "../../../assets/yoga2.jpg";
-import Calendar from "react-calendar";
 import { getCourse } from "../../../helper/courseAPI";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
@@ -29,8 +26,6 @@ function Courses() {
     fetchData();
   }, []);
 
-  const user = useSelector(userSelector);
-  console.log(user);
   const [ref, inView] = useInView({
     threshold: 0,
     rootMargin: "-100px",
@@ -69,10 +64,6 @@ function Courses() {
               <p className={cx("courses-price")}>${course.price}</p>
             </div>
           ))}
-        </div>
-
-        <div>
-          <Calendar className={cx("react-calendar")} />
         </div>
       </Container>
       <Footer />

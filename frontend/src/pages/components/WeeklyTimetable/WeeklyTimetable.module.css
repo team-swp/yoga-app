@@ -1,0 +1,41 @@
+.courses-img-yoga2 img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.weekly-timetable {
+  margin: 50px;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.week-table {
+  width: 100%;
+  margin: auto auto 50px auto;
+  height: auto;
+}
+
+.week-table--head {
+  color: #f7f8f6;
+  background-color: rgb(106, 152, 222);
+}
+
+.week-table--body {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.week-table--body:hover {
+  background-color: rgba(13, 76, 170, 0.433);
+  color: #000;
+}
+
+.today {
+  background-color: yellow;
+}

@@ -14,7 +14,6 @@ export async function getApi({ apiPath, errorMessage }) {
 export async function addApi(response, { apiPath, errorMessage }) {
   try {
     const token = localStorage.getItem("token");
-    console.log("token0", token);
     const data = await axios.post(apiPath, response, {
       headers: { Authorization: `Bearer ${token}` },
     });
