@@ -82,7 +82,11 @@ function Register() {
               <div className="text-center py-4">
                 <span className="text-gray-500">
                   Already Register?
+<<<<<<< HEAD
                   <Link className="text-red-500" to="/">
+=======
+                  <Link className="text-red-500" to="/login">
+>>>>>>> minhNVA
                     Login Now
                   </Link>
                 </span>
