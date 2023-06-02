@@ -55,10 +55,6 @@ const {
   verifyTokenGoogle,
   CheckExistAccount,
 } = require("../Firebase/Firebase-admin");
-<<<<<<< HEAD
-
-=======
->>>>>>> minhNVA
 const {
   addPaymentMethod,
   getPaymentMethod,
@@ -178,9 +174,5 @@ router.patch(
 router.post("/booking/add", Auth, addBooking); // có tài khoản thì mới đucợ book
 router.get("/booking/get", getBooking);
 router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
-<<<<<<< HEAD
-=======
-
->>>>>>> minhNVA
 //google
 router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);

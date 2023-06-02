@@ -162,10 +162,7 @@ function Profile() {
                     src={imageTemp || user.avatar || avatar}
                     className={imgStyle}
                     alt="avatar"
-<<<<<<< HEAD
                     onError={loadImageAgain}
-=======
->>>>>>> minhNVA
                   />
                 </label>
                 <input
