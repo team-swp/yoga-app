@@ -8,13 +8,13 @@ import Reset from "../pages/components/Login/Reset";
 import Username from "../pages/components/Login/Username";
 import Profile from "../pages/components/Profile/Profile";
 import Courses from "../pages/components/Courses/Courses";
+import WeeklyTimetable from "../pages/components/WeeklyTimetable/WeekTimtable";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
 import {
   AuthorizeUser,
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
-import Timetable from "../pages/components/Profile/Timtable";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -30,11 +30,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/timetable",
-    element: (
-      <AuthorizeUser>
-        <Timetable></Timetable>
-      </AuthorizeUser>
-    ),
+    element: <WeeklyTimetable />,
   },
   {
     path: "/login",

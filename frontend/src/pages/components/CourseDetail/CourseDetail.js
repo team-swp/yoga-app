@@ -14,8 +14,6 @@ import Modal from "@mui/material/Modal";
 import { getCourse } from "../../../helper/courseAPI";
 import { getClass } from "../../../helper/classAPI";
 import { getSchedule } from "../../../helper/scheduleAPI";
-import { useSelector } from "react-redux";
-import { userSelector } from "../../../redux/selectors";
 import { addBooking } from "../../../helper/bookingAPI";
 
 const cx = classNames.bind(styles);
@@ -25,7 +23,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -33,11 +31,15 @@ const style = {
 };
 
 function CourseDetail() {
-  //courseAPI
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const courseId = useParams();
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [open, setOpen] = useState(false);
   const [course, setCourse] = useState(null);
   const [classList, setClassList] = useState([]);
-  const courseId = useParams();
 
+  //fetchData
   useEffect(() => {
     async function fetchData() {
       try {
@@ -47,66 +49,36 @@ function CourseDetail() {
         const classes = classList.data.filter(
           (obj) => obj.course_id === course._id
         );
-        setClassList(classes);
+
+        const promises = classes.map(async (obj) => {
+          const scheduleResponse = await getSchedule(obj.schedule_id);
+          obj.schedule = scheduleResponse;
+          return obj;
+        });
+
+        const classListWithSchedule = await Promise.all(promises);
+
         setCourse(course);
+        setClassList(classListWithSchedule);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  }, []);
-
-  const user = useSelector(userSelector);
-
-  //   //scheduleAPI
-  //   // const [scheduleList, setScheduleList] = useState([]);
-  //   // useEffect(() => {
-  //   //   async function fetchData() {
-  //   //     try {
-  //   //       const response = await getSchedule();
-  //   //       setScheduleList(response.data);
-  //   //     } catch (error) {
-  //   //       console.log(error);
-  //   //     }
-  //   //   }
-  //   //   fetchData();
-  //   // }, []);
-
-  //   // const classesWithSchedule = classes.map((classObj) => {
-  //   //   const matchingSchedule = scheduleList.find(
-  //   //     (schedule) => schedule._id === classObj.schedule_id
-  //   //   );
-  //   //   if (matchingSchedule) {
-  //   //     return {
-  //   //       ...classObj,
-  //   //       schedules: [matchingSchedule],
-  //   //     };
-  //   //   } else {
-  //   //     return { ...classObj, schedules: [] };
-  //   //   }
-  //   // });
-  //   // console.log(classesWithSchedule);
-
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const token = localStorage.getItem("token");
-
-  const [selectedClass, setSelectedClass] = useState(null);
-
   const handleSubmit = async () => {
     const booking = {
-      // member_id: user._id,
       class_id: selectedClass,
     };
     try {
       const response = await addBooking(booking);
       console.log(response);
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error);
     }
   };
 
@@ -178,9 +150,19 @@ function CourseDetail() {
                           }
                         >
                           {classList.map((classObj) => (
-                            <option key={classObj._id} value={classObj._id}>
-                              {classObj.classname}
-                            </option>
+                            <optgroup
+                              key={classObj._id}
+                              label={classObj.classname}
+                            >
+                              {classObj.schedule.data.map((scheduleObj) => (
+                                <option
+                                  key={scheduleObj._id}
+                                  value={classObj._id}
+                                >
+                                  {scheduleObj.schedulename}
+                                </option>
+                              ))}
+                            </optgroup>
                           ))}
                         </select>
                         <button
