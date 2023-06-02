@@ -67,7 +67,7 @@ function Username() {
     toast(`Sorry we are updating ${social} to login`, {
       icon: "👏",
       style: {
-        fontSize:"13px",
+        fontSize: "13px",
         borderRadius: "10px",
         background: "#87DEE3",
         color: "000",
@@ -75,6 +75,7 @@ function Username() {
     });
     console.log("click");
   };
+  const styleLine = `${styles.orLine} flex flex-row items-stretch justify-center`; //flex flex-col items-center justify-center ${styles.line_divided_span}
   let title = "YOUR ACCOUNT FOR HEARTBEAT.";
   return (
     <div className={styles.background_all}>
@@ -101,8 +102,16 @@ function Username() {
                 </button>
                 {/* <GoogleButton onClick={handleGoogleSignIn} /> */}
               </div>
-              <div className={styles.line_divided}></div>
-              <div className="flex justify-evenly items-center ">
+
+              <div className={styleLine}>
+                <div className={styles.line_divided}> </div>
+                <div className={styles.orText}>OR</div>
+                <div className={styles.line_divided}> </div>
+              </div>
+              <div
+                style={{ marginTop: "1%" }}
+                className="flex justify-evenly items-center"
+              >
                 <div
                   onClick={() => {
                     socialLoginComing("Facebook");
@@ -135,9 +144,12 @@ function Username() {
                     />
                   </svg>
                 </div>
-                <div onClick={() => {
+                <div
+                  onClick={() => {
                     socialLoginComing("Instagram");
-                  }} className="h-7 w-7">
+                  }}
+                  className="h-7 w-7"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"

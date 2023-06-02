@@ -22,7 +22,7 @@ export async function getUser({ id }) {
 
 export async function getUserByToken() {
   try {
-    const token = await localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     const data = await axios.get("/api/accessToken", {
       headers: { Authorization: `Bearer ${token}` },
     });

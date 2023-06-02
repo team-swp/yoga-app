@@ -10,7 +10,9 @@ module.exports.addSchedule = async (req, res) => {
       days:days,
       meta_data: meta_data || "", //to store side data
     });
-    // return save result as a response
+
+    // return save result as a response 
+    
     schedule
       .save()
       .then((result) =>

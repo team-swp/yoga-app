@@ -19,9 +19,8 @@ margin: 0 auto;
 }
 
 .profile_img{
-  @apply border-4 border-gray-100 w-[100vw] rounded-full shadow-lg cursor-pointer;
+  @apply border-4 border-gray-100 w-[135px] rounded-full shadow-lg cursor-pointer;
   @apply hover:border-gray-200;
-
 }
 
 .textbox{
@@ -43,5 +42,20 @@ input[type='file']{
 }
 
 .line_divided{
-  margin: 10% 0;
+  background-color:#87DEE3 ;
+  font-size: 14px;
+  line-height: 18px;
+  height: 1px;
+  width: calc(70%/2);
+  margin: auto;
+}
+
+.orText{
+  padding: 0 10px;
+  margin: auto -10%;
+  color: #0b6267;
+}
+.orLine{
+  margin-top: 12%;
+  margin-bottom: 4%;
 }
