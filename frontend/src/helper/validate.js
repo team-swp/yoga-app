@@ -48,6 +48,12 @@ export async function registerValidation(values){
   return errors;
 }
 
+export async function loginValidation(values){
+  const errors = emailVerify({}, values);
+  passwordVerify(errors, values);
+  return errors;
+}
+
 
 
 /** validate profile page */

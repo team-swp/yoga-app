@@ -27,6 +27,15 @@ export const ProtectRoute = ({ children }) => {
   return children;
 };
 
+export const ProtectRecover = ({ children }) => {
+  const user = useSelector(userSelector);
+  const email = user.email;
+  if (!email) {
+    return <Navigate to={"/password"} replace={true}></Navigate>;
+  }
+  return children;
+};
+
 export const ProtectRouteOTP = ({ children }) => {
   const user = useSelector(userSelector);
   const checkOTP = user.OTP;

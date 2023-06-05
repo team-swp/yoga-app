@@ -12,9 +12,11 @@ import WeeklyTimetable from "../pages/components/WeeklyTimetable/WeekTimtable";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
 import {
   AuthorizeUser,
+  ProtectRecover,
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+import Checkout from "../pages/components/Checkout/Checkout";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -43,9 +45,7 @@ const routers = createBrowserRouter([
   {
     path: "/password",
     element: (
-      <ProtectRoute>
         <Password />
-      </ProtectRoute>
     ),
   },
   {
@@ -66,7 +66,16 @@ const routers = createBrowserRouter([
   },
   {
     path: "/recovery",
-    element: <Recovery></Recovery>,
+
+    element: (
+      <ProtectRecover>
+        <Recovery />
+      </ProtectRecover>
+    ),
+  },
+  {
+    path:"/checkout",
+    element:(<Checkout/>)
   },
   {
     path: "*",

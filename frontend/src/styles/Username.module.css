@@ -4,6 +4,7 @@
   background-position: center;
   background-size: cover;
   display: flex;
+  flex-direction: column;
 }
 .glass{
   background: rgba(255, 255, 255, 0.55);
@@ -56,6 +57,6 @@ input[type='file']{
   color: #0b6267;
 }
 .orLine{
-  margin-top: 12%;
+  margin-top: 8%;
   margin-bottom: 4%;
 }
