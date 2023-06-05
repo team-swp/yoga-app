@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 //env
 const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
+app.set('view engine', 'html');
 app.use(cors());
 app.use(
   bodyParser.urlencoded({

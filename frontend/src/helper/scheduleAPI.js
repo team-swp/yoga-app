@@ -17,3 +17,4 @@ export async function updateSchedule(respone){
  return await updateApi(respone ,{apiPath:`/api/schedule/update`,errorMessage:'Cannot Update Schedule'})
 
 }
+

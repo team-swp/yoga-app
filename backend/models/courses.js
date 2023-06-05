@@ -30,7 +30,7 @@ const courseSchema = new mongoose.Schema(
     semester_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Semester",
-      required: true,
+      required: false,
     },
     images: {
       type: Array,

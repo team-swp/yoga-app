@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    let test = await signInWithPopup(auth, provider);
+     await signInWithPopup(auth, provider);
   };
   const dispatch = useDispatch();
   const logOut = async () => {

@@ -32,9 +32,12 @@ const paymentSchema = new mongoose.Schema(
       required: false,
     },
     status: {
-      type: Boolean,
-      default: true,
+      type: Number,
+      default: 5,
       required: true,
+      //0 thất bại book, do lớp đầy, do đã tham gia vào lớp r
+      //10 book thành công thanh toán nộp tiền đầy đủ
+      //5 book thành công, chọn phương thức thanh toán thành công, nhưng chưa nộp tiền
     },
     meta_data: {
       type: String,
@@ -43,39 +46,5 @@ const paymentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-paymentSchema.pre("save", async function (next) {
-  const PaymentMethod = require("./payment_methods"); // Đường dẫn tới file model của Payment
-  const Booking = require("./bookings"); // Đường dẫn tới file model của Booking
-  try {
-    const payment = this;
-    const paymentMethod = await PaymentMethod.findOne({
-      _id: payment.paymentMethod_id,
-    });
-
-    if (
-      paymentMethod &&
-      paymentMethod.paymentname === "Pay at the yoga center"
-    ) {
-      const booking = await Booking.findOne({ _id: payment.booking_id });
-      if (booking) {
-        booking.status = 5;
-        await booking.save();
-      }
-    } else if (
-      paymentMethod &&
-      paymentMethod.paymentname !== "Pay at the yoga center"
-    ) {
-      const booking = await Booking.findOne({ _id: payment.booking_id });
-      if (booking) {
-        booking.status = 10;
-        await booking.save();
-      }
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
 
 module.exports = mongoose.model("Payment", paymentSchema);
