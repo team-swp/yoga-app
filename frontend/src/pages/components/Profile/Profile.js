@@ -11,7 +11,6 @@ import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { UserAuth } from "../../../context/AuthGoogleContext";
-<<<<<<< HEAD
 import { addBooking } from "../../../helper/bookingAPI";
 import Navigation from "../Header/Navigation/Navigation";
 import Header from "../Header/Header";
@@ -20,9 +19,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import Password from "../Login/Password";
 import Recovery from "../Login/Recovery";
 import PasswordReset from "./PasswordReset";
-=======
 import { addCourse } from "../../../helper/courseAPI";
->>>>>>> f650142d2379bd67919d386c75b54868fd3f0502
 
 function Profile() {
   const { logOut } = UserAuth();
@@ -118,7 +115,11 @@ function Profile() {
     }
   };
   const onUpload = async (e) => {
-    const res = await addCourse({ coursename: "12333", price: 1234, semester_id:'64731350ba5ce2a6c3ab38df' });
+    const res = await addCourse({
+      coursename: "12333",
+      price: 1234,
+      semester_id: "64731350ba5ce2a6c3ab38df",
+    });
     console.log(res);
 
     const avatar = e.target.files[0];
