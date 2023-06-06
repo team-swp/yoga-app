@@ -15,14 +15,27 @@ import {
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
+=======
+<<<<<<< HEAD
+>>>>>>> 2ee3a9357b7d448950859d00a280310e743cf6c7
 import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
 import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
 import Checkout from "../pages/components/Checkout/Checkout";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
+<<<<<<< HEAD
 
+=======
+>>>>>>> thienNH
+>>>>>>> f650142d2379bd67919d386c75b54868fd3f0502
+>>>>>>> 84c261148effb8feb325180a9e049c794aa79e67
+>>>>>>> 2ee3a9357b7d448950859d00a280310e743cf6c7
 const routers = createBrowserRouter([
   {
     path: "/",
