@@ -17,6 +17,7 @@ import {
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
 import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
@@ -27,8 +28,6 @@ import ManageSchedule from "../pages/components/Schedule/ManageSchedule";
 import ManageAddSchedule from "../pages/components/Schedule/ManageAddSchedule";
 import ManageEditSchedule from "../pages/components/Schedule/ManageEditSchedule";
 import ManageClass from "../pages/components/ManageClass/ManageClass";
-
-
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -86,6 +85,10 @@ const routers = createBrowserRouter([
   {
     path: "/checkout",
     element: <Checkout />,
+  },
+  {
+    path: "/paymentstatus",
+    element: (<PaymentStatus />)
   },
   {
     path: "*",

@@ -5,7 +5,6 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { addSchedule } from "../../../helper/scheduleAPI";
 import Datetime from 'react-datetime';
-import 'react-datetime/css/react-datetime.css';
 
 function ManageAddSchedule() {
     const [schedulename, setSchedulename] = useState("");
