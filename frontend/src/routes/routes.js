@@ -15,6 +15,10 @@ import {
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
+import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
+import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
+import StaffManage from "../pages/components/StaffManage/StaffManage";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -72,6 +76,22 @@ const routers = createBrowserRouter([
     path: "*",
     element: <PageNotFound></PageNotFound>,
   },
+  {
+    path: "/staffmanage",
+    element: <StaffManage></StaffManage>
+  },
+  {
+    path: "/managecourse",
+    element: <ManageCourses></ManageCourses>
+  },
+  {
+    path: "/addnewcourse",
+    element: <AddNewCourse></AddNewCourse>
+  },
+  {
+    path: "/updatecourse/:id",
+    element: <UpdateCourse></UpdateCourse>
+  }
 ]);
 
 export default routers;
