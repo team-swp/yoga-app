@@ -41,3 +41,11 @@
 .modal-modal-button-no:hover {
   opacity: 0.8;
 }
+
+@media only screen and (min-width: 641px) {
+  .sidebar li:nth-child(3),
+  li:nth-child(4),
+  li:nth-child(5) {
+    display: none;
+  }
+}

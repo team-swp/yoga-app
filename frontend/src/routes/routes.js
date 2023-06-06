@@ -8,15 +8,15 @@ import Reset from "../pages/components/Login/Reset";
 import Username from "../pages/components/Login/Username";
 import Profile from "../pages/components/Profile/Profile";
 import Courses from "../pages/components/Courses/Courses";
-import WeeklyTimetable from "../pages/components/WeeklyTimetable/WeekTimtable";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
+import Checkout from "../pages/components/Checkout/Checkout";
+import WeeklySchedule from "../pages/components/WeeklySchedule/WeeklySchedule";
 import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
-import Checkout from "../pages/components/Checkout/Checkout";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -32,7 +32,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/timetable",
-    element: <WeeklyTimetable />,
+    element: <WeeklySchedule />,
   },
   {
     path: "/login",
@@ -44,9 +44,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/password",
-    element: (
-        <Password />
-    ),
+    element: <Password />,
   },
   {
     path: "/profile",
@@ -74,8 +72,8 @@ const routers = createBrowserRouter([
     ),
   },
   {
-    path:"/checkout",
-    element:(<Checkout/>)
+    path: "/checkout",
+    element: <Checkout />,
   },
   {
     path: "*",
