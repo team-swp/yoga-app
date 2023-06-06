@@ -27,7 +27,6 @@ const style = {
 const cx = classNames.bind(styles);
 
 function Sidebar() {
-  const dispatch = useDispatch();
   const { logOut } = UserAuth();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -45,7 +44,7 @@ function Sidebar() {
   };
 
   const handleLogout = () => {
-    logOut()
+    logOut();
   };
 
   const handleOpen = () => setOpen(true);
@@ -88,15 +87,29 @@ function Sidebar() {
         {
           <div className={cx("sidebar")} onClick={handleCloseUserMenu}>
             <ul>
-              <li>Profile</li>
+              <Link to="/profile">
+                <li>Profile</li>
+              </Link>
+              <Link to="/timetable">
+                <li>Weekly Schedule</li>
+              </Link>
               <li>
-                <Link to="/timetable">
-                  <button>Weekly Timetable</button>
+                <Link to="/course">
+                  <button>Course</button>
                 </Link>
               </li>
-              <li>Dashboard</li>
               <li>
-                <button onClick={handleOpen}>Log Out</button>
+                <Link to="/*">
+                  <button>News</button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/*">
+                  <button>Services</button>
+                </Link>
+              </li>
+              <li onClick={handleOpen}>
+                <button>Log Out</button>
                 <Modal
                   open={open}
                   onClose={handleClose}
@@ -112,11 +125,11 @@ function Sidebar() {
                     >
                       Are you sure you want to Log Out ?
                     </Typography>
-                    <div className={cx("modal-modal-button")}>
-                      <button
-                        className={cx("modal-modal-button-yes")}
-                        onClick={handleLogout}
-                      >
+                    <div
+                      className={cx("modal-modal-button")}
+                      onClick={handleLogout}
+                    >
+                      <button className={cx("modal-modal-button-yes")}>
                         <a href="/"> Yes, Log Out</a>
                       </button>
                       <button

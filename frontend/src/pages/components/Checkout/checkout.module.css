@@ -1,0 +1,111 @@
+.text_info{
+  @apply border-0 px-5 py-4 rounded-xl w-3/4 shadow-sm text-lg;
+  @apply focus:outline-none;
+}
+
+
+.div_radio{
+  border: 1px solid #e8e8e8;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  
+}
+
+.active {
+  background-color: #fff0f6;
+  border-color: #a1e209;
+}
+.lable{
+  align-items: center;
+    color: #303233;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.43;
+    margin-right: 1.2rem;
+}
+
+.lable img{
+  height: 2.5rem;
+  margin-right: 0.5rem;
+  object-fit: contain;
+  width: 2.5rem;
+  border-radius: 15%;
+}
+
+img{
+  max-width: 100%;
+}
+
+.div_radio input[type=radio]{
+  background-color: #fff;
+  border: 2px solid #303233;
+  bottom: 0;
+  cursor: pointer;
+  margin: auto 0;
+  position: absolute;
+  right: 0.8rem;
+  top: 0;
+  padding: 5px;
+  transition: background-color .25s cubic-bezier(.4,0,.2,1) 0ms,box-shadow .25s cubic-bezier(.4,0,.2,1) 0ms,border .25s cubic-bezier(.4,0,.2,1) 0ms;
+  transform: scale(2); 
+}
+
+.ticket_devider {
+  border-bottom: 2px dashed #28252577;
+  box-sizing: border-box;
+  content: "";
+  width: 100%;
+  margin-top: 5%;
+  padding: 0 10px;
+}
+/* --------------------------------- */
+.background_all{
+  background-image: url("../../../../public/assets/img/checkout_background2.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+.glass{
+  background: rgba(255, 255, 255, 0.411);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px #4747470b;
+  backdrop-filter: blur(7.1px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  @apply border-4 border-gray-50 shrink-0 h-[auto] w-[60%] rounded-3xl py-20 px-7 min-w-max;
+}
+
+.btn_social{
+margin: 0 auto;
+}
+
+.profile_img{
+  @apply border-4 border-gray-100 w-[135px] rounded-full shadow-lg cursor-pointer;
+  @apply hover:border-gray-200;
+}
+
+.textbox{
+  @apply border-0 px-5 py-4 rounded-xl w-3/4 shadow-sm text-lg;
+  @apply focus:outline-none;
+}
+
+.btn{
+  @apply border bg-indigo-500 w-3/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
+  background-color: #87DEE3;
+  margin-top: 5%;
+  width: 100%;
+}
+
+.btn:hover{
+  background-color: #ff6a6a;
+}
+
+input[type='file']{
+  display: none;
+}

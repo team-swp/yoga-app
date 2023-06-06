@@ -8,17 +8,27 @@ import Reset from "../pages/components/Login/Reset";
 import Username from "../pages/components/Login/Username";
 import Profile from "../pages/components/Profile/Profile";
 import Courses from "../pages/components/Courses/Courses";
-import WeeklyTimetable from "../pages/components/WeeklyTimetable/WeekTimtable";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
+import Checkout from "../pages/components/Checkout/Checkout";
+import WeeklySchedule from "../pages/components/WeeklySchedule/WeeklySchedule";
 import {
   AuthorizeUser,
+  ProtectRecover,
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+<<<<<<< HEAD
 import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
 import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
+=======
+<<<<<<< HEAD
+=======
+import Checkout from "../pages/components/Checkout/Checkout";
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
+>>>>>>> thienNH
+>>>>>>> f650142d2379bd67919d386c75b54868fd3f0502
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -34,7 +44,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/timetable",
-    element: <WeeklyTimetable />,
+    element: <WeeklySchedule />,
   },
   {
     path: "/login",
@@ -46,11 +56,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/password",
-    element: (
-      <ProtectRoute>
-        <Password />
-      </ProtectRoute>
-    ),
+    element: <Password />,
   },
   {
     path: "/profile",
@@ -70,7 +76,20 @@ const routers = createBrowserRouter([
   },
   {
     path: "/recovery",
-    element: <Recovery></Recovery>,
+
+    element: (
+      <ProtectRecover>
+        <Recovery />
+      </ProtectRecover>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />,
+  },
+  {
+    path:"/paymentstatus",
+    element:(<PaymentStatus/>)
   },
   {
     path: "*",

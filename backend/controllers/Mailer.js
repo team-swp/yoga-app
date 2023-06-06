@@ -24,10 +24,11 @@ let MailGenerator = new Mailgen({
 
 module.exports.registerMail = async (req, res) => {
   const { username, userEmail, text, subject } = req.body;
+  console.log(username,userEmail);
   // body of the email
   var email = {
     body: {
-      name: username,
+      name: username||'No Name',
       intro:
         text ||
         "Welcome to Yoga HeartBeat! We're very excited to have you join with us.",

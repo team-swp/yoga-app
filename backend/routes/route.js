@@ -4,6 +4,8 @@ const Account = require("../models/accounts");
 const { Auth, localVariables, AuthStaff } = require("../middleware/auth");
 require("dotenv").config();
 const { registerMail } = require("../controllers/Mailer");
+const moment = require('moment');
+
 const {
   generateOTP,
   verifyOTP,
@@ -24,6 +26,8 @@ const crypto = require("crypto");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+const dateFormat = require("dateformat");
 
 const { postImage, getImage } = require("../AWS/StoreImageS3");
 const {
@@ -64,6 +68,11 @@ const {
   getPayment,
   getPaymentById,
   updatePayment,
+  createPayment,
+  vnpayIPN,
+  vnpayReturn,
+  runUrl,
+  haveDonePayment,
 } = require("../controllers/Payment");
 const {
   addBooking,
@@ -71,6 +80,7 @@ const {
   updateBooking,
 } = require("../controllers/Booking");
 const Semester = require("../models/semesters");
+const { log } = require("console");
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -159,7 +169,7 @@ router.patch(
   updatePaymentMethod
 );
 //payment
-router.post("/payment/add", Auth, addPayment);
+router.post("/payment/add", /*Auth,*/ addPayment);
 router.get("/payment/get", getPayment);
 router.patch("/payment/update", AuthStaff, getPaymentById, updatePayment);
 //payment Method
@@ -176,3 +186,13 @@ router.get("/booking/get", getBooking);
 router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
 //google
 router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
+
+///-payyyment VNPAY
+
+router.post("/create_payment_url",Auth,createPayment);
+
+router.get('/vnpay_ipn', vnpayIPN,haveDonePayment);
+
+router.get('/vnpay_return',vnpayReturn);
+
+router.post("/runUrlVnPAY", runUrl);
