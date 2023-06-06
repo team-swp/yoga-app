@@ -23,6 +23,7 @@
     "react": "^18.2.0",
     "react-big-calendar": "^1.8.1",
     "react-calendar": "^4.2.1",
+    "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
     "react-google-button": "^0.7.2",
     "react-hot-toast": "^2.4.1",
