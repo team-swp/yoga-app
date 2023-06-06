@@ -31,6 +31,9 @@ const classSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+//
+
 // Trigger 3: Check if the instructor exists in the Account table and has role == "instructor"
 classSchema.pre("save", async function (next) {
   try {

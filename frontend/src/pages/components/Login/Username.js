@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../../assets/profile.png";
 import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
-import { emailValidation } from "../../../helper/validate";
+import { emailValidation, loginValidation } from "../../../helper/validate";
 import { useDispatch } from "react-redux";
 import { addUserLogin, setDataLogin } from "../../../redux/actions";
-import { getUserByToken } from "../../../helper/loginAPI";
+import {
+  getUser,
+  getUserByToken,
+  verifyPassword,
+} from "../../../helper/loginAPI";
 import { GoogleButton } from "react-google-button";
 import { UserAuth } from "../../../context/AuthGoogleContext";
 import { addBooking } from "../../../helper/bookingAPI";
@@ -16,7 +20,7 @@ function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
+  const [emailType, setEmailType] = useState();
   if (token && token !== "undefined") {
     let getUserToken = getUserByToken();
     getUserToken.then((res) => {
@@ -33,7 +37,7 @@ function Username() {
     initialValues: {
       email: "",
     },
-    validate: emailValidation,
+    validate: loginValidation,
     validateOnBlur: false,
     validateOnChange: false,
     // handleSubmit(values,{props,setSubmitting}){
@@ -42,9 +46,36 @@ function Username() {
     //   console.log('test 2');
     // }
 
-    onSubmit: async (values) => {
-      dispatch(addUserLogin(values)); //reRender mới bắt đầu update state
-      navigate("/password");
+    onSubmit: (values) => {
+      let loginPromise = verifyPassword({
+        email: values.email,
+        password: values.password,
+      });
+      toast.promise(loginPromise, {
+        loading: "Checking...",
+        success: <b>Login Successfully...!</b>,
+        error: <b>Password Not Match!</b>,
+      });
+
+      loginPromise
+        .then((res) => {
+          const token = res.data.token;
+          const id = res.data._id;
+          let getUserData = getUser({ id });
+          getUserData
+            .then((res) => {
+              res.data = Object.assign(res.data, { token });
+              console.log(res.data);
+              dispatch(setDataLogin(res.data)); //reducer là kho lưu trữ nhận giá trị lưu trữ không phải phần xử lí
+              navigate("/");
+            })
+            .catch((res) => {
+              navigate("/login");
+            });
+        })
+        .catch((res) => {
+          navigate("/login");
+        });
     },
   });
   const { googleSignIn } = UserAuth();
@@ -78,6 +109,7 @@ function Username() {
   };
   const styleLine = `${styles.orLine} flex flex-row items-stretch justify-center`; //flex flex-col items-center justify-center ${styles.line_divided_span}
   let title = "YOUR ACCOUNT FOR HEARTBEAT.";
+
   return (
     <div className={styles.background_all}>
       <div className="container mx-auto">
@@ -91,17 +123,30 @@ function Username() {
               </span>
             </div>
             <form className="py-1" onSubmit={formik.handleSubmit}>
-              <div className="textbox flex flex-col items-center gap-6">
+              <div className="textbox flex flex-col items-center gap-6 mb-2">
                 <input
                   {...formik.getFieldProps("email")}
                   className={styles.textbox}
                   type="email"
                   placeholder="Email..."
+                  value={emailType}
+                />
+                {/* <button className={styles.btn} type="submit">
+                  Let's Go
+                </button> */}
+                {/* <GoogleButton onClick={handleGoogleSignIn} /> */}
+              </div>
+
+              <div className="textbox flex flex-col items-center gap-6">
+                <input
+                  {...formik.getFieldProps("password")}
+                  className={styles.textbox}
+                  type="password"
+                  placeholder="Password..."
                 />
                 <button className={styles.btn} type="submit">
-                  Let's Go
+                  Log In
                 </button>
-                {/* <GoogleButton onClick={handleGoogleSignIn} /> */}
               </div>
 
               <div className={styleLine}>
@@ -162,13 +207,19 @@ function Username() {
                   </svg>
                 </div>
               </div>
-              <div className="text-center py-4">
-                <span className="text-gray-500">
-                  Not a member{" "}
-                  <Link className="text-red-500" to="/register">
-                    Sign Up Now
-                  </Link>
-                </span>
+              <div className="flex flex-col text-center py-4 ">
+                <Link className=" " to="/password">
+                  <span className="hover:brightness-200 text-red-600 my-5">
+                    Forgot Password?
+                  </span>
+                </Link>
+
+                <Link className="text-black mt-2" to="/register">
+                  Don't have an account{" "}
+                  <span className="hover:brightness-200 text-red-600">
+                    Sign Up
+                  </span>
+                </Link>
               </div>
             </form>
           </div>

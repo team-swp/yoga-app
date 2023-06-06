@@ -9,36 +9,22 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import CheckIcon from "@mui/icons-material/Check";
 import ScrollToTopOnMount from "../../ScrollToTopOnMount";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import { getCourse } from "../../../helper/courseAPI";
 import { getClass } from "../../../helper/classAPI";
-import { getSchedule } from "../../../helper/scheduleAPI";
 import { addBooking } from "../../../helper/bookingAPI";
 
 const cx = classNames.bind(styles);
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 700,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 function CourseDetail() {
   const token = localStorage.getItem("token");
+
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const courseId = useParams();
-  const [selectedClass, setSelectedClass] = useState(null);
-  const [open, setOpen] = useState(false);
+
   const [course, setCourse] = useState(null);
   const [classList, setClassList] = useState([]);
-
+  console.log(classList);
   //fetchData
   useEffect(() => {
     async function fetchData() {
@@ -49,33 +35,21 @@ function CourseDetail() {
         const classes = classList.data.filter(
           (obj) => obj.course_id === course._id
         );
-
-        const promises = classes.map(async (obj) => {
-          const scheduleResponse = await getSchedule(obj.schedule_id);
-          obj.schedule = scheduleResponse;
-          return obj;
-        });
-
-        const classListWithSchedule = await Promise.all(promises);
-
         setCourse(course);
-        setClassList(classListWithSchedule);
+        setClassList(classes);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  });
+  }, [courseId.id]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleSubmit = async () => {
-    const booking = {
-      class_id: selectedClass,
-    };
     try {
-      const response = await addBooking(booking);
+      const response = await addBooking();
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -114,96 +88,44 @@ function CourseDetail() {
                 </ul>
               </div>
             </Grid>
-            <Grid item md={5}>
-              <div className={cx("course-wrapper")}>
-                <div className={cx("course-container")}>
-                  <div className={cx("course-image")}>
-                    <img src={course.images[0]} alt={course.coursename} />
-                  </div>
-                  <p className={cx("course-price")}>{course.price}$</p>
-                  <div class="flex justify-evenly align-center">
-                    <button
-                      className={cx("course-button")}
-                      onClick={handleOpen}
-                    >
-                      JOIN US NOW
-                    </button>
-                    <Modal
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
-                    >
-                      <Box sx={style}>
-                        <div className={cx("close")} onClick={handleClose}>
-                          &times;
-                        </div>
-                        <label className={cx("popup-lable")} for="class-select">
-                          Choose class:
-                        </label>
-                        <select
-                          className={cx("popup-select")}
-                          name="class"
-                          id="class-select"
-                          onChange={(event) =>
-                            setSelectedClass(event.target.value)
-                          }
-                        >
-                          {classList.map((classObj) => (
-                            <optgroup
-                              key={classObj._id}
-                              label={classObj.classname}
-                            >
-                              {classObj.schedule.data.map((scheduleObj) => (
-                                <option
-                                  key={scheduleObj._id}
-                                  value={classObj._id}
-                                >
-                                  {scheduleObj.schedulename}
-                                </option>
-                              ))}
-                            </optgroup>
-                          ))}
-                        </select>
-                        <button
-                          className={cx("popup-button")}
-                          onClick={() => {
-                            if (token) {
-                              handleSubmit();
-                            } else {
-                              navigate("/login");
-                            }
-                          }}
-                        >
-                          Submit
-                        </button>
-                      </Box>
-                    </Modal>
-                    <FavoriteIcon
-                      sx={{
-                        mt: "8px",
-                        border: "5px solid #ccc",
-                        borderRadius: "100px",
-                        fontSize: "35px",
-                        backgroundColor: "#ccc",
-                      }}
-                    />
-                  </div>
-                  <div class="my-3 text-center">
-                    30-Day Money-Back Guarantee
-                  </div>
-                  <hr class="mb-3 border-t border-gray-500 mx-auto my-4 w-full" />
-                  <div className={cx("course-policy")}>
-                    <h6>This course include:</h6>
-                    <p>
-                      <CheckIcon fontSize="small" sx={{ marginRight: 1 }} />
-                      Lasts 4 to 8 weeks
-                    </p>
-                    <p>
-                      <ScheduleIcon fontSize="small" sx={{ marginRight: 1 }} />
-                      Certificate of completion
-                    </p>
-                  </div>
+            <Grid item md={5} className={cx("course-wrapper")}>
+              <div className={cx("course-container")}>
+                <div className={cx("course-image")}>
+                  <img src={course.images[0]} alt={course.coursename} />
+                </div>
+                <p className={cx("course-price")}>{course.price}$</p>
+                <div class="flex justify-evenly align-center">
+                  <button
+                    className={cx("course-button")}
+                    onClick={() => {
+                      if (token) handleSubmit();
+                      else navigate("/login");
+                    }}
+                  >
+                    JOIN US NOW
+                  </button>
+                  <FavoriteIcon
+                    sx={{
+                      mt: "8px",
+                      border: "5px solid #ccc",
+                      borderRadius: "100px",
+                      fontSize: "35px",
+                      backgroundColor: "#ccc",
+                    }}
+                  />
+                </div>
+                <div class="my-3 text-center">30-Day Money-Back Guarantee</div>
+                <hr class="mb-3 border-t border-gray-500 mx-auto my-4 w-full" />
+                <div className={cx("course-policy")}>
+                  <h6>This course include:</h6>
+                  <p>
+                    <CheckIcon fontSize="small" sx={{ marginRight: 1 }} />
+                    Lasts 4 to 8 weeks
+                  </p>
+                  <p>
+                    <ScheduleIcon fontSize="small" sx={{ marginRight: 1 }} />
+                    Certificate of completion
+                  </p>
                 </div>
               </div>
             </Grid>
