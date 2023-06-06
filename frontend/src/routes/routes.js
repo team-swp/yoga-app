@@ -9,15 +9,23 @@ import Username from "../pages/components/Login/Username";
 import Profile from "../pages/components/Profile/Profile";
 import Courses from "../pages/components/Courses/Courses";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
-import Checkout from "../pages/components/Checkout/Checkout";
+
 import WeeklySchedule from "../pages/components/WeeklySchedule/WeeklySchedule";
-import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
+
 import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+
+import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
+import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
+import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
+import StaffManage from "../pages/components/StaffManage/StaffManage";
+import Checkout from "../pages/components/Checkout/Checkout";
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
+
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -83,6 +91,22 @@ const routers = createBrowserRouter([
   {
     path: "*",
     element: <PageNotFound></PageNotFound>,
+  },
+  {
+    path: "/staffmanage",
+    element: <StaffManage></StaffManage>,
+  },
+  {
+    path: "/managecourse",
+    element: <ManageCourses></ManageCourses>,
+  },
+  {
+    path: "/addnewcourse",
+    element: <AddNewCourse></AddNewCourse>,
+  },
+  {
+    path: "/updatecourse/:id",
+    element: <UpdateCourse></UpdateCourse>,
   },
 ]);
 
