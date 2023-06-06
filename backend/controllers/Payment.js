@@ -1,10 +1,12 @@
 const PaymentMethod = require("../models/payment_methods");
-const Payment = require("../models/payments");  
+const Payment = require("../models/payments");
 require("dotenv").config();
 const moment = require("moment");
 const dateFormat = require("dateformat");
 const { log } = require("console");
-
+const { registerMail } = require("./Mailer");
+const nodemailer = require("nodemailer");
+const Mailgen = require("mailgen");
 //payment medthod
 module.exports.addPaymentMethod = async (req, res) => {
   const { paymentname } = req.body;
@@ -182,7 +184,6 @@ module.exports.createPayment = async (req, res, next) => {
   var orderId = dateFormat(date, "HHmmss");
   var amount = req.body.amount;
   var bankCode = "VNBANK"; //'VNPAYQR' //req.body.bankCode;
-
   var orderInfo = req.body.orderDescription;
   var orderType = req.body.orderType;
   var locale = "vn";
@@ -205,6 +206,7 @@ module.exports.createPayment = async (req, res, next) => {
   vnp_Params["vnp_IpAddr"] = ipAddr;
   vnp_Params["vnp_CreateDate"] = createDate;
   vnp_Params["vnp_ExpireDate"] = expireDate;
+
   if (bankCode !== null && bankCode !== "") {
     vnp_Params["vnp_BankCode"] = bankCode;
   }
@@ -218,21 +220,21 @@ module.exports.createPayment = async (req, res, next) => {
   var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
+
   res.send(vnpUrl);
-//   res.writeHead(302, {
-//     Location: ur
-// });
-res.end();
+  //   res.writeHead(302, {
+  //     Location: ur
+  // });
+  res.end();
 };
 
-module.exports.runUrl= async(req,res,next)=>{
+module.exports.runUrl = async (req, res, next) => {
   res.redirect(req.url);
-}
+};
 
 module.exports.vnpayIPN = async (req, res, next) => {
   let vnp_Params = req.query;
   let secureHash = vnp_Params["vnp_SecureHash"];
-
   let orderId = vnp_Params["vnp_TxnRef"];
   let rspCode = vnp_Params["vnp_ResponseCode"];
 
@@ -251,6 +253,11 @@ module.exports.vnpayIPN = async (req, res, next) => {
   //let paymentStatus = '2'; // Giả sử '2' là trạng thái thất bại bạn cập nhật sau IPN được gọi và trả kết quả về nó
   let checkOrderId = true; // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL của bạn
   let checkAmount = true; // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
+  const getData = vnp_Params["vnp_OrderInfo"]; //id,thiengk563@gmail.com,name
+  const dataArray = getData.split("%2C");
+  const bookingID = dataArray[0];
+  const email = dataArray[1];
+  const replacedEmail = email.replace("%40", "@");
   if (secureHash === signed) {
     //kiểm tra checksum
     if (checkOrderId) {
@@ -261,20 +268,30 @@ module.exports.vnpayIPN = async (req, res, next) => {
             //thanh cong
             //paymentStatus = '1'
             // Ở đây cập nhật trạng thái giao dịch thanh toán thành công vào CSDL của bạn
+            console.log(bookingID);
             const payment = new Payment({
               recipient: "Yoga HeartBeat",
               paymentDate: vnp_Params["vnp_PayDate"],
               paymentAmount: vnp_Params["vnp_Amount"],
               paymentMethod_id: "647da80b6aa8563399cbc6ff",
-              booking_id: vnp_Params["vnp_OrderInfo"],
+              booking_id: bookingID,
               status: 10,
               meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
             });
             // return save result as a response
-            const url = process.env.returnHome
-            payment.save()
-              .then((result) => {
-                 res.redirect(url+'?/pmid='+result._id)
+            const usernamePayment = dataArray[2];
+
+            payment
+              .save()
+              .then(async (result) => {
+                req.user = {
+                  userEmail: replacedEmail,
+                  username: usernamePayment,
+                  text: `We are pleased to inform you that your payment (id; ${result._id}) has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
+                  subject: "Payment Successful",
+                  result_id: result._id,
+                };
+                next();
               })
               .catch((error) => res.status(500).send({ error: error.message }));
           } else {
@@ -289,8 +306,9 @@ module.exports.vnpayIPN = async (req, res, next) => {
               meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
             });
             // return save result as a response
-            const url = process.env.returnHome
-            payment.save()
+            const url = process.env.returnHome;
+            payment
+              .save()
               .then((result) => {
                 // res.redirect(url, function() {
                 //   res.send(result);
@@ -302,12 +320,10 @@ module.exports.vnpayIPN = async (req, res, next) => {
               .json({ RspCode: "00", Message: "Thanh Toán Thất Bại" });
           }
         } else {
-          res
-            .status(200)
-            .json({
-              RspCode: "02",
-              Message: "This order has been updated to the payment status",
-            });
+          res.status(200).json({
+            RspCode: "02",
+            Message: "This order has been updated to the payment status",
+          });
         }
       } else {
         res.status(200).json({ RspCode: "04", Message: "Amount invalid" });
@@ -361,5 +377,51 @@ function sortObject(obj) {
   }
   return sorted;
 }
+module.exports.haveDonePayment = (req, res) => {
+  let nodeConfig = {
+    service: "gmail",
+    auth: {
+      user: process.env.SMTP_USERNAME,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  };
 
-// Vui lòng tham khảo thêm tại code demo
+  let transporter = nodemailer.createTransport(nodeConfig);
+
+  let MailGenerator = new Mailgen({
+    theme: "default",
+    product: {
+      name: "Heart Beat",
+      link: "heartbeat.com",
+      logo: "https://png.pngtree.com/template/20191108/ourmid/pngtree-yoga-logo-design-stock-meditation-in-lotus-flower-illustration-image_328924.jpg",
+    },
+  });
+  const { username, userEmail, text, subject, result_id } = req.user;
+  // body of the email
+  var email = {
+    body: {
+      name: username || "No Name",
+      intro:
+        text ||
+        "Welcome to Yoga HeartBeat! We're very excited to have you join with us.",
+      outro:
+        "Need help, or have questions? Just reply to this email, we'd love to help.",
+    },
+  };
+  var emailBody = MailGenerator.generate(email);
+
+  let message = {
+    from: process.env.SMTP_USERNAME,
+    to: userEmail,
+    subject: subject || "Login Succesful",
+    html: emailBody,
+  };
+
+  transporter
+    .sendMail(message)
+    .then(() => {
+      const url = process.env.returnHome;
+      res.redirect(url + "?pmid=" + result_id);
+    })
+    .catch((error) => res.status(500).send({ error }));
+};

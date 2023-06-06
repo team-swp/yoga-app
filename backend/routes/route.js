@@ -72,6 +72,7 @@ const {
   vnpayIPN,
   vnpayReturn,
   runUrl,
+  haveDonePayment,
 } = require("../controllers/Payment");
 const {
   addBooking,
@@ -168,7 +169,7 @@ router.patch(
   updatePaymentMethod
 );
 //payment
-router.post("/payment/add", Auth, addPayment);
+router.post("/payment/add", /*Auth,*/ addPayment);
 router.get("/payment/get", getPayment);
 router.patch("/payment/update", AuthStaff, getPaymentById, updatePayment);
 //payment Method
@@ -188,9 +189,9 @@ router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 ///-payyyment VNPAY
 
-router.post("/create_payment_url", createPayment);
+router.post("/create_payment_url",Auth,createPayment);
 
-router.get('/vnpay_ipn', vnpayIPN,vnpayReturn);
+router.get('/vnpay_ipn', vnpayIPN,haveDonePayment);
 
 router.get('/vnpay_return',vnpayReturn);
 

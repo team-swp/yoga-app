@@ -17,6 +17,7 @@ import {
   ProtectRouteOTP,
 } from "../middleware/auth";
 import Checkout from "../pages/components/Checkout/Checkout";
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -76,6 +77,10 @@ const routers = createBrowserRouter([
   {
     path:"/checkout",
     element:(<Checkout/>)
+  },
+  {
+    path:"/paymentstatus",
+    element:(<PaymentStatus/>)
   },
   {
     path: "*",

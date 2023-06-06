@@ -28,10 +28,9 @@ function Register() {
       });
       registerPromise
         .then(() => {
-          navigate("/");
+          navigate("/login");
         })
         .catch(() => {
-          console.log("1234");
           <b>Could not Register or Email has been existed</b>;
         });
     },
