@@ -3,8 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../../assets/profile.png";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
-import { emailValidation, loginValidation } from "../../../helper/validate";
-import { useDispatch } from "react-redux";
+import {
+  emailValidation,
+  loginValidation,
+  paymentVerify,
+} from "../../../helper/validate";
+import { useDispatch, useSelector } from "react-redux";
 import { addUserLogin, setDataLogin } from "../../../redux/actions";
 import {
   getUser,
@@ -15,10 +19,11 @@ import { GoogleButton } from "react-google-button";
 import { UserAuth } from "../../../context/AuthGoogleContext";
 import { addBooking } from "../../../helper/bookingAPI";
 import styles from "./checkout.module.css";
-import vnpayImage from '../../../assets/vnpay.png';
-import homepayImage from '../../../assets/yogapaymenthome.png';
+import vnpayImage from "../../../assets/vnpay.png";
+import homepayImage from "../../../assets/yogapaymenthome.png";
 import { createVnpay, runUrlVnpay } from "../../../helper/paymentAPI";
 import axios from "axios";
+import { userSelector } from "../../../redux/selectors";
 function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,25 +37,19 @@ function Checkout() {
   };
 
   const handleRadioChange2 = () => {
- 
-      setIsSelected(false);
-      setIsSelected2(true);
+    setIsSelected(false);
+    setIsSelected2(true);
   };
-  if (token && token !== "undefined") {
-    let getUserToken = getUserByToken();
-    getUserToken.then((res) => {
-      console.log(res);
-      res.data.data = Object.assign(res.data.data, { token });
-      
-    });
-  } else {
-  }
 
+  const user = useSelector(userSelector);
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: user.email,
+      phone: user.phone || "",
+      amount: "",
+      username:user.username||''
     },
-    // validate: loginValidation,
+    validate: paymentVerify,
     validateOnBlur: false,
     validateOnChange: false,
     // handleSubmit(values,{props,setSubmitting}){
@@ -61,17 +60,19 @@ function Checkout() {
 
     onSubmit: async (values) => {
       console.log(values);
-      if(isSelected){
-       const vnpayLink =  createVnpay({amount:10000,
-        orderDescription:"647da69ec4e008c1eee52e17",
-        orderType:110000})
-        vnpayLink.then((data)=>{
+      if (isSelected) {
+        const vnpayLink = createVnpay({
+          amount: values.amount,
+          orderDescription: `647da69ec4e008c1eee52e17,${values.email},${values.username||'Member'}`, //bookingID lấy trong state
+          orderType: 190004
+        });
+        vnpayLink.then((data) => {
+          console.log(data.data);
           // window.open(data.data, '_blank', 'noopener,noreferrer');
           window.location.href = data.data;
-        })
+        });
       }
-      
-      
+
       // let loginPromise = verifyPassword({
       //   email: values.email,
       //   password: values.password,
@@ -103,7 +104,7 @@ function Checkout() {
       //   });
     },
   });
- 
+
   let title = "please check your information before submit.";
 
   return (
@@ -112,7 +113,7 @@ function Checkout() {
         <Toaster position="top-center" reverseOrder={false}></Toaster>
         <div className="flex justify-center items-center ">
           <div className={styles.glass} sx={{ backgroundColor: "#fff" }}>
-<div className="title flex flex-col items-center">
+            <div className="title flex flex-col items-center">
               <h4 className="text-5xl font-bold">Checkout</h4>
               <span className="py-4 text-xl w-2/3 text-center text-grey-500">
                 {title.toLowerCase()}
@@ -133,7 +134,7 @@ function Checkout() {
                   />
 
                   <input
-                    {...formik.getFieldProps("email")}
+                    {...formik.getFieldProps("phone")}
                     className={styles.textbox}
                     type="text"
                     placeholder="Enter your phone number"
@@ -170,15 +171,17 @@ function Checkout() {
                     onClick={handleRadioChange}
                   >
                     <label className={styles.lable}>
-                      <img src={vnpayImage} alt="VNPAY"/>
-                      <div style={{ whiteSpace: "nowrap" }}>Thẻ ATM Nội Địa</div>
+                      <img src={vnpayImage} alt="VNPAY" />
+                      <div style={{ whiteSpace: "nowrap" }}>
+                        Thẻ ATM Nội Địa
+                      </div>
                     </label>
                     <input
                       {...formik.getFieldProps("method")}
                       type="radio"
                       placeholder="Payment amount"
                       checked={isSelected}
-                      value='ATM'
+                      value="ATM"
                     />
                   </div>
 
@@ -189,7 +192,7 @@ function Checkout() {
                     onClick={handleRadioChange2}
                   >
                     <label className={`lable ${styles.lable}`}>
-                      <img src={homepayImage}  alt="Payment at Yoga Center"/>
+                      <img src={homepayImage} alt="Payment at Yoga Center" />
                       <div style={{ whiteSpace: "nowrap" }}>
                         Thanh Toán Tại Trung Tâm YOGA{" "}
                       </div>
@@ -198,7 +201,7 @@ function Checkout() {
                       {...formik.getFieldProps("method")}
                       type="radio"
                       checked={isSelected2}
-                      value='YogaCenter'
+                      value="YogaCenter"
                     />
                   </div>
                 </div>
