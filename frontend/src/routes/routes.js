@@ -11,17 +11,13 @@ import Courses from "../pages/components/Courses/Courses";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
 import Checkout from "../pages/components/Checkout/Checkout";
 import WeeklySchedule from "../pages/components/WeeklySchedule/WeeklySchedule";
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
-<<<<<<< HEAD
-=======
-import Checkout from "../pages/components/Checkout/Checkout";
-import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
->>>>>>> thienNH
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -81,8 +77,8 @@ const routers = createBrowserRouter([
     element: <Checkout />,
   },
   {
-    path:"/paymentstatus",
-    element:(<PaymentStatus/>)
+    path: "/paymentstatus",
+    element: <PaymentStatus />,
   },
   {
     path: "*",
