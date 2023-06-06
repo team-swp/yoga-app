@@ -7,6 +7,7 @@ module.exports.addClass = async (req, res) => {
     instructor_id,
     schedule_id,
     status,
+    days,
     meta_data,
   } = req.body;
   try {
@@ -15,6 +16,7 @@ module.exports.addClass = async (req, res) => {
       course_id,
       instructor_id,
       schedule_id,
+      days,
       status,
       meta_data: meta_data || "", //to side data
     });
@@ -43,6 +45,7 @@ module.exports.updateClass = async (req, res) => {
     "course_id",
     "instructor_id",
     "schedule_id",
+    "days",
     "status",
     "meta_data",
   ];

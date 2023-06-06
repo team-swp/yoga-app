@@ -7,7 +7,6 @@ module.exports.addSchedule = async (req, res) => {
       schedulename: schedulename,
       startTime: startTime,
       endTime: endTime,
-      days: days,
       meta_data: meta_data || "", //to store side data
     });
 
@@ -38,7 +37,6 @@ module.exports.updateSchedule = async (req, res) => {
     "schedulename",
     "startTime",
     "endTime",
-    "days",
     "status",
     "meta_data",
   ];
