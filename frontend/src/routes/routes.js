@@ -15,6 +15,7 @@ import {
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+import PasswordProfile from "../pages/components/Profile/PasswordProfile";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -55,6 +56,10 @@ const routers = createBrowserRouter([
         <Profile />
       </AuthorizeUser>
     ),
+  },
+  {
+    path: "/profilepass",
+    element: <PasswordProfile />,
   },
   {
     path: "/reset",
