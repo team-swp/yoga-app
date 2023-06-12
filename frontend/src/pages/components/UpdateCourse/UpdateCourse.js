@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Container, TextField, Button, Select, Menu, MenuItem } from "@mui/material";
+import { Container, TextField, Button, Select, Menu, MenuItem, FormGroup, FormControl, FormLabel, FormControlLabel, Checkbox, CircularProgress, Typography } from "@mui/material";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { Link, useParams } from "react-router-dom";
 import { getCourse, updateCourse } from "../../../helper/courseAPI";
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 function UpdateCourse() {
     const [course, setCourse] = useState({});
@@ -15,37 +17,18 @@ function UpdateCourse() {
     const [requirement, setRequirement] = useState("");
     const [forWho, setForWho] = useState("");
     const [semester_id, setSemesterId] = useState("");
-    const [status, setStatus] = useState(false);
-    const [images, setImages] = useState([])
+    const [videos, setVideos] = useState([])
+    const [images, setImages] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [updateSuccess, setUpdateSuccess] = useState(false);
 
-    useEffect(() => {
-        fetchCourses();
-    }, []);
-
-    async function fetchCourses() {
-        try {
-            const response = await getCourse();
-            const course = response.data.find((obj) => obj._id === courseId.id);
-
-            setCourse(course);
-
-            // Set initial values for the input fields
-            setCoursename(course.coursename);
-            setDescription(course.description);
-            setPrice(course.price);
-            setWillLearn(course.willLearn);
-            setRequirement(course.requirement);
-            setForWho(course.forWho);
-            setSemesterId(course.semester_id);
-            setImages(course.images)
-            setStatus(course.status);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    async function handleSubmit(event) {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsSubmitting(true);
+        setErrorMessage(null);
+        setUpdateSuccess(false);
+
         try {
             const response = await updateCourse({
                 _id: courseId.id,
@@ -56,23 +39,83 @@ function UpdateCourse() {
                 requirement: requirement,
                 forWho: forWho,
                 semester_id: semester_id,
+                videos,
                 images,
-                status: status,
+
             });
+
             if (response) {
-                alert("Course updated successfully!");
+                setUpdateSuccess(true);
+                setTimeout(() => {
+                    setUpdateSuccess(false);
+                }, 3000);
             } else {
-                alert("Failed to update course");
+                setErrorMessage("Failed to update course");
             }
         } catch (error) {
             console.error(error);
+            setErrorMessage("Error occurred while updating the course. Please try again later.");
         }
-    }
+
+        setIsSubmitting(false);
+    };
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await getCourse();
+                const course = response.data.find((obj) => obj._id === courseId.id);
+
+                setCourse(course);
+                setCoursename(course.coursename);
+                setDescription(course.description);
+                setPrice(course.price);
+                setWillLearn(course.willLearn);
+                setRequirement(course.requirement);
+                setForWho(course.forWho);
+                setSemesterId(course.semester_id);
+                setImages(course.images)
+                setVideos(course.videos)
+
+            } catch (error) {
+                console.error(error);
+                setErrorMessage("Error occurred while fetching the course details. Please try again later.");
+            }
+        };
+
+        fetchCourses();
+    }, []);
+
+
 
     return (
         <>
             <Header />
+
             <Container maxWidth="md" sx={styles.container}>
+                <div style={{ textAlign: 'center', position: 'sticky', top: 100, color: '#333', fontSize: '24px', marginTop: '40px' }}>
+                    Update Course
+                    {errorMessage &&
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'red', color: 'white', padding: '10px', borderRadius: '8px', marginBottom: '20px' }}>
+                            <CancelOutlinedIcon sx={{ mr: 1 }} />
+                            <Typography variant="body1" >
+                                {errorMessage}
+                            </Typography></div>
+
+                    }
+
+                    {updateSuccess &&
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#4caf50', color: 'white', padding: '10px', borderRadius: '8px', marginBottom: '20px' }}>
+                            <CheckCircleOutlineOutlinedIcon sx={{ mr: 1 }} />
+                            <Typography variant="body1">
+                                Course updated successfully!
+                            </Typography>
+                        </div>
+                    }
+                </div>
+
+
+
                 <form onSubmit={handleSubmit} sx={styles.form}>
                     <TextField
                         label="Course Name"
@@ -146,7 +189,7 @@ function UpdateCourse() {
                         sx={styles.textField}
                     />
                     <TextField
-                        label="For images"
+                        label="Images (comma separated URLs)"
                         type="text"
                         value={images}
                         onChange={(e) => setImages(e.target.value)}
@@ -154,22 +197,42 @@ function UpdateCourse() {
                         required
                         sx={styles.textField}
                     />
-                    <div sx={styles.textField}>Status</div>
-                    <Select
-                        label="Status"
-                        name="status"
-                        value={status}
-                        onChange={(event) => setStatus(event.target.value)}
+                    <TextField
+                        label="Videos (comma separated URLs)"
+                        type="text"
+                        value={videos}
+                        onChange={(e) => setVideos(e.target.value)}
+                        fullWidth
                         required
-                    // sx={styles.textField}
+                        sx={styles.textField}
+                    />
+
+
+                    {isSubmitting ? (
+                        <CircularProgress style={{ marginTop: "1rem" }} />
+                    ) : (
+                        <Button color="success" type="submit" variant="contained" sx={styles.button}>
+                            Update Course
+                        </Button>
+                    )}
+
+                    <Link
+                        to="/managecourse"
+                        style={{
+                            float: 'right',
+                            backgroundColor: 'grey',
+                            border: 'none',
+                            color: 'white',
+                            padding: '10px 20px',
+                            textAlign: 'center',
+                            textDecoration: 'none',
+                            display: 'inline-block',
+                            fontSize: '16px',
+                            cursor: 'pointer',
+                            marginBlock: '30px'
+
+                        }}
                     >
-                        <MenuItem value={status}>Active</MenuItem>
-                        <MenuItem value={status}>Inactive</MenuItem>
-                    </Select>
-                    <Button type="submit" variant="contained" sx={styles.button}>
-                        Update Course
-                    </Button>
-                    <Link to="/managecourse" style={{ marginTop: '10px', float: 'right', backgroundColor: '#4CAF50', border: 'none', color: 'white', padding: '10px 20px', textAlign: 'center', textDecoration: 'none', display: 'inline-block', fontSize: '16px', cursor: 'pointer' }}>
                         Back
                     </Link>
                 </form>
@@ -199,4 +262,4 @@ const styles = {
         marginTop: "1rem",
         width: "100%",
     },
-};
+}; 
