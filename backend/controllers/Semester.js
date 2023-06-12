@@ -1,4 +1,5 @@
 const Semester = require("../models/semesters");
+const { pagingnation } = require("./Pagingnation");
 
 module.exports.addSemester = async (req, res) => {
   const { semestername, startDate, endDate, meta_data } = req.body;
@@ -36,6 +37,15 @@ module.exports.getSemester = async (req, res) => {
       temp.push(rest);
     });
     res.send(temp);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getSemestersPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Semester)
+    res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

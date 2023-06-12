@@ -21,16 +21,22 @@ import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
 import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
+<<<<<<< HEAD
 
 import Checkout from "../pages/components/Checkout/Checkout";
 
+=======
+>>>>>>> 765458932ecfe1975a4991ba8026d82227d9a491
 import AddNewClass from "../pages/components/AddNewClass/AddNewClass";
 import UpdateClass from "../pages/components/UpdateClass/UpdateClass";
 import ManageSchedule from "../pages/components/Schedule/ManageSchedule";
 import ManageAddSchedule from "../pages/components/Schedule/ManageAddSchedule";
 import ManageEditSchedule from "../pages/components/Schedule/ManageEditSchedule";
 import ManageClass from "../pages/components/ManageClass/ManageClass";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 765458932ecfe1975a4991ba8026d82227d9a491
 const routers = createBrowserRouter([
   {
     path: "/",

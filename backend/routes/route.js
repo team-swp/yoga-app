@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Account = require("../models/accounts");
-const { Auth, localVariables, AuthStaff } = require("../middleware/auth");
+const { Auth, localVariables, AuthStaff, AuthAdmin } = require("../middleware/auth");
 require("dotenv").config();
 const { registerMail } = require("../controllers/Mailer");
 const moment = require('moment');
@@ -20,6 +20,8 @@ const {
   register,
   update,
   getAccountByIdAuth,
+  getAccountPaging,
+  updateRoleAccount,
 } = require("../controllers/Account");
 
 const crypto = require("crypto");
@@ -35,24 +37,28 @@ const {
   getSemester,
   updateSemester,
   getSemesterById,
+  getSemestersPaging,
 } = require("../controllers/Semester");
 const {
   addCourse,
   getCourses,
   getCourseById,
   updateCourse,
+  getCoursesPaging,
 } = require("../controllers/Course");
 const {
   addSchedule,
   getSchedules,
   getScheduleById,
   updateSchedule,
+  getSchedulesPaging,
 } = require("../controllers/Schedule");
 const {
   addClass,
   getClasses,
   getClassById,
   updateClass,
+  getClassesPaging,
 } = require("../controllers/Class");
 
 const {
@@ -73,14 +79,17 @@ const {
   vnpayReturn,
   runUrl,
   haveDonePayment,
+  getPaymentsPaging,
 } = require("../controllers/Payment");
 const {
   addBooking,
   getBooking,
   updateBooking,
+  getBookingsPaging,
 } = require("../controllers/Booking");
 const Semester = require("../models/semesters");
 const { log } = require("console");
+const { addRole, updateRole, getRoleById } = require("../controllers/Role");
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -103,11 +112,22 @@ router.post("/accounts/register", register);
 //Updating one
 router.patch("/accounts", Auth, getAccountByIdAuth, update);
 
+//update role for user
+router.patch("/accounts/updateRole", AuthAdmin, updateRoleAccount);
+
+
 //getAccessToken
 router.get("/accessToken", Auth, getAccountByIdAuth, (req, res) => {
   const { password, ...rest } = Object.assign({}, res.account.toJSON());
   res.send(rest);
 });
+
+//Get password
+router.post("/password",Auth,getAccountByIdAuth,(req,res)=>{
+  const { password, ...rest } = Object.assign({}, res.account.toJSON());
+  res.send({password});
+})
+
 
 //Deleting one
 
@@ -168,6 +188,11 @@ router.patch(
   getPaymentMethodById,
   updatePaymentMethod
 );
+
+//Role
+router.post("/role/add",AuthAdmin,addRole)
+router.patch("/role/update",AuthAdmin,getRoleById,updateRole)
+
 //payment
 router.post("/payment/add", /*Auth,*/ addPayment);
 router.get("/payment/get", getPayment);
@@ -196,3 +221,13 @@ router.get('/vnpay_ipn', vnpayIPN,haveDonePayment);
 router.get('/vnpay_return',vnpayReturn);
 
 router.post("/runUrlVnPAY", runUrl);
+
+//pagingnation
+
+router.get("/coursesPaging/get",getCoursesPaging)
+router.get("/accountsPaging/get",getAccountPaging)
+router.get("/bookingsPaging/get",getBookingsPaging)
+router.get("/paymentsPaging/get",getPaymentsPaging)
+router.get("/schedulesPaging/get",getSchedulesPaging)
+router.get("/semestersPaging/get",getSemestersPaging)
+router.get("/classesPaging/get",getClassesPaging)
