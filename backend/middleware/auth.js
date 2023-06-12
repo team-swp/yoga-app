@@ -40,6 +40,25 @@ module.exports.AuthStaff = async function (req, res, next) {
   }
 };
 
+module.exports.AuthAdmin = async function (req, res, next) {
+  try {
+    // access authorize header to validate request
+    const token = req.headers.authorization.split(" ")[1];
+    // retrive the user details fo the logged in user
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    if (decodedToken.role === "admin") {
+      req.account = decodedToken; //chuyển qa cho thg tiếp theo
+    } else {
+      res.status(401).json({ error: "Authentication Failed!" });
+      return;
+    }
+    next();
+    console.log(decodedToken);
+  } catch (error) {
+    res.status(401).json({ error: "Authentication Failed!" });
+  }
+};
+
 module.exports.localVariables = function (req, res, next) {
   req.app.locals = {
     OTP: null,

@@ -1,0 +1,22 @@
+.text-end {
+    text-align: right;
+  }
+  
+  .btn {
+    margin-top: 5px;
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: #ffffff;
+    transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #45a049;
+  }
+  

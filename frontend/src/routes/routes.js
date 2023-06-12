@@ -8,22 +8,44 @@ import Reset from "../pages/components/Login/Reset";
 import Username from "../pages/components/Login/Username";
 import Profile from "../pages/components/Profile/Profile";
 import Courses from "../pages/components/Courses/Courses";
+import WeeklyTimetable from "../pages/components/WeeklySchedule/WeeklySchedule";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
-import Checkout from "../pages/components/Checkout/Checkout";
-import WeeklySchedule from "../pages/components/WeeklySchedule/WeeklySchedule";
 import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+<<<<<<< HEAD
 
+=======
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
+>>>>>>> 4e3f980a81621f15823c4127016891e4144934dd
 import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
 import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
+<<<<<<< HEAD
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 
+=======
+<<<<<<< HEAD
+
+import Checkout from "../pages/components/Checkout/Checkout";
+
+=======
+>>>>>>> 765458932ecfe1975a4991ba8026d82227d9a491
+import AddNewClass from "../pages/components/AddNewClass/AddNewClass";
+import UpdateClass from "../pages/components/UpdateClass/UpdateClass";
+import ManageSchedule from "../pages/components/Schedule/ManageSchedule";
+import ManageAddSchedule from "../pages/components/Schedule/ManageAddSchedule";
+import ManageEditSchedule from "../pages/components/Schedule/ManageEditSchedule";
+import ManageClass from "../pages/components/ManageClass/ManageClass";
+<<<<<<< HEAD
+
+=======
+>>>>>>> 765458932ecfe1975a4991ba8026d82227d9a491
+>>>>>>> 4e3f980a81621f15823c4127016891e4144934dd
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -39,7 +61,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/timetable",
-    element: <WeeklySchedule />,
+    element: <WeeklyTimetable />,
   },
   {
     path: "/login",
@@ -51,7 +73,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/password",
-    element: <Password />,
+    element: (
+      <ProtectRoute>
+        <Password />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/profile",
@@ -84,7 +110,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/paymentstatus",
+<<<<<<< HEAD
     element: (<PaymentStatus />)
+=======
+    element: <PaymentStatus />,
+>>>>>>> 4e3f980a81621f15823c4127016891e4144934dd
   },
   {
     path: "*",
@@ -92,20 +122,44 @@ const routers = createBrowserRouter([
   },
   {
     path: "/staffmanage",
-    element: <StaffManage></StaffManage>
+    element: <StaffManage></StaffManage>,
+  },
+  {
+    path: "/manageclass",
+    element: <ManageClass></ManageClass>,
+  },
+  {
+    path: "/addnewclass",
+    element: <AddNewClass></AddNewClass>,
+  },
+  {
+    path: "/updateclass/:id",
+    element: <UpdateClass></UpdateClass>,
+  },
+  {
+    path: "/schedule",
+    element: <ManageSchedule></ManageSchedule>,
+  },
+  {
+    path: "/addnewschedule",
+    element: <ManageAddSchedule></ManageAddSchedule>,
+  },
+  {
+    path: "/updateschedule/:id",
+    element: <ManageEditSchedule></ManageEditSchedule>,
   },
   {
     path: "/managecourse",
-    element: <ManageCourses></ManageCourses>
+    element: <ManageCourses></ManageCourses>,
   },
   {
     path: "/addnewcourse",
-    element: <AddNewCourse></AddNewCourse>
+    element: <AddNewCourse></AddNewCourse>,
   },
   {
     path: "/updatecourse/:id",
-    element: <UpdateCourse></UpdateCourse>
-  }
+    element: <UpdateCourse></UpdateCourse>,
+  },
 ]);
 
 export default routers;

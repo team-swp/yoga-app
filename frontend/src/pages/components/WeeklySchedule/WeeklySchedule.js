@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./WeeklySchedule.module.css";
 import classNames from "classnames/bind";
-import moment from "moment";
+import moment from 'moment'
 import yoga2 from "../../../assets/yoga2.jpg";
 import { Container } from "@mui/material";
 import Header from "../Header/Header";

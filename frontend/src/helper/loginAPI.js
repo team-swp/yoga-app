@@ -58,6 +58,25 @@ export async function registerUser(credentials) {
   }
 }
 
+export const authenticatePassword = async (credentials) => {
+  const response = await fetch("your-authentication-endpoint", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  // Kiểm tra kết quả và trả về kết quả xác thực (true/false)
+  if (response.ok) {
+    // Xác thực thành công
+    return true;
+  } else {
+    // Xác thực không thành công
+    return false;
+  }
+};
+
 /** login function */
 // export async function verifyPassword({ email, password }){
 //     try {
@@ -146,33 +165,38 @@ export async function resetPassword({ email, password }) {
   }
 }
 
-
 /*
 Handle Image
 */
 
-export async function postAvatarToAWS(formData){
+export async function postAvatarToAWS(formData) {
   try {
-    const {data,status} = await axios.post('api/image/post', formData, { headers: {'Content-Type': 'multipart/form-data'}})
-    return ({ data, status });
+    const { data, status } = await axios.post("api/image/post", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return { data, status };
   } catch (error) {
-    return ({ error });
+    return { error };
   }
 }
 
-export async function getAvatarToAWS({imageName}){
-  try { 
-    const {data} = await axios.get('api/image/get', { params: {imageName}})
-    return Promise.resolve(data)
+export async function getAvatarToAWS({ imageName }) {
+  try {
+    const { data } = await axios.get("api/image/get", {
+      params: { imageName },
+    });
+    return Promise.resolve(data);
   } catch (error) {
     return Promise.reject({ error });
   }
 }
 
-export async function verifyTokenGoogle(tokenID){
+export async function verifyTokenGoogle(tokenID) {
   try {
-    const {data} = await axios.post('api/google/verify', {authToken:tokenID})
-    return Promise.resolve(data)
+    const { data } = await axios.post("api/google/verify", {
+      authToken: tokenID,
+    });
+    return Promise.resolve(data);
   } catch (error) {
     return Promise.reject({ error });
   }
