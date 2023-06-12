@@ -22,16 +22,12 @@ import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
 import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
-<<<<<<< HEAD
-
-=======
 import AddNewClass from "../pages/components/AddNewClass/AddNewClass";
 import UpdateClass from "../pages/components/UpdateClass/UpdateClass";
 import ManageSchedule from "../pages/components/Schedule/ManageSchedule";
 import ManageAddSchedule from "../pages/components/Schedule/ManageAddSchedule";
 import ManageEditSchedule from "../pages/components/Schedule/ManageEditSchedule";
 import ManageClass from "../pages/components/ManageClass/ManageClass";
->>>>>>> 1fb10a6f977a830aadb169df9851e05e7cc53ed5
 const routers = createBrowserRouter([
   {
     path: "/",
