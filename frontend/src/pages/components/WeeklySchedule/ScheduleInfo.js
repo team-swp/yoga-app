@@ -6,11 +6,18 @@ const StyledScheduleInfo = styled.div`
   border: 1px solid #ccc;
   border-radius: 4px;
 
-  h6 {
+  .semester-name {
+    font-weight: bold;
     margin-bottom: 8px;
+    color: #0066cc;
+    font-size: 20px;
+  }
+
+  .date {
+    margin-bottom: 4px;
+    font-size: 16px;
   }
 `;
-
 function ScheduleInfo({ totalSchedule }) {
   const scheduleInfo = totalSchedule.map((schedule) => {
     const startDate = new Date(schedule.startDate);
@@ -34,9 +41,9 @@ function ScheduleInfo({ totalSchedule }) {
 
     return (
       <StyledScheduleInfo>
-        <h6>{`Semester: ${firstSchedule.semesterName}`}</h6>
-        <p>{`Start date: ${startDateString}`}</p>
-        <p>{`End date: ${endDateString}`}</p>
+        <div className="semester-name">{`Semester: ${firstSchedule.semesterName}`}</div>
+        <div className="date">{`Start date: ${startDateString}`}</div>
+        <div className="date">{`End date: ${endDateString}`}</div>
       </StyledScheduleInfo>
     );
   } else {
