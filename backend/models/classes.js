@@ -24,6 +24,10 @@ const classSchema = new mongoose.Schema(
       default: true,
       required: true,
     },
+    days: {
+      type: Array,
+      required: true,
+    },
     meta_data: {
       type: String,
       required: false,
@@ -92,6 +96,30 @@ classSchema.pre("save", async function (next) {
   } catch (error) {
     next(error);
   }
+});
+
+classSchema.pre("save", async function (next) {
+  const allowedDays = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
+
+  // Kiểm tra days chỉ chứa các giá trị thứ hợp lệ
+  const invalidDays = this.days.filter((day) => !allowedDays.includes(day.toLowerCase()));
+  if (invalidDays.length > 0) {
+    const error = new Error(
+      "Invalid days. Please use valid weekdays (e.g., Monday, Tuesday, etc.)."
+    );
+    return next(error);
+  }
+
+  // Nếu không có lỗi, tiếp tục lưu dữ liệu
+  next();
 });
 
 module.exports = mongoose.model("Class", classSchema);
