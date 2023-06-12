@@ -1,4 +1,4 @@
-.background_all{
+.background_all {
   background-image: url("../../public/assets/img/login-background.jpg");
   background-repeat: no-repeat;
   background-position: center;
@@ -6,7 +6,17 @@
   display: flex;
   flex-direction: column;
 }
-.glass{
+
+.background_reset {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
+.background_resetdetail {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+.glass {
   background: rgba(255, 255, 255, 0.55);
   border-radius: 16px;
   box-shadow: 0 4px 30px #4747470b;
@@ -15,48 +25,53 @@
   @apply border-4 border-gray-50 shrink-0 h-[auto] w-[60%] rounded-3xl py-20 px-7 min-w-max;
 }
 
-.btn_social{
-margin: 0 auto;
+.btn_social {
+  margin: 0 auto;
 }
 
-.profile_img{
+.profile_img {
   @apply border-4 border-gray-100 w-[135px] rounded-full shadow-lg cursor-pointer;
   @apply hover:border-gray-200;
 }
 
-.textbox{
+.textbox {
   @apply border-0 px-5 py-4 rounded-xl w-3/4 shadow-sm text-lg;
   @apply focus:outline-none;
 }
 
-.btn{
+.btn {
   @apply border bg-indigo-500 w-3/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
-  background-color: #87DEE3;
+  background-color: #87dee3;
 }
 
-.btn:hover{
+.btn_savechange {
+  @apply border bg-white w-1/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
+  background-color: #fff;
+}
+
+.btn:hover {
   background-color: #ff6a6a;
 }
 
-input[type='file']{
+input[type="file"] {
   display: none;
 }
 
-.line_divided{
-  background-color:#87DEE3 ;
+.line_divided {
+  background-color: #87dee3;
   font-size: 14px;
   line-height: 18px;
   height: 1px;
-  width: calc(70%/2);
+  width: calc(70% / 2);
   margin: auto;
 }
 
-.orText{
+.orText {
   padding: 0 10px;
   margin: auto -10%;
   color: #0b6267;
 }
-.orLine{
+.orLine {
   margin-top: 8%;
   margin-bottom: 4%;
 }

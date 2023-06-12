@@ -7,6 +7,7 @@ const { log } = require("console");
 const { registerMail } = require("./Mailer");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
+const { pagingnation } = require("./Pagingnation");
 //payment medthod
 module.exports.addPaymentMethod = async (req, res) => {
   const { paymentname } = req.body;
@@ -123,6 +124,15 @@ module.exports.getPayment = async (req, res) => {
   try {
     const payment = await Payment.find();
     res.send(payment);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getPaymentsPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Payment)
+    res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

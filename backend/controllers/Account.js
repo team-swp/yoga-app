@@ -4,6 +4,7 @@ const Account = require("../models/accounts");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Auth = require("../middleware/auth");
+const { pagingnation } = require("./Pagingnation");
 require("dotenv").config();
 
 module.exports.getAllAccount = async (req, res) => {
@@ -32,6 +33,15 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
   }
   res.account = account; //gửi respone account qa bên kia
   next();
+};
+
+module.exports.getAccountPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Account)
+    res.send(pagingPayload);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 module.exports.getAccountById = async (req, res, next) => {
@@ -79,9 +89,6 @@ module.exports.update = async (req, res) => {
   }
   if (req.body.phone != null) {
     res.account.phone = req.body.phone;
-  }
-  if (req.body.role != null) {
-    res.account.role = req.body.role;
   }
   if (req.body.avatar != null) {
     res.account.avatar = req.body.avatar;
@@ -198,5 +205,28 @@ module.exports.Login = async (req, res) => {
       });
   } catch (error) {
     return res.status(500).send({ error });
+  }
+};
+
+
+module.exports.updateRoleAccount = async (req, res) => {
+  const { _id, role } = req.body;
+
+  try {
+    // Find the user by _id
+    const account = await Account.findById(_id);
+    if (!account) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the role
+    account.role = role;
+
+    // Save the updated user
+    const updatedAccount = await account.save();
+
+    res.json(updatedAccount);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };

@@ -1,7 +1,8 @@
 const Schedule = require("../models/schedules");
+const { pagingnation } = require("./Pagingnation");
 
 module.exports.addSchedule = async (req, res) => {
-  const { schedulename, startTime, endTime, days, meta_data } = req.body;
+  const { schedulename, startTime, endTime, meta_data } = req.body;
   try {
     const schedule = new Schedule({
       schedulename: schedulename,
@@ -27,6 +28,15 @@ module.exports.getSchedules = async (req, res) => {
   try {
     const schedule = await Schedule.find();
     res.send(schedule);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getSchedulesPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Schedule)
+    res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

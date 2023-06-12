@@ -1,4 +1,5 @@
 const Class = require("../models/classes");
+const { pagingnation } = require("./Pagingnation");
 
 module.exports.addClass = async (req, res) => {
   const {
@@ -34,6 +35,15 @@ module.exports.getClasses = async (req, res) => {
   try {
     const allClasses = await Class.find();
     res.send(allClasses);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getClassesPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Class)
+    res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
