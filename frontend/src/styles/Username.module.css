@@ -16,10 +16,6 @@
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
 .glass {
   background: rgba(255, 255, 255, 0.55);
   border-radius: 16px;
@@ -48,14 +44,11 @@
   background-color: #87dee3;
 }
 
-<<<<<<< HEAD
-=======
 .btn_savechange {
   @apply border bg-white w-1/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
   background-color: #fff;
 }
 
->>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
 .btn:hover {
   background-color: #ff6a6a;
 }
@@ -82,50 +75,3 @@ input[type="file"] {
   margin-top: 8%;
   margin-bottom: 4%;
 }
-<<<<<<< HEAD
-
-.btn_savechange {
-  @apply border bg-white w-1/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
-  background-color: #fff;
-}
-
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-  border-radius: 5px;
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 9999;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@keyframes fadein {
-  from {
-    bottom: 0;
-    opacity: 0;
-  }
-  to {
-    bottom: 30px;
-    opacity: 1;
-  }
-}
-
-@keyframes fadeout {
-  from {
-    bottom: 30px;
-    opacity: 1;
-  }
-  to {
-    bottom: 0;
-    opacity: 0;
-  }
-}
-
-.btn_savechange2 {
-  @apply border bg-white w-2/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
-  background-color: #fff;
-}
-=======
->>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
