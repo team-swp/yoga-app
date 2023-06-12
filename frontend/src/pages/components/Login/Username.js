@@ -47,6 +47,7 @@ function Username() {
     // }
 
     onSubmit: (values) => {
+      console.log(values);
       let loginPromise = verifyPassword({
         email: values.email,
         password: values.password,

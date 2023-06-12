@@ -195,22 +195,23 @@ function Profile() {
             <div className="border-b-2 border-black flex justify-center py-12">
               <div className=" font-semibold text-3xl">PROFILE</div>
             </div>
-            <form className="py-1" onSubmit={formik.handleSubmit}>
-              <div
-                style={{ width: 150, height: "auto", margin: "auto" }}
-                className="profile flex justify-center py-4"
-              >
-                <input
-                  onChange={onUpload}
-                  type="file"
-                  id="profile"
-                  name="avatar"
-                  style={{ width: 500, height: 500 }}
-                />
-              </div>
-              {screen ? (
-                <PasswordReset />
-              ) : (
+            {screen ? (
+              <PasswordReset />
+            ) : (
+              <form className="py-1" onSubmit={formik.handleSubmit}>
+                <div
+                  style={{ width: 150, height: "auto", margin: "auto" }}
+                  className="profile flex justify-center py-4"
+                >
+                  <input
+                    onChange={onUpload}
+                    type="file"
+                    id="profile"
+                    name="avatar"
+                    style={{ width: 500, height: 500 }}
+                  />
+                </div>
+
                 <div className="textbox flex flex-col items-left ml-20 gap-6">
                   <div className="">
                     <p>Your email</p>
@@ -286,8 +287,8 @@ function Profile() {
                     Save change
                   </button>
                 </div>
-              )}
-            </form>
+              </form>
+            )}
           </div>
         </div>
       </div>
