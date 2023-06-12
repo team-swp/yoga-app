@@ -16,7 +16,10 @@
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
 .glass {
   background: rgba(255, 255, 255, 0.55);
   border-radius: 16px;
@@ -45,6 +48,14 @@
   background-color: #87dee3;
 }
 
+<<<<<<< HEAD
+=======
+.btn_savechange {
+  @apply border bg-white w-1/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
+  background-color: #fff;
+}
+
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
 .btn:hover {
   background-color: #ff6a6a;
 }
@@ -71,6 +82,7 @@ input[type="file"] {
   margin-top: 8%;
   margin-bottom: 4%;
 }
+<<<<<<< HEAD
 
 .btn_savechange {
   @apply border bg-white w-1/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
@@ -115,3 +127,5 @@ input[type="file"] {
   @apply border bg-white w-2/4 py-4 rounded-lg text-black text-xl shadow-sm text-center;
   background-color: #fff;
 }
+=======
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97

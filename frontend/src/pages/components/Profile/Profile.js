@@ -19,7 +19,10 @@ import DoneIcon from "@mui/icons-material/Done";
 import Password from "../Login/Password";
 import Recovery from "../Login/Recovery";
 import PasswordReset from "./PasswordReset";
+<<<<<<< HEAD
 import { addCourse } from "../../../helper/courseAPI";
+=======
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
 
 function Profile() {
   const { logOut } = UserAuth();
@@ -30,8 +33,12 @@ function Profile() {
   const userCurr = {
     username: user,
   };
+<<<<<<< HEAD
   const [screen, setScreen] = useState(true);
   const [reset, setReset] = useState(true);
+=======
+  const [screen, setScreen] = useState(false);
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
   const formik = useFormik({
     initialValues: {
       email: user.email,
@@ -115,6 +122,7 @@ function Profile() {
     }
   };
   const onUpload = async (e) => {
+<<<<<<< HEAD
     const res = await addCourse({
       coursename: "12333",
       price: 1234,
@@ -122,6 +130,8 @@ function Profile() {
     });
     console.log(res);
 
+=======
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
     const avatar = e.target.files[0];
     if (avatar) {
       if (avatar.type.startsWith("image/")) {
@@ -146,6 +156,7 @@ function Profile() {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
           setFile(url);
+          console.log(file);
         }
       } else {
         toast.error("Please select an image");
@@ -170,10 +181,18 @@ function Profile() {
   };
 
   const handleScreen = () => {
+<<<<<<< HEAD
     setScreen(true);
   };
   const handleScreen2 = () => {
     setScreen(false);
+=======
+    if (screen) {
+      setScreen(false);
+    } else {
+      setScreen(true);
+    }
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
   };
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (
@@ -199,7 +218,11 @@ function Profile() {
             </div>
 
             <div className="flex flex-col items-center py-24 gap-24 font-bold">
+<<<<<<< HEAD
               <button onClick={handleScreen2} className=" uppercase">
+=======
+              <button onClick={handleScreen} className=" uppercase">
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
                 Update Information
               </button>
               <button onClick={handleScreen} className=" uppercase pr-6">
@@ -269,6 +292,7 @@ function Profile() {
                     <p>Please email me about new products and promotions.</p>
                   </div>
 
+<<<<<<< HEAD
                   <button
                     className={styles.btn_savechange}
                     type="submit"
@@ -305,6 +329,44 @@ function Profile() {
                       </div>
                     </div>
                   </div>
+=======
+                  <div
+                    className=" pt-3
+                  
+                "
+                  >
+                    <div className=" ml-10">
+                      <p>Avatar</p>
+                    </div>
+                    <div className="flex gap-5 items-center">
+                      <label htmlFor="profile">
+                        <img
+                          src={imageTemp || user.avatar || avatar}
+                          className={imgStyle}
+                          alt="avatar"
+                          onError={loadImageAgain}
+                        />
+                      </label>
+                      <div>
+                        <p>Click on current avatar to choose new image * </p>
+                        <input
+                          onChange={onUpload}
+                          type="file"
+                          id="profile"
+                          name="avatar"
+                          style={{ width: 500, height: 500 }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    className={styles.btn_savechange}
+                    type="submit"
+                    onClick={handleSavechange}
+                  >
+                    Save change
+                  </button>
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
                 </div>
               )}
             </form>

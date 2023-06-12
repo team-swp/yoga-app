@@ -15,15 +15,32 @@ import {
   ProtectRoute,
   ProtectRouteOTP,
 } from "../middleware/auth";
+<<<<<<< HEAD
 
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 
+=======
+import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
 import ManageCourses from "../pages/components/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/AddNewCourse/AddNewCourse";
 import UpdateCourse from "../pages/components/UpdateCourse/UpdateCourse";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
+<<<<<<< HEAD
 import Checkout from "../pages/components/Checkout/Checkout";
 
+=======
+<<<<<<< HEAD
+
+=======
+import AddNewClass from "../pages/components/AddNewClass/AddNewClass";
+import UpdateClass from "../pages/components/UpdateClass/UpdateClass";
+import ManageSchedule from "../pages/components/Schedule/ManageSchedule";
+import ManageAddSchedule from "../pages/components/Schedule/ManageAddSchedule";
+import ManageEditSchedule from "../pages/components/Schedule/ManageEditSchedule";
+import ManageClass from "../pages/components/ManageClass/ManageClass";
+>>>>>>> 1fb10a6f977a830aadb169df9851e05e7cc53ed5
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -75,7 +92,24 @@ const routers = createBrowserRouter([
   },
   {
     path: "/recovery",
+<<<<<<< HEAD
     element: <Recovery></Recovery>,
+=======
+
+    element: (
+      <ProtectRecover>
+        <Recovery />
+      </ProtectRecover>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />,
+  },
+  {
+    path: "/paymentstatus",
+    element: (<PaymentStatus />)
+>>>>>>> 2663665387ee226401d4e94ef8fd2388f24b7a97
   },
   {
     path: "*",
@@ -84,6 +118,30 @@ const routers = createBrowserRouter([
   {
     path: "/staffmanage",
     element: <StaffManage></StaffManage>,
+  },
+  {
+    path: "/manageclass",
+    element: <ManageClass></ManageClass>
+  },
+  {
+    path: "/addnewclass",
+    element: <AddNewClass></AddNewClass>
+  },
+  {
+    path: "/updateclass/:id",
+    element: <UpdateClass></UpdateClass>
+  },
+  {
+    path: "/schedule",
+    element: <ManageSchedule></ManageSchedule>
+  },
+  {
+    path: "/addnewschedule",
+    element: <ManageAddSchedule></ManageAddSchedule>
+  },
+  {
+    path: "/updateschedule/:id",
+    element: <ManageEditSchedule></ManageEditSchedule>
   },
   {
     path: "/managecourse",
