@@ -90,6 +90,7 @@ const {
 const Semester = require("../models/semesters");
 const { log } = require("console");
 const { addRole, updateRole, getRoleById } = require("../controllers/Role");
+const { getUserIP } = require("../middleware/blockIP");
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -231,3 +232,6 @@ router.get("/paymentsPaging/get",getPaymentsPaging)
 router.get("/schedulesPaging/get",getSchedulesPaging)
 router.get("/semestersPaging/get",getSemestersPaging)
 router.get("/classesPaging/get",getClassesPaging)
+
+//IP
+router.get("/ipUser",getUserIP)
