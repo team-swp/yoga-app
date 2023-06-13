@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-import styles from "./ManageSchedule.css";
+import styles from "../ManageSchedule/ManageSchedule.css";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

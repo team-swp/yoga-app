@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addCourse } from '../../../helper/courseAPI';
+import { addCourse } from '../../../../helper/courseAPI';
 import { Container, TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Link } from 'react-router-dom';
 

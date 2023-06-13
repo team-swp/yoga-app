@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import { Container } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import { addSchedule } from "../../../helper/scheduleAPI";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
+import { addSchedule } from "../../../../helper/scheduleAPI";
 import Datetime from 'react-datetime';
 
 function ManageAddSchedule() {

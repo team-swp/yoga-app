@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Container, TextField, Button, Select, Menu, MenuItem } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
 import { Link, useParams } from "react-router-dom";
-import { getCourse, updateCourse } from "../../../helper/courseAPI";
+import { getCourse, updateCourse } from "../../../../helper/courseAPI";
 
 function UpdateCourse() {
     const [course, setCourse] = useState({});

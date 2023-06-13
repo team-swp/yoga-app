@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getClass, updateClass } from "../../../helper/classAPI";
+import { getClass, updateClass } from "../../../../helper/classAPI";
 import { Container, TextField, Button } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
+import { getSchedule } from "../../../../helper/scheduleAPI";
+import { getCourse } from "../../../../helper/courseAPI";
+import { getUser } from "../../../../helper/loginAPI";
 
 function UpdateClass() {
     const [classes, setClasses] = useState({});
-    const classId = useParams();
+    const classesId = useParams();
     const [classname, setClassname] = useState("");
     const [scheduleId, setScheduleId] = useState("");
     const [courseId, setCourseId] = useState("");
@@ -21,17 +24,27 @@ function UpdateClass() {
     async function fetchClasses() {
         try {
             const response = await getClass();
-            const classes = response.data.filter((obj) => obj._id === classId.id);
-            console.log(classId);
+            const classes = response.data.find((obj) => obj._id === classesId.id);
             setClasses(classes);
 
             // Set initial values for the input fields
             setClassname(classes.classname);
-            setScheduleId(classes.scheduleId);
-            setCourseId(classes.courseId);
-            setInstructorId(classes.instructorId);
+            if (classes.schedule_id) {
+                const response = await getSchedule();
+                const schedulename = response.data.find((obj) => obj._id === classes.schedule_id);
+                setScheduleId(schedulename.schedulename);
+            }
+            if (classes.course_id) {
+                const response = await getCourse();
+                const coursename = response.data.find((obj) => obj._id === classes.course_id);
+                setCourseId(coursename.coursename);
+            }
+            if (classes.instructor_id) {
+                const id = classes.instructor_id;
+                const response = await getUser({ id }); console.log(response.data);
+                setInstructorId(response.data.username);
+            }
             setStatus(classes.status);
-            console.log(classes);
         } catch (error) {
             console.error(error);
         }
@@ -41,7 +54,7 @@ function UpdateClass() {
         event.preventDefault();
         try {
             const response = await updateClass({
-                _id: classId.id,
+                _id: classesId.id,
                 classname: classname,
                 scheduleId: scheduleId,
                 courseId: courseId,
@@ -100,14 +113,6 @@ function UpdateClass() {
                         value={instructorId}
                         onChange={(event) => setInstructorId(event.target.value)}
                         required
-                        sx={styles.textField}
-                    />
-                    <TextField
-                        label="Status"
-                        type="checkbox"
-                        name="status"
-                        checked={status}
-                        onChange={(event) => setStatus(event.target.checked)}
                         sx={styles.textField}
                     />
                     <Button type="submit" variant="contained" sx={styles.button}>

@@ -13,10 +13,10 @@ import {
     InputAdornment,
     IconButton,
 } from '@mui/material';
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-import { getCourse } from "../../../helper/courseAPI";
+import { getCourse } from "../../../../helper/courseAPI";
 
 function ManageCourses() {
     const [searchKeyword, setSearchKeyword] = useState("");
