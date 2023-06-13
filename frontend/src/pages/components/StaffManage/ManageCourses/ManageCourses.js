@@ -1,3 +1,5 @@
+
+
 import { useEffect, useState } from "react";
 import {
     Container,
@@ -12,43 +14,67 @@ import {
     TextField,
     InputAdornment,
     IconButton,
+    Switch,
+    colors,
 } from '@mui/material';
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/ManageCourses.js
 import { getCourse } from "../../../../helper/courseAPI";
+=======
+import { getCourse, updateCourse } from "../../../helper/courseAPI";
+>>>>>>> ef9cf68ab873de8c8f3c8c9e4266e802db3001f6:frontend/src/pages/components/ManageCourses/ManageCourses.js
 
 function ManageCourses() {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [courses, setCourses] = useState([]);
+    const [showNotFoundMessage, setShowNotFoundMessage] = useState(false);
+    const [updatedCourse, setUpdatedCourse] = useState({});
 
+    //Search
     const handleSearchChange = (event) => {
         setShowErrorMessage(false);
         setSearchKeyword(event.target.value);
     };
 
+    //Search
     const handleSearch = () => {
         if (searchKeyword.trim() === "") {
             setShowErrorMessage(true);
             return;
         }
-        const filteredCourses = courses.filter((course) =>
-            course.coursename.toLowerCase().includes(searchKeyword.toLowerCase())
+
+        const filteredCourses = courses.filter(
+            (course) =>
+                course.coursename.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                course.price.toString().toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                (course.status ? "Enabled" : "Disabled").toLowerCase() === (searchKeyword.toLowerCase())
         );
+
         setSearchResults(filteredCourses);
+
+        // Kiểm tra nếu không có kết quả tìm kiếm
+        if (filteredCourses.length === 0) {
+            setShowNotFoundMessage(true);
+        } else {
+            setShowNotFoundMessage(false);
+        }
     };
 
+    // dùng effect để chạy search
     useEffect(() => {
         if (searchKeyword === "") {
             setSearchResults([]);
         }
-    }, [searchKeyword]);
+    }, [searchKeyword], [updatedCourse]);
 
+    // chạy để lấy dữ liệu course
     useEffect(() => {
         fetchCourses();
-    }, []);
+    }, [updatedCourse]);
 
     async function fetchCourses() {
         try {
@@ -61,6 +87,21 @@ function ManageCourses() {
         }
     }
 
+    const handleToggle = async (event, course) => {
+        try {
+            const updatedCourseData = { ...course, status: event.target.checked };
+            const response = await updateCourse(updatedCourseData);
+            if (response && response.data) {
+                setUpdatedCourse(response.data);
+                const updatedCourses = courses.map((courseItem) =>
+                    courseItem._id === response.data._id ? response.data : courseItem
+                );
+                setCourses(updatedCourses);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
     return (
         <div>
             <Header />
@@ -75,7 +116,7 @@ function ManageCourses() {
                 <div style={{ float: 'right', marginTop: '15px' }}>
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="success"
                         component={Link}
                         to="/addnewcourse"
                     >
@@ -84,7 +125,7 @@ function ManageCourses() {
                 </div>
                 <div style={{ marginTop: '10px', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
                     <TextField
-                        label="Search"
+                        label="..."
                         variant="outlined"
                         value={searchKeyword}
                         onChange={handleSearchChange}
@@ -106,13 +147,22 @@ function ManageCourses() {
                     />
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="info"
                         onClick={handleSearch}
                         style={{ marginLeft: '8px' }}
                     >
                         Search
                     </Button>
                 </div>
+
+                {showNotFoundMessage && (
+                    <div style={{
+                        marginBottom: '16px', color: 'red'
+                    }}>
+                        No results found.
+                    </div>
+                )
+                }
 
                 <TableContainer component={Paper}>
                     <Table>
@@ -121,7 +171,7 @@ function ManageCourses() {
                                 <TableCell>ID</TableCell>
                                 <TableCell>Course Name</TableCell>
                                 <TableCell>Price</TableCell>
-                                <TableCell>Status</TableCell>
+                                <TableCell>Enable/Disable</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -131,11 +181,19 @@ function ManageCourses() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{courseItem.coursename}</TableCell>
                                     <TableCell>{courseItem.price}</TableCell>
-                                    <TableCell>{courseItem.status ? "Active" : "Inactive"}</TableCell>
+                                    <TableCell>
+                                        {!courseItem.status ? 'Disabled' : 'Enabled'}
+                                        <Switch
+
+                                            checked={courseItem.status}
+                                            onChange={(event) => handleToggle(event, courseItem)}
+                                            color={courseItem.status ? 'error' : 'error'}
+                                        />
+                                    </TableCell>
                                     <TableCell>
                                         <Button
                                             variant="contained"
-                                            color="secondary"
+                                            color="warning"
                                             component={Link}
                                             to={`/updatecourse/${courseItem._id}`}
                                         >
@@ -150,8 +208,9 @@ function ManageCourses() {
                 <Link
                     to="/staffmanage"
                     style={{
+                        marginTop: '10px',
                         float: 'right',
-                        backgroundColor: '#4CAF50',
+                        backgroundColor: 'grey',
                         border: 'none',
                         color: 'white',
                         padding: '10px 20px',
@@ -164,11 +223,10 @@ function ManageCourses() {
                 >
                     Back
                 </Link>
-            </Container>
+            </Container >
             <Footer />
-        </div>
+        </div >
     );
 }
 
 export default ManageCourses;
-

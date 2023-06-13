@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "./CourseDetail.module.css";
 import classNames from "classnames/bind";
@@ -17,20 +17,19 @@ const cx = classNames.bind(styles);
 
 function CourseDetail() {
   const token = localStorage.getItem("token");
-
-  const [open, setOpen] = useState(false);
+  const courseId = localStorage.getItem("courseId");
   const navigate = useNavigate();
-  const courseId = useParams();
 
   const [course, setCourse] = useState(null);
   const [classList, setClassList] = useState([]);
+
   console.log(classList);
   //fetchData
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await getCourse();
-        const course = response.data.find((obj) => obj._id === courseId.id);
+        const course = response.data.find((obj) => obj._id === courseId);
         const classList = await getClass();
         const classes = classList.data.filter(
           (obj) => obj.course_id === course._id
@@ -42,10 +41,7 @@ function CourseDetail() {
       }
     }
     fetchData();
-  }, [courseId.id]);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  }, [courseId]);
 
   const handleSubmit = async () => {
     try {

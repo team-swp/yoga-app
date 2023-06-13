@@ -11,14 +11,25 @@ import { updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { UserAuth } from "../../../context/AuthGoogleContext";
-import { addCourse } from "../../../helper/courseAPI";
+import { addBooking } from "../../../helper/bookingAPI";
+import Navigation from "../Header/Navigation/Navigation";
+import Header from "../Header/Header";
+import { Container } from "@mui/material";
+import DoneIcon from "@mui/icons-material/Done";
+import Password from "../Login/Password";
+import Recovery from "../Login/Recovery";
+import PasswordReset from "./PasswordReset";
 
 function Profile() {
   const { logOut } = UserAuth();
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
-  const [imageTemp, setImageTemp] = useState();
+  const [imageTemp, setImageTemp] = useState(true);
   const dispatch = useDispatch();
+  const userCurr = {
+    username: user,
+  };
+  const [screen, setScreen] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: user.email,
@@ -96,15 +107,27 @@ function Profile() {
   //     setFile(resize);
   //   });
   // };
-  const loadImageAgain = (e) => {
+  const loadImageAgain = async (e) => {
     if (user.avatar) {
+<<<<<<< HEAD
+      const { url } = await getAvatarToAWS({imageName:user._id})
+      setFile(url);
       e.target.src = file;
+      updateUser({avatar:url})
+=======
+      const { url } = await getAvatarToAWS({ imageName: user._id });
+      setFile(url);
+      e.target.src = file;
+      updateUser({ avatar: url });
+>>>>>>> 14cc50559d5fd9db99d93168b87f2bd7eb8844ac
     }
   };
+  // if (user.avatar) {
+    //   const { url } = getAvatarToAWS({imageName:user._id})
+    //   setFile(url);
+    //   updateUser({avatar:url})
+    // }
   const onUpload = async (e) => {
-    const res = await addCourse({ coursename: "12333", price: 1234, semester_id:'64731350ba5ce2a6c3ab38df' });
-    console.log(res);
-
     const avatar = e.target.files[0];
     if (avatar) {
       if (avatar.type.startsWith("image/")) {
@@ -129,6 +152,7 @@ function Profile() {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
           setFile(url);
+          console.log(file);
         }
       } else {
         toast.error("Please select an image");
@@ -139,32 +163,55 @@ function Profile() {
   const handleLogout = () => {
     logOut();
   };
+
+  const handleScreen = () => {
+    if (screen) {
+      setScreen(false);
+    } else {
+      setScreen(true);
+    }
+  };
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (
-    <div className={styles.background_all}>
-      <div className="container mx-auto">
-        <Toaster position="top-center" reverseOrder={false}></Toaster>
-        <div className="flex justify-center items-center">
-          <div className={styles.glass}>
-            <div className="title flex flex-col items-center">
-              <h4 className="text-5xl font-bold">Profile</h4>
-              <span className="py-4 text-xl w-2/3 text-center text-grey-500">
-                You can update the details
-              </span>
+    <div className="">
+      <div>
+        <Header />
+      </div>
+      <div className="bg-gray-200 w-[90%] lg:w-[1200px] h-auto my-6 mx-auto">
+        <div className="flex flex-col lg:flex-row h-full">
+          <div className="flex flex-col border-r-red-400 w-full lg:w-[30%] ">
+            <div className=" border-b-2 border-black">
+              <div className="flex justify-center pt-14">
+                <img
+                  src={imageTemp || user.avatar || avatar}
+                  className={imgStyle}
+                  alt="avatar"
+                  onError={loadImageAgain}
+                />
+              </div>
+              <div className="flex justify-center pt-5 text-2xl mb-5">
+                <p>Hello, {user.username}</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center py-24 gap-24 font-bold">
+              <button onClick={handleScreen} className=" uppercase">
+                Update Information
+              </button>
+              <button onClick={handleScreen} className=" uppercase pr-6">
+                Update Password
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-col border-l-2 border-black w-full lg:w-[70%]">
+            <div className="border-b-2 border-black flex justify-center py-12">
+              <div className=" font-semibold text-3xl">PROFILE</div>
             </div>
             <form className="py-1" onSubmit={formik.handleSubmit}>
               <div
                 style={{ width: 150, height: "auto", margin: "auto" }}
                 className="profile flex justify-center py-4"
               >
-                <label htmlFor="profile">
-                  <img
-                    src={imageTemp || user.avatar || avatar}
-                    className={imgStyle}
-                    alt="avatar"
-                    onError={loadImageAgain}
-                  />
-                </label>
                 <input
                   onChange={onUpload}
                   type="file"
@@ -173,43 +220,85 @@ function Profile() {
                   style={{ width: 500, height: 500 }}
                 />
               </div>
+              {screen ? (
+                <PasswordReset />
+              ) : (
+                <div className="textbox flex flex-col items-left ml-20 gap-6">
+                  <div className="">
+                    <p>Your email</p>
+                  </div>
+                  <input
+                    {...formik.getFieldProps("email")}
+                    readOnly
+                    className={styles.textbox}
+                    type="email"
+                    placeholder="Email*"
+                  />
+                  <div>
+                    <p>Your Name</p>
+                  </div>
+                  <input
+                    {...formik.getFieldProps("username")}
+                    className={styles.textbox}
+                    type="text"
+                    placeholder="Username*"
+                  />
+                  <div>
+                    <p>Your telephone</p>
+                  </div>
+                  <input
+                    {...formik.getFieldProps("phone")}
+                    className={styles.textbox}
+                    type="text"
+                    placeholder="phone"
+                  />
+                  <div className="flex items-center gap-2">
+                    <DoneIcon />
+                    <p>Please notify me about updates to my products.</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <DoneIcon />
+                    <p>Please notify me of all offers granted to me.</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <DoneIcon />
+                    <p>Please email me about new products and promotions.</p>
+                  </div>
 
-              <div className="textbox flex flex-col items-center gap-6">
-                <input
-                  {...formik.getFieldProps("email")}
-                  readOnly
-                  className={styles.textbox}
-                  type="email"
-                  placeholder="Email*"
-                />
-                <input
-                  {...formik.getFieldProps("username")}
-                  className={styles.textbox}
-                  type="text"
-                  placeholder="Username*"
-                />
-                <input
-                  {...formik.getFieldProps("phone")}
-                  className={styles.textbox}
-                  type="text"
-                  placeholder="phone"
-                />
-                <button className={styles.btn} type="submit">
-                  Update
-                </button>
-              </div>
-              <div className="text-center py-4">
-                <span className="text-gray-500">
-                  Come back later
-                  <button
-                    onClick={handleLogout}
-                    className="text-red-500"
-                    to="/"
+                  <div
+                    className=" pt-3
+                  
+                "
                   >
-                    Logout Now
+                    <div className=" ml-10">
+                      <p>Avatar</p>
+                    </div>
+                    <div className="flex gap-5 items-center">
+                      <label htmlFor="profile">
+                        <img
+                          src={imageTemp || user.avatar || avatar}
+                          className={imgStyle}
+                          alt="avatar"
+                          onError={loadImageAgain}
+                        />
+                      </label>
+                      <div>
+                        <p>Click on current avatar to choose new image * </p>
+                        <input
+                          onChange={onUpload}
+                          type="file"
+                          id="profile"
+                          name="avatar"
+                          style={{ width: 500, height: 500 }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <button className={styles.btn_savechange} type="submit">
+                    Save change
                   </button>
-                </span>
-              </div>
+                </div>
+              )}
             </form>
           </div>
         </div>

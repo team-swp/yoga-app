@@ -1,4 +1,5 @@
 const Booking = require("../models/bookings");
+const { pagingnation } = require("./Pagingnation");
 module.exports.addBooking = async (req, res) => {
   const { member_id, class_id, booking_date, status, meta_data } = req.body;
   try {
@@ -28,6 +29,15 @@ module.exports.getBooking = async (req, res) => {
   try {
     const booking = await Booking.find();
     res.send(booking);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getBookingsPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Booking)
+    res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
