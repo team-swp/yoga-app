@@ -41,7 +41,7 @@ const routers = createBrowserRouter([
     element: <Courses></Courses>,
   },
   {
-    path: "/course/:id",
+    path: "/course",
     element: <CourseDetail></CourseDetail>,
   },
   {
@@ -91,7 +91,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/paymentstatus",
-    element: (<PaymentStatus />)
+    element: <PaymentStatus />,
   },
   {
     path: "*",
@@ -99,52 +99,52 @@ const routers = createBrowserRouter([
   },
   {
     path: "/staffmanage",
-    element: <StaffManage></StaffManage>
+    element: <StaffManage></StaffManage>,
   },
   {
     path: "/manageclass",
-    element: <ManageClass></ManageClass>
+    element: <ManageClass></ManageClass>,
   },
   {
     path: "/addnewclass",
-    element: <AddNewClass></AddNewClass>
+    element: <AddNewClass></AddNewClass>,
   },
   {
     path: "/updateclass/:id",
-    element: <UpdateClass></UpdateClass>
+    element: <UpdateClass></UpdateClass>,
   },
   {
     path: "/manageschedule",
-    element: <ManageSchedule></ManageSchedule>
+    element: <ManageSchedule></ManageSchedule>,
   },
   {
     path: "/addnewschedule",
-    element: <ManageAddSchedule></ManageAddSchedule>
+    element: <ManageAddSchedule></ManageAddSchedule>,
   },
   {
     path: "/updateschedule/:id",
-    element: <ManageEditSchedule></ManageEditSchedule>
+    element: <ManageEditSchedule></ManageEditSchedule>,
   },
   {
     path: "/managecourse",
-    element: <ManageCourses></ManageCourses>
+    element: <ManageCourses></ManageCourses>,
   },
   {
     path: "/addnewcourse",
-    element: <AddNewCourse></AddNewCourse>
+    element: <AddNewCourse></AddNewCourse>,
   },
   {
     path: "/updatecourse/:id",
-    element: <UpdateCourse></UpdateCourse>
+    element: <UpdateCourse></UpdateCourse>,
   },
   {
     path: "/managesemester",
-    element: <ManageSemester></ManageSemester>
+    element: <ManageSemester></ManageSemester>,
   },
   {
     path: "/addnewsemester",
-    element: <ManageAddSemester></ManageAddSemester>
-  }
+    element: <ManageAddSemester></ManageAddSemester>,
+  },
 ]);
 
 export default routers;
