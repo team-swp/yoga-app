@@ -23,6 +23,7 @@ module.exports.getAllAccount = async (req, res) => {
 
 module.exports.getAccountByIdAuth = async (req, res, next) => {
   let account;
+
   try {
     account = await Account.findById(req.account.userId); //lấy req tìm còn có .role
     if (account === null) {
@@ -31,13 +32,18 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
+  console.log(account);
   res.account = account; //gửi respone account qa bên kia
   next();
 };
 
 module.exports.getAccountPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Account)
+    const pagingPayload = await pagingnation(
+      req.query.page,
+      req.query.limit,
+      Account
+    );
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -61,6 +67,7 @@ module.exports.getAccountById = async (req, res, next) => {
 module.exports.verifyUser = async function (req, res, next) {
   try {
     const { email } = req.method == "GET" ? req.query : req.body;
+    console.log(email);
 
     // check the user existance
     let exist = await Account.findOne({ email });
@@ -85,7 +92,19 @@ module.exports.update = async (req, res) => {
     res.account.username = req.body.username;
   }
   if (req.body.password != null) {
-    res.account.password = req.body.password;
+    bcrypt.hash(req.body.password, 10).then(async (hashedPassword) => {
+      res.account.password = hashedPassword;
+
+      //  Account.findOneAndUpdate({ email: user.email },{ password: hashedPassword },{
+      //   run: (async function (err, data) {
+      //     if (err) throw err;
+      //     req.app.locals.resetSession = false; // reset session
+      //     await user.save();
+      //     return res.status(201).send({ msg: "Record Updated...!" });
+      //   })()
+      //  }
+      // );
+    });
   }
   if (req.body.phone != null) {
     res.account.phone = req.body.phone;
@@ -99,6 +118,7 @@ module.exports.update = async (req, res) => {
 
   try {
     const updateUser = await res.account.save();
+    console.log(req.body.password);
     res.json(updateUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -188,7 +208,7 @@ module.exports.Login = async (req, res) => {
                 username: account.username,
                 _id: account._id,
                 role: account.role,
-                avatar:account.avatar
+                avatar: account.avatar,
               });
             })
             .catch((error) => {
@@ -207,7 +227,6 @@ module.exports.Login = async (req, res) => {
     return res.status(500).send({ error });
   }
 };
-
 
 module.exports.updateRoleAccount = async (req, res) => {
   const { _id, role } = req.body;
