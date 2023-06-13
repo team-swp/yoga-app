@@ -39,3 +39,8 @@ export const updateData = (data) => {
     payload: data,
   };
 };
+
+export const setCourseId = (courseId) => ({
+  type: "set_course_id",
+  payload: { courseId },
+});

@@ -94,8 +94,8 @@ function Sidebar() {
                 <li>Weekly Schedule</li>
               </Link>
               <li>
-                <Link to="/course">
-                  <button>Course</button>
+                <Link to="/courses">
+                  <button>Courses</button>
                 </Link>
               </li>
               <li>

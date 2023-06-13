@@ -109,10 +109,17 @@ function Profile() {
   // };
   const loadImageAgain = async (e) => {
     if (user.avatar) {
+<<<<<<< HEAD
       const { url } = await getAvatarToAWS({imageName:user._id})
       setFile(url);
       e.target.src = file;
       updateUser({avatar:url})
+=======
+      const { url } = await getAvatarToAWS({ imageName: user._id });
+      setFile(url);
+      e.target.src = file;
+      updateUser({ avatar: url });
+>>>>>>> 14cc50559d5fd9db99d93168b87f2bd7eb8844ac
     }
   };
   // if (user.avatar) {
@@ -151,18 +158,6 @@ function Profile() {
         toast.error("Please select an image");
       }
     }
-  };
-
-  const handleSavechange = () => {
-    const alert = document.createElement("div");
-    alert.className = "alert";
-    alert.innerHTML = "Update successfully";
-
-    document.body.appendChild(alert);
-
-    setTimeout(function () {
-      alert.parentNode.removeChild(alert);
-    }, 3000);
   };
 
   const handleLogout = () => {
@@ -299,11 +294,7 @@ function Profile() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    className={styles.btn_savechange}
-                    type="submit"
-                    onClick={handleSavechange}
-                  >
+                  <button className={styles.btn_savechange} type="submit">
                     Save change
                   </button>
                 </div>

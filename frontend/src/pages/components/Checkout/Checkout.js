@@ -47,7 +47,7 @@ function Checkout() {
       email: user.email,
       phone: user.phone || "",
       amount: "",
-      username:user.username||''
+      username: user.username || "",
     },
     validate: paymentVerify,
     validateOnBlur: false,
@@ -63,8 +63,10 @@ function Checkout() {
       if (isSelected) {
         const vnpayLink = createVnpay({
           amount: values.amount,
-          orderDescription: `647da69ec4e008c1eee52e17,${values.email},${values.username||'Member'}`, //bookingID lấy trong state
-          orderType: 190004
+          orderDescription: `647da69ec4e008c1eee52e17,${values.email},${
+            values.username || "Member"
+          }`, //bookingID lấy trong state
+          orderType: 190004,
         });
         vnpayLink.then((data) => {
           console.log(data.data);

@@ -59,11 +59,6 @@ export async function registerUser(credentials) {
 }
 
 export const authenticatePassword = async (credentials) => {
-  // Gửi yêu cầu xác thực mật khẩu cũ đến API hoặc thực hiện xác thực ở phía máy chủ
-  // Trong ví dụ này, tôi giả sử mật khẩu cũ luôn là "password123"
-
-  // Gửi yêu cầu xác thực đến API hoặc xử lý xác thực ở phía máy chủ
-  // Ví dụ sử dụng fetch API:
   const response = await fetch("your-authentication-endpoint", {
     method: "POST",
     headers: {
