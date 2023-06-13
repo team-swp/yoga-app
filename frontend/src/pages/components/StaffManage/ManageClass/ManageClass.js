@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import styles from "../ManageClass/ManageClass.css"
+import styles from "./ManageClass.css"
 import classNames from "classnames/bind";
 import { Container, Switch, colors } from "@mui/material";
 import Header from "../../Header/Header";

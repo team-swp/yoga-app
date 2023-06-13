@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react";
-<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/UpdateCourse.js
-import { Container, TextField, Button, Select, Menu, MenuItem } from "@mui/material";
+import { Container, TextField, Button, Select, Menu, MenuItem, FormGroup, FormControl, FormLabel, FormControlLabel, Checkbox, CircularProgress, Typography } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link, useParams } from "react-router-dom";
 import { getCourse, updateCourse } from "../../../../helper/courseAPI";
-=======
-import { Container, TextField, Button, Select, Menu, MenuItem, FormGroup, FormControl, FormLabel, FormControlLabel, Checkbox, CircularProgress, Typography } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import { Link, useParams } from "react-router-dom";
-import { getCourse, updateCourse } from "../../../helper/courseAPI";
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
->>>>>>> ef9cf68ab873de8c8f3c8c9e4266e802db3001f6:frontend/src/pages/components/UpdateCourse/UpdateCourse.js
 
 function UpdateCourse() {
     const [course, setCourse] = useState({});

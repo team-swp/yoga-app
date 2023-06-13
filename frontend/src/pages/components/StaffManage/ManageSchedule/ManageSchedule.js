@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-import styles from "../ManageSchedule/ManageSchedule.css";
+import styles from "./ManageSchedule.css";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
@@ -47,7 +47,6 @@ function ManageSchedule() {
                         <td>Schedule Name</td>
                         <td>Start Time</td>
                         <td>End Time</td>
-                        <td>Days</td>
                         <td>Status</td>
                     </tr>
 
@@ -58,7 +57,6 @@ function ManageSchedule() {
                             <td>{scheduleItem.schedulename}</td>
                             <td>{scheduleItem.startTime}</td>
                             <td>{scheduleItem.endTime}</td>
-                            <td>{scheduleItem.days}</td>
                             <td>{scheduleItem.status ? 'Active' : 'Inactive'}</td>
                             <Link
                                 to={`/updateschedule/${scheduleItem._id}`}

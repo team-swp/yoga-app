@@ -109,24 +109,17 @@ function Profile() {
   // };
   const loadImageAgain = async (e) => {
     if (user.avatar) {
-<<<<<<< HEAD
-      const { url } = await getAvatarToAWS({imageName:user._id})
-      setFile(url);
-      e.target.src = file;
-      updateUser({avatar:url})
-=======
       const { url } = await getAvatarToAWS({ imageName: user._id });
       setFile(url);
       e.target.src = file;
       updateUser({ avatar: url });
->>>>>>> 14cc50559d5fd9db99d93168b87f2bd7eb8844ac
     }
   };
   // if (user.avatar) {
-    //   const { url } = getAvatarToAWS({imageName:user._id})
-    //   setFile(url);
-    //   updateUser({avatar:url})
-    // }
+  //   const { url } = getAvatarToAWS({imageName:user._id})
+  //   setFile(url);
+  //   updateUser({avatar:url})
+  // }
   const onUpload = async (e) => {
     const avatar = e.target.files[0];
     if (avatar) {

@@ -19,7 +19,7 @@ function ManageAddSemester() {
             if (response) {
                 // Lớp học được thêm thành công
                 // Chuyển hướng người dùng đến trang quản lý lớp học
-                alert("Add New Schedule Semester")
+                alert("Add New Semester")
             } else {
                 // Xử lý lỗi khi không thêm được schedule
                 console.log('Failed to add semester');

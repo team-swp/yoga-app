@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import {
     Container,
@@ -20,11 +18,7 @@ import {
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/ManageCourses.js
-import { getCourse } from "../../../../helper/courseAPI";
-=======
-import { getCourse, updateCourse } from "../../../helper/courseAPI";
->>>>>>> ef9cf68ab873de8c8f3c8c9e4266e802db3001f6:frontend/src/pages/components/ManageCourses/ManageCourses.js
+import { getCourse, updateCourse } from "../../../../helper/courseAPI";
 
 function ManageCourses() {
     const [searchKeyword, setSearchKeyword] = useState("");

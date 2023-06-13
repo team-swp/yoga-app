@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/AddNewCourse.js
 import { addCourse } from '../../../../helper/courseAPI';
-import { Container, TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-=======
-import { addCourse } from '../../../helper/courseAPI';
 import { Container, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
->>>>>>> ef9cf68ab873de8c8f3c8c9e4266e802db3001f6:frontend/src/pages/components/AddNewCourse/AddNewCourse.js
 import { Link } from 'react-router-dom';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
+import Header from '../../Header/Header';
+import Footer from '../../Footer/Footer';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
