@@ -12,18 +12,7 @@ const initState = {
     OTP: false,
   },
   courses: [
-    {
-      id: 1,
-      name: "Learn Yoga",
-      completed: false,
-      priority: "Medium",
-    },
-    {
-      id: 2,
-      name: "Learn Yoga Test",
-      completed: true,
-      priority: "High",
-    },
+    {}
   ],
 };
 
@@ -47,7 +36,9 @@ const rootReducer = (state = initState, action) => {
 
     case "login/setDataLogin": {
       const { _id, token, username, phone, avatar,email } = action.payload;
-      localStorage.setItem("token", token);
+      if(!localStorage.getItem('token')){
+        localStorage.setItem("token", token);
+      }
       return {
         ...state,
         user: { ...state.user, _id, username, phone, avatar,email },

@@ -6,29 +6,32 @@ import { AuthContextProvider } from "./context/AuthGoogleContext";
 import { CheckTokenAccess } from "./middleware/auth";
 import { useEffect } from "react";
 import { getUserByToken } from "./helper/loginAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUserLogin, setDataLogin } from "./redux/actions";
+import { userSelector } from "./redux/selectors";
 function App() {
   const dispatch = useDispatch()
+  const user = useSelector(userSelector)
   useEffect(() => {
     const checkToken = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token && token !== "undefined") {
-          const getUserToken = await getUserByToken(); // Assuming this is an asynchronous function that returns a promise
+          const getUserToken = getUserByToken(); 
           getUserToken
             .then((res) => {
               res.data.data = Object.assign(res.data.data, { token });
-              dispatch(addUserLogin(res.data.data));
-              dispatch(setDataLogin(res.data.data));
+                dispatch(addUserLogin(res.data.data));
+                dispatch(setDataLogin(res.data.data));
+              
             })
             .catch((res) => {
-              localStorage.removeItem("token");
+              // localStorage.removeItem("token");
               return <Navigate to={"/login"} replace={true}></Navigate>;
             });
         }
       } catch (error) {
-        localStorage.removeItem("token");
+        // localStorage.removeItem("token");
         return <Navigate to={"/login"} replace={true} />;
       }
     };

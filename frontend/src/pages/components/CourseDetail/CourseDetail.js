@@ -12,16 +12,19 @@ import ScrollToTopOnMount from "../../ScrollToTopOnMount";
 import { getCourse } from "../../../helper/courseAPI";
 import { getClass } from "../../../helper/classAPI";
 import { addBooking } from "../../../helper/bookingAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataBooking } from "../../../redux/actions";
+import { userSelector } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
 function CourseDetail() {
   const token = localStorage.getItem("token");
-
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const courseId = useParams();
-
+const user = useSelector(userSelector)
   const [course, setCourse] = useState(null);
   const [classList, setClassList] = useState([]);
   console.log(classList);
@@ -49,8 +52,9 @@ function CourseDetail() {
 
   const handleSubmit = async () => {
     try {
-      const response = await addBooking();
-      console.log(response);
+      // const response = await addBooking();
+      // console.log(response);
+      navigate('/checkout')
     } catch (error) {
       console.error(error);
     }

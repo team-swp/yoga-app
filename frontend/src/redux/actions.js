@@ -39,3 +39,10 @@ export const updateData = (data) => {
     payload: data,
   };
 };
+
+export const setDataBooking = (data) => {
+  return {
+    type: "booking/setData",
+    payload: data,
+  };
+};
