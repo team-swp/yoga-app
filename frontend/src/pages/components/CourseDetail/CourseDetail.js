@@ -20,17 +20,9 @@ const cx = classNames.bind(styles);
 
 function CourseDetail() {
   const token = localStorage.getItem("token");
-<<<<<<< HEAD
-  const dispatch = useDispatch()
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-  const courseId = useParams();
-const user = useSelector(userSelector)
-=======
   const courseId = localStorage.getItem("courseId");
   const navigate = useNavigate();
 
->>>>>>> 92ae264d2dc2cca7f79b6e7ad08e381ec52c5c93
   const [course, setCourse] = useState(null);
   const [classList, setClassList] = useState([]);
 

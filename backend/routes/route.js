@@ -215,11 +215,7 @@ router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 ///-payyyment VNPAY
 
-<<<<<<< HEAD
-router.post("/create_payment_url",createPayment);
-=======
 router.post("/create_payment_url", Auth, createPayment);
->>>>>>> 92ae264d2dc2cca7f79b6e7ad08e381ec52c5c93
 
 router.get('/vnpay_ipn', vnpayIPN, haveDonePayment);
 

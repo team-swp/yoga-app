@@ -46,13 +46,8 @@ function Checkout() {
   const formik = useFormik({
     initialValues: {
       email: user.email,
-<<<<<<< HEAD
       phone: `0${user.phone}` || "",
       amount: 1000000,
-=======
-      phone: user.phone || "",
-      amount: "",
->>>>>>> 92ae264d2dc2cca7f79b6e7ad08e381ec52c5c93
       username: user.username || "",
     },
     validate: paymentVerify,
@@ -69,22 +64,10 @@ function Checkout() {
       if (isSelected) {
         const vnpayLink = createVnpay({
           amount: values.amount,
-<<<<<<< HEAD
           orderDescription: `${user._id},${values.email},${
             values.username || "Member"
           }`, //bookingID lấy trong state
           orderType: 190004,
-=======
-          orderDescription: `647da69ec4e008c1eee52e17,${values.email},${
-            values.username || "Member"
-          }`, //bookingID lấy trong state
-          orderType: 190004,
-        });
-        vnpayLink.then((data) => {
-          console.log(data.data);
-          // window.open(data.data, '_blank', 'noopener,noreferrer');
-          window.location.href = data.data;
->>>>>>> 92ae264d2dc2cca7f79b6e7ad08e381ec52c5c93
         });
         vnpayLink
           .then((data) => {
