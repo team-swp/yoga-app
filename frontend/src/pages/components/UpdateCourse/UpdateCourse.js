@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
-import { Container, TextField, Button, Select, Menu, MenuItem, FormGroup, FormControl, FormLabel, FormControlLabel, Checkbox, CircularProgress, Typography } from "@mui/material";
+import { Container, TextField, Button, CircularProgress, Typography, Autocomplete } from "@mui/material";
 import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
 import { Link, useParams } from "react-router-dom";
 import { getCourse, updateCourse } from "../../../helper/courseAPI";
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import { getSemester } from "../../../helper/semesterAPI";
+import axios from "axios";
 
 function UpdateCourse() {
     const [course, setCourse] = useState({});
     const courseId = useParams();
     const [coursename, setCoursename] = useState("");
     const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState(0);
     const [willLearn, setWillLearn] = useState("");
     const [requirement, setRequirement] = useState("");
     const [forWho, setForWho] = useState("");
-    const [semester_id, setSemesterId] = useState("");
-    const [videos, setVideos] = useState([])
+    const [semesterId, setSemesterId] = useState("");
+    const [videos, setVideos] = useState([]);
     const [images, setImages] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [updateSuccess, setUpdateSuccess] = useState(false);
+    const [semesterList, setSemesterList] = useState([]);
+    const [selectedSemester, setSelectedSemester] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,6 +33,9 @@ function UpdateCourse() {
         setUpdateSuccess(false);
 
         try {
+            // Lấy id của học kỳ từ selectedSemester
+            const semesterId = selectedSemester ? selectedSemester._id : null;
+
             const response = await updateCourse({
                 _id: courseId.id,
                 coursename: coursename,
@@ -38,10 +44,9 @@ function UpdateCourse() {
                 willLearn: willLearn,
                 requirement: requirement,
                 forWho: forWho,
-                semester_id: semester_id,
+                semester_id: semesterId, // Sử dụng id học kỳ
                 videos,
                 images,
-
             });
 
             if (response) {
@@ -54,18 +59,39 @@ function UpdateCourse() {
             }
         } catch (error) {
             console.error(error);
-            setErrorMessage("Error occurred while updating the course. Please try again later.");
+            setErrorMessage(
+                "Error occurred while updating the course. Please try again later."
+            );
         }
 
         setIsSubmitting(false);
     };
 
     useEffect(() => {
-        const fetchCourses = async () => {
+        async function fetchData() {
             try {
-                const response = await getCourse();
-                const course = response.data.find((obj) => obj._id === courseId.id);
+                const [courseResponse, semesterResponse] = await Promise.all([
+                    axios.get("http://localhost:3001/api/course/get"),
+                    axios.get("http://localhost:3001/api/semester/get"),
+                ]);
 
+                const courseData = courseResponse.data;
+                const semesterData = semesterResponse.data;
+
+                // Tiến hành kết hợp dữ liệu từ hai API
+                // Ví dụ: Lấy tên học kỳ dựa trên semester_id từ dữ liệu course
+                const combinedData = courseData.map((course) => {
+                    const semester = semesterData.find(
+                        (semester) => semester._id === course.semester_id
+                    );
+                    const semesterName = semester ? semester.semestername : "";
+                    return {
+                        ...course,
+                        semestername: semesterName,
+                    };
+                });
+                const course = combinedData.find((obj) => obj._id === courseId.id);
+                console.log(course);
                 setCourse(course);
                 setCoursename(course.coursename);
                 setDescription(course.description);
@@ -73,25 +99,38 @@ function UpdateCourse() {
                 setWillLearn(course.willLearn);
                 setRequirement(course.requirement);
                 setForWho(course.forWho);
-                setSemesterId(course.semester_id);
-                setImages(course.images)
-                setVideos(course.videos)
-
+                setSemesterId(course.semestername);
+                setImages(course.images);
+                setVideos(course.videos);
             } catch (error) {
                 console.error(error);
-                setErrorMessage("Error occurred while fetching the course details. Please try again later.");
             }
-        };
+        }
 
-        fetchCourses();
+        fetchData();
     }, []);
+
+    useEffect(() => {
+        async function fetchSemesters() {
+            try {
+                const response = await axios.get("http://localhost:3001/api/semester/get");
+                const semesterData = response.data;
+                setSemesterList(semesterData);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchSemesters();
+    }, []);
+
+
 
 
 
     return (
         <>
             <Header />
-
             <Container maxWidth="md" sx={styles.container}>
                 <div style={{ textAlign: 'center', position: 'sticky', top: 100, color: '#333', fontSize: '24px', marginTop: '40px' }}>
                     Update Course
@@ -103,7 +142,6 @@ function UpdateCourse() {
                             </Typography></div>
 
                     }
-
                     {updateSuccess &&
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#4caf50', color: 'white', padding: '10px', borderRadius: '8px', marginBottom: '20px' }}>
                             <CheckCircleOutlineOutlinedIcon sx={{ mr: 1 }} />
@@ -113,9 +151,6 @@ function UpdateCourse() {
                         </div>
                     }
                 </div>
-
-
-
                 <form onSubmit={handleSubmit} sx={styles.form}>
                     <TextField
                         label="Course Name"
@@ -179,14 +214,22 @@ function UpdateCourse() {
                         rows={4}
                         sx={styles.textField}
                     />
-                    <TextField
-                        label="Semester ID"
-                        type="text"
-                        name="semester_id"
-                        value={semester_id}
-                        onChange={(event) => setSemesterId(event.target.value)}
-                        required
-                        sx={styles.textField}
+                    <Autocomplete
+                        value={selectedSemester}
+                        onChange={(event, newValue) => setSelectedSemester(newValue)}
+                        options={semesterList}
+                        getOptionLabel={(option) => option.semestername}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+
+                                label="Semester"
+                                type="text"
+                                name="semester_id"
+                                required
+                                sx={styles.textField}
+                            />
+                        )}
                     />
                     <TextField
                         label="Images (comma separated URLs)"
@@ -229,7 +272,7 @@ function UpdateCourse() {
                             display: 'inline-block',
                             fontSize: '16px',
                             cursor: 'pointer',
-                            marginBlock: '30px'
+                            marginBlock: '10px'
 
                         }}
                     >
@@ -237,13 +280,10 @@ function UpdateCourse() {
                     </Link>
                 </form>
             </Container>
-            <Footer />
         </>
     );
 }
-
 export default UpdateCourse;
-
 const styles = {
     container: {
         marginTop: "2rem",

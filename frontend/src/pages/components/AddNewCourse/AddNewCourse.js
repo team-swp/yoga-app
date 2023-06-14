@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addCourse } from '../../../helper/courseAPI';
-import { Container, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { Container, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, FormLabel, FormGroup, FormControlLabel, Checkbox, Autocomplete } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import axios from 'axios';
 
 
 function AddNewCourse() {
@@ -22,12 +23,16 @@ function AddNewCourse() {
     const [errorMessage, setErrorMessage] = useState(null);
     const [addSuccess, setAddSuccess] = useState(false);
     const [videos, setVideos] = useState([])
+
+    const [semesterList, setSemesterList] = useState([]);
+    const [selectedSemester, setSelectedSemester] = useState(null);
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setErrorMessage(null);
         setAddSuccess(false);
         try {
+            const semesterId = selectedSemester ? selectedSemester._id : null;
             const response = await addCourse({
                 coursename: coursename,
                 description,
@@ -35,7 +40,7 @@ function AddNewCourse() {
                 willLearn,
                 requirement,
                 forWho,
-                semester_id: semester_id,
+                semester_id: semesterId,
                 images,
                 videos,
                 status: status,
@@ -66,6 +71,20 @@ function AddNewCourse() {
         }
         setIsSubmitting(false);
     };
+
+    useEffect(() => {
+        async function fetchSemesters() {
+            try {
+                const response = await axios.get("http://localhost:3001/api/semester/get");
+                const semesterData = response.data;
+                setSemesterList(semesterData);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchSemesters();
+    }, []);
 
     return (
         <div>
@@ -132,13 +151,21 @@ function AddNewCourse() {
                         rows={4}
                         sx={{ marginBottom: '10px' }}
                     />
-                    <TextField
-                        label="Semester ID"
-                        type="text"
-                        value={semester_id}
-                        onChange={(e) => setSemesterId(e.target.value)}
-                        fullWidth
-                        sx={{ marginBottom: '10px' }}
+                    <Autocomplete
+                        value={selectedSemester}
+                        onChange={(event, newValue) => setSelectedSemester(newValue)}
+                        options={semesterList}
+                        getOptionLabel={(option) => option.semestername}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Semester"
+                                type="text"
+                                name="semester_id"
+                                required
+                                sx={styles.textField}
+                            />
+                        )}
                     />
                     <TextField
                         label="Requirement"
@@ -204,7 +231,7 @@ function AddNewCourse() {
                     </Link>
                 </form>
             </Container >
-            <Footer />
+
         </div >
 
 
