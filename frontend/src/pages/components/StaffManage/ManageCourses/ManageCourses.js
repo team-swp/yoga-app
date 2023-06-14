@@ -1,3 +1,7 @@
+<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/ManageCourses.js
+=======
+
+>>>>>>> origin/tanDM:frontend/src/pages/components/ManageCourses/ManageCourses.js
 import { useEffect, useState } from "react";
 import {
     Container,
@@ -13,13 +17,22 @@ import {
     InputAdornment,
     IconButton,
     Switch,
-    colors,
+
 } from '@mui/material';
+<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/ManageCourses.js
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
 import { getCourse, updateCourse } from "../../../../helper/courseAPI";
 
+=======
+
+import './ManageCourses.css'
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import { Link } from "react-router-dom";
+import { updateCourse } from "../../../helper/courseAPI";
+>>>>>>> origin/tanDM:frontend/src/pages/components/ManageCourses/ManageCourses.js
 function ManageCourses() {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [searchResults, setSearchResults] = useState([]);
@@ -27,7 +40,46 @@ function ManageCourses() {
     const [courses, setCourses] = useState([]);
     const [showNotFoundMessage, setShowNotFoundMessage] = useState(false);
     const [updatedCourse, setUpdatedCourse] = useState({});
+    const [totalCourse, setTotalCourse] = useState(0)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage, setPerPage] = useState(3);
+    const [totalPage, setTotalPage] = useState(0)
+    const [page, setPage] = useState(0)
+    const [schedule, setSchedule] = useState([])
 
+    //thay đổi status//////////////////////////////////////
+
+    const handleToggle = async (event, course) => {
+        try {
+            const updatedCourseData = { ...course, status: event.target.checked };
+            const response = await updateCourse(updatedCourseData);
+            if (response && response.data) {
+                setUpdatedCourse(response.data);
+                const updatedCourses = courses.map((courseItem) =>
+                    courseItem._id === response.data._id ? response.data : courseItem
+                );
+                setCourses(updatedCourses);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // thay đổi tiến lên hoặc xuống trang
+    function handlePrevious() {
+        setCurrentPage((p) => {
+            if (p === 1) return p;
+            return p - 1;
+        });
+    }
+
+    function handleNext() {
+        setCurrentPage((p) => {
+            if (p === totalPage) return p;
+            return parseInt(p) + 1;
+        });
+    }
+    //////////////////////////////////////////////////
     //Search
     const handleSearchChange = (event) => {
         setShowErrorMessage(false);
@@ -57,45 +109,62 @@ function ManageCourses() {
             setShowNotFoundMessage(false);
         }
     };
+    useEffect(() => {
 
+        async function fecthScheduleList() {
+            try {
+                const requestUrl = 'http://localhost:3001/api/semester/get'
+                const response = await fetch(requestUrl)
+                const responseJSON = await response.json()
+                console.log(responseJSON)
+                setSchedule(responseJSON)
+                console.log(schedule)
+            } catch (error) {
+                console.log('Failed')
+            }
+        }
+        fecthScheduleList();
+    }, [])
     // dùng effect để chạy search
     useEffect(() => {
         if (searchKeyword === "") {
             setSearchResults([]);
         }
-    }, [searchKeyword], [updatedCourse]);
+    }, [searchKeyword]);
+    ///////////////////////////////////////////////////
+
+
 
     // chạy để lấy dữ liệu course
     useEffect(() => {
         fetchCourses();
     }, [updatedCourse]);
 
+
+
+
+    //////////////////////// pagination
+    useEffect(() => {
+        fetchCourses();
+    }, [currentPage]);
+
     async function fetchCourses() {
-        try {
-            const response = await getCourse();
-            if (response && response.data) {
-                setCourses(response.data);
-            }
-        } catch (error) {
-            console.error(error);
-        }
+        const requestUrl = `http://localhost:3001/api/coursespaging/get?page=${currentPage}&limit=${perPage}`;
+        const response = await fetch(requestUrl);
+        const responseJSON = await response.json();
+        const { items } = responseJSON;
+        console.log(responseJSON);
+        const { pagination } = responseJSON;
+        console.log(pagination.pageCount);
+        setTotalPage(pagination.pageCount)
+        setCourses(items);
+        setTotalCourse(pagination.count)
+        setPage(pagination.pageNum)
+        console.log(pagination.pageNum);
+
     }
 
-    const handleToggle = async (event, course) => {
-        try {
-            const updatedCourseData = { ...course, status: event.target.checked };
-            const response = await updateCourse(updatedCourseData);
-            if (response && response.data) {
-                setUpdatedCourse(response.data);
-                const updatedCourses = courses.map((courseItem) =>
-                    courseItem._id === response.data._id ? response.data : courseItem
-                );
-                setCourses(updatedCourses);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+
     return (
         <div>
             <Header />
@@ -165,37 +234,44 @@ function ManageCourses() {
                                 <TableCell>ID</TableCell>
                                 <TableCell>Course Name</TableCell>
                                 <TableCell>Price</TableCell>
+                                <TableCell>Semester</TableCell>
                                 <TableCell>Enable/Disable</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {(searchResults.length > 0 ? searchResults : courses).map((courseItem, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{courseItem.coursename}</TableCell>
-                                    <TableCell>{courseItem.price}</TableCell>
-                                    <TableCell>
-                                        {!courseItem.status ? 'Disabled' : 'Enabled'}
-                                        <Switch
+                            {(searchResults.length > 0 ? searchResults : courses).map((courseItem, index) => {
+                                const semester = schedule.find((item2) => item2._id === courseItem.semester_id)
+                                return (
+                                    <TableRow key={index}>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{courseItem.coursename}</TableCell>
+                                        <TableCell>{courseItem.price}</TableCell>
+                                        <TableCell>
+                                            {semester ? semester.semestername : 'N/A'}
+                                        </TableCell>
+                                        <TableCell>
 
-                                            checked={courseItem.status}
-                                            onChange={(event) => handleToggle(event, courseItem)}
-                                            color={courseItem.status ? 'error' : 'error'}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            variant="contained"
-                                            color="warning"
-                                            component={Link}
-                                            to={`/updatecourse/${courseItem._id}`}
-                                        >
-                                            Update
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                            <Switch
+
+                                                checked={courseItem.status}
+                                                onChange={(event) => handleToggle(event, courseItem)}
+                                                color={courseItem.status ? 'error' : 'error'}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button
+                                                variant="contained"
+                                                color="warning"
+                                                component={Link}
+                                                to={`/updatecourse/${courseItem._id}`}
+                                            >
+                                                Update
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -217,7 +293,33 @@ function ManageCourses() {
                 >
                     Back
                 </Link>
+
+                <footer>
+
+                    <button disabled={page === 1} onClick={handlePrevious}>
+                        Previous
+                    </button>
+                    <select
+                        value={currentPage}
+                        onChange={(event) => {
+                            setCurrentPage(event.target.value);
+                            console.log(currentPage);
+                        }}
+                    >
+                        {Array(totalPage)
+                            .fill(null)
+                            .map((_, index) => {
+                                return <option key={index}>{parseInt(index + 1)}</option>;
+                            })}
+                    </select>
+                    <button disabled={page == totalPage} onClick={handleNext}>
+
+                        Next
+                    </button>
+
+                </footer>
             </Container >
+
             <Footer />
         </div >
     );
