@@ -46,11 +46,11 @@ const rootReducer = (state = initState, action) => {
     }
 
     case "login/setDataLogin": {
-      const { _id, token, username, phone, avatar } = action.payload;
+      const { _id, token, username, phone, avatar,email } = action.payload;
       localStorage.setItem("token", token);
       return {
         ...state,
-        user: { ...state.user, _id, username, phone, avatar },
+        user: { ...state.user, _id, username, phone, avatar,email },
       };
     }
     case "login/updateData": {
