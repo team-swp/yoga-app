@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import { Container } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import { addClass } from "../../../helper/classAPI";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
+import { addClass } from "../../../../helper/classAPI";
 
 function AddNewClass() {
     const [classname, setClassname] = useState("");

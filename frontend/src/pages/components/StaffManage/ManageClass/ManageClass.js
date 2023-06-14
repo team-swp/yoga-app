@@ -1,26 +1,37 @@
-
 import { useEffect, useState } from "react"
 import styles from "./ManageClass.css"
 import classNames from "classnames/bind";
-import { Container } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import { Container, Switch, colors } from "@mui/material";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-import { getUser } from '../../../helper/loginAPI'
+import { getUser } from "../../../../helper/loginAPI";
+import { updateClass } from "../../../../helper/classAPI";
 const cx = classNames.bind(styles);
 function ManageClass() {
-
+    const [query, setQuery] = useState("")
     const [classList, setClassList] = useState([])
     const [scheduleList, setScheduleList] = useState([])
+    const [updatedClass, setUpdatedClass] = useState({});
+    const [classes, setClasses] = useState([]);
 
     const classIformation = classList.concat.scheduleList
-    // useEffect(() => {
-    //     const fecthData = getClass()
-    //     fecthData.then((dataApi) => {
-    //         setData(dataApi.data)
 
-    //     })
-    // }, [])
+    const handleToggle = async (events, classes) => {
+        try {
+            const updatedClassData = { ...classes, status: events.target.checked };
+            const response = await updateClass(updatedClassData);
+            if (response && response.data) {
+                setUpdatedClass(response.data);
+                const updatedClasses = classes.map((courseItem) =>
+                    courseItem._id === response.data._id ? response.data : courseItem
+                );
+                setClasses(updatedClasses);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         async function fecthClassList() {
@@ -57,30 +68,17 @@ function ManageClass() {
         fecthScheduleList();
     }, [])
 
-    // useEffect(() => {
-
-    //     return fecthScheduleList
-
-    // }, [])
-
-
-
     const list = () => {
         let temp = [];
         for (var classes of classList) {
-            // const classInstruc = await classes.instructor_id
-            // const instructor = getUser({ classInstruc })
             let tempObject = {}
             for (let schedule of scheduleList) {
                 if (classes.schedule_id === schedule._id) {
-                    // const classInstruc = classes.instructor_id
-                    // const instructorName = await getUser({ classInstruc })
-
                     const schedulename = schedule.schedulename
                     const classId = classes._id
                     const classname = classes.classname
                     const courseId = classes.course_id
-                    const instructor = classes.username
+                    const instructor = classes.instructor_id
                     tempObject = Object.assign(tempObject, { schedulename })
                     tempObject = Object.assign(tempObject, { classId })
                     tempObject = Object.assign(tempObject, { classname })
@@ -104,28 +102,56 @@ function ManageClass() {
             </div>
         </div>
         <Container>
-            <div className={cx("text-end")}><Link to="/addnewclass" className={cx("btn btn-primary")}>Add new class</Link></div>
+
+            <div className={cx("text-end")}>
+                <Link to="/addnewclass" className={cx("btn btn-primary")}>Add new class</Link>
+            </div>
+            <div className="searchfilter">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    className="search"
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+            </div>
             <table className="container">
                 <thead>
                     <tr>
                         <td>Class Id</td>
                         <td> Class Name</td>
                         <td> Schedule </td>
+                        <td>Course</td>
+                        <td>Intructor</td>
                         <td>Status</td>
                         <td>Action</td>
                     </tr>
 
                 </thead>
                 <tbody>
-                    {list().map((classItem, index) => (
+                    {list().filter((classItem) => {
+                        return (
+                            classItem.classname.toLowerCase().includes(query) ||
+                            classItem.schedulename.toLowerCase().includes(query)
+                        );
+                    }).map((classItem, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{classItem.classname}</td>
                             <td>{classItem.schedulename}</td>
-                            <td>{classItem.status ? 'Active' : 'Inactive'}</td>
+                            <td>{classItem.courseId}</td>
+                            <td>{classItem.instructor}</td>
+                            <td>
+                                {!classItem.status ? 'Disabled' : 'Enabled'}
+                                <Switch
+
+                                    checked={classItem.status}
+                                    onChange={(event) => handleToggle(event, classItem)}
+                                    color={classItem.status ? 'error' : 'error'}
+                                /></td>
                             <Link
-                                to={`/updateclass/${classItem._id}`}
+                                to={`/updateclass/${classItem.classId} `}
                                 className={cx("btn btn-secondary")}
+                                onClick={() => { console.log(classItem); }}
                             >
                                 Update
                             </Link>

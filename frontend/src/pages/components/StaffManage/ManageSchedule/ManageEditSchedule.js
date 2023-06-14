@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getSchedule, updateSchedule } from "../../../helper/scheduleAPI";
+import { getSchedule, updateSchedule } from "../../../../helper/scheduleAPI";
 import { Container, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
 
 function ManageEditSchedule() {
     const [schedule, setSchedule] = useState({});

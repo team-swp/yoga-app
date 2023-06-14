@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "@mui/material";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-import styles from "./ManageSchedule.css";
+import styles from "./ManageSemester.css"
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function ManageSchedule() {
+function ManageSemester() {
 
-    const [scheduleList, setScheduleList] = useState([])
+    const [semesterList, setSemesterList] = useState([])
 
     useEffect(() => {
-        async function fecthScheduleList() {
+        async function fecthSemesterList() {
             try {
-                const requestUrl = 'http://localhost:3001/api/schedule/get'
+                const requestUrl = 'http://localhost:3001/api/semester/get'
                 const response = await fetch(requestUrl)
                 const responseJSON = await response.json()
                 console.log(responseJSON)
-                setScheduleList(responseJSON)
+                setSemesterList(responseJSON)
             } catch (error) {
                 console.log('Failed')
 
             }
         }
-        fecthScheduleList();
+        fecthSemesterList();
 
     }, [])
 
@@ -35,33 +35,33 @@ function ManageSchedule() {
         <div class="bg-gray-400">
             <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
                 <h1 class="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
-                    Manage Schedule
+                    Manage Semester
                 </h1>
             </div>
         </div>
         <Container>
-            <div className={cx("text-end")}><Link to="/addnewschedule" className={cx("btn btn-primary")}>Add new Schedule</Link></div>
+            <div className={cx("text-end")}><Link to="/addnewsemester" className={cx("btn btn-primary")}>Add new Semester</Link></div>
             <table className="container">
                 <thead>
                     <tr>
-                        <td>Schedule Name</td>
-                        <td>Start Time</td>
-                        <td>End Time</td>
-                        <td>Days</td>
+                        <td>Semester ID</td>
+                        <td>Semester Name</td>
+                        <td>Start Date</td>
+                        <td>End Date</td>
                         <td>Status</td>
                     </tr>
 
                 </thead>
                 <tbody>
-                    {scheduleList.map((scheduleItem, index) => (
+                    {semesterList.map((semesterItem, index) => (
                         <tr key={index}>
-                            <td>{scheduleItem.schedulename}</td>
-                            <td>{scheduleItem.startTime}</td>
-                            <td>{scheduleItem.endTime}</td>
-                            <td>{scheduleItem.days}</td>
-                            <td>{scheduleItem.status ? 'Active' : 'Inactive'}</td>
+                            <td>{index + 1}</td>
+                            <td>{semesterItem.semestername}</td>
+                            <td>{semesterItem.startDate}</td>
+                            <td>{semesterItem.endDate}</td>
+                            <td>{semesterItem.status ? 'Active' : 'Inactive'}</td>
                             <Link
-                                to={`/updateschedule/${scheduleItem._id}`}
+                                to={`//${semesterItem._id}`}
                                 className={cx("btn btn-secondary")}
                             >
                                 Update
@@ -79,4 +79,4 @@ function ManageSchedule() {
     );
 }
 
-export default ManageSchedule;
+export default ManageSemester;

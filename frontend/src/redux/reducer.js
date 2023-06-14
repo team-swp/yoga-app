@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { registerUser, verifyPassword } from "../helper/loginAPI";
-
 const initState = {
   user: {
     _id: "",
@@ -11,9 +8,13 @@ const initState = {
     avatar: "",
     OTP: false,
   },
+<<<<<<< HEAD
   courses: [
     {}
   ],
+=======
+  courseId: null,
+>>>>>>> 92ae264d2dc2cca7f79b6e7ad08e381ec52c5c93
 };
 
 const rootReducer = (state = initState, action) => {
@@ -56,7 +57,6 @@ const rootReducer = (state = initState, action) => {
       if (OTP === false) {
         localStorage.removeItem("email");
       }
-      console.log(OTP);
       return {
         ...state,
         user: { ...state.user, OTP },
@@ -68,6 +68,12 @@ const rootReducer = (state = initState, action) => {
         ...state,
         user: {},
       };
+    }
+
+    case "set_course_id": {
+      const { courseId } = action.payload;
+      localStorage.setItem("courseId", courseId);
+      return { ...state, courseId };
     }
 
     default:

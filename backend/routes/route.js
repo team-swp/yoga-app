@@ -124,9 +124,9 @@ router.get("/accessToken", Auth, getAccountByIdAuth, (req, res) => {
 });
 
 //Get password
-router.post("/password",Auth,getAccountByIdAuth,(req,res)=>{
+router.post("/password", Auth, getAccountByIdAuth, (req, res) => {
   const { password, ...rest } = Object.assign({}, res.account.toJSON());
-  res.send({password});
+  res.send({ password });
 })
 
 
@@ -191,8 +191,8 @@ router.patch(
 );
 
 //Role
-router.post("/role/add",AuthAdmin,addRole)
-router.patch("/role/update",AuthAdmin,getRoleById,updateRole)
+router.post("/role/add", AuthAdmin, addRole)
+router.patch("/role/update", AuthAdmin, getRoleById, updateRole)
 
 //payment
 router.post("/payment/add", /*Auth,*/ addPayment);
@@ -215,23 +215,27 @@ router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 ///-payyyment VNPAY
 
+<<<<<<< HEAD
 router.post("/create_payment_url",createPayment);
+=======
+router.post("/create_payment_url", Auth, createPayment);
+>>>>>>> 92ae264d2dc2cca7f79b6e7ad08e381ec52c5c93
 
-router.get('/vnpay_ipn', vnpayIPN,haveDonePayment);
+router.get('/vnpay_ipn', vnpayIPN, haveDonePayment);
 
-router.get('/vnpay_return',vnpayReturn);
+router.get('/vnpay_return', vnpayReturn);
 
 router.post("/runUrlVnPAY", runUrl);
 
 //pagingnation
 
-router.get("/coursesPaging/get",getCoursesPaging)
-router.get("/accountsPaging/get",getAccountPaging)
-router.get("/bookingsPaging/get",getBookingsPaging)
-router.get("/paymentsPaging/get",getPaymentsPaging)
-router.get("/schedulesPaging/get",getSchedulesPaging)
-router.get("/semestersPaging/get",getSemestersPaging)
-router.get("/classesPaging/get",getClassesPaging)
+router.get("/coursesPaging/get", getCoursesPaging)
+router.get("/accountsPaging/get", getAccountPaging)
+router.get("/bookingsPaging/get", getBookingsPaging)
+router.get("/paymentsPaging/get", getPaymentsPaging)
+router.get("/schedulesPaging/get", getSchedulesPaging)
+router.get("/semestersPaging/get", getSemestersPaging)
+router.get("/classesPaging/get", getClassesPaging)
 
 //IP
-router.get("/ipUser",getUserIP)
+// router.get("/ipUser",getUserIP)

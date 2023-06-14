@@ -35,10 +35,13 @@ function StaffManage() {
                     <Link to="/manageclass">Manage Class</Link>
                 </h1>
                 <h1 className={cx("li")} style={{ margin: "0", marginLeft: "20px" }}>
-                    <Link to="/manage-schedule">Manage Schedule</Link>
+                    <Link to="/manageschedule">Manage Schedule</Link>
                 </h1>
                 <h1 className={cx("li")} style={{ margin: "0", marginLeft: "20px" }}>
                     <Link to="/managecourse">Manage Course</Link>
+                </h1>
+                <h1 className={cx("li")} style={{ margin: "0", marginLeft: "20px" }}>
+                    <Link to="/managesemester">Manage Semester</Link>
                 </h1>
             </div>
         </Container>

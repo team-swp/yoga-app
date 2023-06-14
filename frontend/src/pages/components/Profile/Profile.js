@@ -109,17 +109,17 @@ function Profile() {
   // };
   const loadImageAgain = async (e) => {
     if (user.avatar) {
-      const { url } = await getAvatarToAWS({imageName:user._id})
+      const { url } = await getAvatarToAWS({ imageName: user._id });
       setFile(url);
       e.target.src = file;
-      updateUser({avatar:url})
+      updateUser({ avatar: url });
     }
   };
   // if (user.avatar) {
-    //   const { url } = getAvatarToAWS({imageName:user._id})
-    //   setFile(url);
-    //   updateUser({avatar:url})
-    // }
+  //   const { url } = getAvatarToAWS({imageName:user._id})
+  //   setFile(url);
+  //   updateUser({avatar:url})
+  // }
   const onUpload = async (e) => {
     const avatar = e.target.files[0];
     if (avatar) {
@@ -151,18 +151,6 @@ function Profile() {
         toast.error("Please select an image");
       }
     }
-  };
-
-  const handleSavechange = () => {
-    const alert = document.createElement("div");
-    alert.className = "alert";
-    alert.innerHTML = "Update successfully";
-
-    document.body.appendChild(alert);
-
-    setTimeout(function () {
-      alert.parentNode.removeChild(alert);
-    }, 3000);
   };
 
   const handleLogout = () => {
@@ -299,11 +287,7 @@ function Profile() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    className={styles.btn_savechange}
-                    type="submit"
-                    onClick={handleSavechange}
-                  >
+                  <button className={styles.btn_savechange} type="submit">
                     Save change
                   </button>
                 </div>
