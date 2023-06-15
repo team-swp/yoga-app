@@ -31,6 +31,7 @@ function Checkout() {
   const [emailType, setEmailType] = useState();
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
+
   const handleRadioChange = () => {
     setIsSelected2(false);
     setIsSelected(true);
@@ -39,6 +40,15 @@ function Checkout() {
   const handleRadioChange2 = () => {
     setIsSelected(false);
     setIsSelected2(true);
+  };
+
+  const handleBooking = async () => {
+    try {
+      const response = await addBooking();
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const user = useSelector(userSelector);
@@ -196,7 +206,7 @@ function Checkout() {
                     <label className={`lable ${styles.lable}`}>
                       <img src={homepayImage} alt="Payment at Yoga Center" />
                       <div style={{ whiteSpace: "nowrap" }}>
-                        Thanh Toán Tại Trung Tâm YOGA{" "}
+                        Thanh Toán Tại Trung Tâm YOGA
                       </div>
                     </label>
                     <input
@@ -210,7 +220,10 @@ function Checkout() {
               </div>
 
               <div className={styles.ticket_devider}></div>
-              <div className="textbox flex flex-col items-center">
+              <div
+                className="textbox flex flex-col items-center"
+                onClick={handleBooking}
+              >
                 <button className={styles.btn} type="submit">
                   Payment now
                 </button>

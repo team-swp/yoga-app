@@ -43,15 +43,6 @@ function CourseDetail() {
     fetchData();
   }, [courseId]);
 
-  const handleSubmit = async () => {
-    try {
-      const response = await addBooking();
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <div>
       <ScrollToTopOnMount />
@@ -94,7 +85,7 @@ function CourseDetail() {
                   <button
                     className={cx("course-button")}
                     onClick={() => {
-                      if (token) handleSubmit();
+                      if (token) navigate("/checkout");
                       else navigate("/login");
                     }}
                   >

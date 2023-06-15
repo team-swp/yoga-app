@@ -30,6 +30,7 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
+import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 
 const routers = createBrowserRouter([
   {
@@ -78,7 +79,6 @@ const routers = createBrowserRouter([
   },
   {
     path: "/recovery",
-
     element: (
       <ProtectRecover>
         <Recovery />
@@ -105,6 +105,7 @@ const routers = createBrowserRouter([
     path: "/manageclass",
     element: <ManageClass></ManageClass>,
   },
+  { path: "/managemember", element: <ManageMember /> },
   {
     path: "/addnewclass",
     element: <AddNewClass></AddNewClass>,

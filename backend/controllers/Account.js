@@ -37,7 +37,11 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
 
 module.exports.getAccountPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Account)
+    const pagingPayload = await pagingnation(
+      req.query.page,
+      req.query.limit,
+      Account
+    );
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -188,7 +192,7 @@ module.exports.Login = async (req, res) => {
                 username: account.username,
                 _id: account._id,
                 role: account.role,
-                avatar:account.avatar
+                avatar: account.avatar,
               });
             })
             .catch((error) => {
@@ -207,7 +211,6 @@ module.exports.Login = async (req, res) => {
     return res.status(500).send({ error });
   }
 };
-
 
 module.exports.updateRoleAccount = async (req, res) => {
   const { _id, role } = req.body;

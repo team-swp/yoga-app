@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getApi, updateApi } from "./easyAPI";
 // Make API req
 axios.defaults.baseURL = "http://localhost:3001";
 //authen func
@@ -8,6 +9,15 @@ export async function authenticate(email) {
   } catch (error) {
     return { error: "Username doesn't exist...!" };
   }
+}
+
+//Member manegement
+
+export async function getMember() {
+  return await getApi({
+    apiPath: `/api/accounts`,
+    errorMessage: "Cannot Get Members",
+  });
 }
 
 /** get User details */

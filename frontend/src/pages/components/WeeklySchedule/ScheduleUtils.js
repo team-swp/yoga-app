@@ -7,7 +7,7 @@ import { getSchedule } from "../../../helper/scheduleAPI";
 export default function useSchedule() {
   const [courseList, setCourseList] = useState([]);
   const [totalSchedule, setTotalSchedule] = useState([]);
-
+  console.log(courseList);
   useEffect(() => {
     const fetchData = async () => {
       try {

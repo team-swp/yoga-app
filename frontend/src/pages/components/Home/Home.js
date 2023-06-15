@@ -15,7 +15,6 @@ const cx = classNames.bind(styles);
 
 function Home() {
   const [courseList, setCourseList] = useState([]);
-
   useEffect(() => {
     async function fetchData() {
       try {
