@@ -12,6 +12,9 @@ import ScrollToTopOnMount from "../../ScrollToTopOnMount";
 import { getCourse } from "../../../helper/courseAPI";
 import { getClass } from "../../../helper/classAPI";
 import { addBooking } from "../../../helper/bookingAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataBooking } from "../../../redux/actions";
+import { userSelector } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
@@ -21,27 +24,30 @@ function CourseDetail() {
   const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
-  const [classList, setClassList] = useState([]);
 
-  console.log(classList);
   //fetchData
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await getCourse();
         const course = response.data.find((obj) => obj._id === courseId);
-        const classList = await getClass();
-        const classes = classList.data.filter(
-          (obj) => obj.course_id === course._id
-        );
         setCourse(course);
-        setClassList(classes);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
   }, [courseId]);
+
+  const handleSubmit = async () => {
+    try {
+      // const response = await addBooking();
+      // console.log(response);
+      navigate("/checkout");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
@@ -85,7 +91,7 @@ function CourseDetail() {
                   <button
                     className={cx("course-button")}
                     onClick={() => {
-                      if (token) navigate("/checkout");
+                      if (token) handleSubmit();
                       else navigate("/login");
                     }}
                   >

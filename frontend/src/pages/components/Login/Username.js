@@ -24,14 +24,14 @@ function Username() {
   if (token && token !== "undefined") {
     let getUserToken = getUserByToken();
     getUserToken.then((res) => {
-      console.log(res);
       res.data.data = Object.assign(res.data.data, { token });
       dispatch(addUserLogin(res.data.data));
       dispatch(setDataLogin(res.data.data));
       navigate("/profile");
-    });
-  } else {
-  }
+    }).catch((res)=>{
+      navigate("/");
+    })
+  } 
 
   const formik = useFormik({
     initialValues: {
