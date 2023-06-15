@@ -116,6 +116,18 @@ export async function updateUser(response) {
     return Promise.reject({ error: "Couldn't Update Profile...!" + error });
   }
 }
+
+export async function updateUserForStaff(response) {
+  try {
+    const token =  localStorage.getItem("token");
+    const data = await axios.patch("/api/staff/account/update", response, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error: "Couldn't Update Profile...!" + error });
+  }
+}
 /** generate OTP */
 export async function generateOTP(email) {
   try {

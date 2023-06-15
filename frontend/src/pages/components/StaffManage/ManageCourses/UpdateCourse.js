@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
-<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/UpdateCourse.js
-import { Container, TextField, Button, Select, Menu, MenuItem, FormGroup, FormControl, FormLabel, FormControlLabel, Checkbox, CircularProgress, Typography } from "@mui/material";
+import { Container, TextField, Button, Select, Menu, MenuItem, FormGroup, FormControl, FormLabel, FormControlLabel, Checkbox, CircularProgress, Typography, Autocomplete } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
-=======
-import { Container, TextField, Button, CircularProgress, Typography, Autocomplete } from "@mui/material";
-import Header from "../Header/Header";
->>>>>>> origin/tanDM:frontend/src/pages/components/UpdateCourse/UpdateCourse.js
 import { Link, useParams } from "react-router-dom";
 import { getCourse, updateCourse } from "../../../../helper/courseAPI";
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import { getSemester } from "../../../helper/semesterAPI";
+import { getSemester } from "../../../../helper/semesterAPI";
 import axios from "axios";
 
 function UpdateCourse() {

@@ -1,7 +1,3 @@
-<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/ManageCourses.js
-=======
-
->>>>>>> origin/tanDM:frontend/src/pages/components/ManageCourses/ManageCourses.js
 import { useEffect, useState } from "react";
 import {
     Container,
@@ -19,20 +15,11 @@ import {
     Switch,
 
 } from '@mui/material';
-<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/ManageCourses.js
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
 import { getCourse, updateCourse } from "../../../../helper/courseAPI";
 
-=======
-
-import './ManageCourses.css'
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import { Link } from "react-router-dom";
-import { updateCourse } from "../../../helper/courseAPI";
->>>>>>> origin/tanDM:frontend/src/pages/components/ManageCourses/ManageCourses.js
 function ManageCourses() {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [searchResults, setSearchResults] = useState([]);

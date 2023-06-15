@@ -35,7 +35,7 @@ module.exports.getBooking = async (req, res) => {
 
 module.exports.getBookingsPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Booking)
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Booking,req.query.q,'member_id')
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -22,6 +22,7 @@ const {
   getAccountByIdAuth,
   getAccountPaging,
   updateRoleAccount,
+  updateAccountForStaff,
 } = require("../controllers/Account");
 
 const crypto = require("crypto");
@@ -116,6 +117,8 @@ router.patch("/accounts", Auth, getAccountByIdAuth, update);
 //update role for user
 router.patch("/accounts/updateRole", AuthAdmin, updateRoleAccount);
 
+//update user for staff
+router.patch("/staff/account/update",AuthStaff,updateAccountForStaff)
 
 //getAccessToken
 router.get("/accessToken", Auth, getAccountByIdAuth, (req, res) => {
@@ -132,14 +135,14 @@ router.post("/password", Auth, getAccountByIdAuth, (req, res) => {
 
 //Deleting one
 
-router.delete("/accounts/:id", getAccountById, async (req, res) => {
-  try {
-    await Account.findByIdAndDelete(res.account.id);
-    res.json({ message: "Deleted Account" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// router.delete("/accounts/:id", getAccountById, async (req, res) => {
+//   try {
+//     await Account.findByIdAndDelete(res.account.id);
+//     res.json({ message: "Deleted Account" });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
 
 router.post("/authenticate", verifyUser, (req, res) => res.end());
 ///End Account

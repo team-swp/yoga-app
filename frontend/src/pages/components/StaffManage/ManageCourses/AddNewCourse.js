@@ -1,12 +1,6 @@
-<<<<<<< HEAD:frontend/src/pages/components/StaffManage/ManageCourses/AddNewCourse.js
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { addCourse } from '../../../../helper/courseAPI';
-import { Container, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-=======
-import React, { useEffect, useState } from 'react';
-import { addCourse } from '../../../helper/courseAPI';
 import { Container, TextField, Button, Select, MenuItem, FormControl, InputLabel, Typography, CircularProgress, FormLabel, FormGroup, FormControlLabel, Checkbox, Autocomplete } from '@mui/material';
->>>>>>> origin/tanDM:frontend/src/pages/components/AddNewCourse/AddNewCourse.js
 import { Link } from 'react-router-dom';
 import Header from '../../Header/Header';
 import Footer from '../../Footer/Footer';

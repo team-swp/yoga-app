@@ -137,6 +137,7 @@ module.exports.getPaymentsPaging = async (req, res) => {
       req.query.page,
       req.query.limit,
       Payment
+   
     );
     res.send(pagingPayload);
   } catch (error) {
