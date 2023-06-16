@@ -40,7 +40,6 @@ export const AuthContextProvider = ({ children }) => {
         const token = await currentUser.getIdToken();
         const data = await verifyTokenGoogle(token);
         if (data) {
-          dispatch(addUserLogin(data));
           dispatch(setDataLogin(data));
         }
       }

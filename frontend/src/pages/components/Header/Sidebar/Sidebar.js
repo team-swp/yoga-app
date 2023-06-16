@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { IconButton, Menu } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ClearIcon from "@mui/icons-material/Clear";
 import classNames from "classnames/bind";
 import styles from "./Sidebar.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import { logOutNormal } from "../../../../redux/actions";
+import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -19,6 +16,7 @@ import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import LogoutIcon from "@mui/icons-material/Logout";
+import BadgeIcon from "@mui/icons-material/Badge";
 const style = {
   position: "absolute",
   top: "50%",
@@ -34,10 +32,10 @@ const cx = classNames.bind(styles);
 
 function Sidebar() {
   const { logOut } = UserAuth();
-  const[checkMember,setCheckMember]=useState(false)
+  const [checkMember, setCheckMember] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const handleOpenUserMenu = (event) => {
     if (showMenu === false) {
       setAnchorElUser(event.currentTarget);
@@ -56,8 +54,11 @@ function Sidebar() {
   const handleLogout = () => {
     logOut();
   };
+
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const user = useSelector(userSelector);
   const loadImageAgain = async (e) => {
     if (user.avatar) {
@@ -65,15 +66,12 @@ function Sidebar() {
       e.target.src = url;
     }
   };
-
-  useEffect(()=>{
-    if(user.meta_data){
-      const checkMem = JSON.parse(user.meta_data)
-      console.log(checkMem.isMember,'12122323');
-      setCheckMember(checkMem.isMember)
+  useEffect(() => {
+    if (user.meta_data) {
+      const checkMem = JSON.parse(user.meta_data);
+      setCheckMember(checkMem.isMember);
     }
-  },[])
-
+  }, [user]);
   return (
     <div>
       <IconButton
@@ -84,19 +82,27 @@ function Sidebar() {
         aria-label="menu"
         sx={{ mr: 3 }}
       >
-        <div className={checkMember ? styles.bgImage : ''} style={{ cursor: "pointer" }}>
+        <div
+          className={checkMember ? styles.bgImage : ""}
+          style={{ cursor: "pointer" }}
+        >
           <img
             src={user.avatar}
-            className={` ${checkMember?styles.profile_img:styles.profile_img_normal} object-cover h-44`}
+            className={` ${
+              checkMember ? styles.profile_img : styles.profile_img_normal
+            } object-cover h-44`}
             alt="avatar"
             onError={loadImageAgain}
           />
-          {checkMember?
-          <img
-            src="https://fullstack.edu.vn/static/media/crown.8edf462029b3c37a7f673303d8d3bedc.svg"
-            className={` ${styles.crown}`}
-            alt="Member"
-          />:''}
+          {checkMember ? (
+            <img
+              src="https://fullstack.edu.vn/static/media/crown.8edf462029b3c37a7f673303d8d3bedc.svg"
+              className={` ${styles.crown}`}
+              alt="Member"
+            />
+          ) : (
+            ""
+          )}
         </div>
       </IconButton>
       <Menu
@@ -155,20 +161,27 @@ function Sidebar() {
                         cursor: "pointer",
                         marginLeft: "10px",
                       }}
-                      className={checkMember ? styles.bgImage : ''}
+                      className={checkMember ? styles.bgImage : ""}
                     >
                       <img
                         src={user.avatar}
-                        className={` ${checkMember?styles.profile_img_details:styles.profile_img_details_normal} object-cover h-44`}
+                        className={` ${
+                          checkMember
+                            ? styles.profile_img_details
+                            : styles.profile_img_details_normal
+                        } object-cover h-44`}
                         alt="avatar"
                         onError={loadImageAgain}
                       />
-                      {checkMember?
-                      <img
-                        src="https://fullstack.edu.vn/static/media/crown.8edf462029b3c37a7f673303d8d3bedc.svg"
-                        className={` ${styles.crown}`}
-                        alt="Member"
-                      />:''}
+                      {checkMember ? (
+                        <img
+                          src="https://fullstack.edu.vn/static/media/crown.8edf462029b3c37a7f673303d8d3bedc.svg"
+                          className={` ${styles.crown}`}
+                          alt="Member"
+                        />
+                      ) : (
+                        ""
+                      )}
                     </span>
 
                     <span style={{ fontWeight: "bold", fontSize: "20px" }}>
@@ -197,7 +210,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                    {checkMember?'Your are a member':'Become a member'}
+                    {checkMember ? "Your are a member" : "Become a member"}
                   </div>
                 </div>
               </div>
@@ -232,6 +245,20 @@ function Sidebar() {
                   />
                 </div>
               </Link>
+              {user.role === "staff" && (
+                <Link to="/staffmanage">
+                  <div className={styles.sidebar_details}>
+                    <HomeRepairServiceIcon
+                      className={styles.sidebar_details_icon}
+                    />
+                    <div> Staff Manager</div>
+                    <ArrowForwardIosOutlinedIcon
+                      className={styles.sidebar_details_arrow}
+                    />
+                  </div>
+                </Link>
+              )}
+
               <Link to="/*">
                 <div className={styles.sidebar_details}>
                   <HomeRepairServiceIcon
@@ -243,11 +270,12 @@ function Sidebar() {
                   />
                 </div>
               </Link>
-              <div onClick={handleOpen}>
-                <div className={styles.sidebar_details}>
+              <div>
+                <div className={styles.sidebar_details} onClick={handleOpen}>
                   <LogoutIcon className={styles.sidebar_details_icon} />
-                  <div>Logout</div>
+                  <button>Logout</button>
                 </div>
+
                 <Modal
                   open={open}
                   onClose={handleClose}
@@ -263,19 +291,21 @@ function Sidebar() {
                     >
                       Are you sure you want to Log Out ?
                     </Typography>
-                    <div
-                      className={cx("modal-modal-button")}
-                      onClick={handleLogout}
-                    >
-                      <button className={cx("modal-modal-button-yes")}>
-                        <a href="/"> Yes, Log Out</a>
-                      </button>
-                      <button
-                        className={cx("modal-modal-button-no")}
-                        onClick={handleClose}
-                      >
-                        No, Cancel
-                      </button>
+                    <div className={cx("modal-modal-button")}>
+                      <a href="/">
+                        <button
+                          className={cx("modal-modal-button-yes")}
+                          onClick={handleLogout}
+                        >
+                          Yes, Log Out
+                        </button>
+                      </a>
+
+                      <div onClick={handleClose}>
+                        <button className={cx("modal-modal-button-no")}>
+                          No, Cancel
+                        </button>
+                      </div>
                     </div>
                   </Box>
                 </Modal>

@@ -114,7 +114,7 @@ module.exports.addPayment = async (req, res) => {
     payment
       .save()
       .then((result) =>
-        res.status(201).send({ msg: "Add Payment Successfully" })
+        res.status(201).send({ result, msg: "Add Payment Successfully" })
       )
       .catch((error) => res.status(500).send({ error: error.message }));
   } catch (error) {
@@ -131,13 +131,24 @@ module.exports.getPayment = async (req, res) => {
   }
 };
 
+module.exports.getPaymentParams = async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
+    if (payment === null) {
+      return res.status(404).json({ message: "Cannot Find Payment" });
+    }
+    res.send(payment);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports.getPaymentsPaging = async (req, res) => {
   try {
     const pagingPayload = await pagingnation(
       req.query.page,
       req.query.limit,
       Payment
-   
     );
     res.send(pagingPayload);
   } catch (error) {
@@ -238,7 +249,10 @@ module.exports.createPayment = async (req, res, next) => {
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
+  console.log(vnpUrl);
   res.send(vnpUrl);
+  // res.redirect(vnpUrl);
+
   //   res.writeHead(302, {
   //     Location: ur
   // });
@@ -367,7 +381,6 @@ module.exports.vnpayIPN = async (req, res, next) => {
     res.status(200).json({ RspCode: "97", Message: "Checksum failed" });
   }
 };
-
 module.exports.vnpayReturn = async (req, res, next) => {
   let vnp_Params = req.query;
   let secureHash = vnp_Params["vnp_SecureHash"];

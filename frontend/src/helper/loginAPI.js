@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getApi, updateApi } from "./easyAPI";
 // Make API req
 axios.defaults.baseURL = "http://localhost:3001";
 //authen func
@@ -8,6 +9,15 @@ export async function authenticate(email) {
   } catch (error) {
     return { error: "Username doesn't exist...!" };
   }
+}
+
+//Member manegement
+
+export async function getMember() {
+  return await getApi({
+    apiPath: `/api/accounts`,
+    errorMessage: "Cannot Get Members",
+  });
 }
 
 /** get User details */
@@ -88,7 +98,6 @@ export async function verifyPassword({ email, password }) {
 /** update user profile function */
 export async function updateUser(response) {
   try {
-    console.log(response);
     const token = localStorage.getItem("token");
     const data = await axios.patch("/api/accounts", response, {
       headers: { Authorization: `Bearer ${token}` },
@@ -123,6 +132,7 @@ export async function updateUserForStaff(response) {
     return Promise.reject({ error: "Couldn't Update Profile...!" + error });
   }
 }
+
 /** generate OTP */
 export async function generateOTP(email) {
   try {
@@ -189,7 +199,6 @@ export async function postAvatarToAWS(formData) {
 export async function getPasswordCurr() {
   try {
     const token = localStorage.getItem("token");
-    console.log(token);
     const { data } = await axios.post(
       "api/password",
       {},

@@ -10,11 +10,6 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import CheckIcon from "@mui/icons-material/Check";
 import ScrollToTopOnMount from "../../ScrollToTopOnMount";
 import { getCourse } from "../../../helper/courseAPI";
-import { getClass } from "../../../helper/classAPI";
-import { addBooking } from "../../../helper/bookingAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { setDataBooking } from "../../../redux/actions";
-import { userSelector } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
@@ -24,21 +19,14 @@ function CourseDetail() {
   const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
-  const [classList, setClassList] = useState([]);
 
-  console.log(classList);
   //fetchData
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await getCourse();
         const course = response.data.find((obj) => obj._id === courseId);
-        const classList = await getClass();
-        const classes = classList.data.filter(
-          (obj) => obj.course_id === course._id
-        );
         setCourse(course);
-        setClassList(classes);
       } catch (error) {
         console.log(error);
       }
@@ -50,7 +38,7 @@ function CourseDetail() {
     try {
       // const response = await addBooking();
       // console.log(response);
-      navigate('/checkout')
+      navigate("/checkout");
     } catch (error) {
       console.error(error);
     }
@@ -60,9 +48,9 @@ function CourseDetail() {
     <div>
       <ScrollToTopOnMount />
       <Header />
-      <div class="bg-gray-400">
-        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
-          <h1 class="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
+      <div className="bg-gray-400">
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
+          <h1 className="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
             START YOUR TRAINING JOURNEY
           </h1>
         </div>
@@ -93,8 +81,7 @@ function CourseDetail() {
                 <div className={cx("course-image")}>
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
-                <p className={cx("course-price")}>{course.price}$</p>
-                <div class="flex justify-evenly align-center">
+                <div className="flex justify-evenly align-center">
                   <button
                     className={cx("course-button")}
                     onClick={() => {
@@ -114,8 +101,10 @@ function CourseDetail() {
                     }}
                   />
                 </div>
-                <div class="my-3 text-center">30-Day Money-Back Guarantee</div>
-                <hr class="mb-3 border-t border-gray-500 mx-auto my-4 w-full" />
+                <div className="my-3 text-center">
+                  30-Day Money-Back Guarantee
+                </div>
+                <hr className="mb-3 border-t border-gray-500 mx-auto my-4 w-full" />
                 <div className={cx("course-policy")}>
                   <h6>This course include:</h6>
                   <p>

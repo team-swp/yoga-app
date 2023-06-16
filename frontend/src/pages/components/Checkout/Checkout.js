@@ -13,6 +13,7 @@ import { addUserLogin, setDataLogin } from "../../../redux/actions";
 import {
   getUser,
   getUserByToken,
+  updateUser,
   verifyPassword,
 } from "../../../helper/loginAPI";
 import { GoogleButton } from "react-google-button";
@@ -21,9 +22,17 @@ import { addBooking } from "../../../helper/bookingAPI";
 import styles from "./checkout.module.css";
 import vnpayImage from "../../../assets/vnpay.png";
 import homepayImage from "../../../assets/yogapaymenthome.png";
-import { createVnpay, runUrlVnpay } from "../../../helper/paymentAPI";
+import {
+  addPayment,
+  createVnpay,
+  runUrlVnpay,
+} from "../../../helper/paymentAPI";
 import axios from "axios";
 import { userSelector } from "../../../redux/selectors";
+import { Box, Typography } from "@mui/material";
+import { Modal } from "@mui/base";
+import classNames from "classnames/bind";
+
 function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,6 +42,8 @@ function Checkout() {
   const [emailType, setEmailType] = useState(user.email);
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
+  const [open, setOpen] = useState(true);
+
   const handleRadioChange = () => {
     setIsSelected2(false);
     setIsSelected(true);
@@ -42,7 +53,10 @@ function Checkout() {
     setIsSelected(false);
     setIsSelected2(true);
   };
-
+  const openModal = (e) => {
+    e.preventDefault();
+    setOpen(true);
+  };
   const formik = useFormik({
     initialValues: {
       email: user.email,
@@ -58,9 +72,7 @@ function Checkout() {
     //   setSubmitting(false);
     //   console.log('test 2');
     // }
-
     onSubmit: async (values) => {
-      console.log(values);
       if (isSelected) {
         const vnpayLink = createVnpay({
           amount: values.amount,
@@ -71,44 +83,61 @@ function Checkout() {
         });
         vnpayLink
           .then((data) => {
-            console.log(data.data);
-            // window.open(data.data, '_blank', 'noopener,noreferrer');
-            window.location.href = data.data;
+            console.log(data);
+            if (data.data) {
+              var newLink = document.createElement("a");
+              newLink.href = data.data;
+              newLink.textContent = "VNPAY PAYMENT";
+              newLink.target = "_blank";
+              newLink.click();
+              navigate("/");
+            } else {
+              toast.error("The system is maintenance");
+            }
           })
           .catch(() => {
             toast.error("Payment is maintenance please choose other");
           });
+      } else {
+        const date = new Date();
+        const bookingPromise = addBooking({ member_id: user._id });
+        toast.promise(bookingPromise, {
+          loading: "Checking...",
+          success: <b>Payment Successfully...!</b>,
+          error: <b>Payment not Successfully !</b>,
+        });
+        bookingPromise
+          .then((result) => {
+            const paymentPromise = addPayment({
+              recipient: "Yoga HeartBeat",
+              paymentDate: date,
+              paymentAmount: values.amount,
+              paymentMethod_id: "647496600eeb65cda05ee191",
+              booking_id: result.data.data.result._id,
+              status: 5,
+              meta_data: "Pay at Yoga Center",
+            });
+            paymentPromise
+              .then((result) => {
+                const urlID = result.data.data.result._id;
+                console.log(urlID);
+                const updateMember = updateUser({
+                  meta_data: `{"isMember":false}`,
+                });
+                updateMember.then(() => {
+                  //qua trang thanh toán thành công
+                  navigate(`/paymentstatus?pmid=${urlID}`);
+                });
+              })
+              .catch(() => {
+                //chỗ này làm thêm delete nếu ko thành công xóa mấy thg cũ
+                toast.error("Payment not Successfully");
+              });
+          })
+          .catch(() => {
+            toast.error("Booking not Successfully");
+          });
       }
-
-      // let loginPromise = verifyPassword({
-      //   email: values.email,
-      //   password: values.password,
-      // });
-      // toast.promise(loginPromise, {
-      //   loading: "Checking...",
-      //   success: <b>Login Successfully...!</b>,
-      //   error: <b>Password Not Match!</b>,
-      // });
-
-      // loginPromise
-      //   .then((res) => {
-      //     const token = res.data.token;
-      //     const id = res.data._id;
-      //     let getUserData = getUser({ id });
-      //     getUserData
-      //       .then((res) => {
-      //         res.data = Object.assign(res.data, { token });
-      //         console.log(res.data);
-      //         dispatch(setDataLogin(res.data)); //reducer là kho lưu trữ nhận giá trị lưu trữ không phải phần xử lí
-      //         navigate("/");
-      //       })
-      //       .catch((res) => {
-      //         navigate("/login");
-      //       });
-      //   })
-      //   .catch((res) => {
-      //     navigate("/login");
-      //   });
     },
   });
 
@@ -148,11 +177,11 @@ function Checkout() {
                 </div>
               </div>
 
-              <div className="textbox flex flex-col items-left mt-10 mb-10">
+              <div className="textbox flex-col  items-center gap-6 mb-10 ">
                 <div className="textbox px-5 py-4 h2 font-bold text-xl">
                   2. Payment Info
                 </div>
-                <div className="textbox flex items-left pr-5 mb-2 w-8/12 ">
+                <div className="textbox flex  items-left gap-6 mb-2">
                   <input
                     {...formik.getFieldProps("amount")}
                     className={styles.textbox}
@@ -160,10 +189,14 @@ function Checkout() {
                     placeholder="Payment amount"
                   />
 
-                  <div></div>
+                  <input
+                    {...formik.getFieldProps("username")}
+                    className={styles.textbox}
+                    type="text"
+                    placeholder="Enter your fullname"
+                  />
                 </div>
               </div>
-
               <div className="textbox flex flex-col items-left mt-10 mb-10">
                 <div className="textbox px-5 py-4 h2 font-bold text-xl">
                   3. Choose your payment methods
@@ -199,7 +232,7 @@ function Checkout() {
                     <label className={`lable ${styles.lable}`}>
                       <img src={homepayImage} alt="Payment at Yoga Center" />
                       <div style={{ whiteSpace: "nowrap" }}>
-                        Thanh Toán Tại Trung Tâm YOGA{" "}
+                        Thanh Toán Tại Trung Tâm YOGA
                       </div>
                     </label>
                     <input

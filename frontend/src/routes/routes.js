@@ -30,6 +30,8 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
+import Premium from "../pages/components/MemberPacket/Premium";
+import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 
 const routers = createBrowserRouter([
   {
@@ -85,6 +87,10 @@ const routers = createBrowserRouter([
     ),
   },
   {
+    path: "/paymentstatus",
+    element: <PaymentStatus />,
+  },
+  {
     path: "/checkout",
     element: <Checkout />,
   },
@@ -104,6 +110,7 @@ const routers = createBrowserRouter([
     path: "/manageclass",
     element: <ManageClass></ManageClass>,
   },
+  { path: "/managemember", element: <ManageMember /> },
   {
     path: "/addnewclass",
     element: <AddNewClass></AddNewClass>,
@@ -143,6 +150,10 @@ const routers = createBrowserRouter([
   {
     path: "/addnewsemester",
     element: <ManageAddSemester></ManageAddSemester>,
+  },
+  {
+    path: "/premium",
+    element: <Premium></Premium>,
   },
 ]);
 

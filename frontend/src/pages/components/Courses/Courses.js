@@ -8,15 +8,13 @@ import Footer from "../Footer/Footer";
 import yoga2 from "../../../assets/yoga2.jpg";
 import { getCourse } from "../../../helper/courseAPI";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCourseId } from "../../../redux/actions";
-import { getCourseID } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
 function Courses() {
   const [courseList, setCourseList] = useState([]);
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -43,9 +41,9 @@ function Courses() {
   return (
     <div>
       <Header />
-      <div class="bg-gray-400">
-        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
-          <h1 class="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
+      <div className="bg-gray-400">
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
+          <h1 className="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
             START YOUR TRAINING JOURNEY
           </h1>
         </div>
@@ -54,10 +52,10 @@ function Courses() {
         <img src={yoga2} alt="yoga2" />
       </div>
       <Container>
-        <h2 class="w-full text-2xl text-left font-bold mt-8 mb-6">
+        <h2 className="w-full text-2xl text-left font-bold mt-8 mb-6">
           OUR COURSES
         </h2>
-        <hr class="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
+        <hr className="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
         <div
           className={cx("courses-container", { "in-view": inView })}
           ref={ref}
@@ -68,8 +66,7 @@ function Courses() {
                 <div className={cx("courses-image")}>
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
-                <h6 className={cx("courses-title")}>{course.coursename}</h6>
-                <p className={cx("courses-price")}>${course.price}</p>
+                <p className={cx("courses-title")}>{course.coursename}</p>
               </div>
             </Link>
           ))}
