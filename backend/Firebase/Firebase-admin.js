@@ -23,12 +23,12 @@ module.exports.verifyTokenGoogle = async (req, res, next) => {
   }
 };
 
-module.exports.CheckExistAccount = async(req,res)=>{
+module.exports.CheckExistAccount = async (req, res) => {
   try {
     const { email } = req.authUser;
     const existAccount = await Account.findOne({ email });
-    if(existAccount){
-      if(existAccount.status){
+    if (existAccount) {
+      if (existAccount.status) {
         const token = jwt.sign(
           {
             userId: existAccount._id,
@@ -45,14 +45,14 @@ module.exports.CheckExistAccount = async(req,res)=>{
           username: existAccount.username,
           _id: existAccount._id,
           role: existAccount.role,
-          avatar:existAccount.avatar
+          avatar: existAccount.avatar,
+          meta_data: existAccount.meta_data,
+          phone: existAccount.phone,
         });
-      }else{
-        return res
-            .status(500)
-            .send({ error: "Your account have been banned" });
+      } else {
+        return res.status(500).send({ error: "Your account have been banned" });
       }
-    }else{
+    } else {
       const { name, email, phone, picture, meta_data } = req.authUser;
       const account = new Account({
         username: name,
@@ -63,16 +63,16 @@ module.exports.CheckExistAccount = async(req,res)=>{
       });
 
       account
-          .save()
-          .then((result) =>
-            res.status(201).send({ msg: "User Register Successfully" })
-          )
-          .catch((error) => res.status(500).send({ error }));
+        .save()
+        .then((result) =>
+          res.status(201).send({ msg: "User Register Successfully" })
+        )
+        .catch((error) => res.status(500).send({ error }));
     }
   } catch (error) {
     return res.status(401).send("Authenticate fail");
   }
-}
+};
 // module.exports.verifyTokenGooglettt = async (req, res, next) => {
 //   try {
 //     const { authToken } = req.body;

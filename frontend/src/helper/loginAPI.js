@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getApi, updateApi } from "./easyAPI";
 // Make API req
 axios.defaults.baseURL = "http://localhost:3001";
 //authen func
@@ -8,6 +9,15 @@ export async function authenticate(email) {
   } catch (error) {
     return { error: "Username doesn't exist...!" };
   }
+}
+
+//Member manegement
+
+export async function getMember() {
+  return await getApi({
+    apiPath: `/api/accounts`,
+    errorMessage: "Cannot Get Members",
+  });
 }
 
 /** get User details */
@@ -58,25 +68,6 @@ export async function registerUser(credentials) {
   }
 }
 
-export const authenticatePassword = async (credentials) => {
-  const response = await fetch("your-authentication-endpoint", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  });
-
-  // Kiểm tra kết quả và trả về kết quả xác thực (true/false)
-  if (response.ok) {
-    // Xác thực thành công
-    return true;
-  } else {
-    // Xác thực không thành công
-    return false;
-  }
-};
-
 /** login function */
 // export async function verifyPassword({ email, password }){
 //     try {
@@ -107,7 +98,7 @@ export async function verifyPassword({ email, password }) {
 /** update user profile function */
 export async function updateUser(response) {
   try {
-    const token = await localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     const data = await axios.patch("/api/accounts", response, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -116,6 +107,19 @@ export async function updateUser(response) {
     return Promise.reject({ error: "Couldn't Update Profile...!" + error });
   }
 }
+
+export async function updateUserForStaff(response) {
+  try {
+    const token = localStorage.getItem("token");
+    const data = await axios.patch("/api/staff/account/update", response, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error: "Couldn't Update Profile...!" + error });
+  }
+}
+
 /** generate OTP */
 export async function generateOTP(email) {
   try {
@@ -176,6 +180,23 @@ export async function postAvatarToAWS(formData) {
     });
     return { data, status };
   } catch (error) {
+    return { error };
+  }
+}
+export async function getPasswordCurr() {
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await axios.post(
+      "api/password",
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    return { data };
+  } catch (error) {
+    console.log(error);
     return { error };
   }
 }

@@ -1,6 +1,8 @@
 import { Navigate } from "react-router-dom";
 import { userSelector } from "../redux/selectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserByToken } from "../helper/loginAPI";
+import { addUserLogin, setDataLogin } from "../redux/actions";
 
 export const AuthorizeUser = ({ children }) => {
   const user = useSelector(userSelector);
@@ -30,9 +32,11 @@ export const ProtectRoute = ({ children }) => {
 export const ProtectRecover = ({ children }) => {
   const user = useSelector(userSelector);
   const email = user.email;
+
   if (!email) {
     return <Navigate to={"/password"} replace={true}></Navigate>;
   }
+
   return children;
 };
 

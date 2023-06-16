@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import avatar from "../../../assets/profile.png";
 import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
@@ -7,7 +7,7 @@ import { profileValidation } from "../../../helper/validate";
 import convertToBase64 from "../../../helper/convert";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../redux/selectors";
-import { updateUser } from "../../../helper/loginAPI";
+import { getPasswordCurr, updateUser } from "../../../helper/loginAPI";
 import { updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { UserAuth } from "../../../context/AuthGoogleContext";
@@ -16,19 +16,22 @@ import Navigation from "../Header/Navigation/Navigation";
 import Header from "../Header/Header";
 import { Container } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import Password from "../Login/Password";
-import Recovery from "../Login/Recovery";
+import Password from "./PasswordGoogle";
+import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
+import Reset from "../Login/Reset";
 
 function Profile() {
   const { logOut } = UserAuth();
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
   const [imageTemp, setImageTemp] = useState(true);
+  const [isNotPass, setIsNotPass] = useState(true);
   const dispatch = useDispatch();
   const userCurr = {
     username: user,
   };
+
   const [screen, setScreen] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -44,6 +47,7 @@ function Profile() {
         avatar: file || user.avatar || "",
       });
       let updatePromise = updateUser(values);
+      console.log(values);
       toast.promise(updatePromise, {
         loading: "Updating...",
         success: <b>Update Successfully...!</b>,
@@ -145,7 +149,6 @@ function Profile() {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
           setFile(url);
-          console.log(file);
         }
       } else {
         toast.error("Please select an image");
@@ -164,12 +167,25 @@ function Profile() {
       setScreen(true);
     }
   };
+
+  useEffect(() => {
+    const isPassword = async () => {
+      const isOldPassword = await getPasswordCurr();
+      if (isOldPassword.data.password) {
+        setIsNotPass(true);
+      } else {
+        setIsNotPass(false);
+      }
+    };
+    isPassword();
+  }, []);
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (
     <div className="">
       <div>
         <Header />
       </div>
+      <Toaster></Toaster>
       <div className="bg-gray-200 w-[90%] lg:w-[1200px] h-auto my-6 mx-auto">
         <div className="flex flex-col lg:flex-row h-full">
           <div className="flex flex-col border-r-red-400 w-full lg:w-[30%] ">
@@ -200,22 +216,27 @@ function Profile() {
             <div className="border-b-2 border-black flex justify-center py-12">
               <div className=" font-semibold text-3xl">PROFILE</div>
             </div>
-            <form className="py-1" onSubmit={formik.handleSubmit}>
-              <div
-                style={{ width: 150, height: "auto", margin: "auto" }}
-                className="profile flex justify-center py-4"
-              >
-                <input
-                  onChange={onUpload}
-                  type="file"
-                  id="profile"
-                  name="avatar"
-                  style={{ width: 500, height: 500 }}
-                />
-              </div>
-              {screen ? (
+            {screen ? (
+              isNotPass ? (
                 <PasswordReset />
               ) : (
+                <Recovery />
+              )
+            ) : (
+              <form className="py-1" onSubmit={formik.handleSubmit}>
+                <div
+                  style={{ width: 150, height: "auto", margin: "auto" }}
+                  className="profile flex justify-center py-4"
+                >
+                  <input
+                    onChange={onUpload}
+                    type="file"
+                    id="profile"
+                    name="avatar"
+                    style={{ width: 500, height: 500 }}
+                  />
+                </div>
+
                 <div className="textbox flex flex-col items-left ml-20 gap-6">
                   <div className="">
                     <p>Your email</p>
@@ -258,12 +279,8 @@ function Profile() {
                     <p>Please email me about new products and promotions.</p>
                   </div>
 
-                  <div
-                    className=" pt-3
-                  
-                "
-                  >
-                    <div className=" ml-10">
+                  <div className="pt-3">
+                    <div className="ml-10">
                       <p>Avatar</p>
                     </div>
                     <div className="flex gap-5 items-center">
@@ -291,8 +308,8 @@ function Profile() {
                     Save change
                   </button>
                 </div>
-              )}
-            </form>
+              </form>
+            )}
           </div>
         </div>
       </div>

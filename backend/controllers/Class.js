@@ -42,7 +42,7 @@ module.exports.getClasses = async (req, res) => {
 
 module.exports.getClassesPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Class)
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Class,req.query.q,'classname')
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

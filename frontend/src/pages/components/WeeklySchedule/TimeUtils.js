@@ -94,8 +94,12 @@ export const minTime = new Date(
 export function CustomEvent({ event }) {
   return (
     <div>
-      <strong style={{ fontSize: "15px" }}>{event.title}</strong>
-      {event.description && <p style={{ margin: "0" }}>{event.description}</p>}
+      <strong style={{ fontSize: "13px" }}>{event.title}</strong>
+      {event.description && (
+        <p style={{ marginTop: "2px", fontSize: "13px" }}>
+          {event.description}
+        </p>
+      )}
     </div>
   );
 }

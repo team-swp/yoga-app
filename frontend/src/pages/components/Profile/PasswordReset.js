@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { resetPasswordValidation } from "../../../helper/validate";
-import { resetPassword, authenticatePassword } from "../../../helper/loginAPI";
+import {
+  resetPassword,
+  authenticatePassword,
+  getPasswordCurr,
+  updateUser,
+} from "../../../helper/loginAPI";
 import { userSelector } from "../../../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setActionOTP } from "../../../redux/actions";
+var bcrypt = require("bcryptjs");
 
 function Reset() {
   const user = useSelector(userSelector);
@@ -27,37 +33,43 @@ function Reset() {
     onSubmit: async (values) => {
       setIsAuthenticating(true);
       const email = user.email || JSON.parse(localStorage.getItem("email"));
-
+      console.log(values.password);
       // Xác thực mật khẩu cũ
-      const isAuthenticated = await authenticatePassword({
-        email,
-        password: values.currentPassword,
-      });
+      const isOldPassword = await getPasswordCurr();
+      console.log(isOldPassword.data.password);
+      console.log(values.currentPassword, "asasdsad");
 
-      if (isAuthenticated) {
-        // Nếu mật khẩu cũ hợp lệ, tiến hành đổi mật khẩu
-        let resetPromise = resetPassword({ email, password: values.password });
+      if (isOldPassword)
+        bcrypt
+          .compare(values.currentPassword, isOldPassword.data.password)
 
-        toast.promise(resetPromise, {
-          loading: "Updating...",
-          success: (response) => {
-            dispatch(setActionOTP({ OTP: false }));
-            navigate("/");
-            return <b>{response.message}</b>;
-          },
-          error: (error) => {
-            if (error.statusCode === 401) {
-              return <b>Current password is incorrect!</b>;
+          .then((isSuccess) => {
+            if (isSuccess) {
+              bcrypt
+                .compare(values.password, isOldPassword.data.password)
+                .then((isSame) => {
+                  if (!isSame) {
+                    let updatePromise = updateUser({
+                      password: values.password,
+                    });
+                    toast.promise(updatePromise, {
+                      loading: "Updating...",
+                      success: <b>Update Successfully...!</b>,
+                      error: <b>Could not Update!</b>,
+                    });
+                  } else {
+                    toast.error("New password cannot same Old Password");
+                  }
+                });
             } else {
-              return <b>Could not reset password!</b>;
+              toast.error("Old Password not match");
             }
-          },
-        });
-      } else {
-        toast.error("Current password is incorrect!");
-      }
+            console.log(isSuccess);
+          })
 
-      setIsAuthenticating(false);
+          .catch((isFail) => {
+            toast.error("Old Password not match");
+          });
     },
   });
 
@@ -93,12 +105,8 @@ function Reset() {
                   type="password"
                   placeholder="Repeat Password..."
                 />
-                <button
-                  className={styles.btn}
-                  type="submit"
-                  disabled={isAuthenticating}
-                >
-                  {isAuthenticating ? "Authenticating..." : "Confirm"}
+                <button className={styles.btn} type="submit">
+                  Submit
                 </button>
               </div>
             </form>
