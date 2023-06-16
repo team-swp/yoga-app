@@ -11,6 +11,8 @@ const cx = classNames.bind(styles);
 function ManageSemester() {
 
     const [semesterList, setSemesterList] = useState([])
+    const [query, setQuery] = useState("")
+
 
     useEffect(() => {
         async function fecthSemesterList() {
@@ -41,6 +43,14 @@ function ManageSemester() {
         </div>
         <Container>
             <div className={cx("text-end")}><Link to="/addnewsemester" className={cx("btn btn-primary")}>Add new Semester</Link></div>
+            <div className="searchfilter">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    className="search"
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+            </div>
             <table className="container">
                 <thead>
                     <tr>
@@ -53,15 +63,19 @@ function ManageSemester() {
 
                 </thead>
                 <tbody>
-                    {semesterList.map((semesterItem, index) => (
+                    {semesterList.filter((classItem) => {
+                        return (
+                            classItem.semestername.toLowerCase().includes(query)
+                        );
+                    }).map((semesterItem, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td>
                             <td>{semesterItem.semestername}</td>
                             <td>{semesterItem.startDate}</td>
                             <td>{semesterItem.endDate}</td>
-                            <td>{semesterItem.status ? 'Active' : 'Inactive'}</td>
+                            <td>{semesterItem.status ? 'Enable' : 'Disable'}</td>
                             <Link
-                                to={`//${semesterItem._id}`}
+                                to={`/updatesemester/${semesterItem._id}`}
                                 className={cx("btn btn-secondary")}
                             >
                                 Update
@@ -73,9 +87,6 @@ function ManageSemester() {
         </Container>
         <Footer />
     </div>
-
-
-
     );
 }
 

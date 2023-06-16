@@ -93,6 +93,9 @@ function Sidebar() {
               <Link to="/timetable">
                 <li>Weekly Schedule</li>
               </Link>
+              <Link to="/staffmanage">
+                <li>Staff Manage</li>
+              </Link>
               <li>
                 <Link to="/courses">
                   <button>Courses</button>

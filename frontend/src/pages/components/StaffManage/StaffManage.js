@@ -45,7 +45,6 @@ function StaffManage() {
                 </h1>
             </div>
         </Container>
-
         <div className={cx("courses-img-yoga2")}>
             <img src={yoga2} alt="yoga2" />
         </div>

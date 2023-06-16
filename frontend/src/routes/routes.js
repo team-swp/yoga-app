@@ -30,6 +30,7 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
+import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 
 const routers = createBrowserRouter([
   {
@@ -41,7 +42,7 @@ const routers = createBrowserRouter([
     element: <Courses></Courses>,
   },
   {
-    path: "/course/:id",
+    path: "/course",
     element: <CourseDetail></CourseDetail>,
   },
   {
@@ -144,7 +145,11 @@ const routers = createBrowserRouter([
   {
     path: "/addnewsemester",
     element: <ManageAddSemester></ManageAddSemester>
-  }
+  },
+  {
+    path: "/updatesemester/:id",
+    element: <ManageUpdateSemester></ManageUpdateSemester>
+  },
 ]);
 
 export default routers;

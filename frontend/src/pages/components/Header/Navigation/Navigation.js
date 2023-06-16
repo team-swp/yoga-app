@@ -36,12 +36,7 @@ function Navigation() {
               >
                 SERVICES
               </Link>
-              <Link
-                to="/staffmanage"
-                class="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
-              >
-                STAFF MANAGE
-              </Link>
+
             </div>
           </div>
           <div class="flex items-center mt-4 sm:mt-0">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import ReactPaginate from 'react-paginate';
 import styles from "./ManageClass.css"
 import classNames from "classnames/bind";
 import { Container, Switch, colors } from "@mui/material";
@@ -6,35 +7,35 @@ import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
 import { getUser } from "../../../../helper/loginAPI";
-import { updateClass } from "../../../../helper/classAPI";
+import { getClass, updateClass } from "../../../../helper/classAPI";
 const cx = classNames.bind(styles);
 function ManageClass() {
     const [query, setQuery] = useState("")
     const [classList, setClassList] = useState([])
     const [scheduleList, setScheduleList] = useState([])
+    const [courseList, setCourseList] = useState([]);
+    const [instructorList, setInstructorList] = useState([]);
     const [updatedClass, setUpdatedClass] = useState({});
     const [classes, setClasses] = useState([]);
+    const [showEnabled, setShowEnabled] = useState(true);
+    const [showDisabled, setShowDisabled] = useState(true);
+    const [pageNumber, setPageNumber] = useState(0);
+    const [updatedClassList, setUpdatedClassList] = useState([]);
 
     const classIformation = classList.concat.scheduleList
 
-    const handleToggle = async (events, classes) => {
+    const handleToggle = async (event, classes) => {
         try {
-            const updatedClassData = { ...classes, status: events.target.checked };
-            const response = await updateClass(updatedClassData);
-            if (response && response.data) {
-                setUpdatedClass(response.data);
-                const updatedClasses = classes.map((courseItem) =>
-                    courseItem._id === response.data._id ? response.data : courseItem
-                );
-                setClasses(updatedClasses);
-            }
+            console.log(classes.classId, event.target.checked, 123);
+            const response = await updateClass({ _id: classes.classId, status: event.target.checked });
+            setUpdatedClassList([...updatedClassList, response]);
         } catch (error) {
             console.error(error);
         }
     };
 
     useEffect(() => {
-        async function fecthClassList() {
+        async function fetchClassList() {
             try {
                 const requestUrl = 'http://localhost:3001/api/class/get'
                 const response = await fetch(requestUrl)
@@ -45,9 +46,9 @@ function ManageClass() {
                 console.log('Failed')
             }
         }
-        fecthClassList();
+        fetchClassList();
 
-        async function fecthScheduleList() {
+        async function fetchScheduleList() {
             try {
                 const requestUrl = 'http://localhost:3001/api/schedule/get'
                 const response = await fetch(requestUrl)
@@ -65,8 +66,37 @@ function ManageClass() {
 
 
         }
-        fecthScheduleList();
+        fetchScheduleList();
+
+        async function fetchCourseList() {
+            try {
+                const requestUrl = 'http://localhost:3001/api/course/get'
+                const response = await fetch(requestUrl)
+                const responseJSON = await response.json()
+                setCourseList(responseJSON)
+
+            } catch (error) {
+                console.log('Failed')
+            }
+        }
+        fetchCourseList();
+
+        async function fetchInstructorList() {
+            try {
+                const requestUrl = 'http://localhost:3001/api/accounts'
+                const response = await fetch(requestUrl)
+                const responseJSON = await response.json()
+                setInstructorList(responseJSON)
+
+            } catch (error) {
+                console.log('Failed')
+            }
+        }
+        fetchInstructorList();
     }, [])
+
+
+
 
     const list = () => {
         let temp = [];
@@ -78,12 +108,17 @@ function ManageClass() {
                     const classId = classes._id
                     const classname = classes.classname
                     const courseId = classes.course_id
-                    const instructor = classes.instructor_id
+                    const instructorId = classes.instructor_id; // Thêm thông tin về id của Instructor
+                    const instructor = instructorList.find((inst) => inst._id === instructorId)?.username; // Tìm kiếm thông tin về Instructor
+
+                    const courseName = courseList.find((course) => course._id === courseId)?.coursename;
+
+
                     tempObject = Object.assign(tempObject, { schedulename })
                     tempObject = Object.assign(tempObject, { classId })
                     tempObject = Object.assign(tempObject, { classname })
-                    tempObject = Object.assign(tempObject, { courseId })
-                    tempObject = Object.assign(tempObject, { instructor })
+                    tempObject = Object.assign(tempObject, { courseId: courseName })
+                    tempObject = Object.assign(tempObject, { instructor: instructor })
                     temp.push(tempObject)
                 }
             }
@@ -92,6 +127,27 @@ function ManageClass() {
         return temp
     }
     console.log(list());
+
+    const filteredList = list().filter((classItem) => {
+        if (showEnabled && showDisabled) {
+            return true;
+        } else if (showEnabled && !classItem.status) {
+            return false;
+        } else if (showDisabled && classItem.status) {
+            return false;
+        }
+        return true;
+    });
+
+    const classesPerPage = 3;
+    const pagesVisited = pageNumber * classesPerPage;
+
+    const pageCount = Math.ceil(filteredList.length / classesPerPage);
+
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+    };
+
     return (<div>
         <Header />
         <div class="bg-gray-400">
@@ -128,7 +184,7 @@ function ManageClass() {
 
                 </thead>
                 <tbody>
-                    {list().filter((classItem) => {
+                    {filteredList.slice(pagesVisited, pagesVisited + classesPerPage).filter((classItem) => {
                         return (
                             classItem.classname.toLowerCase().includes(query) ||
                             classItem.schedulename.toLowerCase().includes(query)
@@ -141,13 +197,10 @@ function ManageClass() {
                             <td>{classItem.courseId}</td>
                             <td>{classItem.instructor}</td>
                             <td>
-                                {!classItem.status ? 'Disabled' : 'Enabled'}
-                                <Switch
-
-                                    checked={classItem.status}
-                                    onChange={(event) => handleToggle(event, classItem)}
-                                    color={classItem.status ? 'error' : 'error'}
-                                /></td>
+                                <Switch checked={updatedClassList.find((item) =>
+                                    item._id === classItem.classId)?.status || classItem.status}
+                                    onChange={(event) => handleToggle(event, classItem)} />
+                            </td>
                             <Link
                                 to={`/updateclass/${classItem.classId} `}
                                 className={cx("btn btn-secondary")}
@@ -159,12 +212,46 @@ function ManageClass() {
                     ))}
                 </tbody>
             </table>
+            <div style={{ margin: '20px', marginLeft: '70%', textAlign: 'center' }}>
+                <span>Show Status</span>
+                <div className={cx("filter")}>
+                    <button
+                        onClick={() => setShowEnabled(!showEnabled)}
+                        className={cx("btn", { "btn-secondary": showEnabled, "btn-primary": !showEnabled })}
+                        style={{ backgroundColor: 'red' }}
+                    >
+                        Disabled
+                    </button>
+                    <button
+                        onClick={() => setShowDisabled(!showDisabled)}
+                        className={cx("btn", { "btn-secondary": showDisabled, "btn-primary": !showDisabled })}
+                        style={{ backgroundColor: 'green' }}
+                    >
+                        Enabled
+                    </button>
+                </div>
+            </div>
+            {
+                pageCount > 0 &&
+                <ReactPaginate
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={"pagination"}
+                    previousLinkClassName={"previousBtn"}
+                    nextLinkClassName={"nextBtn"}
+                    disabledClassName={"disabled"}
+                    activeClassName={"active"}
+                    pageRangeDisplayed={3}
+                    marginPagesDisplayed={2}
+                    forcePage={pageNumber}
+                    disableInitialCallback={true}
+                />
+            }
         </Container>
         <Footer />
     </div>
-
-
-
     );
 }
 
