@@ -1,8 +1,8 @@
 const Booking = require("../models/bookings");
+const { pagingnation } = require("./Pagingnation");
 module.exports.addBooking = async (req, res) => {
   const { member_id, class_id, booking_date, status, meta_data } = req.body;
   try {
-    console.log(req.body, "123");
 
     const booking = new Booking({
       member_id: req.account.userId,
@@ -11,12 +11,12 @@ module.exports.addBooking = async (req, res) => {
       status,
       meta_data: meta_data || "",
     });
-    // return save result as a response
     console.log(booking);
+    // return save result as a response
     booking
       .save()
       .then((result) =>
-        res.status(201).send({ msg: "Add Booking Successfully" })
+        res.status(201).send({ result ,msg: "Add Booking Successfully" })
       )
       .catch((error) => res.status(500).send({ error: error.message }));
   } catch (error) {
@@ -28,6 +28,15 @@ module.exports.getBooking = async (req, res) => {
   try {
     const booking = await Booking.find();
     res.send(booking);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getBookingsPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Booking,req.query.q,'member_id')
+    res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

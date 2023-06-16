@@ -7,6 +7,9 @@ const { log } = require("console");
 const { registerMail } = require("./Mailer");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
+const { pagingnation } = require("./Pagingnation");
+const Booking = require("../models/bookings");
+const Account = require("../models/accounts");
 //payment medthod
 module.exports.addPaymentMethod = async (req, res) => {
   const { paymentname } = req.body;
@@ -111,7 +114,7 @@ module.exports.addPayment = async (req, res) => {
     payment
       .save()
       .then((result) =>
-        res.status(201).send({ msg: "Add Payment Successfully" })
+        res.status(201).send({ result, msg: "Add Payment Successfully" })
       )
       .catch((error) => res.status(500).send({ error: error.message }));
   } catch (error) {
@@ -123,6 +126,31 @@ module.exports.getPayment = async (req, res) => {
   try {
     const payment = await Payment.find();
     res.send(payment);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getPaymentParams = async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
+    if (payment === null) {
+      return res.status(404).json({ message: "Cannot Find Payment" });
+    }
+    res.send(payment);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getPaymentsPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(
+      req.query.page,
+      req.query.limit,
+      Payment
+    );
+    res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -221,11 +249,13 @@ module.exports.createPayment = async (req, res, next) => {
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
+  console.log(vnpUrl);
   res.send(vnpUrl);
+  // res.redirect(vnpUrl);
+
   //   res.writeHead(302, {
   //     Location: ur
   // });
-  res.end();
 };
 
 module.exports.runUrl = async (req, res, next) => {
@@ -255,7 +285,7 @@ module.exports.vnpayIPN = async (req, res, next) => {
   let checkAmount = true; // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
   const getData = vnp_Params["vnp_OrderInfo"]; //id,thiengk563@gmail.com,name
   const dataArray = getData.split("%2C");
-  const bookingID = dataArray[0];
+  const userID = dataArray[0];
   const email = dataArray[1];
   const replacedEmail = email.replace("%40", "@");
   if (secureHash === signed) {
@@ -265,59 +295,75 @@ module.exports.vnpayIPN = async (req, res, next) => {
         if (paymentStatus == "0") {
           //kiểm tra tình trạng giao dịch trước khi cập nhật tình trạng thanh toán
           if (rspCode == "00") {
-            //thanh cong
-            //paymentStatus = '1'
-            // Ở đây cập nhật trạng thái giao dịch thanh toán thành công vào CSDL của bạn
-            console.log(bookingID);
-            const payment = new Payment({
-              recipient: "Yoga HeartBeat",
-              paymentDate: vnp_Params["vnp_PayDate"],
-              paymentAmount: vnp_Params["vnp_Amount"],
-              paymentMethod_id: "647da80b6aa8563399cbc6ff",
-              booking_id: bookingID,
-              status: 10,
-              meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
+            const booking = new Booking({
+              member_id: userID,
             });
-            // return save result as a response
-            const usernamePayment = dataArray[2];
-
-            payment
-              .save()
-              .then(async (result) => {
-                req.user = {
-                  userEmail: replacedEmail,
-                  username: usernamePayment,
-                  text: `We are pleased to inform you that your payment (id; ${result._id}) has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
-                  subject: "Payment Successful",
-                  result_id: result._id,
-                };
-                next();
-              })
-              .catch((error) => res.status(500).send({ error: error.message }));
+            booking.save()
+              .then((result) => {
+              const bookingID = result._id;
+              const payment = new Payment({
+                recipient: "Yoga HeartBeat",
+                paymentDate: vnp_Params["vnp_PayDate"],
+                paymentAmount: vnp_Params["vnp_Amount"],
+                paymentMethod_id: "647da80b6aa8563399cbc6ff",
+                booking_id: bookingID,
+                status: 10,
+                meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
+              });
+              // return save result as a response
+              const usernamePayment = dataArray[2];
+              payment.save()
+                .then(async (result) => {
+                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":true}`})
+                  req.user = {
+                    userEmail: replacedEmail,
+                    username: usernamePayment,
+                    text: `We are pleased to inform you that your payment (id; ${result._id}) has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
+                    subject: "Payment Successful",
+                    result_id: result._id,
+                  };
+                  next();
+                })
+                .catch((error) =>
+                  res.status(500).send({ error: error.message })
+                );
+            });
           } else {
             //fail
-            const payment = new Payment({
-              recipient: "Yoga HeartBeat",
-              paymentDate: vnp_Params["vnp_PayDate"],
-              paymentAmount: vnp_Params["vnp_Amount"],
-              paymentMethod_id: "647da80b6aa8563399cbc6ff",
-              booking_id: vnp_Params["vnp_OrderInfo"],
-              status: 5,
-              meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
+            const booking = new Booking({
+              member_id: userID,
             });
-            // return save result as a response
-            const url = process.env.returnHome;
-            payment
-              .save()
+            booking.save()
               .then((result) => {
-                // res.redirect(url, function() {
-                //   res.send(result);
-                // });
-              })
-              .catch((error) => res.status(500).send({ error: error.message }));
-            res
-              .status(200)
-              .json({ RspCode: "00", Message: "Thanh Toán Thất Bại" });
+              const bookingID = result._id;
+              
+              const payment = new Payment({
+                recipient: "Yoga HeartBeat",
+                paymentDate: vnp_Params["vnp_PayDate"],
+                paymentAmount: vnp_Params["vnp_Amount"],
+                paymentMethod_id: "647da80b6aa8563399cbc6ff",
+                booking_id: bookingID,
+                status: 5,
+                meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
+              });
+              // return save result as a response
+              const usernamePayment = dataArray[2];
+              payment.save()
+                .then(async (result) => {
+                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":false}`})
+                  req.user = {
+                    userEmail: replacedEmail,
+                    username: usernamePayment,
+                    text: `We are pleased to inform you that your payment (id; ${result._id}) has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
+                    subject: "Payment Successful",
+                    result_id: result._id,
+                  };
+                  next();
+                })
+                .catch((error) =>
+                  res.status(500).send({ error: error.message })
+                );
+            });
           }
         } else {
           res.status(200).json({
@@ -335,7 +381,6 @@ module.exports.vnpayIPN = async (req, res, next) => {
     res.status(200).json({ RspCode: "97", Message: "Checksum failed" });
   }
 };
-
 module.exports.vnpayReturn = async (req, res, next) => {
   let vnp_Params = req.query;
   let secureHash = vnp_Params["vnp_SecureHash"];

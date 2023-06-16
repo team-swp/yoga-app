@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-     await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   };
   const dispatch = useDispatch();
   const logOut = async () => {
@@ -38,10 +38,8 @@ export const AuthContextProvider = ({ children }) => {
       if (currentUser) {
         setUser(currentUser);
         const token = await currentUser.getIdToken();
-        console.log(token);
         const data = await verifyTokenGoogle(token);
         if (data) {
-          dispatch(addUserLogin(data));
           dispatch(setDataLogin(data));
         }
       }

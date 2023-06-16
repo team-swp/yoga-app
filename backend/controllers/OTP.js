@@ -10,12 +10,15 @@ module.exports.generateOTP = async (req, res) => {
     upperCaseAlphabets: false,
     specialChars: false,
   });
+  setTimeout(() => {
+    req.app.locals.OTP = null;
+  }, 5 * 60 * 1000);
   res.status(201).send({ code: req.app.locals.OTP });
 };
 
 module.exports.verifyOTP = async (req, res) => {
   const { code } = req.query;
-  if (parseInt(req.app.locals.OTP) === parseInt(code)) {
+  if ((parseInt(req.app.locals.OTP) === parseInt(code))) {
     req.app.locals.OTP = null;
     req.app.locals.resetSession = true;
     res.status(201).send({ msg: "Verify Successfully!" });

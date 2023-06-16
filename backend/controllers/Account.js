@@ -4,6 +4,7 @@ const Account = require("../models/accounts");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Auth = require("../middleware/auth");
+const { pagingnation } = require("./Pagingnation");
 require("dotenv").config();
 
 module.exports.getAllAccount = async (req, res) => {
@@ -22,6 +23,7 @@ module.exports.getAllAccount = async (req, res) => {
 
 module.exports.getAccountByIdAuth = async (req, res, next) => {
   let account;
+
   try {
     account = await Account.findById(req.account.userId); //lấy req tìm còn có .role
     if (account === null) {
@@ -30,8 +32,24 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
+  console.log(account);
   res.account = account; //gửi respone account qa bên kia
   next();
+};
+
+module.exports.getAccountPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(
+      req.query.page,
+      req.query.limit,
+      Account,
+      req.query.q,
+      "username"
+    );
+    res.send(pagingPayload);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 module.exports.getAccountById = async (req, res, next) => {
@@ -51,6 +69,7 @@ module.exports.getAccountById = async (req, res, next) => {
 module.exports.verifyUser = async function (req, res, next) {
   try {
     const { email } = req.method == "GET" ? req.query : req.body;
+    console.log(email);
 
     // check the user existance
     let exist = await Account.findOne({ email });
@@ -75,13 +94,22 @@ module.exports.update = async (req, res) => {
     res.account.username = req.body.username;
   }
   if (req.body.password != null) {
-    res.account.password = req.body.password;
+    bcrypt.hash(req.body.password, 10).then(async (hashedPassword) => {
+      res.account.password = hashedPassword;
+
+      //  Account.findOneAndUpdate({ email: user.email },{ password: hashedPassword },{
+      //   run: (async function (err, data) {
+      //     if (err) throw err;
+      //     req.app.locals.resetSession = false; // reset session
+      //     await user.save();
+      //     return res.status(201).send({ msg: "Record Updated...!" });
+      //   })()
+      //  }
+      // );
+    });
   }
   if (req.body.phone != null) {
     res.account.phone = req.body.phone;
-  }
-  if (req.body.role != null) {
-    res.account.role = req.body.role;
   }
   if (req.body.avatar != null) {
     res.account.avatar = req.body.avatar;
@@ -92,6 +120,7 @@ module.exports.update = async (req, res) => {
 
   try {
     const updateUser = await res.account.save();
+    console.log(req.body.password);
     res.json(updateUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -181,7 +210,7 @@ module.exports.Login = async (req, res) => {
                 username: account.username,
                 _id: account._id,
                 role: account.role,
-                avatar:account.avatar
+                avatar: account.avatar,
               });
             })
             .catch((error) => {
@@ -198,5 +227,63 @@ module.exports.Login = async (req, res) => {
       });
   } catch (error) {
     return res.status(500).send({ error });
+  }
+};
+
+module.exports.updateRoleAccount = async (req, res) => {
+  const { _id, role } = req.body;
+
+  try {
+    // Find the user by _id
+    const account = await Account.findById(_id);
+    if (!account) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the role
+    account.role = role;
+
+    // Save the updated user
+    const updatedAccount = await account.save();
+
+    res.json(updatedAccount);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.updateAccountForStaff = async (req, res) => {
+  const { _id } = req.body;
+
+  try {
+    // Find the user by _id
+    const account = await Account.findById(_id);
+    if (!account) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (req.body.username != null) {
+      account.username = req.body.username;
+    }
+    if (req.body.password != null) {
+      account.password = req.body.password;
+    }
+    if (req.body.phone != null) {
+      account.phone = req.body.phone;
+    }
+    if (req.body.avatar != null) {
+      account.avatar = req.body.avatar;
+    }
+    if (req.body.meta_data != null) {
+      account.meta_data = req.body.meta_data;
+    }
+
+    try {
+      const updateUser = await account.save();
+      res.json(updateUser);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };

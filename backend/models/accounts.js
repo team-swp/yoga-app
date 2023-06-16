@@ -40,5 +40,18 @@ const accountSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+accountSchema.pre("save", async function (next) {
+  const Role = require('./roles')
+  try {
+    const roleExists = await Role.exists({ rolename: this.role });
+    if (!roleExists) {
+      const error = new Error("Invalid role");
+      error.statusCode = 400;
+      throw error;
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 module.exports = mongoose.model("Account", accountSchema);

@@ -1,13 +1,13 @@
 const Schedule = require("../models/schedules");
+const { pagingnation } = require("./Pagingnation");
 
 module.exports.addSchedule = async (req, res) => {
-  const { schedulename, startTime, endTime, days, meta_data } = req.body;
+  const { schedulename, startTime, endTime, meta_data } = req.body;
   try {
     const schedule = new Schedule({
       schedulename: schedulename,
       startTime: startTime,
       endTime: endTime,
-      days: days,
       meta_data: meta_data || "", //to store side data
     });
 
@@ -33,12 +33,20 @@ module.exports.getSchedules = async (req, res) => {
   }
 };
 
+module.exports.getSchedulesPaging = async (req, res) => {
+  try {
+    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Schedule,req.query.q,'schedulename')
+    res.send(pagingPayload);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports.updateSchedule = async (req, res) => {
   const fieldsToUpdate = [
     "schedulename",
     "startTime",
     "endTime",
-    "days",
     "status",
     "meta_data",
   ];

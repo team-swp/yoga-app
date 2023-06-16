@@ -31,7 +31,7 @@ export async function createVnpay(respone) {
     const { data } = await axios.post(`/api/create_payment_url`,respone);
     return { data };
   } catch (error) {
-    return { error: "Password doesn't Match...!" };
+    return { error: "Cannot open link...!" };
   }
 }
 
@@ -40,6 +40,15 @@ export async function runUrlVnpay(respone) {
     const { data } = await axios.post(`/api/runUrlVnPAY`,respone);
     return { data };
   } catch (error) {
-    return { error: "Password doesn't Match...!" };
+    return { error: "Cannot open link...!" };
+  }
+}
+
+export async function getPaymentByID({ id }) {
+  try {
+    const { data } = await axios.get(`/api/payment/get/${id}`);
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error: "Payment cannot Found...!" });
   }
 }
