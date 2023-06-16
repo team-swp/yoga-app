@@ -98,7 +98,6 @@ export async function verifyPassword({ email, password }) {
 /** update user profile function */
 export async function updateUser(response) {
   try {
-    console.log(response);
     const token = localStorage.getItem("token");
     const data = await axios.patch("/api/accounts", response, {
       headers: { Authorization: `Bearer ${token}` },
@@ -187,7 +186,6 @@ export async function postAvatarToAWS(formData) {
 export async function getPasswordCurr() {
   try {
     const token = localStorage.getItem("token");
-    console.log(token);
     const { data } = await axios.post(
       "api/password",
       {},

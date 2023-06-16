@@ -15,6 +15,7 @@ import { getPayment } from "../../../../helper/paymentAPI";
 import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
 import StatusButton from "./CustomeStatus";
 import Search from "./Search";
+import { Toaster, toast } from "react-hot-toast";
 
 function ManageMember() {
   const moment = require("moment");
@@ -76,7 +77,7 @@ function ManageMember() {
     updateUserForStaff(response)
       .then((res) => {
         console.log(res.data);
-
+        toast.success("Update thành công");
         // Cập nhật lại danh sách booking
         const updatedBookings = bookings.map((bookingItem) =>
           bookingItem.member._id === memberId
@@ -91,7 +92,10 @@ function ManageMember() {
         );
         setBookings(updatedBookings);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        toast.error("Lỗi khi update");
+      });
   }
 
   const [searchResults, setSearchResults] = useState([]);
@@ -100,6 +104,7 @@ function ManageMember() {
     <div>
       <Container>
         <Search newBookings={newBookings} setSearchResults={setSearchResults} />
+        <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper} sx={{ height: "500px", my: 2 }}>
           <Table>
             <TableHead>

@@ -31,6 +31,7 @@ function Profile() {
   const userCurr = {
     username: user,
   };
+
   const [screen, setScreen] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -148,7 +149,6 @@ function Profile() {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
           setFile(url);
-          console.log(file);
         }
       } else {
         toast.error("Please select an image");
@@ -176,7 +176,6 @@ function Profile() {
       } else {
         setIsNotPass(false);
       }
-      console.log(isOldPassword, "312312");
     };
     isPassword();
   }, []);
@@ -280,12 +279,8 @@ function Profile() {
                     <p>Please email me about new products and promotions.</p>
                   </div>
 
-                  <div
-                    className=" pt-3
-                  
-                "
-                  >
-                    <div className=" ml-10">
+                  <div className="pt-3">
+                    <div className="ml-10">
                       <p>Avatar</p>
                     </div>
                     <div className="flex gap-5 items-center">

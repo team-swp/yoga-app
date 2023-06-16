@@ -1,7 +1,5 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 
-import classNames from "classnames/bind";
-import styles from "./StaffManage.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import PropTypes from "prop-types";

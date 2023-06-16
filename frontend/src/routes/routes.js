@@ -19,15 +19,6 @@ import {
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
-<<<<<<< HEAD
-import AddNewClass from "../pages/components/AddNewClass/AddNewClass";
-import UpdateClass from "../pages/components/UpdateClass/UpdateClass";
-import ManageSchedule from "../pages/components/Schedule/ManageSchedule";
-import ManageAddSchedule from "../pages/components/Schedule/ManageAddSchedule";
-import ManageEditSchedule from "../pages/components/Schedule/ManageEditSchedule";
-import ManageClass from "../pages/components/ManageClass/ManageClass";
-import Checkout from "../pages/components/Checkout/Checkout";
-=======
 import ManageClass from "../pages/components/StaffManage/ManageClass/ManageClass";
 import AddNewClass from "../pages/components/StaffManage/ManageClass/AddNewClass";
 import UpdateClass from "../pages/components/StaffManage/ManageClass/UpdateClass";
@@ -41,7 +32,6 @@ import ManageSemester from "../pages/components/StaffManage/MangeSemester/Manage
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 
->>>>>>> 433704ba9b2413b46b8a74b338065575a2973096
 const routers = createBrowserRouter([
   {
     path: "/",
