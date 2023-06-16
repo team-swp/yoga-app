@@ -8,9 +8,8 @@ import Footer from "../Footer/Footer";
 import yoga2 from "../../../assets/yoga2.jpg";
 import { getCourse } from "../../../helper/courseAPI";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCourseId } from "../../../redux/actions";
-import { getCourseID } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
@@ -68,7 +67,6 @@ function Courses() {
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
                 <p className={cx("courses-title")}>{course.coursename}</p>
-                <p className={cx("courses-price")}>${course.price}</p>
               </div>
             </Link>
           ))}

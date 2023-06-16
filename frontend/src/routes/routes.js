@@ -30,10 +30,9 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
-import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
-
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+
 const routers = createBrowserRouter([
   {
     path: "/",
