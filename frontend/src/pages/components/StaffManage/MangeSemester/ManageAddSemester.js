@@ -63,14 +63,6 @@ function ManageAddSemester() {
                                 style={{ width: '100%', padding: '5px', border: '1px solid #ccc' }}
                             />
                         </div>
-                        <div style={{ marginBottom: '10px' }}>
-                            <label style={{ display: 'block', fontWeight: 'bold' }}>Status:</label>
-                            <input
-                                type="checkbox"
-                                checked={status}
-                                onChange={(e) => setStatus(e.target.checked)}
-                            />
-                        </div>
                         <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer' }}>Add Semester</button>
                     </form>
                 </div>

@@ -13,6 +13,34 @@ function Navigation() {
             <Link to="/">
               <img className="w-100 h-100" src={logo} alt="logo" />
             </Link>
+<<<<<<< HEAD
+            <div class="hidden sm:-my-px sm:ml-6 sm:flex">
+              <Link
+                to="/courses"
+                class="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
+              >
+                COURES
+              </Link>
+            </div>
+            <div class="hidden sm:-my-px sm:ml-6 sm:flex">
+              <Link
+                to="/*"
+                class="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
+              >
+                NEWS
+              </Link>
+            </div>
+            <div class="hidden sm:-my-px sm:ml-6 sm:flex">
+              <Link
+                to="/*"
+                class="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
+              >
+                SERVICES
+              </Link>
+
+            </div>
+=======
+>>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
           </div>
           <div
             className="flex items-center mt-4 sm:mt-0"

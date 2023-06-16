@@ -10,7 +10,7 @@ function AddNewClass() {
     const [scheduleId, setScheduleId] = useState("");
     const [courseId, setCourseId] = useState("")
     const [instructorId, setInstructorId] = useState("")
-    const [status, setStatus] = useState(false)
+    const [status, setStatus] = useState("")
     // Thêm các trạng thái khác nếu cần thiết
 
 
@@ -20,6 +20,7 @@ function AddNewClass() {
         // Gửi yêu cầu POST để thêm lớp học mới
         try {
             const response = await addClass({ classname, schedule_id: scheduleId, course_id: courseId, intructor_id: instructorId })
+            console.log(response, 123);
             if (response) {
                 // Lớp học được thêm thành công
                 // Chuyển hướng người dùng đến trang quản lý lớp học
