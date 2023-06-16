@@ -307,7 +307,7 @@ function UpdateCourse() {
           )}
 
           <Link
-            to="/managecourse"
+            to="/staffmanage"
             style={{
               float: "right",
               backgroundColor: "grey",

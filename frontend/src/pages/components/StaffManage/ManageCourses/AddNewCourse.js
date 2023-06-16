@@ -291,7 +291,7 @@ function AddNewCourse() {
             </Button>
           )}
           <Link
-            to="/managecourse"
+            to="/staffmanage"
             style={{
               marginBlock: "30px",
               float: "right",
