@@ -15,11 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.6.1",
     "axios": "^1.4.0",
-<<<<<<< HEAD
-    "bootstrap": "^5.3.0",
-=======
     "bcryptjs": "^2.4.3",
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
     "classnames": "^2.3.2",
     "dayjs": "^1.11.8",
     "dotenv": "^16.0.3",

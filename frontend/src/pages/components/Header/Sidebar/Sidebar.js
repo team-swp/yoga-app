@@ -224,14 +224,6 @@ function Sidebar() {
                   />
                 </div>
               </Link>
-<<<<<<< HEAD
-              <Link to="/staffmanage">
-                <li>Staff Manage</li>
-              </Link>
-              <li>
-                <Link to="/courses">
-                  <button>Courses</button>
-=======
 
               <Link to="/courses">
                 <div className={styles.sidebar_details}>
@@ -264,7 +256,6 @@ function Sidebar() {
                       className={styles.sidebar_details_arrow}
                     />
                   </div>
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
                 </Link>
               )}
 
