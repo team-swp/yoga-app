@@ -7,44 +7,17 @@ function Navigation() {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">
-      <nav className="mx-5" >
-        <div className="flex justify-between items-center" >
+      <nav className="mx-20">
+        <div className="flex justify-between items-center">
           <div className="flex">
             <Link to="/">
               <img className="w-100 h-100" src={logo} alt="logo" />
             </Link>
-            <div className="hidden sm:-my-px sm:ml-6 sm:flex">
-              <Link
-                to="/courses"
-                className="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
-              >
-                COURES
-              </Link>
-            </div>
-            <div className="hidden sm:-my-px sm:ml-6 sm:flex">
-              <Link
-                to="/*"
-                className="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
-              >
-                NEWS
-              </Link>
-            </div>
-            <div className="hidden sm:-my-px sm:ml-6 sm:flex">
-              <Link
-                to="/*"
-                className="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
-              >
-                SERVICES
-              </Link>
-              <Link
-                to="/staffmanage"
-                className="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
-              >
-                STAFF MANAGE
-              </Link>
-            </div>
           </div>
-          <div className="flex items-center mt-4 sm:mt-0" style={{width:'fit-content'}}>
+          <div
+            className="flex items-center mt-4 sm:mt-0"
+            style={{ width: "fit-content" }}
+          >
             {token ? (
               <Sidebar />
             ) : (

@@ -15,7 +15,7 @@ module.exports.Auth = async function (req, res, next) {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const currentTimestamp = Math.floor(Date.now() / 1000);
     if (decodedToken.exp < currentTimestamp) {
-      throw new Error('Token has expired');
+      throw new Error("Token has expired");
     }
     req.account = decodedToken; //chuyển qa cho thg tiếp theo
     next();
@@ -37,7 +37,6 @@ module.exports.AuthStaff = async function (req, res, next) {
       return;
     }
     next();
-    console.log(decodedToken);
   } catch (error) {
     res.status(401).json({ error: "Authentication Failed!" });
   }
@@ -56,7 +55,6 @@ module.exports.AuthAdmin = async function (req, res, next) {
       return;
     }
     next();
-    console.log(decodedToken);
   } catch (error) {
     res.status(401).json({ error: "Authentication Failed!" });
   }

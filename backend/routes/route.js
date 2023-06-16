@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const Account = require("../models/accounts");
-const { Auth, localVariables, AuthStaff, AuthAdmin } = require("../middleware/auth");
+const {
+  Auth,
+  localVariables,
+  AuthStaff,
+  AuthAdmin,
+} = require("../middleware/auth");
 require("dotenv").config();
 const { registerMail } = require("../controllers/Mailer");
-const moment = require('moment');
+const moment = require("moment");
 
 const {
   generateOTP,
@@ -119,7 +124,7 @@ router.patch("/accounts", Auth, getAccountByIdAuth, update);
 router.patch("/accounts/updateRole", AuthAdmin, updateRoleAccount);
 
 //update user for staff
-router.patch("/staff/account/update",AuthStaff,updateAccountForStaff)
+router.patch("/staff/account/update", AuthStaff, updateAccountForStaff);
 
 //getAccessToken
 router.get("/accessToken", Auth, getAccountByIdAuth, (req, res) => {
@@ -131,8 +136,7 @@ router.get("/accessToken", Auth, getAccountByIdAuth, (req, res) => {
 router.post("/password", Auth, getAccountByIdAuth, (req, res) => {
   const { password, ...rest } = Object.assign({}, res.account.toJSON());
   res.send({ password });
-})
-
+});
 
 //Deleting one
 
@@ -195,8 +199,8 @@ router.patch(
 );
 
 //Role
-router.post("/role/add", AuthAdmin, addRole)
-router.patch("/role/update", AuthAdmin, getRoleById, updateRole)
+router.post("/role/add", AuthAdmin, addRole);
+router.patch("/role/update", AuthAdmin, getRoleById, updateRole);
 
 //payment
 router.post("/payment/add", /*Auth,*/ addPayment);
@@ -222,21 +226,21 @@ router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 router.post("/create_payment_url", createPayment);
 
-router.get('/vnpay_ipn', vnpayIPN, haveDonePayment);
+router.get("/vnpay_ipn", vnpayIPN, haveDonePayment);
 
-router.get('/vnpay_return', vnpayReturn);
+router.get("/vnpay_return", vnpayReturn);
 
 router.post("/runUrlVnPAY", runUrl);
 
 //pagingnation
 
-router.get("/coursesPaging/get", getCoursesPaging)
-router.get("/accountsPaging/get", getAccountPaging)
-router.get("/bookingsPaging/get", getBookingsPaging)
-router.get("/paymentsPaging/get", getPaymentsPaging)
-router.get("/schedulesPaging/get", getSchedulesPaging)
-router.get("/semestersPaging/get", getSemestersPaging)
-router.get("/classesPaging/get", getClassesPaging)
+router.get("/coursesPaging/get", getCoursesPaging);
+router.get("/accountsPaging/get", getAccountPaging);
+router.get("/bookingsPaging/get", getBookingsPaging);
+router.get("/paymentsPaging/get", getPaymentsPaging);
+router.get("/schedulesPaging/get", getSchedulesPaging);
+router.get("/semestersPaging/get", getSemestersPaging);
+router.get("/classesPaging/get", getClassesPaging);
 
 //IP
 // router.get("/ipUser",getUserIP)

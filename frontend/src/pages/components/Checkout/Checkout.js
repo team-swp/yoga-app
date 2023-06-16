@@ -42,7 +42,11 @@ function Checkout() {
   const [emailType, setEmailType] = useState(user.email);
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
+<<<<<<< HEAD
   const [open, setOpen] = useState(true);
+=======
+
+>>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
   const handleRadioChange = () => {
     setIsSelected2(false);
     setIsSelected(true);
@@ -232,7 +236,7 @@ function Checkout() {
                     <label className={`lable ${styles.lable}`}>
                       <img src={homepayImage} alt="Payment at Yoga Center" />
                       <div style={{ whiteSpace: "nowrap" }}>
-                        Thanh Toán Tại Trung Tâm YOGA{" "}
+                        Thanh Toán Tại Trung Tâm YOGA
                       </div>
                     </label>
                     <input
