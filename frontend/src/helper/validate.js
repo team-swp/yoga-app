@@ -85,14 +85,9 @@ export async function resetPasswordValidation(values) {
 
 export async function paymentVerify(values) {
   const errors = emailVerify({}, values);
-<<<<<<< HEAD
   verifyCurrency(errors,values)
   verifyPhoneNumber(errors,values)
   validateUsername(errors,values)
-=======
-  verifyCurrency(errors, values);
-  verifyPhoneNumber(errors, values);
->>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
   return errors;
 }
 
