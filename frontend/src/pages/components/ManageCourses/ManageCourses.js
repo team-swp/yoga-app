@@ -14,27 +14,28 @@ import {
     InputAdornment,
     IconButton,
     Switch,
-
+    Radio,
 } from '@mui/material';
-
 import './ManageCourses.css'
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-import { updateCourse } from "../../../helper/courseAPI";
+import { updateCourse } from "../../../../helper/courseAPI";
+import axios from "axios";
+import { Toaster, toast } from "react-hot-toast";
 function ManageCourses() {
     const [searchKeyword, setSearchKeyword] = useState("");
     const [searchResults, setSearchResults] = useState([]);
-    const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [courses, setCourses] = useState([]);
-    const [showNotFoundMessage, setShowNotFoundMessage] = useState(false);
     const [updatedCourse, setUpdatedCourse] = useState({});
     const [totalCourse, setTotalCourse] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(3);
+    const [perPage, setPerPage] = useState(5);
     const [totalPage, setTotalPage] = useState(0)
     const [page, setPage] = useState(0)
     const [schedule, setSchedule] = useState([])
+    const [statusFilter, setStatusFilter] = useState("both");
+    const [courseList, setcourseList] = useState([])
 
     //thay đổi status//////////////////////////////////////
 
@@ -54,6 +55,20 @@ function ManageCourses() {
         }
     };
 
+    useEffect(() => {
+        // Lọc danh sách khóa học dựa trên trạng thái
+        let filtered = courses;
+        if (statusFilter === "enable") {
+            filtered = courseList.filter((course) => course.status);
+        } else if (statusFilter === "disable") {
+            filtered = courseList.filter((course) => !course.status);
+        }
+        // else if (statusFilter === "both")
+        //     filtered = courses.filter(courses => courses.status)
+
+        setSearchResults(filtered);
+    }, [courseList, statusFilter, courses]);
+
     // thay đổi tiến lên hoặc xuống trang
     function handlePrevious() {
         setCurrentPage((p) => {
@@ -71,33 +86,60 @@ function ManageCourses() {
     //////////////////////////////////////////////////
     //Search
     const handleSearchChange = (event) => {
-        setShowErrorMessage(false);
         setSearchKeyword(event.target.value);
     };
 
     //Search
     const handleSearch = () => {
         if (searchKeyword.trim() === "") {
-            setShowErrorMessage(true);
             return;
         }
-
-        const filteredCourses = courses.filter(
+        const filteredCourses = courseList.filter(
             (course) =>
                 course.coursename.toLowerCase().includes(searchKeyword.toLowerCase()) ||
                 course.price.toString().toLowerCase().includes(searchKeyword.toLowerCase()) ||
                 (course.status ? "Enabled" : "Disabled").toLowerCase() === (searchKeyword.toLowerCase())
         );
-
         setSearchResults(filteredCourses);
-
         // Kiểm tra nếu không có kết quả tìm kiếm
         if (filteredCourses.length === 0) {
-            setShowNotFoundMessage(true);
+            toast.error('Can not found!')
+
         } else {
-            setShowNotFoundMessage(false);
+
         }
     };
+
+    // dùng effect để chạy search
+    useEffect(() => {
+        if (searchKeyword === "") {
+            setSearchResults([]);
+        }
+
+    }, [searchKeyword]);
+    ///////////////////////////////////////////////////
+
+    useEffect(() => {
+        async function fetchSemesters() {
+            try {
+                const response = await axios.get("http://localhost:3001/api/coursesPaging/get");
+                const semesterData = response.data.items;
+                console.log(response.data);
+                setcourseList(semesterData);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchSemesters();
+    }, [updatedCourse]);
+
+    // chạy để lấy dữ liệu course
+    useEffect(() => {
+        fetchCourses();
+    }, [updatedCourse, courseList, currentPage]);
+
+
     useEffect(() => {
 
         async function fecthScheduleList() {
@@ -114,31 +156,12 @@ function ManageCourses() {
         }
         fecthScheduleList();
     }, [])
-    // dùng effect để chạy search
-    useEffect(() => {
-        if (searchKeyword === "") {
-            setSearchResults([]);
-        }
-    }, [searchKeyword]);
-    ///////////////////////////////////////////////////
-
-
-
-    // chạy để lấy dữ liệu course
-    useEffect(() => {
-        fetchCourses();
-    }, [updatedCourse]);
-
-
-
 
     //////////////////////// pagination
-    useEffect(() => {
-        fetchCourses();
-    }, [currentPage]);
+
 
     async function fetchCourses() {
-        const requestUrl = `http://localhost:3001/api/coursespaging/get?page=${currentPage}&limit=${perPage}`;
+        const requestUrl = `http://localhost:3001/api/coursespaging/get?page=${currentPage}&limit=${perPage}&status=${statusFilter}`;
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
         const { items } = responseJSON;
@@ -165,6 +188,7 @@ function ManageCourses() {
                 </div>
             </div>
             <Container>
+                <Toaster position="top-center" reverseOrder={false} />
                 <div style={{ float: 'right', marginTop: '15px' }}>
                     <Button
                         variant="contained"
@@ -206,16 +230,6 @@ function ManageCourses() {
                         Search
                     </Button>
                 </div>
-
-                {showNotFoundMessage && (
-                    <div style={{
-                        marginBottom: '16px', color: 'red'
-                    }}>
-                        No results found.
-                    </div>
-                )
-                }
-
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
@@ -224,7 +238,27 @@ function ManageCourses() {
                                 <TableCell>Course Name</TableCell>
                                 <TableCell>Price</TableCell>
                                 <TableCell>Semester</TableCell>
-                                <TableCell>Enable/Disable</TableCell>
+                                <TableCell>
+                                    <Radio
+                                        value="both"
+                                        checked={statusFilter === "both"}
+                                        onChange={(e) => setStatusFilter(e.target.value)}
+                                    />
+                                    Both
+                                    <Radio
+                                        value="enable"
+                                        checked={statusFilter === "enable"}
+                                        onChange={(e) => setStatusFilter(e.target.value)}
+                                    />
+                                    Enable
+                                    <Radio
+                                        value="disable"
+                                        checked={statusFilter === "disable"}
+                                        onChange={(e) => setStatusFilter(e.target.value)}
+                                    />
+                                    Disable
+                                </TableCell>
+
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -283,9 +317,18 @@ function ManageCourses() {
                     Back
                 </Link>
 
-                <footer>
-
-                    <button disabled={page === 1} onClick={handlePrevious}>
+                <footer style={{ marginTop: '10px', marginBottom: '10px' }}>
+                    <button
+                        disabled={page === 1}
+                        onClick={handlePrevious}
+                        style={{
+                            marginRight: "1rem",
+                            padding: "0.5rem 1rem",
+                            borderRadius: "4px",
+                            backgroundColor: "#ccc",
+                            cursor: "pointer",
+                        }}
+                    >
                         Previous
                     </button>
                     <select
@@ -294,21 +337,37 @@ function ManageCourses() {
                             setCurrentPage(event.target.value);
                             console.log(currentPage);
                         }}
+                        style={{
+                            marginRight: "1rem",
+                            padding: "0.5rem",
+                            borderRadius: "4px",
+                        }}
                     >
                         {Array(totalPage)
                             .fill(null)
                             .map((_, index) => {
-                                return <option key={index}>{parseInt(index + 1)}</option>;
+                                return (
+                                    <option key={index} style={{ padding: "0.5rem" }}>
+                                        {parseInt(index + 1)}
+                                    </option>
+                                );
                             })}
                     </select>
-                    <button disabled={page == totalPage} onClick={handleNext}>
-
+                    <button
+                        disabled={page == totalPage}
+                        onClick={handleNext}
+                        style={{
+                            padding: "0.5rem 1rem",
+                            borderRadius: "4px",
+                            backgroundColor: "#ccc",
+                            cursor: "pointer",
+                        }}
+                    >
                         Next
                     </button>
-
                 </footer>
-            </Container >
 
+            </Container >
             <Footer />
         </div >
     );
