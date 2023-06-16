@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const Account = require("../models/accounts");
-const { Auth, localVariables, AuthStaff, AuthAdmin } = require("../middleware/auth");
+const {
+  Auth,
+  localVariables,
+  AuthStaff,
+  AuthAdmin,
+} = require("../middleware/auth");
 require("dotenv").config();
 const { registerMail } = require("../controllers/Mailer");
-const moment = require('moment');
+const moment = require("moment");
 
 const {
   generateOTP,
@@ -117,9 +122,12 @@ router.patch("/accounts", Auth, getAccountByIdAuth, update);
 //update role for user
 router.patch("/accounts/updateRole", AuthAdmin, updateRoleAccount);
 
+<<<<<<< HEAD
+=======
 //update user for staff
 router.patch("/staff/account/update",AuthStaff,updateAccountForStaff)
 
+>>>>>>> 433704ba9b2413b46b8a74b338065575a2973096
 //getAccessToken
 router.get("/accessToken", Auth, getAccountByIdAuth, (req, res) => {
   const { password, ...rest } = Object.assign({}, res.account.toJSON());
@@ -129,9 +137,15 @@ router.get("/accessToken", Auth, getAccountByIdAuth, (req, res) => {
 //Get password
 router.post("/password", Auth, getAccountByIdAuth, (req, res) => {
   const { password, ...rest } = Object.assign({}, res.account.toJSON());
+<<<<<<< HEAD
+  console.log(password);
+  res.send({ password });
+});
+=======
   res.send({ password });
 })
 
+>>>>>>> 433704ba9b2413b46b8a74b338065575a2973096
 
 //Deleting one
 
@@ -194,8 +208,13 @@ router.patch(
 );
 
 //Role
+<<<<<<< HEAD
+router.post("/role/add", AuthAdmin, addRole);
+router.patch("/role/update", AuthAdmin, getRoleById, updateRole);
+=======
 router.post("/role/add", AuthAdmin, addRole)
 router.patch("/role/update", AuthAdmin, getRoleById, updateRole)
+>>>>>>> 433704ba9b2413b46b8a74b338065575a2973096
 
 //payment
 router.post("/payment/add", /*Auth,*/ addPayment);
@@ -220,14 +239,29 @@ router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 router.post("/create_payment_url", Auth, createPayment);
 
+<<<<<<< HEAD
+router.get("/vnpay_ipn", vnpayIPN, haveDonePayment);
+
+router.get("/vnpay_return", vnpayReturn);
+=======
 router.get('/vnpay_ipn', vnpayIPN, haveDonePayment);
 
 router.get('/vnpay_return', vnpayReturn);
+>>>>>>> 433704ba9b2413b46b8a74b338065575a2973096
 
 router.post("/runUrlVnPAY", runUrl);
 
 //pagingnation
 
+<<<<<<< HEAD
+router.get("/coursesPaging/get", getCoursesPaging);
+router.get("/accountsPaging/get", getAccountPaging);
+router.get("/bookingsPaging/get", getBookingsPaging);
+router.get("/paymentsPaging/get", getPaymentsPaging);
+router.get("/schedulesPaging/get", getSchedulesPaging);
+router.get("/semestersPaging/get", getSemestersPaging);
+router.get("/classesPaging/get", getClassesPaging);
+=======
 router.get("/coursesPaging/get", getCoursesPaging)
 router.get("/accountsPaging/get", getAccountPaging)
 router.get("/bookingsPaging/get", getBookingsPaging)
@@ -238,3 +272,4 @@ router.get("/classesPaging/get", getClassesPaging)
 
 //IP
 // router.get("/ipUser",getUserIP)
+>>>>>>> 433704ba9b2413b46b8a74b338065575a2973096
