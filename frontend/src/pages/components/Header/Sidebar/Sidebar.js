@@ -66,23 +66,12 @@ function Sidebar() {
       e.target.src = url;
     }
   };
-<<<<<<< HEAD
-
-  useEffect(()=>{
-    if(user.meta_data){
-      const checkMem = JSON.parse(user.meta_data)
-      setCheckMember(checkMem.isMember)
-    }
-  },[user])
-
-=======
   useEffect(() => {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
     }
   }, [user]);
->>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
   return (
     <div>
       <IconButton
@@ -221,11 +210,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-<<<<<<< HEAD
-                    {checkMember?'You are a member':'Become a member'}
-=======
                     {checkMember ? "Your are a member" : "Become a member"}
->>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
                   </div>
                 </div>
               </div>
@@ -239,14 +224,6 @@ function Sidebar() {
                   />
                 </div>
               </Link>
-<<<<<<< HEAD
-              <Link to="/staffmanage">
-                <li>Staff Manage</li>
-              </Link>
-              <li>
-                <Link to="/courses">
-                  <button>Courses</button>
-=======
 
               <Link to="/courses">
                 <div className={styles.sidebar_details}>
@@ -279,7 +256,6 @@ function Sidebar() {
                       className={styles.sidebar_details_arrow}
                     />
                   </div>
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
                 </Link>
               )}
 

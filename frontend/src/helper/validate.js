@@ -39,14 +39,13 @@ function usernameVerify(error = {}, values) {
   return error;
 }
 
-function validateUsername(errors = {},values) {
+function validateUsername(errors = {}, values) {
   const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/; // Dấu hiệu của các ký tự đặc biệt
   if (specialCharacters.test(values.username)) {
     errors.username = toast.error("Fullname must have no special Characters");
   }
 
   return errors;
-
 }
 
 /** validate register form */
@@ -85,14 +84,8 @@ export async function resetPasswordValidation(values) {
 
 export async function paymentVerify(values) {
   const errors = emailVerify({}, values);
-<<<<<<< HEAD
-  verifyCurrency(errors,values)
-  verifyPhoneNumber(errors,values)
-  validateUsername(errors,values)
-=======
   verifyCurrency(errors, values);
   verifyPhoneNumber(errors, values);
->>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
   return errors;
 }
 
