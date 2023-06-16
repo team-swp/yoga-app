@@ -30,11 +30,9 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
-<<<<<<< HEAD
+import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
-=======
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
->>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
 
 const routers = createBrowserRouter([
   {
@@ -91,9 +89,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/paymentstatus",
-    element: (
-     <PaymentStatus/>
-    ),
+    element: <PaymentStatus />,
   },
   {
     path: "/checkout",
