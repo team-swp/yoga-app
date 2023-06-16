@@ -32,6 +32,7 @@ import ManageSemester from "../pages/components/StaffManage/MangeSemester/Manage
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 
 const routers = createBrowserRouter([
   {
@@ -150,6 +151,10 @@ const routers = createBrowserRouter([
   {
     path: "/addnewsemester",
     element: <ManageAddSemester></ManageAddSemester>,
+  },
+  {
+    path: "/updatesemester/:id",
+    element: <ManageUpdateSemester />,
   },
   {
     path: "/premium",
