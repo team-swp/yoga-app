@@ -55,11 +55,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/password",
-    element: (
-      <ProtectRoute>
-        <Password />
-      </ProtectRoute>
-    ),
+    element: <Password />,
   },
   {
     path: "/profile",
@@ -79,7 +75,6 @@ const routers = createBrowserRouter([
   },
   {
     path: "/recovery",
-
     element: (
       <ProtectRecover>
         <Recovery />

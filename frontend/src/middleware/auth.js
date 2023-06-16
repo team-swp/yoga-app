@@ -30,9 +30,11 @@ export const ProtectRoute = ({ children }) => {
 export const ProtectRecover = ({ children }) => {
   const user = useSelector(userSelector);
   const email = user.email;
+
   if (!email) {
     return <Navigate to={"/password"} replace={true}></Navigate>;
   }
+
   return children;
 };
 
