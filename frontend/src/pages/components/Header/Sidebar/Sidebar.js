@@ -69,10 +69,9 @@ function Sidebar() {
   useEffect(()=>{
     if(user.meta_data){
       const checkMem = JSON.parse(user.meta_data)
-      console.log(checkMem.isMember,'12122323');
       setCheckMember(checkMem.isMember)
     }
-  },[])
+  },[user])
 
   return (
     <div>
@@ -197,7 +196,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                    {checkMember?'Your are a member':'Become a member'}
+                    {checkMember?'You are a member':'Become a member'}
                   </div>
                 </div>
               </div>

@@ -1,0 +1,52 @@
+@import url(//db.onlinewebfonts.com/c/01173b246d9d9ea808ea75a26b3b61bb?family=Circular+Spotify+Tx+T+Black);
+
+html {
+  scroll-behavior: smooth;
+}
+
+.startBtn {
+  color: black;
+  background-color: white;
+  padding: 10px 30px;
+  border-radius: 25px;
+}
+
+.startBtn:hover {
+  transform: scale(1.05) perspective(0px);
+  cursor: pointer;
+}
+
+.moreBtn {
+  border: 3px solid white;
+  padding: 10px 30px;
+  border-radius: 25px;
+}
+
+.moreBtn:hover{
+  transform: scale(1.05) perspective(0px);
+  cursor: pointer;
+}
+
+.tryByDay{
+  color: black;
+  background-color: white;
+  padding: 10px 30px;
+  border-radius: 25px;
+}
+
+.tryByDay:hover{
+  transform: scale(1.05) perspective(0px);
+  cursor: pointer;
+}
+
+.tryByWeek{
+  color: black;
+  background-color: white;
+  padding: 10px 30px;
+  border-radius: 25px;
+}
+
+.tryByWeek:hover{
+  transform: scale(1.05) perspective(0px);
+  cursor: pointer;
+}

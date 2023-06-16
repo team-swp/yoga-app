@@ -30,6 +30,7 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
+import Premium from "../pages/components/MemberPacket/Premium";
 
 const routers = createBrowserRouter([
   {
@@ -83,6 +84,12 @@ const routers = createBrowserRouter([
       <ProtectRecover>
         <Recovery />
       </ProtectRecover>
+    ),
+  },
+  {
+    path: "/paymentstatus",
+    element: (
+     <PaymentStatus/>
     ),
   },
   {
@@ -144,6 +151,10 @@ const routers = createBrowserRouter([
   {
     path: "/addnewsemester",
     element: <ManageAddSemester></ManageAddSemester>,
+  },
+  {
+    path: "/premium",
+    element: <Premium></Premium>,
   },
 ]);
 
