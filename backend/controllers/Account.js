@@ -40,7 +40,9 @@ module.exports.getAccountPaging = async (req, res) => {
     const pagingPayload = await pagingnation(
       req.query.page,
       req.query.limit,
-      Account
+      Account,
+      req.query.q,
+      "username"
     );
     res.send(pagingPayload);
   } catch (error) {
@@ -229,6 +231,42 @@ module.exports.updateRoleAccount = async (req, res) => {
     const updatedAccount = await account.save();
 
     res.json(updatedAccount);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.updateAccountForStaff = async (req, res) => {
+  const { _id } = req.body;
+
+  try {
+    // Find the user by _id
+    const account = await Account.findById(_id);
+    if (!account) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (req.body.username != null) {
+      account.username = req.body.username;
+    }
+    if (req.body.password != null) {
+      account.password = req.body.password;
+    }
+    if (req.body.phone != null) {
+      account.phone = req.body.phone;
+    }
+    if (req.body.avatar != null) {
+      account.avatar = req.body.avatar;
+    }
+    if (req.body.meta_data != null) {
+      account.meta_data = req.body.meta_data;
+    }
+
+    try {
+      const updateUser = await account.save();
+      res.json(updateUser);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

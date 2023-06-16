@@ -53,9 +53,9 @@ function CourseDetail() {
     <div>
       <ScrollToTopOnMount />
       <Header />
-      <div class="bg-gray-400">
-        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
-          <h1 class="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
+      <div className="bg-gray-400">
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
+          <h1 className="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
             START YOUR TRAINING JOURNEY
           </h1>
         </div>
@@ -87,7 +87,7 @@ function CourseDetail() {
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
                 <p className={cx("course-price")}>{course.price}$</p>
-                <div class="flex justify-evenly align-center">
+                <div className="flex justify-evenly align-center">
                   <button
                     className={cx("course-button")}
                     onClick={() => {
@@ -107,8 +107,10 @@ function CourseDetail() {
                     }}
                   />
                 </div>
-                <div class="my-3 text-center">30-Day Money-Back Guarantee</div>
-                <hr class="mb-3 border-t border-gray-500 mx-auto my-4 w-full" />
+                <div className="my-3 text-center">
+                  30-Day Money-Back Guarantee
+                </div>
+                <hr className="mb-3 border-t border-gray-500 mx-auto my-4 w-full" />
                 <div className={cx("course-policy")}>
                   <h6>This course include:</h6>
                   <p>

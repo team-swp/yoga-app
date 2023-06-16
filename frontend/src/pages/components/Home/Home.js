@@ -82,7 +82,7 @@ function Home() {
                 sx={{ letterSpacing: "1px", fontWeight: "bold" }}
               >
                 OUR FAVORITE CLASS
-                <Typography variant="subtitle1" sx={{ mt: 3 }}>
+                <Typography variant="body1" sx={{ mt: 3 }}>
                   Inspired by the core principles of Pilates and the love of
                   movement, our classes are designed to shift your energy and
                   create long-lasting strength from within.
@@ -148,12 +148,12 @@ function Home() {
           </Button>
         </Box>
         <div className={cx("background-img")}>
-          <div class="relative h-screen bg-cover bg-center flex flex-col justify-center items-center sm:p-10 lg:p-20 xl:p-32 2xl:p-40">
-            <div class="max-w-3xl w-full mx-auto text-center text-black">
-              <h4 class="text-4xl font-bold mb-8">
+          <div className="relative h-screen bg-cover bg-center flex flex-col justify-center items-center sm:p-10 lg:p-20 xl:p-32 2xl:p-40">
+            <div className="max-w-3xl w-full mx-auto text-center text-black">
+              <h4 className="text-4xl font-bold mb-8">
                 THE POWER OF POSITIVE MOVEMENT
               </h4>
-              <p class="text-lg mb-8">
+              <p className="text-lg mb-8">
                 We believe that when we move our bodies with intention,
                 positivity and gratitude, we have the power to change our flow
                 of energy and state of mind. Connecting every cell, every
@@ -161,12 +161,12 @@ function Home() {
                 movement – we’re able to push through what we think we are
                 capable of.
               </p>
-              <p class="text-lg mb-8">
+              <p className="text-lg mb-8">
                 Transforming our mind as much as our body, our relationship with
                 ourselves and the world around us to feel true strength from
                 within. This, is the power of positive movement.
               </p>
-              <p class="text-lg mb-12">
+              <p className="text-lg mb-12">
                 Every time you step on to the mat, or the Coreformer, we’ll take
                 you there. One move, one breath, one heartbeat at a time.
               </p>

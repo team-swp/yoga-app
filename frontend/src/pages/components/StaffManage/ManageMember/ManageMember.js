@@ -12,11 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { getBooking } from "../../../../helper/bookingAPI";
 import { getPayment } from "../../../../helper/paymentAPI";
-import {
-  getMember,
-  updateMember,
-  updateUser,
-} from "../../../../helper/loginAPI";
+import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
 import StatusButton from "./CustomeStatus";
 import Search from "./Search";
 
@@ -24,7 +20,7 @@ function ManageMember() {
   const moment = require("moment");
 
   const [bookings, setBookings] = useState([]);
-  const [isMember, setIsMember] = useState(false);
+  const [memberId, setMemberId] = useState("");
 
   async function fetchData() {
     try {
@@ -56,18 +52,6 @@ function ManageMember() {
     fetchData();
   }, []);
 
-  const handleToggle = (memberId) => {
-    const updatedData = {
-      meta_data: JSON.stringify({ isMember: !isMember }),
-    };
-    // updateMember(memberId, updatedData)
-    //   .then(() => {
-    //     setIsMember(!isMember);
-    //     fetchData();
-    //   })
-    //   .catch((error) => console.log(error));
-  };
-
   const newBookings = bookings
     .filter((booking) => {
       return booking.payment && booking.member;
@@ -75,13 +59,40 @@ function ManageMember() {
     .map((booking) => {
       const metaData = JSON.parse(booking.member.meta_data);
       const isMember = metaData.isMember;
-      const memberId = booking.member_id;
+      const memberId = booking.member._id;
       const bookingDate = moment(booking.booking_date).format("DD/MM/YY");
       const { status } = booking.payment;
       const { username, email } = booking.member;
 
       return { username, email, status, bookingDate, isMember, memberId };
     });
+
+  function handleToggle(isMember, memberId) {
+    const booking = bookings.find((booking) => booking.member._id === memberId);
+    const oldMetaData = JSON.parse(booking.member.meta_data);
+    const newMetaData = { ...oldMetaData, isMember };
+    const response = { _id: memberId, meta_data: JSON.stringify(newMetaData) };
+
+    updateUserForStaff(response)
+      .then((res) => {
+        console.log(res.data);
+
+        // Cập nhật lại danh sách booking
+        const updatedBookings = bookings.map((bookingItem) =>
+          bookingItem.member._id === memberId
+            ? {
+                ...bookingItem,
+                member: {
+                  ...bookingItem.member,
+                  meta_data: response.meta_data,
+                },
+              }
+            : bookingItem
+        );
+        setBookings(updatedBookings);
+      })
+      .catch((error) => console.error(error));
+  }
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -114,8 +125,11 @@ function ManageMember() {
                     </TableCell>
                     <TableCell>
                       <Switch
-                        checked={isMember}
-                        // onChange={handleToggle}
+                        checked={booking.isMember}
+                        onChange={(event) => {
+                          setMemberId(booking.memberId);
+                          handleToggle(event.target.checked, booking.memberId);
+                        }}
                       />
                     </TableCell>
                   </TableRow>

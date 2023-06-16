@@ -14,12 +14,11 @@ import {
   IconButton,
   Switch,
 } from "@mui/material";
-
-import "./ManageCourses.css";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
-import { updateCourse } from "../../../../helper/courseAPI";
+import { getCourse, updateCourse } from "../../../../helper/courseAPI";
+
 function ManageCourses() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -150,14 +149,6 @@ function ManageCourses() {
 
   return (
     <div>
-      <Header />
-      <div className="bg-gray-400">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
-          <h1 className="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
-            Manage Courses
-          </h1>
-        </div>
-      </div>
       <Container>
         <div style={{ float: "right", marginTop: "15px" }}>
           <Button

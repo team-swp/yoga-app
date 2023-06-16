@@ -21,6 +21,9 @@ import { getCourse, updateCourse } from "../../../../helper/courseAPI";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 // import { getSemester } from "../../../helper/semesterAPI";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
+import { getSemester } from "../../../../helper/semesterAPI";
 import axios from "axios";
 
 function UpdateCourse() {

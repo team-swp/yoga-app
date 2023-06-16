@@ -40,12 +40,6 @@ export const updateData = (data) => {
   };
 };
 
-export const setDataBooking = (data) => {
-  return {
-    type: "booking/setData",
-    payload: data,
-  };
-};
 export const setCourseId = (courseId) => ({
   type: "set_course_id",
   payload: { courseId },

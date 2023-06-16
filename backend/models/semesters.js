@@ -29,7 +29,7 @@ const semesterSchema = new mongoose.Schema(
 );
 
 semesterSchema.pre("save", async function (next) {
-  const currentDate = new Date();
+  const currentDate = new Date;
   if (this.isModified("startDate") && this.startDate < currentDate) {
     return next(new Error("Start date cannot be in the past."));
   }

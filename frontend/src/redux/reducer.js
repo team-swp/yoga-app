@@ -8,7 +8,7 @@ const initState = {
     avatar: "",
     OTP: false,
   },
-  courseId: null,
+  courses: [{}],
 };
 
 const rootReducer = (state = initState, action) => {
@@ -30,13 +30,23 @@ const rootReducer = (state = initState, action) => {
     }
 
     case "login/setDataLogin": {
-      const { _id, token, username, phone, avatar, email } = action.payload;
+      const { _id, token, username, phone, avatar, email, meta_data, role } =
+        action.payload;
       if (!localStorage.getItem("token")) {
         localStorage.setItem("token", token);
       }
       return {
         ...state,
-        user: { ...state.user, _id, username, phone, avatar, email },
+        user: {
+          ...state.user,
+          _id,
+          username,
+          phone,
+          avatar,
+          email,
+          meta_data,
+          role,
+        },
       };
     }
     case "login/updateData": {
