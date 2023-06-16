@@ -1,10 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { userSelector } from "../redux/selectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserByToken } from "../helper/loginAPI";
+import { addUserLogin, setDataLogin } from "../redux/actions";
 
 export const AuthorizeUser = ({ children }) => {
   const user = useSelector(userSelector);
   const token = localStorage.getItem("token");
+  console.log(user);
   if (!token) {
     return <Navigate to={"/login"} replace={true}></Navigate>;
   } else {
@@ -47,3 +50,5 @@ export const ProtectRouteOTP = ({ children }) => {
   }
   return children;
 };
+
+

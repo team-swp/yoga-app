@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { registerUser, verifyPassword } from "../helper/loginAPI";
-
 const initState = {
   user: {
     _id: "",
@@ -12,18 +9,7 @@ const initState = {
     OTP: false,
   },
   courses: [
-    {
-      id: 1,
-      name: "Learn Yoga",
-      completed: false,
-      priority: "Medium",
-    },
-    {
-      id: 2,
-      name: "Learn Yoga Test",
-      completed: true,
-      priority: "High",
-    },
+    {}
   ],
 };
 
@@ -46,11 +32,13 @@ const rootReducer = (state = initState, action) => {
     }
 
     case "login/setDataLogin": {
-      const { _id, token, username, phone, avatar } = action.payload;
-      localStorage.setItem("token", token);
+      const { _id, token, username, phone, avatar,email,meta_data} = action.payload;
+      if(!localStorage.getItem('token')){
+        localStorage.setItem("token", token);
+      }
       return {
         ...state,
-        user: { ...state.user, _id, username, phone, avatar },
+        user: { ...state.user, _id, username, phone, avatar,email ,meta_data},
       };
     }
     case "login/updateData": {
@@ -65,7 +53,6 @@ const rootReducer = (state = initState, action) => {
       if (OTP === false) {
         localStorage.removeItem("email");
       }
-      console.log(OTP);
       return {
         ...state,
         user: { ...state.user, OTP },
@@ -77,6 +64,12 @@ const rootReducer = (state = initState, action) => {
         ...state,
         user: {},
       };
+    }
+
+    case "set_course_id": {
+      const { courseId } = action.payload;
+      localStorage.setItem("courseId", courseId);
+      return { ...state, courseId };
     }
 
     default:

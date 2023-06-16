@@ -28,7 +28,9 @@ function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [emailType, setEmailType] = useState();
+  const user = useSelector(userSelector);
+
+  const [emailType, setEmailType] = useState(user.email);
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
   const handleRadioChange = () => {
@@ -41,13 +43,12 @@ function Checkout() {
     setIsSelected2(true);
   };
 
-  const user = useSelector(userSelector);
   const formik = useFormik({
     initialValues: {
       email: user.email,
-      phone: user.phone || "",
-      amount: "",
-      username:user.username||''
+      phone: `0${user.phone}` || "",
+      amount: 1000000,
+      username: user.username || "",
     },
     validate: paymentVerify,
     validateOnBlur: false,
@@ -63,14 +64,20 @@ function Checkout() {
       if (isSelected) {
         const vnpayLink = createVnpay({
           amount: values.amount,
-          orderDescription: `647da69ec4e008c1eee52e17,${values.email},${values.username||'Member'}`, //bookingID lấy trong state
-          orderType: 190004
+          orderDescription: `${user._id},${values.email},${
+            values.username || "Member"
+          }`, //bookingID lấy trong state
+          orderType: 190004,
         });
-        vnpayLink.then((data) => {
-          console.log(data.data);
-          // window.open(data.data, '_blank', 'noopener,noreferrer');
-          window.location.href = data.data;
-        });
+        vnpayLink
+          .then((data) => {
+            console.log(data.data);
+            // window.open(data.data, '_blank', 'noopener,noreferrer');
+            window.location.href = data.data;
+          })
+          .catch(() => {
+            toast.error("Payment is maintenance please choose other");
+          });
       }
 
       // let loginPromise = verifyPassword({
@@ -130,7 +137,6 @@ function Checkout() {
                     className={styles.textbox}
                     type="email"
                     placeholder="Enter your email address"
-                    value={emailType}
                   />
 
                   <input
@@ -138,7 +144,6 @@ function Checkout() {
                     className={styles.textbox}
                     type="text"
                     placeholder="Enter your phone number"
-                    value={emailType}
                   />
                 </div>
               </div>

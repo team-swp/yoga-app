@@ -13,11 +13,14 @@ module.exports.Auth = async function (req, res, next) {
     const token = req.headers.authorization.split(" ")[1];
     // retrive the user details fo the logged in user
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decodedToken);
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    if (decodedToken.exp < currentTimestamp) {
+      throw new Error('Token has expired');
+    }
     req.account = decodedToken; //chuyển qa cho thg tiếp theo
     next();
   } catch (error) {
-    res.status(401).json({ error: "Authentication Failed!" });
+    res.status(401).send({ error: "Authentication Failed!" });
   }
 };
 

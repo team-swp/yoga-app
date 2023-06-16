@@ -118,6 +118,11 @@ function Profile() {
       updateUser({ avatar: url });
     }
   };
+  // if (user.avatar) {
+  //   const { url } = getAvatarToAWS({imageName:user._id})
+  //   setFile(url);
+  //   updateUser({avatar:url})
+  // }
   const onUpload = async (e) => {
     const avatar = e.target.files[0];
     if (avatar) {

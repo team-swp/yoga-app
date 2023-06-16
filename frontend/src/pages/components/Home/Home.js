@@ -8,6 +8,8 @@ import { itemData2 } from "./ClassList";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getCourse } from "../../../helper/courseAPI";
+import { useDispatch } from "react-redux";
+import { setCourseId } from "../../../redux/actions";
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +20,9 @@ function Home() {
     async function fetchData() {
       try {
         const response = await getCourse();
-        setCourseList(response.data);
+        setCourseList(
+          response.data.filter((course) => course.status && course.meta_data)
+        );
       } catch (error) {
         console.log(error);
       }
@@ -35,6 +39,13 @@ function Home() {
     threshold: 0,
     rootMargin: "-100px",
   });
+
+  const dispatch = useDispatch();
+
+  const handleCourseClick = (courseId) => {
+    dispatch(setCourseId(courseId));
+  };
+
   return (
     <div>
       <Header />
@@ -43,7 +54,7 @@ function Home() {
           <source src="/video.mp4" type="video/mp4" />
         </video>
         <div className={cx("text-in-video")}>
-          <h1 className={cx("text-in-video_header")}> IN STUDIO</h1>
+          <h1 className={cx("text-in-video_header")}>IN STUDIO</h1>
           <p>
             Transform your body, mind and heart with Reformer Pilates & Mat
             classes at one of our seven London studios.
@@ -71,19 +82,21 @@ function Home() {
                 variant="h4"
                 sx={{ letterSpacing: "1px", fontWeight: "bold" }}
               >
-                OUR CLASS
+                OUR FAVORITE CLASS
                 <Typography variant="subtitle1" sx={{ mt: 3 }}>
                   Inspired by the core principles of Pilates and the love of
                   movement, our classes are designed to shift your energy and
                   create long-lasting strength from within.
                 </Typography>
-                <Button
-                  color="inherit"
-                  variant="outlined"
-                  sx={{ borderRadius: "50px" }}
-                >
-                  Discovery more
-                </Button>
+                <Link to="/courses">
+                  <Button
+                    color="inherit"
+                    variant="outlined"
+                    sx={{ borderRadius: "50px" }}
+                  >
+                    Discovery more
+                  </Button>
+                </Link>
               </Typography>
             </div>
           </Grid>
@@ -94,7 +107,10 @@ function Home() {
             >
               {courseList.map((course) => (
                 <div key={course._id} className={cx("class-item")}>
-                  <Link to={`course/${course._id}`}>
+                  <Link
+                    to="/course"
+                    onClick={() => handleCourseClick(course._id)}
+                  >
                     <div className={cx("class-img")}>
                       <img src={course.images[0]} alt={course.coursename} />
                     </div>
