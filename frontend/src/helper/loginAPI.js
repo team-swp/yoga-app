@@ -99,9 +99,22 @@ export async function updateUser(response) {
   }
 }
 
+export async function updateUserPass(response) {
+  try {
+    console.log(response);
+    const token = localStorage.getItem("token");
+    const data = await axios.patch("/api/accountsPassword", response, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error: "Couldn't Update Profile...!" + error });
+  }
+}
+
 export async function updateUserForStaff(response) {
   try {
-    const token =  localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     const data = await axios.patch("/api/staff/account/update", response, {
       headers: { Authorization: `Bearer ${token}` },
     });

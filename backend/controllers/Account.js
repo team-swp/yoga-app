@@ -39,15 +39,13 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
 
 module.exports.getAccountPaging = async (req, res) => {
   try {
-<<<<<<< HEAD
     const pagingPayload = await pagingnation(
       req.query.page,
       req.query.limit,
-      Account
+      Account,
+      req.query.q,
+      "username"
     );
-=======
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Account,req.query.q,'username')
->>>>>>> 433704ba9b2413b46b8a74b338065575a2973096
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -96,6 +94,7 @@ module.exports.update = async (req, res) => {
     res.account.username = req.body.username;
   }
   if (req.body.password != null) {
+    console.log(req.body.password);
     bcrypt.hash(req.body.password, 10).then(async (hashedPassword) => {
       res.account.password = hashedPassword;
 
@@ -108,6 +107,7 @@ module.exports.update = async (req, res) => {
       //   })()
       //  }
       // );
+      console.log(res.account, "123");
     });
   }
   if (req.body.phone != null) {
@@ -119,11 +119,35 @@ module.exports.update = async (req, res) => {
   if (req.body.meta_data != null) {
     res.account.meta_data = req.body.meta_data;
   }
-
   try {
     const updateUser = await res.account.save();
+    console.log(updateUser, "132233");
     console.log(req.body.password);
     res.json(updateUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.updatePassword = async (req, res) => {
+  try {
+    bcrypt.hash(req.body.password, 10).then(async (hashedPassword) => {
+      res.account.password = hashedPassword;
+
+      const updateUser = await res.account.save();
+
+      res.json(updateUser);
+      //  Account.findOneAndUpdate({ email: user.email },{ password: hashedPassword },{
+      //   run: (async function (err, data) {
+      //     if (err) throw err;
+      //     req.app.locals.resetSession = false; // reset session
+      //     await user.save();
+      //     return res.status(201).send({ msg: "Record Updated...!" });
+      //   })()
+      //  }
+      // );
+      console.log(res.account, "123");
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -254,9 +278,8 @@ module.exports.updateRoleAccount = async (req, res) => {
   }
 };
 
-
 module.exports.updateAccountForStaff = async (req, res) => {
-  const { _id} = req.body;
+  const { _id } = req.body;
 
   try {
     // Find the user by _id
@@ -279,7 +302,7 @@ module.exports.updateAccountForStaff = async (req, res) => {
     if (req.body.meta_data != null) {
       account.meta_data = req.body.meta_data;
     }
-  
+
     try {
       const updateUser = await account.save();
       res.json(updateUser);

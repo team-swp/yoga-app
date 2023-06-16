@@ -8,6 +8,7 @@ import {
   authenticatePassword,
   getPasswordCurr,
   updateUser,
+  updateUserPass,
 } from "../../../helper/loginAPI";
 import { userSelector } from "../../../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,9 +50,10 @@ function Reset() {
                 .compare(values.password, isOldPassword.data.password)
                 .then((isSame) => {
                   if (!isSame) {
-                    let updatePromise = updateUser({
+                    let updatePromise = updateUserPass({
                       password: values.password,
                     });
+                    console.log(values.password);
                     toast.promise(updatePromise, {
                       loading: "Updating...",
                       success: <b>Update Successfully...!</b>,
