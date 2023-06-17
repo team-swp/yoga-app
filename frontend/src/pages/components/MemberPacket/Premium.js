@@ -52,7 +52,6 @@ function Premium() {
           </Typography>
         </div>
         <div>
-          {" "}
           <Typography className="font-bold" variant="h5">
             Tải 30 bài hát và nghe nhạc thỏa thích, không quảng cáo trên 1 thiết
             bị di động
@@ -125,13 +124,13 @@ function Premium() {
 
       <div
         id="premium_packet"
-        className="flex flex-col justify-center justify-items-center items-center"
+        className="py-20 flex flex-col justify-center justify-items-center items-center"
       >
         <div>
-          <Typography variant="h4">Chọn gói Premium của bạn</Typography>
+          <Typography style={{fontWeight:700}} variant="h4">Chọn gói Premium của bạn</Typography>
         </div>
         <div>
-          <Typography variant="h6">
+          <Typography variant="body1" >
             Nghe không giới hạn trên điện thoại, loa và các thiết bị khác.
           </Typography>
         </div>
