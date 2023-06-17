@@ -4,18 +4,18 @@ import Footer from "../Footer/Footer";
 import yogaGif from "../../../assets/yoga-2.gif";
 import styles from "./premium.module.css";
 import { Typography } from "@mui/material";
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 function Premium() {
   return (
     <>
       <Navigation />
       <div
         style={{ height: "500px" }}
-        className="w-full bg-current flex justify-center justify-items-center items-center gap-20"
+        className="w-full bg-stone-400 flex justify-center justify-items-center items-center gap-20"
       >
         <div className="w-4/12 h-full text-white flex flex-col flex-wrap justify-center gap-6">
           <div>
-            <Typography className="font-bold" nowrap={false} variant="h4">
+            <Typography style={{fontWeight:'900'}} className="font-extrabold" nowrap={false} variant="h4">
               59,000₫ cho 4 tháng dùng gói Premium
             </Typography>
           </div>
@@ -45,14 +45,13 @@ function Premium() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center justify-items-center items-center">
+      <div style={{padding:'80px', color:'white'}} className="bg-stone-950 flex flex-col justify-center justify-items-center items-center gap-10">
         <div>
-          <Typography className="font-bold" nowrap={true} variant="h4">
+          <Typography style={{fontWeight:'900'}} className="font-bold" nowrap={true} variant="h4">
             Giới thiệu gói Premium Mini
           </Typography>
         </div>
         <div>
-          {" "}
           <Typography className="font-bold" variant="h5">
             Tải 30 bài hát và nghe nhạc thỏa thích, không quảng cáo trên 1 thiết
             bị di động
@@ -64,36 +63,85 @@ function Premium() {
         </div>
         <div>
           <a>
-            <Typography variant="caption">Áp dụng điều khoản và điều kiện</Typography>
+            <Typography className="underline" variant="caption" >
+              Áp dụng điều khoản và điều kiện
+            </Typography>
           </a>
         </div>
       </div>
 
-      <div className="bg-cyan-600 flex flex-col justify-center justify-items-center items-center">
-        <div><Typography variant="h4">Lý do dùng gói Premium?</Typography></div>
-        <div className="flex justify-center justify-items-center items-center">
-          <div>
-              <div className=""><SelfImprovementIcon  style={{fontSize:'100px'}}/></div>
-              <div><Typography>title</Typography></div>
+      <div className="bg-white flex flex-col justify-center justify-items-center items-center py-20">
+        <div style={{marginBottom:'5%'}}>
+          <Typography style={{fontWeight:'900'}} variant="h4">Lý do dùng gói Premium?</Typography>
+        </div>
+        <div className="flex justify-center justify-items-center items-center gap-40">
+          <div className="flex flex-col justify-center justify-items-center items-center gap-4">
+            <div className={styles.iconWhy}>
+              <SelfImprovementIcon style={{ fontSize: "100px" }} />
+            </div>
+            <div>
+              <Typography className={styles.title1}>title</Typography>
+            </div>
+            <div >
+              <Typography className={styles.title2}>title</Typography>
+            </div>
           </div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
+          <div className="flex flex-col justify-center justify-items-center items-center gap-4">
+            <div className={styles.iconWhy}>
+              <SelfImprovementIcon style={{ fontSize: "100px" }} />
+            </div>
+            <div>
+              <Typography className={styles.title1}>title</Typography>
+            </div>
+            <div >
+              <Typography className={styles.title2}>title</Typography>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center justify-items-center items-center gap-4">
+            <div className={styles.iconWhy}>
+              <SelfImprovementIcon style={{ fontSize: "100px" }} />
+            </div>
+            <div>
+              <Typography className={styles.title1}>title</Typography>
+            </div>
+            <div >
+              <Typography className={styles.title2}>title</Typography>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center justify-items-center items-center gap-4">
+            <div className={styles.iconWhy}>
+              <SelfImprovementIcon style={{ fontSize: "100px" }} />
+            </div>
+            <div>
+              <Typography className={styles.title1}>title</Typography>
+            </div>
+            <div >
+              <Typography className={styles.title2}>title</Typography>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center justify-items-center items-center">
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div
-          id="premium_packet"
-          className="flex justify-center justify-items-center items-center"
-        >
+
+      <div
+        id="premium_packet"
+        className="py-20 flex flex-col justify-center justify-items-center items-center"
+      >
+        <div>
+          <Typography style={{fontWeight:700}} variant="h4">Chọn gói Premium của bạn</Typography>
+        </div>
+        <div>
+          <Typography variant="body1" >
+            Nghe không giới hạn trên điện thoại, loa và các thiết bị khác.
+          </Typography>
+        </div>
+        <div>logo payment</div>
+        <div className="flex  justify-center justify-items-center items-center">
           <div>1</div>
           <div>2</div>
           <div>3</div>
         </div>
       </div>
+
       <Footer />
     </>
   );

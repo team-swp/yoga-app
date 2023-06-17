@@ -443,9 +443,10 @@ module.exports.haveDonePayment = (req, res) => {
   });
   const { username, userEmail, text, subject, result_id } = req.user;
   // body of the email
+var modifiedUsername = username.replace(/\+/g, ' ');
   var email = {
     body: {
-      name: username || "No Name",
+      name: modifiedUsername || "No Name",
       intro:
         text ||
         "Welcome to Yoga HeartBeat! We're very excited to have you join with us.",

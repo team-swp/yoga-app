@@ -32,6 +32,7 @@ html {
   background-color: white;
   padding: 10px 30px;
   border-radius: 25px;
+  font-weight: bold;
 }
 
 .tryByDay:hover{
@@ -44,9 +45,24 @@ html {
   background-color: white;
   padding: 10px 30px;
   border-radius: 25px;
+  font-weight: bold;
 }
 
 .tryByWeek:hover{
   transform: scale(1.05) perspective(0px);
   cursor: pointer;
+}
+
+.iconWhy{
+  background-color: #F5EBEB;
+  padding: 20px;
+  border-radius: 50%;
+}
+
+.title1{
+font-weight: 700 !important;
+}
+
+.title2{
+
 }
