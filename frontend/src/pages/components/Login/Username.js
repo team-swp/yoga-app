@@ -28,7 +28,7 @@ function Username() {
         res.data.data = Object.assign(res.data.data, { token });
         dispatch(addUserLogin(res.data.data));
         dispatch(setDataLogin(res.data.data));
-        navigate("/profile");
+        navigate("/");
       })
       .catch((res) => {
         navigate("/");
