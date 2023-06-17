@@ -1,0 +1,10 @@
+.\src\pages\components\Login\Recovery.js:23:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\ManageCourses\ManageCourses.js:75:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\ManageCourses\ManageCourses.js:82:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\Profile\PasswordGoogle.js:23:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\Profile\PasswordReset.js:43:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:75:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:82:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\StaffManage\ManageMember\CustomeStatus.js:4:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManageMember\CustomeStatus.js:6:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManageMember\CustomeStatus.js:8:	NoElseReturn:	The else block is unnecessary

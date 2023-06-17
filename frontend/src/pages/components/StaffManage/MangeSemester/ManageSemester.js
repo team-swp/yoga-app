@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "@mui/material";
-import Header from "../../Header/Header";
-import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
 import styles from "./ManageSemester.css";
 import classNames from "classnames/bind";

@@ -1,14 +1,7 @@
-let lastParsedDayOfWeek = -1; // initialize to an impossible value
-
 export function parseTime(timeStr, days, startDate, endDate) {
   const [hourMinuteStr, amPmStr] = timeStr.split(" ");
   const [hour, minute] = hourMinuteStr.split(":");
   let dayOfWeek = startDate.getDay();
-
-  // update lastParsedDayOfWeek
-  if (startDate < new Date()) {
-    lastParsedDayOfWeek = startDate.getDay();
-  }
 
   const daysInWeek = 7;
   let targetDays;

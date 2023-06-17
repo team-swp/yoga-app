@@ -68,7 +68,14 @@ function ManageMember() {
       return { username, email, status, bookingDate, isMember, memberId };
     });
 
-  function handleToggle(isMember, memberId) {
+  function handleToggle(isMember, memberId, statusPaymented) {
+    console.log(statusPaymented);
+
+    if (statusPaymented !== 10) {
+      toast.error("Update failed");
+      return;
+    }
+
     const booking = bookings.find((booking) => booking.member._id === memberId);
     const oldMetaData = JSON.parse(booking.member.meta_data);
     const newMetaData = { ...oldMetaData, isMember };
@@ -77,8 +84,7 @@ function ManageMember() {
     updateUserForStaff(response)
       .then((res) => {
         console.log(res.data);
-        toast.success("Update thành công");
-        // Cập nhật lại danh sách booking
+        toast.success("Update succesfully");
         const updatedBookings = bookings.map((bookingItem) =>
           bookingItem.member._id === memberId
             ? {
@@ -94,7 +100,7 @@ function ManageMember() {
       })
       .catch((error) => {
         console.error(error);
-        toast.error("Lỗi khi update");
+        toast.error("Update failed");
       });
   }
 
@@ -133,7 +139,11 @@ function ManageMember() {
                         checked={booking.isMember}
                         onChange={(event) => {
                           setMemberId(booking.memberId);
-                          handleToggle(event.target.checked, booking.memberId);
+                          handleToggle(
+                            event.target.checked,
+                            booking.memberId,
+                            booking.status
+                          );
                         }}
                       />
                     </TableCell>
