@@ -27,11 +27,15 @@ function ManageMember() {
   const moment = require("moment");
 
   const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+
   const [bookings, setBookings] = useState([]);
+
+  const [newTotalPage, setNewTotalPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [totalPage, setTotalPage] = useState(0);
 
   async function fetchData() {
     try {
@@ -113,6 +117,15 @@ function ManageMember() {
             : bookingItem
         );
         setBookings(updatedBookings);
+
+        if (isSearching) {
+          const updatedSearchResults = searchResults.map((searchResultItem) =>
+            searchResultItem.memberId === memberId
+              ? { ...searchResultItem, isMember }
+              : searchResultItem
+          );
+          setSearchResults(updatedSearchResults);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -138,10 +151,20 @@ function ManageMember() {
     setCurrentPage(parseInt(event.target.value));
   }
 
+  const searchProps = {
+    newBookings,
+    setSearchResults,
+    setNewTotalPage,
+    setCurrentPage,
+    perPage,
+    setIsSearching,
+  };
+
   return (
     <div>
       <Container>
-        <Search newBookings={newBookings} setSearchResults={setSearchResults} />
+        <Search {...searchProps} />
+
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper} sx={{ height: "500px", my: 2 }}>
           <Table>
@@ -190,8 +213,14 @@ function ManageMember() {
             disabled={page === 1}
             endIcon={<KeyboardArrowLeftIcon />}
           />
-          <Select value={currentPage} onChange={handlePageChange} sx={{}}>
-            {[...Array(totalPage)].map((_, index) => (
+          <Select
+            value={searchResults.length > 0 ? currentPage : currentPage}
+            onChange={handlePageChange}
+            sx={{}}
+          >
+            {[
+              ...Array(searchResults.length > 0 ? newTotalPage : totalPage),
+            ].map((_, index) => (
               <MenuItem key={index + 1} value={index + 1}>
                 {index + 1}
               </MenuItem>
@@ -199,7 +228,9 @@ function ManageMember() {
           </Select>
           <Button
             onClick={handleNext}
-            disabled={page === totalPage}
+            disabled={
+              page === (searchResults.length > 0 ? newTotalPage : totalPage)
+            }
             startIcon={<KeyboardArrowRightIcon />}
           />
         </Box>

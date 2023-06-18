@@ -4,11 +4,31 @@ import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import { Toaster, toast } from "react-hot-toast";
 
-function Search({ newBookings, setSearchResults }) {
+function Search(props) {
+  const {
+    newBookings,
+    setSearchResults,
+    setNewTotalPage,
+    setCurrentPage,
+    perPage,
+    setIsSearching,
+  } = props;
+
   const [searchKeyword, setSearchKeyword] = useState("");
 
   const handleSearchChange = (event) => {
     setSearchKeyword(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchKeyword("");
+    setSearchResults([]);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      handleSearch();
+    }
   };
 
   const handleSearch = () => {
@@ -21,12 +41,20 @@ function Search({ newBookings, setSearchResults }) {
         booking.username.toLowerCase().includes(searchKeyword.toLowerCase()) ||
         booking.email.toLowerCase().includes(searchKeyword.toLowerCase())
     );
-
+    setIsSearching(true);
     setSearchResults(searchBookings);
 
     if (searchBookings.length === 0) {
       toast.error("Can't found!");
     }
+
+    // Tính toán lại totalPage dựa trên kết quả tìm kiếm
+    const newTotalPage = Math.ceil(searchBookings.length / perPage);
+    setNewTotalPage(newTotalPage);
+    setCurrentPage(1);
+
+    // Thông báo về giá trị mới của totalPage
+    setNewTotalPage(newTotalPage);
   };
 
   useEffect(() => {
@@ -51,6 +79,7 @@ function Search({ newBookings, setSearchResults }) {
         variant="standard"
         value={searchKeyword}
         onChange={handleSearchChange}
+        onKeyDown={handleKeyDown}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -61,7 +90,7 @@ function Search({ newBookings, setSearchResults }) {
             <InputAdornment position="end">
               {searchKeyword && (
                 <ClearIcon
-                  onClick={() => setSearchKeyword("")}
+                  onClick={handleClearSearch}
                   sx={{ cursor: "pointer" }}
                 />
               )}
