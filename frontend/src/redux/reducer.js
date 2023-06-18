@@ -30,19 +30,13 @@ const rootReducer = (state = initState, action) => {
     }
 
     case "login/setDataLogin": {
-<<<<<<< HEAD
       const { _id, token, username, phone, avatar, email, meta_data, role } =
         action.payload;
       if (!localStorage.getItem("token")) {
-=======
-      const { _id, token, username, phone, avatar,email,meta_data,role} = action.payload;
-      if(!localStorage.getItem('token')){
->>>>>>> thienNH
         localStorage.setItem("token", token);
       }
       return {
         ...state,
-<<<<<<< HEAD
         user: {
           ...state.user,
           _id,
@@ -53,9 +47,6 @@ const rootReducer = (state = initState, action) => {
           meta_data,
           role,
         },
-=======
-        user: { ...state.user, _id, username, phone, avatar,email ,meta_data,role},
->>>>>>> thienNH
       };
     }
     case "login/updateData": {

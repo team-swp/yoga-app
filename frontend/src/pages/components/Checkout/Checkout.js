@@ -43,10 +43,6 @@ function Checkout() {
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
   const [open, setOpen] = useState(true);
-<<<<<<< HEAD
-
-=======
->>>>>>> thienNH
   const handleRadioChange = () => {
     setIsSelected2(false);
     setIsSelected(true);

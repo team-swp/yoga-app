@@ -1,6 +1,10 @@
 import {
+  Box,
+  Button,
   Container,
+  MenuItem,
   Paper,
+  Select,
   Switch,
   Table,
   TableBody,
@@ -10,25 +14,37 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getBooking } from "../../../../helper/bookingAPI";
+import { getBookingWithPaging } from "../../../../helper/bookingAPI";
 import { getPayment } from "../../../../helper/paymentAPI";
 import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
 import StatusButton from "./CustomeStatus";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Search from "./Search";
 import { Toaster, toast } from "react-hot-toast";
 
 function ManageMember() {
   const moment = require("moment");
 
+  const [searchResults, setSearchResults] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [memberId, setMemberId] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(5);
+  const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
 
   async function fetchData() {
     try {
       const [bookingsResponse, paymentsResponse, membersResponse] =
-        await Promise.all([getBooking(), getPayment(), getMember()]);
+        await Promise.all([
+          getBookingWithPaging(currentPage, perPage),
+          getPayment(),
+          getMember(),
+        ]);
 
-      const updatedBookings = bookingsResponse.data.map((booking) => {
+      const { pageCount, pageNum } = bookingsResponse.data.pagination;
+
+      const updatedBookings = bookingsResponse.data.items.map((booking) => {
         const payment = paymentsResponse.data.find(
           (payment) => payment.booking_id === booking._id
         );
@@ -44,6 +60,8 @@ function ManageMember() {
       });
 
       setBookings(updatedBookings);
+      setPage(pageNum);
+      setTotalPage(pageCount);
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +69,7 @@ function ManageMember() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage, perPage]);
 
   const newBookings = bookings
     .filter((booking) => {
@@ -69,8 +87,6 @@ function ManageMember() {
     });
 
   function handleToggle(isMember, memberId, statusPaymented) {
-    console.log(statusPaymented);
-
     if (statusPaymented !== 10) {
       toast.error("Update failed");
       return;
@@ -104,7 +120,23 @@ function ManageMember() {
       });
   }
 
-  const [searchResults, setSearchResults] = useState([]);
+  function handlePrevious() {
+    setCurrentPage((p) => {
+      if (p === 1) return p;
+      return p - 1;
+    });
+  }
+
+  function handleNext() {
+    setCurrentPage((p) => {
+      if (p === totalPage) return p;
+      return parseInt(p) + 1;
+    });
+  }
+
+  function handlePageChange(event) {
+    setCurrentPage(parseInt(event.target.value));
+  }
 
   return (
     <div>
@@ -138,7 +170,6 @@ function ManageMember() {
                       <Switch
                         checked={booking.isMember}
                         onChange={(event) => {
-                          setMemberId(booking.memberId);
                           handleToggle(
                             event.target.checked,
                             booking.memberId,
@@ -153,6 +184,25 @@ function ManageMember() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Box>
+          <Button
+            onClick={handlePrevious}
+            disabled={page === 1}
+            endIcon={<KeyboardArrowLeftIcon />}
+          />
+          <Select value={currentPage} onChange={handlePageChange} sx={{}}>
+            {[...Array(totalPage)].map((_, index) => (
+              <MenuItem key={index + 1} value={index + 1}>
+                {index + 1}
+              </MenuItem>
+            ))}
+          </Select>
+          <Button
+            onClick={handleNext}
+            disabled={page === totalPage}
+            startIcon={<KeyboardArrowRightIcon />}
+          />
+        </Box>
       </Container>
     </div>
   );

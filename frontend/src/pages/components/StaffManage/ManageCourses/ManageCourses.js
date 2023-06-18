@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -15,10 +14,8 @@ import {
   IconButton,
   Switch,
   Radio,
-} from '@mui/material';
-import './ManageCourses.css'
-import Header from "../../Header/Header";
-import Footer from "../../Footer/Footer";
+} from "@mui/material";
+import "./ManageCourses.css";
 import { Link } from "react-router-dom";
 import { updateCourse } from "../../../../helper/courseAPI";
 import axios from "axios";
@@ -28,14 +25,14 @@ function ManageCourses() {
   const [searchResults, setSearchResults] = useState([]);
   const [courses, setCourses] = useState([]);
   const [updatedCourse, setUpdatedCourse] = useState({});
-  const [totalCourse, setTotalCourse] = useState(0)
+  const [totalCourse, setTotalCourse] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
-  const [totalPage, setTotalPage] = useState(0)
-  const [page, setPage] = useState(0)
-  const [schedule, setSchedule] = useState([])
+  const [totalPage, setTotalPage] = useState(0);
+  const [page, setPage] = useState(0);
+  const [schedule, setSchedule] = useState([]);
   const [statusFilter, setStatusFilter] = useState("both");
-  const [courseList, setcourseList] = useState([])
+  const [courseList, setcourseList] = useState([]);
 
   //thay đổi status//////////////////////////////////////
 
@@ -97,16 +94,18 @@ function ManageCourses() {
     const filteredCourses = courseList.filter(
       (course) =>
         course.coursename.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        course.price.toString().toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        (course.status ? "Enabled" : "Disabled").toLowerCase() === (searchKeyword.toLowerCase())
+        course.price
+          .toString()
+          .toLowerCase()
+          .includes(searchKeyword.toLowerCase()) ||
+        (course.status ? "Enabled" : "Disabled").toLowerCase() ===
+          searchKeyword.toLowerCase()
     );
     setSearchResults(filteredCourses);
     // Kiểm tra nếu không có kết quả tìm kiếm
     if (filteredCourses.length === 0) {
-      toast.error('Can not found!')
-
+      toast.error("Can not found!");
     } else {
-
     }
   };
 
@@ -115,14 +114,15 @@ function ManageCourses() {
     if (searchKeyword === "") {
       setSearchResults([]);
     }
-
   }, [searchKeyword]);
   ///////////////////////////////////////////////////
 
   useEffect(() => {
     async function fetchSemesters() {
       try {
-        const response = await axios.get("http://localhost:3001/api/coursesPaging/get");
+        const response = await axios.get(
+          "http://localhost:3001/api/coursesPaging/get"
+        );
         const semesterData = response.data.items;
         console.log(response.data);
         setcourseList(semesterData);
@@ -139,50 +139,41 @@ function ManageCourses() {
     fetchCourses();
   }, [updatedCourse, courseList, currentPage]);
 
-
   useEffect(() => {
-
     async function fecthScheduleList() {
       try {
-        const requestUrl = 'http://localhost:3001/api/semester/get'
-        const response = await fetch(requestUrl)
-        const responseJSON = await response.json()
-        console.log(responseJSON)
-        setSchedule(responseJSON)
-        console.log(schedule)
+        const requestUrl = "http://localhost:3001/api/semester/get";
+        const response = await fetch(requestUrl);
+        const responseJSON = await response.json();
+        console.log(responseJSON);
+        setSchedule(responseJSON);
+        console.log(schedule);
       } catch (error) {
-        console.log('Failed')
+        console.log("Failed");
       }
     }
     fecthScheduleList();
-  }, [])
+  }, []);
 
   //////////////////////// pagination
-
 
   async function fetchCourses() {
     const requestUrl = `http://localhost:3001/api/coursespaging/get?page=${currentPage}&limit=${perPage}&status=${statusFilter}`;
     const response = await fetch(requestUrl);
     const responseJSON = await response.json();
     const { items } = responseJSON;
-    console.log(responseJSON);
     const { pagination } = responseJSON;
-    console.log(pagination.pageCount);
-    setTotalPage(pagination.pageCount)
+    setTotalPage(pagination.pageCount);
     setCourses(items);
-    setTotalCourse(pagination.count)
-    setPage(pagination.pageNum)
-    console.log(pagination.pageNum);
-
+    setTotalCourse(pagination.count);
+    setPage(pagination.pageNum);
   }
-
 
   return (
     <div>
-
       <Container>
         <Toaster position="top-center" reverseOrder={false} />
-        <div style={{ float: 'right', marginTop: '15px' }}>
+        <div style={{ float: "right", marginTop: "15px" }}>
           <Button
             variant="contained"
             color="success"
@@ -192,7 +183,14 @@ function ManageCourses() {
             Add new course
           </Button>
         </div>
-        <div style={{ marginTop: '10px', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{
+            marginTop: "10px",
+            marginBottom: "16px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <TextField
             label="..."
             variant="outlined"
@@ -204,7 +202,12 @@ function ManageCourses() {
                   {searchKeyword && (
                     <IconButton
                       onClick={() => setSearchKeyword("")}
-                      style={{ marginTop: '5px', padding: 0, color: 'gray', fontSize: '20px' }}
+                      style={{
+                        marginTop: "5px",
+                        padding: 0,
+                        color: "gray",
+                        fontSize: "20px",
+                      }}
                     >
                       clear
                     </IconButton>
@@ -212,13 +215,13 @@ function ManageCourses() {
                 </InputAdornment>
               ),
             }}
-            style={{ marginRight: '8px' }}
+            style={{ marginRight: "8px" }}
           />
           <Button
             variant="contained"
             color="info"
             onClick={handleSearch}
-            style={{ marginLeft: '8px' }}
+            style={{ marginLeft: "8px" }}
           >
             Search
           </Button>
@@ -256,44 +259,45 @@ function ManageCourses() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {(searchResults.length > 0 ? searchResults : courses).map((courseItem, index) => {
-                const semester = schedule.find((item2) => item2._id === courseItem.semester_id)
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{courseItem.coursename}</TableCell>
-                    <TableCell>{courseItem.price}</TableCell>
-                    <TableCell>
-                      {semester ? semester.semestername : 'N/A'}
-                    </TableCell>
-                    <TableCell>
-
-                      <Switch
-
-                        checked={courseItem.status}
-                        onChange={(event) => handleToggle(event, courseItem)}
-                        color={courseItem.status ? 'error' : 'error'}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color="warning"
-                        component={Link}
-                        to={`/updatecourse/${courseItem._id}`}
-                      >
-                        Update
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
+              {(searchResults.length > 0 ? searchResults : courses).map(
+                (courseItem, index) => {
+                  const semester = schedule.find(
+                    (item2) => item2._id === courseItem.semester_id
+                  );
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{courseItem.coursename}</TableCell>
+                      <TableCell>{courseItem.price}</TableCell>
+                      <TableCell>
+                        {semester ? semester.semestername : "N/A"}
+                      </TableCell>
+                      <TableCell>
+                        <Switch
+                          checked={courseItem.status}
+                          onChange={(event) => handleToggle(event, courseItem)}
+                          color={courseItem.status ? "error" : "error"}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="warning"
+                          component={Link}
+                          to={`/updatecourse/${courseItem._id}`}
+                        >
+                          Update
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
+              )}
             </TableBody>
           </Table>
         </TableContainer>
 
-
-        <footer style={{ marginTop: '10px', marginBottom: '10px' }}>
+        <footer style={{ marginTop: "10px", marginBottom: "10px" }}>
           <button
             disabled={page === 1}
             onClick={handlePrevious}
@@ -330,7 +334,7 @@ function ManageCourses() {
               })}
           </select>
           <button
-            disabled={page == totalPage}
+            disabled={page === totalPage}
             onClick={handleNext}
             style={{
               padding: "0.5rem 1rem",
@@ -342,10 +346,8 @@ function ManageCourses() {
             Next
           </button>
         </footer>
-
-      </Container >
-      <Footer />
-    </div >
+      </Container>
+    </div>
   );
 }
 

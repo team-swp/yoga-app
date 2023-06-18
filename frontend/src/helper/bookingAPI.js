@@ -11,6 +11,13 @@ export async function getBooking() {
   });
 }
 
+export async function getBookingWithPaging(currentPage, perPage) {
+  return await getApi({
+    apiPath: `/api/bookingsPaging/get?page=${currentPage}&limit=${perPage}`,
+    errorMessage: "Cannot Get Booking",
+  });
+}
+
 export async function addBooking(respone) {
   //respone là 1 object nhận giá trị cần để add, add thì ko cần id
   return await addApi(respone, {
