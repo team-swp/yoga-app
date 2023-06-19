@@ -36,10 +36,6 @@ const rootReducer = (state = initState, action) => {
       }
       return {
         ...state,
-<<<<<<< HEAD
-=======
-
->>>>>>> 8bdb7bd0c4794df439b0f51f30c15b84d618ca94
         user: {
           ...state.user,
           _id,
@@ -81,12 +77,10 @@ const rootReducer = (state = initState, action) => {
       localStorage.setItem("courseId", courseId);
       return { ...state, courseId };
     }
-    
+
     case "payment/premiumData": {
-      const {premium_id,paymentAmount} = action.payload
-      return { ...state ,
-      premium:{premium_id,paymentAmount}
-      };
+      const { premium_id, paymentAmount } = action.payload;
+      return { ...state, premium: { premium_id, paymentAmount } };
     }
     default:
       return state;

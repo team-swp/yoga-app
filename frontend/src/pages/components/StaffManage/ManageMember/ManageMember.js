@@ -14,8 +14,14 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getBookingWithPaging } from "../../../../helper/bookingAPI";
-import { getPayment } from "../../../../helper/paymentAPI";
+import {
+  getBooking,
+  getBookingWithPaging,
+} from "../../../../helper/bookingAPI";
+import {
+  getPayment,
+  getPaymentWithPaging,
+} from "../../../../helper/paymentAPI";
 import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
 import StatusButton from "./CustomeStatus";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -29,8 +35,7 @@ function ManageMember() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  const [bookings, setBookings] = useState([]);
-
+  const [payments, setPayments] = useState([]);
   const [newTotalPage, setNewTotalPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,31 +44,31 @@ function ManageMember() {
 
   async function fetchData() {
     try {
-      const [bookingsResponse, paymentsResponse, membersResponse] =
+      const [paymentsResponse, bookingsResponse, membersResponse] =
         await Promise.all([
-          getBookingWithPaging(currentPage, perPage),
-          getPayment(),
+          getPaymentWithPaging(currentPage, perPage),
+          getBooking(),
           getMember(),
         ]);
 
-      const { pageCount, pageNum } = bookingsResponse.data.pagination;
+      const { pageCount, pageNum } = paymentsResponse.data.pagination;
 
-      const updatedBookings = bookingsResponse.data.items.map((booking) => {
-        const payment = paymentsResponse.data.find(
-          (payment) => payment.booking_id === booking._id
+      const updatedPayments = paymentsResponse.data.items.map((payment) => {
+        const bookings = bookingsResponse.data.find(
+          (booking) => payment.booking_id === booking._id
         );
 
-        const member = membersResponse.data.find(
-          (member) => member._id === booking.member_id
-        );
-
-        if (payment) {
-          return { ...booking, payment, member };
+        if (bookings) {
+          const member = membersResponse.data.find(
+            (member) => member._id === bookings.member_id
+          );
+          if (member) {
+            return { ...payment, bookings, member };
+          }
         }
-        return booking;
+        return payment;
       });
-
-      setBookings(updatedBookings);
+      setPayments(updatedPayments);
       setPage(pageNum);
       setTotalPage(pageCount);
     } catch (error) {
@@ -75,57 +80,82 @@ function ManageMember() {
     fetchData();
   }, [currentPage, perPage]);
 
-  const newBookings = bookings
-    .filter((booking) => {
-      return booking.payment && booking.member;
+  const newPayments = payments
+
+    .filter((payments) => {
+      return payments.bookings && payments.member;
     })
-    .map((booking) => {
-      const metaData = JSON.parse(booking.member.meta_data);
+    .map((payments) => {
+      const metaData = JSON.parse(payments.member.meta_data);
       const isMember = metaData.isMember;
-      const memberId = booking.member._id;
-      const bookingDate = moment(booking.booking_date).format("DD/MM/YY");
-      const { status } = booking.payment;
-      const { username, email } = booking.member;
+      const MemberDuration = metaData.MemberDuration;
+      const startDateMember = moment(metaData.startDateMember).format(
+        "DD/MM/YY"
+      );
 
-      return { username, email, status, bookingDate, isMember, memberId };
+      let expiredDate;
+
+      if (
+        typeof MemberDuration !== "undefined" &&
+        typeof MemberDuration !== "string"
+      ) {
+        expiredDate = moment(startDateMember, "DD/MM/YY")
+          .add(MemberDuration, "months")
+          .format("DD/MM/YY");
+      } else {
+        expiredDate = "Not Yet";
+      }
+
+      const memberId = payments.member._id;
+      const bookingDate = moment(payments.booking_date).format("DD/MM/YY");
+      const status = payments.status;
+      const { username, email } = payments.member;
+
+      return {
+        username,
+        email,
+        status,
+        bookingDate,
+        isMember,
+        startDateMember,
+        expiredDate,
+        memberId,
+      };
     });
-
-  function handleToggle(isMember, memberId, statusPaymented) {
+  function handleToggle(isMember, memberId, expiredDate, statusPaymented) {
     if (statusPaymented !== 10) {
       toast.error("Update failed");
       return;
     }
-
-    const booking = bookings.find((booking) => booking.member._id === memberId);
-    const oldMetaData = JSON.parse(booking.member.meta_data);
+    const payment = payments.find((payment) => payment.member._id === memberId);
+    console.log(payment);
+    const oldMetaData = JSON.parse(payment.member.meta_data);
     const newMetaData = { ...oldMetaData, isMember };
     const response = { _id: memberId, meta_data: JSON.stringify(newMetaData) };
-
     updateUserForStaff(response)
       .then((res) => {
         console.log(res.data);
         toast.success("Update succesfully");
-        const updatedBookings = bookings.map((bookingItem) =>
-          bookingItem.member._id === memberId
+        const updatedPayments = payments.map((paymentItem) =>
+          paymentItem.member._id === memberId
             ? {
-                ...bookingItem,
+                ...paymentItem,
                 member: {
-                  ...bookingItem.member,
+                  ...paymentItem.member,
                   meta_data: response.meta_data,
                 },
               }
-            : bookingItem
+            : paymentItem
         );
-        setBookings(updatedBookings);
-
-        if (isSearching) {
-          const updatedSearchResults = searchResults.map((searchResultItem) =>
-            searchResultItem.memberId === memberId
-              ? { ...searchResultItem, isMember }
-              : searchResultItem
-          );
-          setSearchResults(updatedSearchResults);
-        }
+        setPayments(updatedPayments);
+        //     if (isSearching) {
+        //       const updatedSearchResults = searchResults.map((searchResultItem) =>
+        //         searchResultItem.memberId === memberId
+        //           ? { ...searchResultItem, isMember }
+        //           : searchResultItem
+        //       );
+        //       setSearchResults(updatedSearchResults);
+        //     }
       })
       .catch((error) => {
         console.error(error);
@@ -155,19 +185,19 @@ function ManageMember() {
     setCurrentPage(parseInt(event.target.value));
   }
 
-  const searchProps = {
-    newBookings,
-    setSearchResults,
-    setNewTotalPage,
-    setCurrentPage,
-    perPage,
-    setIsSearching,
-  };
+  // const searchProps = {
+  //   newBookings,
+  //   setSearchResults,
+  //   setNewTotalPage,
+  //   setCurrentPage,
+  //   perPage,
+  //   setIsSearching,
+  // };
 
   return (
     <div>
       <Container>
-        <Search {...searchProps} />
+        {/* <Search {...searchProps} /> */}
 
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper} sx={{ height: "500px", my: 2 }}>
@@ -178,29 +208,34 @@ function ManageMember() {
                 <TableCell>User Name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Booking Date</TableCell>
+                <TableCell>startDate Member</TableCell>
+                <TableCell>Expired Date</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Enable/Disable</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {(searchResults.length > 0 ? searchResults : newBookings).map(
-                (booking, index) => (
+              {(searchResults.length > 0 ? searchResults : newPayments).map(
+                (payment, index) => (
                   <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{booking.username}</TableCell>
-                    <TableCell>{booking.email}</TableCell>
-                    <TableCell>{booking.bookingDate}</TableCell>
+                    <TableCell>{payment.username}</TableCell>
+                    <TableCell>{payment.email}</TableCell>
+                    <TableCell>{payment.bookingDate}</TableCell>
+                    <TableCell>{payment.startDateMember}</TableCell>
+                    <TableCell>{payment.expiredDate}</TableCell>
                     <TableCell>
-                      <StatusButton status={booking.status} />
+                      <StatusButton status={payment.status} />
                     </TableCell>
                     <TableCell>
                       <Switch
-                        checked={booking.isMember}
+                        checked={payment.isMember}
                         onChange={(event) => {
                           handleToggle(
                             event.target.checked,
-                            booking.memberId,
-                            booking.status
+                            payment.memberId,
+                            payment.expiredDate,
+                            payment.status
                           );
                         }}
                       />

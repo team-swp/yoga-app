@@ -2,11 +2,6 @@ const Account = require("../models/accounts");
 const Booking = require("../models/bookings");
 const Payment = require("../models/payments");
 const { pagingnation } = require("./Pagingnation");
-<<<<<<< HEAD
-module.exports.addBooking = async (req, res) => {
-  const { member_id, class_id, booking_date, status, meta_data } = req.body;
-  try {
-=======
 
 module.exports.addBooking = async (req, res) => {
   try {
@@ -20,7 +15,6 @@ module.exports.addBooking = async (req, res) => {
     }
     //check user trước nếu meta_data có isMember:true
     const { member_id, class_id, booking_date, status, meta_data } = req.body;
->>>>>>> 8bdb7bd0c4794df439b0f51f30c15b84d618ca94
     const booking = new Booking({
       member_id: req.account.userId,
       class_id,
@@ -52,17 +46,7 @@ module.exports.getBooking = async (req, res) => {
 
 module.exports.getBookingsPaging = async (req, res) => {
   try {
-<<<<<<< HEAD
-    const pagingPayload = await pagingnation(
-      req.query.page,
-      req.query.limit,
-      Booking,
-      req.query.q,
-      "member_id"
-    );
-=======
     const pagingPayload = await pagingnation(Booking, "member_id", req.query);
->>>>>>> 8bdb7bd0c4794df439b0f51f30c15b84d618ca94
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
