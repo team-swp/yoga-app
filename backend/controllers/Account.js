@@ -123,7 +123,7 @@ module.exports.update = async (req, res) => {
     const updateUser = await res.account.save();
     console.log(updateUser, "132233");
     console.log(req.body.password);
-    res.json(updateUser);
+    res.status(201).send(updateUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
