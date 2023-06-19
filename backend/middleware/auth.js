@@ -18,7 +18,7 @@ module.exports.Auth = async function (req, res, next) {
       throw new Error("Token has expired");
     }
     req.account = decodedToken; //chuyển qa cho thg tiếp theo
-    next();
+      next();
   } catch (error) {
     res.status(401).send({ error: "Authentication Failed!" });
   }

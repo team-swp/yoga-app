@@ -1,11 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navigation from "../Header/Navigation/Navigation";
 import Footer from "../Footer/Footer";
 import yogaGif from "../../../assets/yoga-2.gif";
 import styles from "./premium.module.css";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
+import PremiumOption from "./PremiumOption";
+import { getPremium } from "../../../helper/premiumAPI";
+import toast from "react-hot-toast";
 function Premium() {
+  const [premiums, setPremiums] = useState([]);
+  useEffect(() => {
+    let arr=[];
+    const premiumPromise = getPremium();
+    premiumPromise
+      .then((result) => {
+        result.data.map((item) => {
+          console.log(item);
+          if (item.status) {
+            arr.push(item);
+          }
+        });
+        setPremiums(arr);
+        console.log("1213", premiums);
+      })
+      .catch(() => {
+        toast.error("No premium option to show");
+      });
+  }, []);
   return (
     <>
       <Navigation />
@@ -15,7 +37,12 @@ function Premium() {
       >
         <div className="w-4/12 h-full text-white flex flex-col flex-wrap justify-center gap-6">
           <div>
-            <Typography style={{fontWeight:'900'}} className="font-extrabold" nowrap={false} variant="h4">
+            <Typography
+              style={{ fontWeight: "900" }}
+              className="font-extrabold"
+              nowrap={false}
+              variant="h4"
+            >
               59,000₫ cho 4 tháng dùng gói Premium
             </Typography>
           </div>
@@ -45,9 +72,17 @@ function Premium() {
         </div>
       </div>
 
-      <div style={{padding:'80px', color:'white'}} className="bg-stone-950 flex flex-col justify-center justify-items-center items-center gap-10">
+      <div
+        style={{ padding: "80px", color: "white" }}
+        className="bg-stone-950 flex flex-col justify-center justify-items-center items-center gap-10"
+      >
         <div>
-          <Typography style={{fontWeight:'900'}} className="font-bold" nowrap={true} variant="h4">
+          <Typography
+            style={{ fontWeight: "900" }}
+            className="font-bold"
+            nowrap={true}
+            variant="h4"
+          >
             Giới thiệu gói Premium Mini
           </Typography>
         </div>
@@ -63,7 +98,7 @@ function Premium() {
         </div>
         <div>
           <a>
-            <Typography className="underline" variant="caption" >
+            <Typography className="underline" variant="caption">
               Áp dụng điều khoản và điều kiện
             </Typography>
           </a>
@@ -71,8 +106,10 @@ function Premium() {
       </div>
 
       <div className="bg-white flex flex-col justify-center justify-items-center items-center py-20">
-        <div style={{marginBottom:'5%'}}>
-          <Typography style={{fontWeight:'900'}} variant="h4">Lý do dùng gói Premium?</Typography>
+        <div style={{ marginBottom: "5%" }}>
+          <Typography style={{ fontWeight: "900" }} variant="h4">
+            Lý do dùng gói Premium?
+          </Typography>
         </div>
         <div className="flex justify-center justify-items-center items-center gap-40">
           <div className="flex flex-col justify-center justify-items-center items-center gap-4">
@@ -82,7 +119,7 @@ function Premium() {
             <div>
               <Typography className={styles.title1}>title</Typography>
             </div>
-            <div >
+            <div>
               <Typography className={styles.title2}>title</Typography>
             </div>
           </div>
@@ -93,7 +130,7 @@ function Premium() {
             <div>
               <Typography className={styles.title1}>title</Typography>
             </div>
-            <div >
+            <div>
               <Typography className={styles.title2}>title</Typography>
             </div>
           </div>
@@ -104,7 +141,7 @@ function Premium() {
             <div>
               <Typography className={styles.title1}>title</Typography>
             </div>
-            <div >
+            <div>
               <Typography className={styles.title2}>title</Typography>
             </div>
           </div>
@@ -115,7 +152,7 @@ function Premium() {
             <div>
               <Typography className={styles.title1}>title</Typography>
             </div>
-            <div >
+            <div>
               <Typography className={styles.title2}>title</Typography>
             </div>
           </div>
@@ -127,18 +164,20 @@ function Premium() {
         className="py-20 flex flex-col justify-center justify-items-center items-center"
       >
         <div>
-          <Typography style={{fontWeight:700}} variant="h4">Chọn gói Premium của bạn</Typography>
+          <Typography style={{ fontWeight: 700 }} variant="h4">
+            Chọn gói Premium của bạn
+          </Typography>
         </div>
         <div>
-          <Typography variant="body1" >
+          <Typography variant="body1">
             Nghe không giới hạn trên điện thoại, loa và các thiết bị khác.
           </Typography>
         </div>
-        <div>logo payment</div>
-        <div className="flex  justify-center justify-items-center items-center">
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
+        <div style={{ marginBottom: "4%" }}>logo payment</div>
+        <div className="flex justify-between justify-items-center items-center flex-wrap gap-5">
+          {premiums.map((premium,index) => (
+            <PremiumOption  premium={premium} />
+          ))}
         </div>
       </div>
 

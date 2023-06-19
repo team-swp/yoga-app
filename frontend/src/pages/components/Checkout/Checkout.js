@@ -18,7 +18,7 @@ import {
 } from "../../../helper/loginAPI";
 import { GoogleButton } from "react-google-button";
 import { UserAuth } from "../../../context/AuthGoogleContext";
-import { addBooking } from "../../../helper/bookingAPI";
+import { addBooking, checkBooking } from "../../../helper/bookingAPI";
 import styles from "./checkout.module.css";
 import vnpayImage from "../../../assets/vnpay.png";
 import homepayImage from "../../../assets/yogapaymenthome.png";
@@ -28,7 +28,7 @@ import {
   runUrlVnpay,
 } from "../../../helper/paymentAPI";
 import axios from "axios";
-import { userSelector } from "../../../redux/selectors";
+import { premiumSelector, userSelector } from "../../../redux/selectors";
 import { Box, Typography } from "@mui/material";
 import { Modal } from "@mui/base";
 import classNames from "classnames/bind";
@@ -38,7 +38,7 @@ function Checkout() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const user = useSelector(userSelector);
-
+  const premium = useSelector(premiumSelector);
   const [emailType, setEmailType] = useState(user.email);
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
@@ -59,8 +59,8 @@ function Checkout() {
   const formik = useFormik({
     initialValues: {
       email: user.email,
-      phone: `0${user.phone}` || "",
-      amount: 1000000,
+      phone: (user.phone && `0${user.phone}`) || "",
+      amount: premium.paymentAmount,
       username: user.username || "",
     },
     validate: paymentVerify,
@@ -72,72 +72,82 @@ function Checkout() {
     //   console.log('test 2');
     // }
     onSubmit: async (values) => {
-      if (isSelected) {
-        
-        const vnpayLink = createVnpay({
-          amount: values.amount,
-          orderDescription: `${user._id},${values.email},${
-            values.username || "Member"
-          }`, //bookingID lấy trong state
-          orderType: 190004,
-        });
-        vnpayLink
-          .then((data) => {
-            console.log(data);
-            if (data.data) {
-              var newLink = document.createElement("a");
-              newLink.href = data.data;
-              newLink.textContent = "VNPAY PAYMENT";
-              newLink.target = "_blank";
-              newLink.click();
-              navigate('/')
-            } else {
-              toast.error("The system is maintenance");
-            }
-          })
-          .catch(() => {
-            toast.error("Payment is maintenance please choose other");
-          });
-      } else {
-        const date = new Date();
-        const bookingPromise = addBooking({ member_id: user._id });
-        toast.promise(bookingPromise, {
-          loading: "Checking...",
-          success: <b>Payment Successfully...!</b>,
-          error: <b>Payment not Successfully !</b>,
-        });
-        bookingPromise
-          .then((result) => {
-            const paymentPromise = addPayment({
-              recipient: "Yoga HeartBeat",
-              paymentDate: date,
-              paymentAmount: values.amount,
-              paymentMethod_id: "647496600eeb65cda05ee191",
-              booking_id: result.data.data.result._id,
-              status: 5,
-              meta_data: "Pay at Yoga Center",
+      const checkBookingPromise = checkBooking();
+      checkBookingPromise
+        .then(() => {
+          if (isSelected) {
+            const vnpayLink = createVnpay({
+              amount: values.amount,
+              orderDescription: `${user._id},${values.email},${
+                values.username || "Member"
+              } ,${premium.premium_id}`, //bookingID lấy trong state
+              orderType: 190004,
             });
-            paymentPromise
-              .then((result) => {
-                const urlID = result.data.data.result._id;
-                console.log(urlID);
-                const updateMember = updateUser({
-                  meta_data: `{"isMember":false}`,
-                });
-                updateMember.then(() => {
-                  //qua trang thanh toán thành công
-                  navigate(`/paymentstatus?pmid=${urlID}`);
-                });
+            vnpayLink
+              .then((data) => {
+                console.log(data);
+                if (data.data) {
+                  var newLink = document.createElement("a");
+                  newLink.href = data.data;
+                  newLink.textContent = "VNPAY PAYMENT";
+                  newLink.target = "_blank";
+                  newLink.click();
+                  navigate("/");
+                } else {
+                  toast.error("The system is maintenance");
+                }
               })
               .catch(() => {
-                //chỗ này làm thêm delete nếu ko thành công xóa mấy thg cũ
-                toast.error("Payment not Successfully");
+                toast.error("Payment is maintenance please choose other");
               });
-          })
-          .catch(() => {
-            toast.error("Booking not Successfully");
-          });
-      }
+          } else {
+            const date = new Date();
+            const bookingPromise = addBooking({ member_id: user._id });
+            toast.promise(bookingPromise, {
+              loading: "Checking...",
+              success: <b>Payment Successfully...!</b>,
+              error: <b>Payment not Successfully !</b>,
+            });
+            bookingPromise
+              .then((result) => {
+                const paymentPromise = addPayment({
+                  recipient: "Yoga HeartBeat",
+                  paymentDate: date,
+                  paymentAmount: values.amount,
+                  paymentMethod_id: "647496600eeb65cda05ee191",
+                  booking_id: result.data.data.result._id,
+                  premium_id: premium.premium_id,
+                  status: 5,
+                  meta_data: "Pay at Yoga Center",
+                });
+                paymentPromise
+                  .then( async(result) => {
+                    const urlID = result.data.data.result._id;
+                    const date = new Date()
+                  const dateString = date.toISOString();
+                    const updateMember = updateUser({
+                      meta_data:`{"isMember":true,"MemberDuration":"${premium.duration}","startDateMember":"${dateString}"}` ,
+                    });
+                    updateMember.then((result) => {
+                      //qua trang thanh toán thành công
+                      dispatch(setDataLogin(result.data.data))
+                      navigate(`/paymentstatus?pmid=${urlID}`);
+                    });
+                  })
+                  .catch(() => {
+                    //chỗ này làm thêm delete nếu ko thành công xóa mấy thg cũ
+                    // toast.error("Payment not Successfully");
+                  });
+              })
+              .catch(() => {
+                // toast.error("Booking not Successfully");
+              });
+          }
+        })
+        .catch((error) => {
+          // console.log(error.error.response.data.message);
+          toast.error(error.error.response.data.message);
+        });
     },
   });
 
@@ -179,10 +189,11 @@ function Checkout() {
 
               <div className="textbox flex-col  items-center gap-6 mb-10 ">
                 <div className="textbox px-5 py-4 h2 font-bold text-xl">
-                2. Payment Info
+                  2. Payment Info
                 </div>
                 <div className="textbox flex  items-left gap-6 mb-2">
-                <input
+                  <input
+                    readOnly
                     {...formik.getFieldProps("amount")}
                     className={styles.textbox}
                     type="text"

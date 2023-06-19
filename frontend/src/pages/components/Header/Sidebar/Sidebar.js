@@ -71,6 +71,7 @@ function Sidebar() {
     if(user.meta_data){
       const checkMem = JSON.parse(user.meta_data)
       setCheckMember(checkMem.isMember)
+      console.log(checkMem);
     }
   },[user])
 

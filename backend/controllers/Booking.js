@@ -1,9 +1,20 @@
+const Account = require("../models/accounts");
 const Booking = require("../models/bookings");
+const Payment = require("../models/payments");
 const { pagingnation } = require("./Pagingnation");
-module.exports.addBooking = async (req, res) => {
-  const { member_id, class_id, booking_date, status, meta_data } = req.body;
-  try {
 
+module.exports.addBooking = async (req, res) => {
+  try {
+    const bookTry = await Booking.findOne({
+      member_id: req.account.userId,
+      meta_data: `"isTry":true`,
+    });
+
+    if (bookTry && req.body.isTry) {
+      res.status(400).json({ message: "Cannot book try" });
+    }
+    //check user trước nếu meta_data có isMember:true
+    const { member_id, class_id, booking_date, status, meta_data } = req.body;
     const booking = new Booking({
       member_id: req.account.userId,
       class_id,
@@ -16,7 +27,7 @@ module.exports.addBooking = async (req, res) => {
     booking
       .save()
       .then((result) =>
-        res.status(201).send({ result ,msg: "Add Booking Successfully" })
+        res.status(201).send({ result, msg: "Add Booking Successfully" })
       )
       .catch((error) => res.status(500).send({ error: error.message }));
   } catch (error) {
@@ -35,7 +46,13 @@ module.exports.getBooking = async (req, res) => {
 
 module.exports.getBookingsPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Booking,req.query.q,'member_id')
+    const pagingPayload = await pagingnation(
+      req.query.page,
+      req.query.limit,
+      Booking,
+      req.query.q,
+      "member_id"
+    );
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
