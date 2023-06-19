@@ -10,35 +10,8 @@
     <exclude-pattern>.*/node_modules/*.*</exclude-pattern>
 
     <!-- Your rules will come here -->
-    <rule ref="category/ecmascript/bestpractices.xml/ConsistentReturn" />
-
-    <!-- <rule ref="category/ecmascript/bestpractices.xml/GlobalVariable" /> -->
-
-    <!-- <rule ref="category/ecmascript/errorprone.xml/AvoidTrailingComma">
-        <properties>
-            <property name="allowObjectLiteral" value="false" />
-            <property name="allowArrayLiteral" value="false" />
-         </properties>
-    </rule> -->
-    <!-- <rule ref="category/ecmascript/codestyle.xml/UnnecessaryBlock" /> -->
-    <rule ref="category/ecmascript/codestyle.xml/ForLoopsMustUseBraces" />
+    <rule ref="category/ecmascript/bestpractices.xml/GlobalVariable" />
     <rule ref="category/ecmascript/codestyle.xml/IfStmtsMustUseBraces" />
     <rule ref="category/ecmascript/codestyle.xml/NoElseReturn" />
-    <rule ref="category/ecmascript/codestyle.xml/UnnecessaryParentheses" />
-    <rule ref="category/ecmascript/codestyle.xml/UnreachableCode" />
-    <rule ref="category/ecmascript/codestyle.xml/WhileLoopsMustUseBraces" />
-    <rule ref="category/ecmascript/codestyle.xml/AssignmentInOperand">
-        <properties>
-            <property name="allowIf" value="false" />
-            <property name="allowFor" value="false" />
-            <property name="allowWhile" value="false" />
-            <property name="allowTernary" value="false" />
-            <property name="allowTernaryResults" value="false" />
-            <property name="allowIncrementDecrement" value="false" />
-        </properties>
-    </rule>
-    <rule ref="category/ecmascript/codestyle.xml/IfElseStmtsMustUseBraces" />
-    <rule ref="category/ecmascript/errorprone.xml/InnaccurateNumericLiteral" />
-    <rule ref="category/ecmascript/errorprone.xml/EqualComparison" />
-
+   
 </ruleset>

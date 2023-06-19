@@ -10,10 +10,11 @@ export async function getBooking() {
     errorMessage: "Cannot Get Booking",
   });
 }
-
 export async function getBookingWithPaging(currentPage, perPage) {
+  let apiPath = `/api/bookingsPaging/get?page=${currentPage}&limit=${perPage}`;
+
   return await getApi({
-    apiPath: `/api/bookingsPaging/get?page=${currentPage}&limit=${perPage}`,
+    apiPath,
     errorMessage: "Cannot Get Booking",
   });
 }

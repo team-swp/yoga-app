@@ -3,6 +3,8 @@ import React from "react";
 function getStatusString(status) {
   if (status === 0) {
     return "Failed";
+  } else if (status === 4) {
+    return "Trial";
   } else if (status === 5) {
     return "Pending";
   } else if (status === 10) {
@@ -21,6 +23,13 @@ function StatusButton(props) {
   if (status === 0) {
     btnStyle = {
       backgroundColor: "red",
+      color: "white",
+      padding: "4px 12px",
+      borderRadius: "8px",
+    };
+  } else if (status === 4) {
+    btnStyle = {
+      backgroundColor: "#0E86D4",
       color: "white",
       padding: "4px 12px",
       borderRadius: "8px",

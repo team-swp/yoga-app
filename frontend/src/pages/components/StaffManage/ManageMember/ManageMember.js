@@ -135,14 +135,18 @@ function ManageMember() {
 
   function handlePrevious() {
     setCurrentPage((p) => {
-      if (p === 1) return p;
+      if (p === 1) {
+        return p;
+      }
       return p - 1;
     });
   }
 
   function handleNext() {
     setCurrentPage((p) => {
-      if (p === totalPage) return p;
+      if (p === totalPage) {
+        return p;
+      }
       return parseInt(p) + 1;
     });
   }
