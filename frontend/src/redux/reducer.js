@@ -28,30 +28,15 @@ const rootReducer = (state = initState, action) => {
       };
       return newState;
     }
-
     case "login/setDataLogin": {
-<<<<<<< HEAD
-<<<<<<< HEAD
       const { _id, token, username, phone, avatar, email, meta_data, role } =
         action.payload;
       if (!localStorage.getItem("token")) {
-=======
-      const { _id, token, username, phone, avatar,email,meta_data,role} = action.payload;
-      if(!localStorage.getItem('token')){
->>>>>>> thienNH
-=======
-      const { _id, token, username, phone, avatar, email, meta_data, role } =
-        action.payload;
-      if (!localStorage.getItem("token")) {
->>>>>>> thienNH
         localStorage.setItem("token", token);
       }
       return {
         ...state,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> thienNH
+
         user: {
           ...state.user,
           _id,
@@ -62,12 +47,6 @@ const rootReducer = (state = initState, action) => {
           meta_data,
           role,
         },
-<<<<<<< HEAD
-=======
-        user: { ...state.user, _id, username, phone, avatar,email ,meta_data,role},
->>>>>>> thienNH
-=======
->>>>>>> thienNH
       };
     }
     case "login/updateData": {
@@ -94,12 +73,12 @@ const rootReducer = (state = initState, action) => {
         user: {},
       };
     }
-
     case "set_course_id": {
       const { courseId } = action.payload;
       localStorage.setItem("courseId", courseId);
       return { ...state, courseId };
     }
+    
     case "payment/premiumData": {
       const {premium_id,paymentAmount} = action.payload
       return { ...state ,

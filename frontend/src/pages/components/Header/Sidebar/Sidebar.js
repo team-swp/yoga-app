@@ -66,24 +66,12 @@ function Sidebar() {
       e.target.src = url;
     }
   };
-<<<<<<< HEAD
   useEffect(() => {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
     }
   }, [user]);
-=======
-
-  useEffect(()=>{
-    if(user.meta_data){
-      const checkMem = JSON.parse(user.meta_data)
-      setCheckMember(checkMem.isMember)
-      console.log(checkMem);
-    }
-  },[user])
-
->>>>>>> thienNH
   return (
     <div>
       <IconButton
@@ -222,11 +210,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-<<<<<<< HEAD
-                    {checkMember ? "Your are a member" : "Become a member"}
-=======
                     {checkMember?'You are a member':'Become a member'}
->>>>>>> thienNH
                   </div>
                 </div>
               </div>
