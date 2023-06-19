@@ -39,13 +39,7 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
 
 module.exports.getAccountPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(
-      req.query.page,
-      req.query.limit,
-      Account,
-      req.query.q,
-      "username"
-    );
+    const pagingPayload = await pagingnation(Account, "username", req.query);
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

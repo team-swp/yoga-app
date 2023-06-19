@@ -70,11 +70,11 @@ module.exports.getPaymentMethodById = async (req, res, next) => {
 };
 
 module.exports.addPaymentMethod = async (req, res) => {
-  const { paymentname,image } = req.body;
+  const { paymentname, image } = req.body;
   try {
     const paymentMethod = new PaymentMethod({
       paymentname: paymentname,
-      image:image
+      image: image,
     });
     // return save result as a response
     paymentMethod
@@ -150,9 +150,9 @@ module.exports.getPaymentParams = async (req, res) => {
 module.exports.getPaymentsPaging = async (req, res) => {
   try {
     const pagingPayload = await pagingnation(
-      req.query.page,
-      req.query.limit,
-      Payment
+      Payment,
+      null,
+      req.query,
     );
     res.send(pagingPayload);
   } catch (error) {
@@ -318,19 +318,28 @@ module.exports.vnpayIPN = async (req, res, next) => {
                 meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
               });
               // return save result as a response
-              payment.save()
+              payment
+                .save()
                 .then(async (result) => {
-                  const premiumName = await Premium.findOne({_id:premium_id});
-                  const date = new Date()
+                  const premiumName = await Premium.findOne({
+                    _id: premium_id,
+                  });
+                  const date = new Date();
                   const dateString = date.toISOString();
                   const memeberAccount = await Account.findOneAndUpdate(
                     { _id: userID },
-                    { meta_data: `{"isMember":true,"MemberDuration":${premiumName.durationByMonth},"startDateMember":"${dateString}"}` }
+                    {
+                      meta_data: `{"isMember":true,"MemberDuration":${premiumName.durationByMonth},"startDateMember":"${dateString}"}`,
+                    }
                   );
                   req.user = {
                     userEmail: replacedEmail,
                     username: usernamePayment,
-                    text: `We are pleased to inform you that your payment (id; ${result._id}) for ${premiumName&&premiumName.premiumname} package has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
+                    text: `We are pleased to inform you that your payment (id; ${
+                      result._id
+                    }) for ${
+                      premiumName && premiumName.premiumname
+                    } package has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
                     subject: "Payment Successful",
                     result_id: result._id,
                   };
