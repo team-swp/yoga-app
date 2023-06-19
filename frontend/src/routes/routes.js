@@ -28,7 +28,13 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
+<<<<<<< HEAD
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
+=======
+import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
+
+>>>>>>> 8bdb7bd0c4794df439b0f51f30c15b84d618ca94
 const routers = createBrowserRouter([
   {
     path: "/",

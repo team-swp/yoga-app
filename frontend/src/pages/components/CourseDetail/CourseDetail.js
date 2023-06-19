@@ -38,7 +38,7 @@ function CourseDetail() {
     try {
       // const response = await addBooking();
       // console.log(response);
-      navigate("/checkout");
+      navigate("/premium");
     } catch (error) {
       console.error(error);
     }
@@ -86,7 +86,7 @@ function CourseDetail() {
                     className={cx("course-button")}
                     onClick={() => {
                       if (token) handleSubmit();
-                      else navigate("/login");
+                      else navigate("/premium");
                     }}
                   >
                     JOIN US NOW

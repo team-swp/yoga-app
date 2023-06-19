@@ -99,6 +99,13 @@ const Semester = require("../models/semesters");
 const { log } = require("console");
 const { addRole, updateRole, getRoleById } = require("../controllers/Role");
 const { getUserIP } = require("../middleware/blockIP");
+const {
+  addPremiumOption,
+  getPremiums,
+  updatePremium,
+  getPremiumById,
+} = require("../controllers/Premium");
+const { checkIsMember } = require("../middleware/checkDateIsMember");
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -203,9 +210,12 @@ router.patch(
 //Role
 router.post("/role/add", AuthAdmin, addRole);
 router.patch("/role/update", AuthAdmin, getRoleById, updateRole);
-
+//premium
+router.post("/premium/add", AuthStaff, addPremiumOption);
+router.get("/premium/get", getPremiums);
+router.patch("/premium/update", AuthStaff, getPremiumById, updatePremium);
 //payment
-router.post("/payment/add", /*Auth,*/ addPayment);
+router.post("/payment/add", Auth, addPayment);
 router.get("/payment/get", getPayment);
 router.get("/payment/get/:id", getPaymentParams);
 router.patch("/payment/update", AuthStaff, getPaymentById, updatePayment);
@@ -218,7 +228,11 @@ router.patch(
   getPaymentMethodById,
   updatePaymentMethod
 );
-router.post("/booking/add", Auth, addBooking); // có tài khoản thì mới đucợ book
+router.post("/booking/add", Auth, checkIsMember, addBooking); // có tài khoản thì mới đucợ book
+
+router.post("/booking/check", Auth, checkIsMember, (req, res) =>
+  res.status(201).send()
+); // check book
 router.get("/booking/get", getBooking);
 router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
 //google

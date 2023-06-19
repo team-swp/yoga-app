@@ -66,14 +66,20 @@ function Sidebar() {
       e.target.src = url;
     }
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8bdb7bd0c4794df439b0f51f30c15b84d618ca94
   useEffect(() => {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
     }
   }, [user]);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8bdb7bd0c4794df439b0f51f30c15b84d618ca94
   return (
     <div>
       <IconButton
@@ -212,7 +218,11 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
+<<<<<<< HEAD
                     {checkMember ? "You are a member" : "Become a member"}
+=======
+                    {checkMember?'You are a member':'Become a member'}
+>>>>>>> 8bdb7bd0c4794df439b0f51f30c15b84d618ca94
                   </div>
                 </div>
               </div>
