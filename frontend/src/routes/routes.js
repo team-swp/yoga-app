@@ -30,15 +30,9 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
-<<<<<<< HEAD
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
-=======
-<<<<<<< HEAD
-import Premium from "../pages/components/MemberPacket/Premium";
-=======
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
->>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
+
 
 const routers = createBrowserRouter([
   {
@@ -96,7 +90,7 @@ const routers = createBrowserRouter([
   {
     path: "/paymentstatus",
     element: (
-     <PaymentStatus/>
+      <PaymentStatus />
     ),
   },
   {
@@ -158,19 +152,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/addnewsemester",
-<<<<<<< HEAD
     element: <ManageAddSemester></ManageAddSemester>
   },
   {
     path: "/updatesemester/:id",
     element: <ManageUpdateSemester></ManageUpdateSemester>
-=======
-    element: <ManageAddSemester></ManageAddSemester>,
-  },
-  {
-    path: "/premium",
-    element: <Premium></Premium>,
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
   },
 ]);
 

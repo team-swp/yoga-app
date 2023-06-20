@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getClass, updateClass } from "../../../../helper/classAPI";
-import { Container, TextField, Button } from "@mui/material";
+import { Container, TextField, Button, MenuItem, Autocomplete } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
+import axios from "axios";
 import { getSchedule } from "../../../../helper/scheduleAPI";
 import { getCourse } from "../../../../helper/courseAPI";
 import { getUser } from "../../../../helper/loginAPI";
+import { Toaster, toast } from "react-hot-toast";
 
 function UpdateClass() {
     const [classes, setClasses] = useState({});
@@ -15,18 +17,67 @@ function UpdateClass() {
     const [scheduleId, setScheduleId] = useState("");
     const [courseId, setCourseId] = useState("");
     const [instructorId, setInstructorId] = useState("");
-    const [status, setStatus] = useState(false);
+    const [scheduleList, setScheduleList] = useState("");
+    const [selectedSchedule, setSelectedSchedule] = useState(null);
+    const [courseList, setCourseList] = useState("");
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [instructorList, setInstructorList] = useState("");
+    const [selectedInstructor, setSelectedInstructor] = useState(null);
+    const [days, setDays] = useState([]);
 
     useEffect(() => {
         fetchClasses();
+    }, []);
+
+    useEffect(() => {
+        async function fetchSchedule() {
+            try {
+                const response = await axios.get(
+                    "http://localhost:3001/api/schedule/get"
+                );
+                const scheduleData = response.data;
+                setScheduleList(scheduleData);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchSchedule();
+
+        async function fetchCourse() {
+            try {
+                const response = await axios.get(
+                    "http://localhost:3001/api/course/get"
+                );
+                const courseData = response.data;
+                setCourseList(courseData);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchCourse();
+
+        async function fetchInstructor() {
+            try {
+                const response = await axios.get(
+                    "http://localhost:3001/api/accounts"
+                );
+                setInstructorList(response.data.filter((ins) => ins.role === "instructor"));
+                console.log(setInstructorList);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchInstructor();
     }, []);
 
     async function fetchClasses() {
         try {
             const response = await getClass();
             const classes = response.data.find((obj) => obj._id === classesId.id);
-            setClasses(classes);
-
+            setClasses(classes)
             // Set initial values for the input fields
             setClassname(classes.classname);
             if (classes.schedule_id) {
@@ -44,7 +95,6 @@ function UpdateClass() {
                 const response = await getUser({ id }); console.log(response.data);
                 setInstructorId(response.data.username);
             }
-            setStatus(classes.status);
         } catch (error) {
             console.error(error);
         }
@@ -53,21 +103,27 @@ function UpdateClass() {
     async function handleSubmit(event) {
         event.preventDefault();
         try {
+            const temp = [days]
+            console.log(temp);
+            const scheduleId = selectedSchedule ? selectedSchedule._id : null;
+            const courseId = selectedCourse ? selectedCourse._id : null;
+            const instructorId = selectedInstructor ? selectedInstructor._id : null;
             const response = await updateClass({
                 _id: classesId.id,
-                classname: classname,
-                scheduleId: scheduleId,
-                courseId: courseId,
-                instructorId: instructorId,
-                status: status,
+                classname,
+                schedule_id: scheduleId,
+                course_id: courseId,
+                instructor_id: instructorId,
+                days: [days],
             });
             if (response) {
-                alert("Class updated successfully!");
+                toast.success("Updated successfully!");
             } else {
-                alert("Failed to update class");
+                toast.error("Failed to update class...");
             }
         } catch (error) {
             console.error(error);
+            toast.error("Failed to update class...");
         }
     }
 
@@ -75,46 +131,84 @@ function UpdateClass() {
         <>
             <Header />
             <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px' }}>Update Class</h1>
+                <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px', marginTop: '20px' }}>Update Class</h1>
             </div>
             <Container maxWidth="md" sx={styles.container}>
+                <Toaster position="top-center"></Toaster>
                 <form onSubmit={handleSubmit} sx={styles.form}>
                     <TextField
                         label="Class Name"
                         type="text"
-                        name="classname"
                         value={classname}
-                        onChange={(event) => setClassname(event.target.value)}
+                        onChange={(e) => setClassname(e.target.value)}
+                        fullWidth
                         required
-                        sx={styles.textField}
+                        sx={{ marginBottom: "10px" }}
+                    />
+                    <Autocomplete
+                        value={selectedSchedule}
+                        onChange={(event, newValue) => setSelectedSchedule(newValue)}
+                        options={scheduleList}
+                        getOptionLabel={(option) => option.schedulename}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Schedule"
+                                type="text"
+                                name="schedule_id"
+                                required
+                                sx={styles.textField}
+                            />
+                        )}
+                    />
+                    <Autocomplete
+                        value={selectedCourse}
+                        onChange={(event, newValue) => setSelectedCourse(newValue)}
+                        options={courseList}
+                        getOptionLabel={(option) => option.coursename}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Course"
+                                type="text"
+                                name="course_id"
+                                required
+                                sx={styles.textField}
+                            />
+                        )}
+                    />
+                    <Autocomplete
+                        value={selectedInstructor}
+                        onChange={(event, newValue) => setSelectedInstructor(newValue)}
+                        options={instructorList}
+                        getOptionLabel={(option) => option.username}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Instructor"
+                                type="text"
+                                name="instructor_id"
+                                required
+                                sx={styles.textField}
+                            />
+                        )}
                     />
                     <TextField
-                        label="Schedule ID"
-                        type="text"
-                        name="scheduleId"
-                        value={scheduleId}
-                        onChange={(event) => setScheduleId(event.target.value)}
-                        required
+                        select
+                        label="Day of the week"
+                        value={days}
+                        onChange={(e) => setDays(e.target.value)}
+                        variant="outlined"
                         sx={styles.textField}
-                    />
-                    <TextField
-                        label="Course ID"
-                        type="text"
-                        name="courseId"
-                        value={courseId}
-                        onChange={(event) => setCourseId(event.target.value)}
-                        required
-                        sx={styles.textField}
-                    />
-                    <TextField
-                        label="Intructor ID"
-                        type="text"
-                        name="instructorId"
-                        value={instructorId}
-                        onChange={(event) => setInstructorId(event.target.value)}
-                        required
-                        sx={styles.textField}
-                    />
+                    >
+                        <MenuItem value="Monday">Monday</MenuItem>
+                        <MenuItem value="Tuesday">Tuesday</MenuItem>
+                        <MenuItem value="Wednesday">Wednesday</MenuItem>
+                        <MenuItem value="Thursday">Thursday</MenuItem>
+                        <MenuItem value="Friday">Friday</MenuItem>
+                        <MenuItem value="Saturday">Saturday</MenuItem>
+                        <MenuItem value="Sunday">Sunday</MenuItem>
+                    </TextField>
                     <Button type="submit" variant="contained" sx={styles.button}>
                         Update Course
                     </Button>

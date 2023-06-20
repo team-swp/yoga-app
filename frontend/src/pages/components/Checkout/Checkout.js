@@ -42,11 +42,7 @@ function Checkout() {
   const [emailType, setEmailType] = useState(user.email);
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
-<<<<<<< HEAD
   const [open, setOpen] = useState(true);
-=======
-
->>>>>>> 6b641d5edf87807a001ca60acc54d7e461734b15
   const handleRadioChange = () => {
     setIsSelected2(false);
     setIsSelected(true);
@@ -77,12 +73,11 @@ function Checkout() {
     // }
     onSubmit: async (values) => {
       if (isSelected) {
-        
+
         const vnpayLink = createVnpay({
           amount: values.amount,
-          orderDescription: `${user._id},${values.email},${
-            values.username || "Member"
-          }`, //bookingID lấy trong state
+          orderDescription: `${user._id},${values.email},${values.username || "Member"
+            }`, //bookingID lấy trong state
           orderType: 190004,
         });
         vnpayLink
@@ -183,10 +178,10 @@ function Checkout() {
 
               <div className="textbox flex-col  items-center gap-6 mb-10 ">
                 <div className="textbox px-5 py-4 h2 font-bold text-xl">
-                2. Payment Info
+                  2. Payment Info
                 </div>
                 <div className="textbox flex  items-left gap-6 mb-2">
-                <input
+                  <input
                     {...formik.getFieldProps("amount")}
                     className={styles.textbox}
                     type="text"
@@ -207,9 +202,8 @@ function Checkout() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div
-                    className={`${styles.div_radio} ${
-                      isSelected ? styles.active : ""
-                    } justify-between p-4`}
+                    className={`${styles.div_radio} ${isSelected ? styles.active : ""
+                      } justify-between p-4`}
                     onClick={handleRadioChange}
                   >
                     <label className={styles.lable}>
@@ -228,9 +222,8 @@ function Checkout() {
                   </div>
 
                   <div
-                    className={`${styles.div_radio} ${
-                      isSelected2 ? styles.active : ""
-                    } justify-between p-4`}
+                    className={`${styles.div_radio} ${isSelected2 ? styles.active : ""
+                      } justify-between p-4`}
                     onClick={handleRadioChange2}
                   >
                     <label className={`lable ${styles.lable}`}>

@@ -4,6 +4,7 @@ import { getSchedule, updateSchedule } from "../../../../helper/scheduleAPI";
 import { Container, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
+import { Toaster, toast } from "react-hot-toast";
 
 function ManageEditSchedule() {
     const [schedule, setSchedule] = useState({});
@@ -12,7 +13,7 @@ function ManageEditSchedule() {
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
     const [days, setDays] = useState([]);
-    const [status, setStatus] = useState(false);
+
     console.log(schedule);
     useEffect(() => {
         fetchSchedules();
@@ -31,7 +32,7 @@ function ManageEditSchedule() {
             setStartTime(schedule.startTime);
             setEndTime(schedule.endTime);
             setDays(schedule.days);
-            setStatus(schedule.status);
+
         } catch (error) {
             console.error(error);
         }
@@ -45,16 +46,15 @@ function ManageEditSchedule() {
                 schedulename: schedulename,
                 startTime: startTime,
                 endTime: endTime,
-                days: days,
-                status: status,
             });
             if (response) {
-                alert("Schedule updated successfully!");
+                toast.success("Updated successfully!");
             } else {
-                alert("Failed to update schedule");
+                toast.error("Failed to update Schedule...");
             }
         } catch (error) {
             console.error(error);
+            toast.error("Failed to update Schedule...");
         }
     }
 
@@ -63,6 +63,7 @@ function ManageEditSchedule() {
         <>
             <Header />
             <Container maxWidth="md" sx={styles.container}>
+                <Toaster position="top-center"></Toaster>
                 <div style={{ maxWidth: '400px', margin: '0 auto' }}>
                     <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px' }}>Update Schedule</h1>
                 </div>
@@ -94,31 +95,6 @@ function ManageEditSchedule() {
                         onChange={(event) => setEndTime(event.target.value)}
                         required
                         multiline
-                        sx={styles.textField}
-                    />
-                    <FormControl sx={styles.textField}>
-                        <InputLabel>Days</InputLabel>
-                        <Select
-                            multiple
-                            value={days}
-                            onChange={(event) => setDays(event.target.value)}
-                            renderValue={(selected) => selected.join(', ')}
-                        >
-                            <MenuItem value="Monday">Monday</MenuItem>
-                            <MenuItem value="Tuesday">Tuesday</MenuItem>
-                            <MenuItem value="Wednesday">Wednesday</MenuItem>
-                            <MenuItem value="Thursday">Thursday</MenuItem>
-                            <MenuItem value="Friday">Friday</MenuItem>
-                            <MenuItem value="Saturday">Saturday</MenuItem>
-                            <MenuItem value="Sunday">Sunday</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <TextField
-                        label="Status"
-                        type="checkbox"
-                        name="status"
-                        checked={status}
-                        onChange={(event) => setStatus(event.target.checked)}
                         sx={styles.textField}
                     />
                     <Button type="submit" variant="contained" sx={styles.button}>

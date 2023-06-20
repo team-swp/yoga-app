@@ -1,53 +1,60 @@
-<<<<<<< HEAD
-import { useEffect, useState } from "react"
-import ReactPaginate from 'react-paginate';
-import styles from "./ManageClass.css"
-=======
+import { Select, MenuItem, TextField, FormControl } from '@mui/material';
+
 import { useEffect, useState } from "react";
-import styles from "./ManageClass.css";
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
-import classNames from "classnames/bind";
-import { Container, Switch, colors } from "@mui/material";
+import {
+    Container,
+    Switch,
+} from '@mui/material';
 import { Link } from "react-router-dom";
-import { getUser } from "../../../../helper/loginAPI";
-import { getClass, updateClass } from "../../../../helper/classAPI";
+import axios from "axios";
+import { Toaster, toast } from "react-hot-toast";
+import { updateClass } from '../../../../helper/classAPI';
+import classNames from "classnames/bind";
+import styles from './ManageClass.css'
+
 const cx = classNames.bind(styles);
+
+
 function ManageClass() {
-<<<<<<< HEAD
-    const [query, setQuery] = useState("")
+    const [classes, setClasses] = useState([]);
+    const [updatedClass, setUpdatedClass] = useState({})
     const [classList, setClassList] = useState([])
     const [scheduleList, setScheduleList] = useState([])
     const [courseList, setCourseList] = useState([]);
     const [instructorList, setInstructorList] = useState([]);
-    const [updatedClass, setUpdatedClass] = useState({});
-    const [classes, setClasses] = useState([]);
-    const [showEnabled, setShowEnabled] = useState(true);
-    const [showDisabled, setShowDisabled] = useState(true);
-    const [pageNumber, setPageNumber] = useState(0);
-    const [updatedClassList, setUpdatedClassList] = useState([]);
-=======
-  const [query, setQuery] = useState("");
-  const [classList, setClassList] = useState([]);
-  const [scheduleList, setScheduleList] = useState([]);
-  const [updatedClass, setUpdatedClass] = useState({});
-  const [classes, setClasses] = useState([]);
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
+    const [value, setValue] = useState('')
+    const [page, setPage] = useState(1)
+    const [pageCount, setPageCount] = useState(0)
+    const [semesterValue, setSemesterValue] = useState('');
+    const [statusValue, setStatusValue] = useState('');
+    const [price, setPrice] = useState('')
 
-  const classIformation = classList.concat.scheduleList;
-
-<<<<<<< HEAD
-    const handleToggle = async (event, classes) => {
+    /////// update done//////////// 
+    const handleToggle = async (event, classs) => {
         try {
-            console.log(classes.classId, event.target.checked, 123);
-            const response = await updateClass({ _id: classes.classId, status: event.target.checked });
-            setUpdatedClassList([...updatedClassList, response]);
+            const updatedClassData = { ...classs, status: event.target.checked };
+            const response = await updateClass(updatedClassData);
+            if (response && response.data) {
+                console.log(response.data.data.classname);
+                setUpdatedClass(classes);
+                const updatedClass = classes.map((classItem) =>
+                    classItem._id === response.data._id ? response.data : classItem,
+                    toast.success(`${response.data.data.classname} status updated success`)
+                );
+                setClasses(updatedClass);
+            }
         } catch (error) {
             console.error(error);
         }
     };
 
     useEffect(() => {
-        async function fetchClassList() {
+        fetchClasses();
+    }, [updatedClass, page]);
+
+    useEffect(() => {
+
+        async function fecthClassList() {
             try {
                 const requestUrl = 'http://localhost:3001/api/class/get'
                 const response = await fetch(requestUrl)
@@ -58,7 +65,7 @@ function ManageClass() {
                 console.log('Failed')
             }
         }
-        fetchClassList();
+        fecthClassList();
 
         async function fetchScheduleList() {
             try {
@@ -66,17 +73,12 @@ function ManageClass() {
                 const response = await fetch(requestUrl)
                 const responseJSON = await response.json()
                 console.log(responseJSON)
-
-
                 setScheduleList(responseJSON)
                 console.log(scheduleList)
 
             } catch (error) {
                 console.log('Failed')
-
             }
-
-
         }
         fetchScheduleList();
 
@@ -86,7 +88,6 @@ function ManageClass() {
                 const response = await fetch(requestUrl)
                 const responseJSON = await response.json()
                 setCourseList(responseJSON)
-
             } catch (error) {
                 console.log('Failed')
             }
@@ -99,7 +100,6 @@ function ManageClass() {
                 const response = await fetch(requestUrl)
                 const responseJSON = await response.json()
                 setInstructorList(responseJSON)
-
             } catch (error) {
                 console.log('Failed')
             }
@@ -107,301 +107,182 @@ function ManageClass() {
         fetchInstructorList();
     }, [])
 
-
-
-
-    const list = () => {
-        let temp = [];
-        for (var classes of classList) {
-            let tempObject = {}
-            for (let schedule of scheduleList) {
-                if (classes.schedule_id === schedule._id) {
-                    const schedulename = schedule.schedulename
-                    const classId = classes._id
-                    const classname = classes.classname
-                    const courseId = classes.course_id
-                    const instructorId = classes.instructor_id; // Thêm thông tin về id của Instructor
-                    const instructor = instructorList.find((inst) => inst._id === instructorId)?.username; // Tìm kiếm thông tin về Instructor
-
-                    const courseName = courseList.find((course) => course._id === courseId)?.coursename;
-
-
-                    tempObject = Object.assign(tempObject, { schedulename })
-                    tempObject = Object.assign(tempObject, { classId })
-                    tempObject = Object.assign(tempObject, { classname })
-                    tempObject = Object.assign(tempObject, { courseId: courseName })
-                    tempObject = Object.assign(tempObject, { instructor: instructor })
-                    temp.push(tempObject)
-                }
-            }
-
-        }
-        return temp
+    ////////////////////////////  chạy lại cái này để reset lại trang ////////////////////////////////////////////////
+    async function fetchClasses2() {
+        const response = await axios.get(`http://localhost:3001/api/classesPaging/get?page=${page}&limit=${3}`)
+        const classData = response.data.items;
+        setPage(response.data.pagination.pageNum)
+        setPageCount(response.data.pagination.pageCount)
+        setClasses(classData);
     }
-    console.log(list());
+    ////////////////////////////// cái này thì là khi update nó k bị load lại với page////////////////////////////
+    async function fetchClasses() {
+        const response = await axios.get(`http://localhost:3001/api/classesPaging/get?page=${page}&limit=${3}`)
+        const classData = response.data.items;
+        setPage(response.data.pagination.pageNum)
+        setPageCount(response.data.pagination.pageCount)
+        setClasses(classData);
+    }
 
-    const filteredList = list().filter((classItem) => {
-        if (showEnabled && showDisabled) {
-            return true;
-        } else if (showEnabled && !classItem.status) {
-            return false;
-        } else if (showDisabled && classItem.status) {
-            return false;
-        }
-        return true;
-    });
+    /////////////////////// hàm reset này sẽ làm mới lại trang mà trả ô tìm kiếm bằng rỗng//////////////////////////////////
+    // const handleReset = () => {
+    //   fetchCourses2()
+    //   setSemesterValue("")
+    //   setValue("")
+    //   setStatusValue("")
+    //   setPrice('')
+    //   setPageCount(1)
+    // }
+    ///////////////////// đây là hàm search tìm kiếm///////////////////////////////////////////////
+    // const handleSearch = async (e) => {
+    //   e.preventDefault();
+    //   try {
+    //     const response = await axios.get(`http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester=${semesterValue}&status=${statusValue}&price=${price}`)
 
-    const classesPerPage = 3;
-    const pagesVisited = pageNumber * classesPerPage;
+    //     const semesterData = response.data.items;
+    //     console.log(response.data);
+    //     setPage(response.data.pagination.pageNum)
+    //     setPageCount(response.data.pagination.pageCount)
+    //     setCourses(semesterData);
+    //   } catch (error) {
+    //     toast.error('Not Found!!!')
+    //   }
+    // }
+    /////////////////// handle việc next và prev trong page/////////////////////////
 
-    const pageCount = Math.ceil(filteredList.length / classesPerPage);
+    function handlePrevious() {
+        setPage((p) => {
+            if (p === 1) return p;
+            return p - 1;
+        });
+    }
 
-    const changePage = ({ selected }) => {
-        setPageNumber(selected);
-    };
+    function handleNext() {
+        setPage((p) => {
+            if (p === pageCount) return p;
+            return parseInt(p) + 1;
+        });
+    }
+    //////////////////////////////////////////////////////////////////////////////////////
 
-    return (<div>
-        <Header />
-        <div class="bg-gray-400">
-            <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
-                <h1 class="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
-                    Manage Class
-                </h1>
-            </div>
-        </div>
-        <Container>
-
-            <div className={cx("text-end")}>
-                <Link to="/addnewclass" className={cx("btn btn-primary")}>Add new class</Link>
-            </div>
-            <div className="searchfilter">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="search"
-                    onChange={(e) => setQuery(e.target.value)}
-                />
-            </div>
-            <table className="container">
-                <thead>
-                    <tr>
-                        <td>Class Id</td>
-                        <td> Class Name</td>
-                        <td> Schedule </td>
-                        <td>Course</td>
-                        <td>Intructor</td>
-                        <td>Status</td>
-                        <td>Action</td>
-                    </tr>
-
-                </thead>
-                <tbody>
-                    {filteredList.slice(pagesVisited, pagesVisited + classesPerPage).filter((classItem) => {
-                        return (
-                            classItem.classname.toLowerCase().includes(query) ||
-                            classItem.schedulename.toLowerCase().includes(query)
-                        );
-                    }).map((classItem, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{classItem.classname}</td>
-                            <td>{classItem.schedulename}</td>
-                            <td>{classItem.courseId}</td>
-                            <td>{classItem.instructor}</td>
-                            <td>
-                                <Switch checked={updatedClassList.find((item) =>
-                                    item._id === classItem.classId)?.status || classItem.status}
-                                    onChange={(event) => handleToggle(event, classItem)} />
-                            </td>
-                            <Link
-                                to={`/updateclass/${classItem.classId} `}
-                                className={cx("btn btn-secondary")}
-                                onClick={() => { console.log(classItem); }}
-                            >
-                                Update
-                            </Link>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <div style={{ margin: '20px', marginLeft: '70%', textAlign: 'center' }}>
-                <span>Show Status</span>
-                <div className={cx("filter")}>
-                    <button
-                        onClick={() => setShowEnabled(!showEnabled)}
-                        className={cx("btn", { "btn-secondary": showEnabled, "btn-primary": !showEnabled })}
-                        style={{ backgroundColor: 'red' }}
-                    >
-                        Disabled
-                    </button>
-                    <button
-                        onClick={() => setShowDisabled(!showDisabled)}
-                        className={cx("btn", { "btn-secondary": showDisabled, "btn-primary": !showDisabled })}
-                        style={{ backgroundColor: 'green' }}
-                    >
-                        Enabled
-                    </button>
+    return (
+        <div>
+            <Container>
+                <Toaster position="top-center" reverseOrder={false} />
+                <div className={cx("text-end")}>
+                    <Link to="/addnewclass" className={cx("btn btn-primary")}>Add new class</Link>
                 </div>
-            </div>
-            {
-                pageCount > 0 &&
-                <ReactPaginate
-                    previousLabel={"Previous"}
-                    nextLabel={"Next"}
-                    pageCount={pageCount}
-                    onPageChange={changePage}
-                    containerClassName={"pagination"}
-                    previousLinkClassName={"previousBtn"}
-                    nextLinkClassName={"nextBtn"}
-                    disabledClassName={"disabled"}
-                    activeClassName={"active"}
-                    pageRangeDisplayed={3}
-                    marginPagesDisplayed={2}
-                    forcePage={pageNumber}
-                    disableInitialCallback={true}
-                />
-            }
-        </Container>
-        <Footer />
-    </div>
+                <table className="container">
+                    <thead>
+                        <tr>
+                            <td>Class Id</td>
+                            <td> Class Name</td>
+                            <td> Schedule </td>
+                            <td>Course</td>
+                            <td>Intructor</td>
+                            <td>Days</td>
+                            <td>Status</td>
+                            <td>Action</td>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        {classes.map((classItem, index) => {
+                            const scheduleId = classItem.schedule_id;
+                            const courseId = classItem.course_id;
+                            const instructorId = classItem.instructor_id;
+                            const scheduleName = scheduleList.find((schedule) => schedule._id === scheduleId)?.schedulename;
+                            const courseName = courseList.find((course) => course._id === courseId)?.coursename;
+                            const instructor = instructorList.find((inst) => inst._id === instructorId)?.username;
+
+                            return (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{classItem.classname}</td>
+                                    <td>{scheduleName}</td>
+                                    <td>{courseName}</td>
+                                    <td>{instructor}</td>
+                                    <td>{classItem.days}</td>
+                                    <td>
+                                        <Switch
+                                            checked={classItem.status}
+                                            onChange={(event) => handleToggle(event, classItem)}
+                                            color={classItem.status ? 'success' : 'error'}
+                                        />
+                                    </td>
+                                    <Link
+                                        to={`/updateclass/${classItem._id} `}
+                                        className={cx("btn btn-secondary")}
+                                        onClick={() => { console.log(classItem); }}
+                                    >
+                                        Update
+                                    </Link>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+                <footer style={{
+                    margin: 'auto',
+                    padding: '15px',
+                    maxWidth: '400px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <button
+                        disabled={page === 1}
+                        onClick={handlePrevious}
+                        style={{
+                            marginRight: "1rem",
+                            padding: "0.5rem 1rem",
+                            borderRadius: "4px",
+                            backgroundColor: "#ccc",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Previous
+                    </button>
+                    <select
+                        value={page}
+                        onChange={(event) => {
+                            setPage(event.target.value);
+
+                        }}
+                        style={{
+                            marginRight: "1rem",
+                            padding: "0.5rem",
+                            borderRadius: "4px",
+                        }}
+                    >
+                        {Array(pageCount)
+                            .fill(null)
+                            .map((_, index) => {
+                                return (
+                                    <option key={index} style={{ padding: "0.5rem" }}>
+                                        {parseInt(index + 1)}
+                                    </option>
+                                );
+                            })}
+                    </select>
+                    <button
+                        disabled={page == pageCount}
+                        onClick={handleNext}
+                        style={{
+                            padding: "0.5rem 1rem",
+                            borderRadius: "4px",
+                            backgroundColor: "#ccc",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Next
+                    </button>
+                </footer>
+            </Container >
+
+
+        </div >
     );
-=======
-  const handleToggle = async (events, classes) => {
-    try {
-      const updatedClassData = { ...classes, status: events.target.checked };
-      const response = await updateClass(updatedClassData);
-      if (response && response.data) {
-        setUpdatedClass(response.data);
-        const updatedClasses = classes.map((courseItem) =>
-          courseItem._id === response.data._id ? response.data : courseItem
-        );
-        setClasses(updatedClasses);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    async function fecthClassList() {
-      try {
-        const requestUrl = "http://localhost:3001/api/class/get";
-        const response = await fetch(requestUrl);
-        const responseJSON = await response.json();
-        setClassList(responseJSON);
-      } catch (error) {
-        console.log("Failed");
-      }
-    }
-    fecthClassList();
-
-    async function fecthScheduleList() {
-      try {
-        const requestUrl = "http://localhost:3001/api/schedule/get";
-        const response = await fetch(requestUrl);
-        const responseJSON = await response.json();
-        console.log(responseJSON);
-
-        setScheduleList(responseJSON);
-        console.log(scheduleList);
-      } catch (error) {
-        console.log("Failed");
-      }
-    }
-    fecthScheduleList();
-  }, []);
-
-  const list = () => {
-    let temp = [];
-    for (var classes of classList) {
-      let tempObject = {};
-      for (let schedule of scheduleList) {
-        if (classes.schedule_id === schedule._id) {
-          const schedulename = schedule.schedulename;
-          const classId = classes._id;
-          const classname = classes.classname;
-          const courseId = classes.course_id;
-          const instructor = classes.instructor_id;
-          tempObject = Object.assign(tempObject, { schedulename });
-          tempObject = Object.assign(tempObject, { classId });
-          tempObject = Object.assign(tempObject, { classname });
-          tempObject = Object.assign(tempObject, { courseId });
-          tempObject = Object.assign(tempObject, { instructor });
-          temp.push(tempObject);
-        }
-      }
-    }
-    return temp;
-  };
-  console.log(list());
-  return (
-    <div>
-      <Container>
-        <div className={cx("text-end")}>
-          <Link to="/addnewclass" className={cx("btn btn-primary")}>
-            Add new class
-          </Link>
-        </div>
-        <div className="searchfilter">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="search"
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
-        <table className="container">
-          <thead>
-            <tr>
-              <td>Class Id</td>
-              <td> Class Name</td>
-              <td> Schedule </td>
-              <td>Course</td>
-              <td>Intructor</td>
-              <td>Status</td>
-              <td>Action</td>
-            </tr>
-          </thead>
-          <tbody>
-            {list()
-              .filter((classItem) => {
-                return (
-                  classItem.classname.toLowerCase().includes(query) ||
-                  classItem.schedulename.toLowerCase().includes(query)
-                );
-              })
-              .map((classItem, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{classItem.classname}</td>
-                  <td>{classItem.schedulename}</td>
-                  <td>{classItem.courseId}</td>
-                  <td>{classItem.instructor}</td>
-                  <td>
-                    {!classItem.status ? "Disabled" : "Enabled"}
-                    <Switch
-                      checked={classItem.status}
-                      onChange={(event) => handleToggle(event, classItem)}
-                      color={classItem.status ? "error" : "error"}
-                    />
-                  </td>
-                  <Link
-                    to={`/updateclass/${classItem.classId} `}
-                    className={cx("btn btn-secondary")}
-                    onClick={() => {
-                      console.log(classItem);
-                    }}
-                  >
-                    Update
-                  </Link>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </Container>
-    </div>
-  );
->>>>>>> f84de0755a1dc8d3941db51ef52370bdf17d748f
 }
 
 export default ManageClass;
