@@ -27,8 +27,6 @@ function BasicExample() {
     fetchUsers();
   }, []);
 
-  useEffect(() => {}, []);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -54,6 +52,15 @@ function BasicExample() {
       );
       setListUsers(cloneListUsers);
     } else {
+      async function fetchUsers() {
+        try {
+          const response = await getMember();
+          setListUsers(response.data);
+        } catch {
+          console.log("fail");
+        }
+      }
+      fetchUsers();
     }
   }, 500);
 
