@@ -31,7 +31,6 @@ function Profile() {
   const userCurr = {
     username: user,
   };
-
   const [screen, setScreen] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -119,11 +118,6 @@ function Profile() {
       updateUser({ avatar: url });
     }
   };
-  // if (user.avatar) {
-  //   const { url } = getAvatarToAWS({imageName:user._id})
-  //   setFile(url);
-  //   updateUser({avatar:url})
-  // }
   const onUpload = async (e) => {
     const avatar = e.target.files[0];
     if (avatar) {
@@ -149,6 +143,7 @@ function Profile() {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
           setFile(url);
+          console.log(file);
         }
       } else {
         toast.error("Please select an image");
@@ -176,6 +171,7 @@ function Profile() {
       } else {
         setIsNotPass(false);
       }
+      console.log(isOldPassword, "312312");
     };
     isPassword();
   }, []);
@@ -279,8 +275,12 @@ function Profile() {
                     <p>Please email me about new products and promotions.</p>
                   </div>
 
-                  <div className="pt-3">
-                    <div className="ml-10">
+                  <div
+                    className=" pt-3
+                  
+                "
+                  >
+                    <div className=" ml-10">
                       <p>Avatar</p>
                     </div>
                     <div className="flex gap-5 items-center">

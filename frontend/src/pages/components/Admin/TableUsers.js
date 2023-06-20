@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import { getMember, updateUser } from "../../../helper/loginAPI";
+import { updateUserForAdmin } from "../../../helper/adminAPI";
+import { Container } from "@mui/system";
+import _, { debounce } from "lodash";
 
 function BasicExample() {
   const moment = require("moment");
@@ -24,6 +27,8 @@ function BasicExample() {
     fetchUsers();
   }, []);
 
+  useEffect(() => {}, []);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -40,12 +45,32 @@ function BasicExample() {
     }
   };
 
+  const handleSearch = debounce((event) => {
+    let term = event.target.value;
+    if (term) {
+      let cloneListUsers = _.cloneDeep(listUser);
+      cloneListUsers = cloneListUsers.filter((item) =>
+        item.email.includes(term)
+      );
+      setListUsers(cloneListUsers);
+    } else {
+    }
+  }, 500);
+
   const totalPages = Math.ceil(listUser.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
   return (
     <div>
+      {" "}
+      <div className=" py-7 col">
+        <input
+          placeholder="Search by email"
+          className="border-solid border-2 border-black p-2"
+          onChange={(event) => handleSearch(event)}
+        />
+      </div>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -67,7 +92,8 @@ function BasicExample() {
                 updatedList[startIndex + index].status = !item.status;
                 setListUsers(updatedList);
                 try {
-                  await updateUser(item.id, {
+                  await updateUserForAdmin({
+                    _id: item._id,
                     status: updatedList[startIndex + index].status,
                   });
                   console.log("Status updated successfully.");

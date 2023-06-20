@@ -18,23 +18,7 @@ const AdminHome = () => {
   return (
     <div className="Container">
       <Header />
-      <div>
-        <Container>
-          <div className="d-flex align-items-center">
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-success" className=" pb-2">
-                Search
-              </Button>
-            </Form>
-          </div>
-        </Container>
-      </div>
+      <div></div>
       <Container>{isLoading ? <Loading /> : <TableUsers />}</Container>
     </div>
   );
