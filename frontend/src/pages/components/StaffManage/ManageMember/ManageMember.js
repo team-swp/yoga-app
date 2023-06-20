@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  InputLabel,
   MenuItem,
   Paper,
   Select,
@@ -14,52 +15,47 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { getBooking } from "../../../../helper/bookingAPI";
+import { getPaymentWithPaging } from "../../../../helper/paymentAPI";
 import {
-  getBooking,
-  getBookingWithPaging,
-} from "../../../../helper/bookingAPI";
-import {
-  getPayment,
-  getPaymentWithPaging,
-} from "../../../../helper/paymentAPI";
-import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
+  getMemberPaging,
+  updateUserForStaff,
+} from "../../../../helper/loginAPI";
 import StatusButton from "./CustomeStatus";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import Search from "./Search";
 import { Toaster, toast } from "react-hot-toast";
+import classNames from "classnames/bind";
+import styles from "./ManageMember.module.css";
+import Search from "./Search";
 
 function ManageMember() {
+  const cx = classNames.bind(styles);
   const moment = require("moment");
 
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-
   const [payments, setPayments] = useState([]);
-  const [newTotalPage, setNewTotalPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(5);
   const [page, setPage] = useState(0);
+  const [statusFilter, setStatusFilter] = useState(null);
+  const [searchUsername, setSearchUsername] = useState("");
 
   async function fetchData() {
     try {
       const [paymentsResponse, bookingsResponse, membersResponse] =
         await Promise.all([
-          getPaymentWithPaging(currentPage, perPage),
+          getPaymentWithPaging(currentPage, statusFilter),
           getBooking(),
-          getMember(),
+          getMemberPaging(searchUsername),
         ]);
-
       const { pageCount, pageNum } = paymentsResponse.data.pagination;
-
+      //const { pageCount, pageNum } = membersResponse.data.pagination;
       const updatedPayments = paymentsResponse.data.items.map((payment) => {
         const bookings = bookingsResponse.data.find(
           (booking) => payment.booking_id === booking._id
         );
-
         if (bookings) {
-          const member = membersResponse.data.find(
+          const member = membersResponse.data.items.find(
             (member) => member._id === bookings.member_id
           );
           if (member) {
@@ -68,6 +64,7 @@ function ManageMember() {
         }
         return payment;
       });
+
       setPayments(updatedPayments);
       setPage(pageNum);
       setTotalPage(pageCount);
@@ -78,10 +75,9 @@ function ManageMember() {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, perPage]);
+  }, [currentPage, statusFilter, searchUsername]);
 
   const newPayments = payments
-
     .filter((payments) => {
       return payments.bookings && payments.member;
     })
@@ -105,9 +101,10 @@ function ManageMember() {
       } else {
         expiredDate = "Not Yet";
       }
-
       const memberId = payments.member._id;
-      const bookingDate = moment(payments.booking_date).format("DD/MM/YY");
+      const bookingDate = moment(payments.bookings.booking_date).format(
+        "DD/MM/YY"
+      );
       const status = payments.status;
       const { username, email } = payments.member;
 
@@ -128,7 +125,6 @@ function ManageMember() {
       return;
     }
     const payment = payments.find((payment) => payment.member._id === memberId);
-    console.log(payment);
     const oldMetaData = JSON.parse(payment.member.meta_data);
     const newMetaData = { ...oldMetaData, isMember };
     const response = { _id: memberId, meta_data: JSON.stringify(newMetaData) };
@@ -148,14 +144,6 @@ function ManageMember() {
             : paymentItem
         );
         setPayments(updatedPayments);
-        //     if (isSearching) {
-        //       const updatedSearchResults = searchResults.map((searchResultItem) =>
-        //         searchResultItem.memberId === memberId
-        //           ? { ...searchResultItem, isMember }
-        //           : searchResultItem
-        //       );
-        //       setSearchResults(updatedSearchResults);
-        //     }
       })
       .catch((error) => {
         console.error(error);
@@ -185,22 +173,63 @@ function ManageMember() {
     setCurrentPage(parseInt(event.target.value));
   }
 
-  // const searchProps = {
-  //   newBookings,
-  //   setSearchResults,
-  //   setNewTotalPage,
-  //   setCurrentPage,
-  //   perPage,
-  //   setIsSearching,
-  // };
+  const handleStatusFilterChange = (event) => {
+    setStatusFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleResetStatusFilter = () => {
+    setStatusFilter(null);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1);
+    fetchData();
+  };
+
+  const displayedStatusValue = statusFilter === null ? "" : statusFilter;
+
+  const statusOptions = [
+    { value: "", label: "All" },
+    { value: "0", label: "Failed" },
+    { value: "4", label: "Trial" },
+    { value: "5", label: "Pending" },
+    { value: "10", label: "Completed" },
+  ];
 
   return (
     <div>
       <Container>
-        {/* <Search {...searchProps} /> */}
+        <Box>
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              value={searchUsername}
+              onChange={(e) => setSearchUsername(e.target.value)}
+            />
+            <button type="submit">Search</button>
+          </form>
 
+          <InputLabel htmlFor="status-filter">Filter status:</InputLabel>
+          <select
+            id="status-filter"
+            onChange={handleStatusFilterChange}
+            value={displayedStatusValue}
+            className={cx("select-status")}
+          >
+            {statusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <Button variant="outlined" onClick={handleResetStatusFilter}>
+            Reset
+          </Button>
+        </Box>
         <Toaster position="top-center" reverseOrder={false} />
-        <TableContainer component={Paper} sx={{ height: "500px", my: 2 }}>
+        <TableContainer component={Paper} sx={{ my: 2 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -215,34 +244,32 @@ function ManageMember() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {(searchResults.length > 0 ? searchResults : newPayments).map(
-                (payment, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{payment.username}</TableCell>
-                    <TableCell>{payment.email}</TableCell>
-                    <TableCell>{payment.bookingDate}</TableCell>
-                    <TableCell>{payment.startDateMember}</TableCell>
-                    <TableCell>{payment.expiredDate}</TableCell>
-                    <TableCell>
-                      <StatusButton status={payment.status} />
-                    </TableCell>
-                    <TableCell>
-                      <Switch
-                        checked={payment.isMember}
-                        onChange={(event) => {
-                          handleToggle(
-                            event.target.checked,
-                            payment.memberId,
-                            payment.expiredDate,
-                            payment.status
-                          );
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
+              {newPayments.map((payment, index) => (
+                <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{payment.username}</TableCell>
+                  <TableCell>{payment.email}</TableCell>
+                  <TableCell>{payment.bookingDate}</TableCell>
+                  <TableCell>{payment.startDateMember}</TableCell>
+                  <TableCell>{payment.expiredDate}</TableCell>
+                  <TableCell>
+                    <StatusButton status={payment.status} />
+                  </TableCell>
+                  <TableCell>
+                    <Switch
+                      checked={payment.isMember}
+                      onChange={(event) => {
+                        handleToggle(
+                          event.target.checked,
+                          payment.memberId,
+                          payment.expiredDate,
+                          payment.status
+                        );
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -252,14 +279,8 @@ function ManageMember() {
             disabled={page === 1}
             endIcon={<KeyboardArrowLeftIcon />}
           />
-          <Select
-            value={searchResults.length > 0 ? currentPage : currentPage}
-            onChange={handlePageChange}
-            sx={{}}
-          >
-            {[
-              ...Array(searchResults.length > 0 ? newTotalPage : totalPage),
-            ].map((_, index) => (
+          <Select value={currentPage} onChange={handlePageChange} sx={{}}>
+            {[...Array(totalPage)].map((_, index) => (
               <MenuItem key={index + 1} value={index + 1}>
                 {index + 1}
               </MenuItem>
@@ -267,9 +288,7 @@ function ManageMember() {
           </Select>
           <Button
             onClick={handleNext}
-            disabled={
-              page === (searchResults.length > 0 ? newTotalPage : totalPage)
-            }
+            disabled={page === totalPage}
             startIcon={<KeyboardArrowRightIcon />}
           />
         </Box>

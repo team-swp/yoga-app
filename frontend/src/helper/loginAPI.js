@@ -20,6 +20,19 @@ export async function getMember() {
   });
 }
 
+export async function getMemberPaging(searchUsername) {
+  let apiPath = `/api/accountsPaging/get?limit=999999`;
+
+  if (searchUsername) {
+    apiPath += `&q=${searchUsername}`;
+  }
+
+  return await getApi({
+    apiPath,
+    errorMessage: "Cannot Get Members",
+  });
+}
+
 /** get User details */
 export async function getUser({ id }) {
   try {

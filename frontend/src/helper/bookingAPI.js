@@ -47,6 +47,6 @@ export async function checkBooking() {
     );
     return Promise.resolve({ data });
   } catch (error) {
-    return Promise.reject({ error});
+    return Promise.reject({ error });
   }
 }

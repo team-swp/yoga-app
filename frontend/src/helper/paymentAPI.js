@@ -11,9 +11,12 @@ export async function getPayment() {
   });
 }
 
-export async function getPaymentWithPaging(currentPage, perPage) {
-  let apiPath = `/api/paymentsPaging/get?page=${currentPage}&limit=${perPage}`;
+export async function getPaymentWithPaging(currentPage, status) {
+  let apiPath = `/api/paymentsPaging/get?page=${currentPage}&limit=5`;
 
+  if (status && status !== null) {
+    apiPath += `&status=${status}`;
+  }
   return await getApi({
     apiPath,
     errorMessage: "Cannot Get Booking",

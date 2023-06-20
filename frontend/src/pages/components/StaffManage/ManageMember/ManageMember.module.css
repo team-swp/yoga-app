@@ -1,0 +1,15 @@
+.select-status {
+  height: 2.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+}
+
+.select-status:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.4);
+  border-color: #6495ed;
+}
