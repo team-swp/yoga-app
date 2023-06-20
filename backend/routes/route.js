@@ -29,6 +29,7 @@ const {
   updateRoleAccount,
   updateAccountForStaff,
   updatePassword,
+  updateUserForAdmin,
 } = require("../controllers/Account");
 
 const crypto = require("crypto");
@@ -206,6 +207,8 @@ router.patch(
   getPaymentMethodById,
   updatePaymentMethod
 );
+//admin
+router.patch("/admin/update", AuthAdmin, updateUserForAdmin);
 
 //Role
 router.post("/role/add", AuthAdmin, addRole);

@@ -80,9 +80,9 @@ const rootReducer = (state = initState, action) => {
     }
     
     case "payment/premiumData": {
-      const {premium_id,paymentAmount} = action.payload
+      const {premium_id,paymentAmount,premiumname} = action.payload
       return { ...state ,
-      premium:{premium_id,paymentAmount}
+      premium:{premium_id,paymentAmount,premiumname}
       };
     }
     default:
