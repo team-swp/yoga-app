@@ -39,13 +39,7 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
 
 module.exports.getAccountPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(
-      req.query.page,
-      req.query.limit,
-      Account,
-      req.query.q,
-      "username"
-    );
+    const pagingPayload = await pagingnation(Account, "username", req.query);
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -89,6 +83,31 @@ module.exports.delete = async (req, res) => {
   }
 };
 
+module.exports.updateUserForAdmin = async (req, res) => {
+const {_id} = req.body
+
+  const accountUpdate = await Account.findOne({_id:_id})
+  console.log(accountUpdate);
+  const fieldsToUpdate = [
+    "username",
+    "role",
+    "status",
+    "phone",
+    "meta_data"
+  ];
+  for (const field of fieldsToUpdate) {
+    if (req.body[field] != null) {
+      accountUpdate[field] = req.body[field];
+    }
+  }
+  try {
+    const updateAccountNow = await accountUpdate.save();
+    res.status(201).send(updateAccountNow);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports.update = async (req, res) => {
   if (req.body.username != null) {
     res.account.username = req.body.username;
@@ -123,7 +142,7 @@ module.exports.update = async (req, res) => {
     const updateUser = await res.account.save();
     console.log(updateUser, "132233");
     console.log(req.body.password);
-    res.json(updateUser);
+    res.status(201).send(updateUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

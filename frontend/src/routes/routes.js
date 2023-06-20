@@ -15,6 +15,7 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
+  ProtectRouteCheckout,
   ProtectRouteOTP,
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
@@ -32,7 +33,11 @@ import ManageSemester from "../pages/components/StaffManage/MangeSemester/Manage
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+<<<<<<< HEAD
 import AdminHome from "../pages/components/Admin/AdminHome";
+=======
+import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
+>>>>>>> 5e22fd26097985f6f7ce9408e0e104ffb968fea0
 
 const routers = createBrowserRouter([
   {
@@ -93,7 +98,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element: <Checkout />,
+    element:<ProtectRouteCheckout> <Checkout /></ProtectRouteCheckout>,
   },
   {
     path: "/paymentstatus",
@@ -111,7 +116,7 @@ const routers = createBrowserRouter([
     path: "/manageclass",
     element: <ManageClass></ManageClass>,
   },
-  { path: "/managemember", element: <ManageMember /> },
+  { path: "/managemember", element: <ManageMember/> },
   {
     path: "/addnewclass",
     element: <AddNewClass></AddNewClass>,
@@ -151,6 +156,10 @@ const routers = createBrowserRouter([
   {
     path: "/addnewsemester",
     element: <ManageAddSemester></ManageAddSemester>,
+  },
+  {
+    path: "/updatesemester/:id",
+    element: <ManageUpdateSemester />,
   },
   {
     path: "/premium",

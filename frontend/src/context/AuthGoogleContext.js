@@ -17,13 +17,14 @@ import {
 } from "../redux/actions";
 import { useDispatch } from "react-redux";
 import { verifyTokenGoogle } from "../helper/loginAPI";
+import { Howl } from "howler";
 
 const AuthContext = createContext(); //tạo ra 1 cái kho
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    return signInWithPopup(auth, provider);
   };
   const dispatch = useDispatch();
   const logOut = async () => {
@@ -31,6 +32,14 @@ export const AuthContextProvider = ({ children }) => {
     signOut(auth);
     // }else{
     dispatch(logOutNormal(""));
+  };
+
+  const soundPlay = (src) => {
+    const sound = new Howl({
+      src,
+      html5: true,
+    });
+    sound.play();
   };
 
   useEffect(() => {
@@ -50,7 +59,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ googleSignIn, logOut }}>
+    <AuthContext.Provider value={{ googleSignIn, logOut,soundPlay }}>
       {children}
     </AuthContext.Provider>
   );

@@ -52,7 +52,7 @@ function ManageSemester() {
                 <td>{semesterItem.endDate}</td>
                 <td>{semesterItem.status ? "Active" : "Inactive"}</td>
                 <Link
-                  to={`//${semesterItem._id}`}
+                  to={`/updatesemester/${semesterItem._id}`}
                   className={cx("btn btn-secondary")}
                 >
                   Update

@@ -72,6 +72,10 @@ function Sidebar() {
       setCheckMember(checkMem.isMember);
     }
   }, [user]);
+
+  useEffect(()=>{
+
+  },[])
   return (
     <div>
       <IconButton
@@ -210,7 +214,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                    {checkMember ? "Your are a member" : "Become a member"}
+                    {checkMember?'You are a member':'Become a member'}
                   </div>
                 </div>
               </div>

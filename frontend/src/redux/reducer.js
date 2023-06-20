@@ -28,7 +28,6 @@ const rootReducer = (state = initState, action) => {
       };
       return newState;
     }
-
     case "login/setDataLogin": {
       const { _id, token, username, phone, avatar, email, meta_data, role } =
         action.payload;
@@ -37,6 +36,7 @@ const rootReducer = (state = initState, action) => {
       }
       return {
         ...state,
+
         user: {
           ...state.user,
           _id,
@@ -73,13 +73,18 @@ const rootReducer = (state = initState, action) => {
         user: {},
       };
     }
-
     case "set_course_id": {
       const { courseId } = action.payload;
       localStorage.setItem("courseId", courseId);
       return { ...state, courseId };
     }
-
+    
+    case "payment/premiumData": {
+      const {premium_id,paymentAmount,premiumname} = action.payload
+      return { ...state ,
+      premium:{premium_id,paymentAmount,premiumname}
+      };
+    }
     default:
       return state;
   }
