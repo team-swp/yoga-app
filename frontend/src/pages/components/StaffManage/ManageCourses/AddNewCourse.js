@@ -4,10 +4,7 @@ import {
   Container,
   TextField,
   Button,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel,
   Typography,
   CircularProgress,
   FormLabel,
@@ -18,7 +15,6 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import Header from "../../Header/Header";
-import Footer from "../../Footer/Footer";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import axios from "axios";
