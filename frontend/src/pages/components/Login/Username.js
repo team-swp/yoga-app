@@ -21,7 +21,7 @@ import soundBonk from "../../../assets/bonk-sound-effect.mp3";
 function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { googleSignIn,soundPlay } = UserAuth();
+  const { googleSignIn,soundPlay,checkLogin } = UserAuth();
   const token = localStorage.getItem("token");
   const [emailType, setEmailType] = useState();
   if (token && token !== "undefined") {
@@ -81,7 +81,8 @@ function Username() {
               navigate("/login");
             });
         })
-        .catch((res) => {
+        .catch((error) => {
+          toast.error('Or Your Account Have Been Banned')
           soundPlay(soundBonk);
           navigate("/login");
         });
@@ -90,17 +91,19 @@ function Username() {
   const handleGoogleSignIn = () => {
     try {
       let loginPromise = googleSignIn();
-      toast.promise(loginPromise, {
-        loading: "Checking...",
-        success: <b>Login Successfully...!</b>,
-        error: <b>Login Not Successfully!</b>,
-      });
       loginPromise
         .then(() => {
-          soundPlay(soundLogin);
-          navigate("/");
+          if(checkLogin){
+            soundPlay(soundLogin);
+            toast.success('Login Successfully...!')
+            navigate("/");
+          }else{
+            toast.error('Your Account Have Been Banned!')
+          soundPlay(soundBonk);
+          }
         })
         .catch(() => {
+          toast.error('Login Not Successfully!')
           soundPlay(soundBonk);
         });
     } catch (error) {

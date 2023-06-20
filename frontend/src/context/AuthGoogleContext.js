@@ -22,6 +22,7 @@ import { Howl } from "howler";
 const AuthContext = createContext(); //tạo ra 1 cái kho
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
+  const [checkLogin, setCheckLogin] = useState(false);
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
@@ -47,10 +48,17 @@ export const AuthContextProvider = ({ children }) => {
       if (currentUser) {
         setUser(currentUser);
         const token = await currentUser.getIdToken();
-        const data = await verifyTokenGoogle(token);
-        if (data) {
+        const data =  verifyTokenGoogle(token);
+        data.then((data)=>{
+          setCheckLogin(true)
           dispatch(setDataLogin(data));
-        }
+        })
+        .catch((error)=>{
+          setCheckLogin(false)
+          console.log(checkLogin);
+          signOut(auth);
+          dispatch(logOutNormal(""));
+        })
       }
     });
     return () => {
@@ -59,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ googleSignIn, logOut,soundPlay }}>
+    <AuthContext.Provider value={{ googleSignIn, logOut,soundPlay, checkLogin}}>
       {children}
     </AuthContext.Provider>
   );
