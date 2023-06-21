@@ -82,7 +82,6 @@ function Username() {
             });
         })
         .catch((error) => {
-          toast.error('Or Your Account Have Been Banned')
           soundPlay(soundBonk);
           navigate("/login");
         });
