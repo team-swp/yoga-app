@@ -21,6 +21,7 @@
     "dotenv": "^16.0.3",
     "firebase": "^9.22.1",
     "formik": "^2.2.9",
+    "lodash": "^4.17.21",
     "materialize-css": "^1.0.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
