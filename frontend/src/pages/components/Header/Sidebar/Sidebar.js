@@ -72,6 +72,10 @@ function Sidebar() {
       setCheckMember(checkMem.isMember);
     }
   }, [user]);
+
+  useEffect(()=>{
+
+  },[])
   return (
     <div>
       <IconButton

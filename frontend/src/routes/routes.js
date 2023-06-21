@@ -15,6 +15,7 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
+  ProtectRouteCheckout,
   ProtectRouteOTP,
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
@@ -29,7 +30,11 @@ import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCo
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+import AdminHome from "../pages/components/Admin/AdminHome";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
+import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
+import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
+import CourseItems from "../pages/components/Courses/CourseItems";
 
 const routers = createBrowserRouter([
   {
@@ -39,6 +44,10 @@ const routers = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses></Courses>,
+  },
+  {
+    path: "/courseitem",
+    element: <CourseItems></CourseItems>,
   },
   {
     path: "/course",
@@ -90,7 +99,12 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element: <Checkout />,
+    element: (
+      <ProtectRouteCheckout>
+        {" "}
+        <Checkout />
+      </ProtectRouteCheckout>
+    ),
   },
   {
     path: "/paymentstatus",
@@ -108,7 +122,15 @@ const routers = createBrowserRouter([
       </ProtectRoute>
     ),
   },
+<<<<<<< HEAD
 
+=======
+  {
+    path: "/manageclass",
+    element: <ManageClass></ManageClass>,
+  },
+  { path: "/managemember", element: <ManageMember /> },
+>>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
   {
     path: "/addnewclass",
     element: (
@@ -177,6 +199,10 @@ const routers = createBrowserRouter([
   {
     path: "/premium",
     element: <Premium></Premium>,
+  },
+  {
+    path: "/admin",
+    element: <AdminHome></AdminHome>,
   },
 ]);
 

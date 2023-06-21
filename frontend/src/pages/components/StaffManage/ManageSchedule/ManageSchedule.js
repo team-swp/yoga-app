@@ -3,6 +3,7 @@ import { Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import styles from "./ManageSchedule.css";
 import classNames from "classnames/bind";
+import Navigation from "../../Header/Navigation/Navigation";
 
 const cx = classNames.bind(styles);
 
@@ -26,7 +27,8 @@ function ManageSchedule() {
 
   return (
     <div>
-      <Container>
+      <Navigation/>
+      <Container style={{marginTop:'5%'}}>
         <div className={cx("text-end")}>
           <Link to="/addnewschedule" className={cx("btn btn-primary")}>
             Add new Schedule

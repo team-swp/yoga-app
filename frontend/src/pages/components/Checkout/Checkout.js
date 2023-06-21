@@ -32,11 +32,15 @@ import { premiumSelector, userSelector } from "../../../redux/selectors";
 import { Box, Typography } from "@mui/material";
 import { Modal } from "@mui/base";
 import classNames from "classnames/bind";
+import soundSpringFlower from '../../../assets/LisaSpringFlower.mp3'
+import soundHalfLove from '../../../assets/LisaHalfLove.mp3'
+import soundBigDeal from '../../../assets/LisaBigDeal.mp3'
 
 function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const { soundPlay } = UserAuth();
   const user = useSelector(userSelector);
   const premium = useSelector(premiumSelector);
   const [emailType, setEmailType] = useState(user.email);
@@ -56,6 +60,16 @@ function Checkout() {
     e.preventDefault();
     setOpen(true);
   };
+  useEffect(()=>{
+    toast.success(`Your premium booking is ${premium.premiumname}`)
+    if(premium.premiumname.includes('Spring')){
+      soundPlay(soundSpringFlower)
+    }else if(premium.premiumname.includes('Half')){
+      soundPlay(soundHalfLove)
+    }else{
+      soundPlay(soundBigDeal)
+    }
+  },[])
   const formik = useFormik({
     initialValues: {
       email: user.email,
@@ -72,6 +86,7 @@ function Checkout() {
     //   console.log('test 2');
     // }
     onSubmit: async (values) => {
+    
       const checkBookingPromise = checkBooking();
       checkBookingPromise
         .then(() => {
@@ -126,7 +141,8 @@ function Checkout() {
                     const date = new Date()
                   const dateString = date.toISOString();
                     const updateMember = updateUser({
-                      meta_data:`{"isMember":true,"MemberDuration":"${premium.duration}","startDateMember":"${dateString}"}` ,
+                      meta_data:`{"isMember":false}` ,
+                      // meta_data:`{"isMember":true,"MemberDuration":"${premium.duration}","startDateMember":"${dateString}"}` ,
                     });
                     updateMember.then((result) => {
                       //qua trang thanh toán thành công

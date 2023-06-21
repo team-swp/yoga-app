@@ -17,13 +17,15 @@ import {
 } from "../redux/actions";
 import { useDispatch } from "react-redux";
 import { verifyTokenGoogle } from "../helper/loginAPI";
+import { Howl } from "howler";
 
 const AuthContext = createContext(); //tạo ra 1 cái kho
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
+  const [checkLogin, setCheckLogin] = useState(false);
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    return signInWithPopup(auth, provider);
   };
   const dispatch = useDispatch();
   const logOut = async () => {
@@ -33,15 +35,30 @@ export const AuthContextProvider = ({ children }) => {
     dispatch(logOutNormal(""));
   };
 
+  const soundPlay = (src) => {
+    const sound = new Howl({
+      src,
+      html5: true,
+    });
+    sound.play();
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
         const token = await currentUser.getIdToken();
-        const data = await verifyTokenGoogle(token);
-        if (data) {
+        const data =  verifyTokenGoogle(token);
+        data.then((data)=>{
+          setCheckLogin(true)
           dispatch(setDataLogin(data));
-        }
+        })
+        .catch((error)=>{
+          setCheckLogin(false)
+          console.log(checkLogin);
+          signOut(auth);
+          dispatch(logOutNormal(""));
+        })
       }
     });
     return () => {
@@ -50,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ googleSignIn, logOut }}>
+    <AuthContext.Provider value={{ googleSignIn, logOut,soundPlay, checkLogin}}>
       {children}
     </AuthContext.Provider>
   );

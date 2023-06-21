@@ -83,6 +83,31 @@ module.exports.delete = async (req, res) => {
   }
 };
 
+module.exports.updateUserForAdmin = async (req, res) => {
+const {_id} = req.body
+
+  const accountUpdate = await Account.findOne({_id:_id})
+  console.log(accountUpdate);
+  const fieldsToUpdate = [
+    "username",
+    "role",
+    "status",
+    "phone",
+    "meta_data"
+  ];
+  for (const field of fieldsToUpdate) {
+    if (req.body[field] != null) {
+      accountUpdate[field] = req.body[field];
+    }
+  }
+  try {
+    const updateAccountNow = await accountUpdate.save();
+    res.status(201).send(updateAccountNow);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports.update = async (req, res) => {
   if (req.body.username != null) {
     res.account.username = req.body.username;
@@ -237,9 +262,7 @@ module.exports.Login = async (req, res) => {
               return res.status(500).send({ error: "Password does not Match" });
             });
         } else {
-          return res
-            .status(500)
-            .send({ error: "Your account have been banned" });
+          return res.status(404).send({ message: "Your account have been banned" });
         }
       })
       .catch((error) => {
