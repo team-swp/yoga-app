@@ -10,6 +10,7 @@ import { getCourse } from "../../../helper/courseAPI";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCourseId } from "../../../redux/actions";
+import CourseItems from "./CourseItems";
 
 const cx = classNames.bind(styles);
 
@@ -61,14 +62,7 @@ function Courses() {
           ref={ref}
         >
           {courseList.map((course) => (
-            <Link to="/course" onClick={() => handleCourseClick(course._id)}>
-              <div className={cx("courses-items")} key={course._id}>
-                <div className={cx("courses-image")}>
-                  <img src={course.images[0]} alt={course.coursename} />
-                </div>
-                <p className={cx("courses-title")}>{course.coursename}</p>
-              </div>
-            </Link>
+            <CourseItems course={course} />
           ))}
         </div>
       </Container>

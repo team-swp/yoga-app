@@ -1,273 +1,214 @@
-import React, { useEffect, useState } from "react";
-
-import {
-    Container,
-    TextField,
-    Button,
-    FormControl,
-    Typography,
-    CircularProgress,
-    FormLabel,
-    FormGroup,
-    FormControlLabel,
-    Checkbox,
-
-} from "@mui/material";
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Container, TextField, Button, FormControl } from "@mui/material";
 import { Link } from "react-router-dom";
 import Header from "../../Header/Header";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+
 import { addPremium } from "../../../../helper/premiumAPI";
+import { Toaster, toast } from "react-hot-toast";
+
+const validationSchema = Yup.object().shape({
+  premiumName: Yup.string().required("Premium Name is required"),
+  priceOriginal: Yup.number()
+    .typeError("Price Origin must be a number")
+    .required("Price Origin is required"),
+  priceDiscount: Yup.number()
+    .typeError("Price Discount must be a number")
+    .required("Price Discount is required"),
+  benefit: Yup.string().required("Benefit is required"),
+  rules: Yup.string().required("Rules is required"),
+
+  durationByMonth: Yup.number()
+    .typeError("Duration by month must be a number")
+    .required("Duration by month is required"),
+});
 
 function AddNewPremium() {
-    const [premiumName, setPremiumName] = useState("");
-    const [priceOriginal, setpriceOriginal] = useState("");
-    const [priceDiscount, setpriceDiscount] = useState("");
-    const [benefit, setBenefit] = useState("");
-    const [rules, setRules] = useState("");
-    const [description, setDescription] = useState("");
-    const [status, setStatus] = useState("");
-    const [durationByMonth, setDurationByMonth] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [addSuccess, setAddSuccess] = useState(false);
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setErrorMessage(null);
-        setAddSuccess(false);
-        try {
-            const response = await addPremium({
-                premiumname: premiumName,
-                priceOriginal,
-                priceDiscount,
-                benefit,
-                rules,
-                description,
-                status: status,
-                durationByMonth
-            });
+  const formik = useFormik({
+    initialValues: {
+      premiumName: "",
+      priceOriginal: "",
+      priceDiscount: "",
+      benefit: "",
+      rules: "",
 
-            if (response) {
-                setAddSuccess(true);
-                setTimeout(() => {
-                    setAddSuccess(false);
-                }, 3000);
-                setPremiumName("");
-                setpriceOriginal("");
-                setpriceDiscount("");
-                setBenefit("");
-                setRules("")
-                setDescription("")
-                setStatus("");
-                setDurationByMonth("")
-            } else {
-                setErrorMessage("Failed to update course");
-            }
-        } catch (error) {
-            console.error(error);
-            setErrorMessage(
-                "Error occurred while updating the course. Please try again later."
-            );
+      durationByMonth: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await addPremium({
+          premiumname: values.premiumName,
+          priceOriginal: values.priceOriginal,
+          priceDiscount: values.priceDiscount,
+          benefit: values.benefit,
+          rules: values.rules,
+          description: values.description,
+
+          durationByMonth: values.durationByMonth,
+        });
+
+        if (response) {
+          toast.success("Premium package added successfully");
+          formik.resetForm();
+        } else {
+          toast.error("Failed to add premium package");
         }
-        setIsSubmitting(false);
-    };
-    return (
-        <div>
-            <Header />
-            <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
-                <div
-                    style={{
-                        textAlign: "center",
-                        position: "sticky",
-                        top: 100,
-                        color: "#333",
-                        fontSize: "24px",
-                        marginTop: "40px",
-                    }}
-                >
-                    Add New Premium
-                    {errorMessage && (
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: "red",
-                                color: "white",
-                                padding: "10px",
-                                borderRadius: "8px",
-                                marginBottom: "20px",
-                            }}
-                        >
-                            <CancelOutlinedIcon sx={{ mr: 1 }} />
-                            <Typography variant="body1">{errorMessage}</Typography>
-                        </div>
-                    )}
-                    {addSuccess && (
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backgroundColor: "#4caf50",
-                                color: "white",
-                                padding: "10px",
-                                borderRadius: "8px",
-                                marginBottom: "20px",
-                            }}
-                        >
-                            <CheckCircleOutlineOutlinedIcon sx={{ mr: 1 }} />
-                            <Typography variant="body1">
-                                Course updated successfully!
-                            </Typography>
-                        </div>
-                    )}
-                </div>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Premium Name"
-                        type="text"
-                        value={premiumName}
-                        onChange={(e) => setPremiumName(e.target.value)}
-                        fullWidth
-                        required
-                        sx={{ marginBottom: "10px" }}
-                    />
-                    <TextField
-                        label="Price Origin"
-                        type="number"
-                        value={priceOriginal}
-                        onChange={(e) => setpriceOriginal(e.target.value)}
-                        fullWidth
-                        required
-                        multiline
-                        rows={4}
-                        sx={{ marginBottom: "10px" }}
-                    />
-                    <TextField
-                        label="Price Discount"
-                        type="number"
-                        name="price"
-                        value={priceDiscount}
-                        onChange={(event) => setpriceDiscount(event.target.value)}
-                        required
-                        sx={styles.textField}
-                    />
-                    <TextField
-                        label="Benefit"
-                        type="text"
-                        value={benefit}
-                        onChange={(e) => setBenefit(e.target.value)}
-                        fullWidth
-                        required
-                        multiline
-                        rows={4}
-                        sx={{ marginBottom: "10px" }}
-                    />
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          "Error occurred while adding the premium package. Please try again later."
+        );
+      }
+    },
+  });
 
-                    <TextField
-                        label="Rules"
-                        type="text"
-                        value={rules}
-                        onChange={(e) => setRules(e.target.value)}
-                        fullWidth
-                        required
-                        multiline
-                        rows={4}
-                        sx={{ marginBottom: "10px" }}
-                    />
-
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Status</FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={status === "true"}
-                                        onChange={(event) =>
-                                            setStatus(event.target.checked ? "true" : "false")
-                                        }
-                                    />
-                                }
-                                label="Active"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={status === "false"}
-                                        onChange={(event) =>
-                                            setStatus(event.target.checked ? "false" : "true")
-                                        }
-                                    />
-                                }
-                                label="Inactive"
-                            />
-                        </FormGroup>
-                        <TextField
-                            label="Duration by month"
-                            type="number"
-                            value={durationByMonth}
-                            onChange={(e) => setDurationByMonth(e.target.value)}
-                            fullWidth
-                            required
-                            sx={{ marginBottom: "10px" }}
-                        />
-                    </FormControl>
-
-                    {isSubmitting ? (
-                        <CircularProgress style={{ marginTop: "1rem" }} />
-                    ) : (
-                        <Button
-                            color="success"
-                            type="submit"
-                            variant="contained"
-                            sx={styles.button}
-                        >
-                            SUBMIT
-                        </Button>
-                    )}
-                    <Link
-                        to="/staffmanage"
-                        style={{
-                            marginBlock: "30px",
-                            float: "right",
-                            backgroundColor: "grey",
-                            border: "none",
-                            color: "white",
-                            padding: "10px 20px",
-                            textAlign: "center",
-                            textDecoration: "none",
-                            display: "inline-block",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        Back
-                    </Link>
-                </form>
-            </Container>
+  return (
+    <div>
+      <Header />
+      <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
+        <Toaster></Toaster>
+        <div
+          style={{
+            textAlign: "center",
+            position: "sticky",
+            top: 100,
+            color: "#333",
+            fontSize: "24px",
+            marginTop: "40px",
+          }}
+        >
+          Add New Premium
         </div>
-    );
+        <form onSubmit={formik.handleSubmit}>
+          <TextField
+            label="Premium Name"
+            type="text"
+            fullWidth
+            required
+            sx={{ marginBottom: "10px" }}
+            {...formik.getFieldProps("premiumName")}
+            error={formik.touched.premiumName && formik.errors.premiumName}
+            helperText={formik.touched.premiumName && formik.errors.premiumName}
+          />
+          <TextField
+            label="Price Origin"
+            type="number"
+            fullWidth
+            required
+            multiline
+            rows={4}
+            sx={{ marginBottom: "10px" }}
+            {...formik.getFieldProps("priceOriginal")}
+            error={formik.touched.priceOriginal && formik.errors.priceOriginal}
+            helperText={
+              formik.touched.priceOriginal && formik.errors.priceOriginal
+            }
+          />
+          <TextField
+            label="Price Discount"
+            type="number"
+            required
+            sx={styles.textField}
+            {...formik.getFieldProps("priceDiscount")}
+            error={formik.touched.priceDiscount && formik.errors.priceDiscount}
+            helperText={
+              formik.touched.priceDiscount && formik.errors.priceDiscount
+            }
+          />
+          <TextField
+            label="Benefit"
+            type="text"
+            fullWidth
+            required
+            multiline
+            rows={4}
+            sx={{ marginBottom: "10px" }}
+            {...formik.getFieldProps("benefit")}
+            error={formik.touched.benefit && formik.errors.benefit}
+            helperText={formik.touched.benefit && formik.errors.benefit}
+          />
+
+          <TextField
+            label="Rules"
+            type="text"
+            fullWidth
+            required
+            multiline
+            rows={4}
+            sx={{ marginBottom: "10px" }}
+            {...formik.getFieldProps("rules")}
+            error={formik.touched.rules && formik.errors.rules}
+            helperText={formik.touched.rules && formik.errors.rules}
+          />
+          <FormControl component="fieldset">
+            <TextField
+              label="Duration by month"
+              type="number"
+              required
+              sx={{ marginBottom: "10px" }}
+              {...formik.getFieldProps("durationByMonth")}
+              error={
+                formik.touched.durationByMonth && formik.errors.durationByMonth
+              }
+              helperText={
+                formik.touched.durationByMonth && formik.errors.durationByMonth
+              }
+            />
+          </FormControl>
+
+          <Button
+            color="success"
+            type="submit"
+            variant="contained"
+            sx={styles.button}
+          >
+            SUBMIT
+          </Button>
+
+          <Link
+            to="/staffmanage"
+            style={{
+              marginBlock: "30px",
+              float: "right",
+              backgroundColor: "grey",
+              border: "none",
+              color: "white",
+              padding: "10px 20px",
+              textAlign: "center",
+              textDecoration: "none",
+              display: "inline-block",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            Cancel
+          </Link>
+        </form>
+      </Container>
+    </div>
+  );
 }
 
 export default AddNewPremium;
+
 const styles = {
-    container: {
-        marginTop: "2rem",
-        marginBottom: "2rem",
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    textField: {
-        marginBottom: "1rem",
-        width: "100%",
-    },
-    button: {
-        marginTop: "1rem",
-        width: "100%",
-    },
+  container: {
+    marginTop: "2rem",
+    marginBottom: "2rem",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  textField: {
+    marginBottom: "1rem",
+    width: "100%",
+  },
+  button: {
+    marginTop: "1rem",
+    width: "100%",
+  },
 };

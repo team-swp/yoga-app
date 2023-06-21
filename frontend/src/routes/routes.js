@@ -35,6 +35,7 @@ import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMem
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
+import CourseItems from "../pages/components/Courses/CourseItems";
 
 const routers = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const routers = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses></Courses>,
+  },
+  {
+    path: "/courseitem",
+    element: <CourseItems></CourseItems>,
   },
   {
     path: "/course",
@@ -164,7 +169,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/addnewpremium",
-    element: <AddNewPremium></AddNewPremium>
+    element: <AddNewPremium></AddNewPremium>,
   },
   {
     path: "/updatepremiumpack/:id",

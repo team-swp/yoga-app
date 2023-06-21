@@ -1,4 +1,4 @@
-import { Select, MenuItem, TextField } from '@mui/material';
+import { Select, MenuItem, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -11,25 +11,25 @@ import {
   Paper,
   Button,
   Switch,
-} from '@mui/material';
-import './ManageCourses.css'
+} from "@mui/material";
+import "./ManageCourses.css";
 import { Link } from "react-router-dom";
 
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
-import StatusButton from './StatusButton2';
+import StatusButton from "./StatusButton2";
 
-import { updateCourse } from '../../../../helper/courseAPI';
+import { updateCourse } from "../../../../helper/courseAPI";
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
-  const [updatedCourse, setUpdatedCourse] = useState({})
-  const [schedule, setSchedule] = useState([])
-  const [value, setValue] = useState('')
-  const [page, setPage] = useState(1)
-  const [pageCount, setPageCount] = useState(0)
-  const [semesterValue, setSemesterValue] = useState('');
-  const [statusValue, setStatusValue] = useState('');
-  /////// update done//////////// 
+  const [updatedCourse, setUpdatedCourse] = useState({});
+  const [schedule, setSchedule] = useState([]);
+  const [value, setValue] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [semesterValue, setSemesterValue] = useState("");
+  const [statusValue, setStatusValue] = useState("");
+  /////// update done////////////
   const handleToggle = async (event, course) => {
     try {
       const updatedCourseData = { ...course, status: event.target.checked };
@@ -37,9 +37,12 @@ function ManageCourses() {
       if (response && response.data) {
         console.log(response.data.data.coursename);
         setUpdatedCourse(courses);
-        const updatedCourses = courses.map((courseItem) =>
-          courseItem._id === response.data._id ? response.data : courseItem,
-          toast.success(`${response.data.data.coursename} status updated success`)
+        const updatedCourses = courses.map(
+          (courseItem) =>
+            courseItem._id === response.data._id ? response.data : courseItem,
+          toast.success(
+            `${response.data.data.coursename} status updated success`
+          )
         );
         setCourses(updatedCourses);
       }
@@ -56,114 +59,98 @@ function ManageCourses() {
   useEffect(() => {
     async function fecthSemester() {
       try {
-        const requestUrl = 'http://localhost:3001/api/semester/get'
-        const response = await fetch(requestUrl)
-        const responseJSON = await response.json()
-        console.log(responseJSON);
-        setSchedule(responseJSON)
+        const response = await axios.get(
+          `http://localhost:3001/api/semestersPaging/get?limit=${1000}`
+        );
+        const coureseData = response.data.items;
+        console.log();
+        setSchedule(coureseData);
       } catch (error) {
-        console.log('Failed')
+        console.log("Failed");
       }
     }
     fecthSemester();
-  }, [])
+  }, []);
   ////////////////////////////  chạy lại cái này để reset lại trang ////////////////////////////////////////////////
   async function fetchCourses2() {
-    const response = await axios.get(`http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`)
+    const response = await axios.get(
+      `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`
+    );
     const coureseData = response.data.items;
-    setPage(response.data.pagination.pageNum)
-    setPageCount(response.data.pagination.pageCount)
+    setPage(response.data.pagination.pageNum);
+    setPageCount(response.data.pagination.pageCount);
     setCourses(coureseData);
   }
   ////////////////////////////// cái này thì là khi update nó k bị load lại với page////////////////////////////
   async function fetchCourses() {
-    const response = await axios.get(url2)
+    const response = await axios.get(url2);
     const coureseData = response.data.items;
-    setPage(response.data.pagination.pageNum)
-    setPageCount(response.data.pagination.pageCount)
+    setPage(response.data.pagination.pageNum);
+    setPageCount(response.data.pagination.pageCount);
     setCourses(coureseData);
   }
   /////////////////////// hàm reset này sẽ làm mới lại trang mà trả ô tìm kiếm bằng rỗng//////////////////////////////////
   const handleReset = () => {
-    fetchCourses2()
-    setSemesterValue("")
-    setValue("")
-    setStatusValue("")
-
-
-  }
-  var url2 = null
+    fetchCourses2();
+    setSemesterValue("");
+    setValue("");
+    setStatusValue("");
+  };
+  var url2 = null;
   if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
   } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}`
-
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}`;
   } else if (value === "" && semesterValue !== "" && statusValue === "") {
-
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}`
-
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}`;
   } else if (value === "" && semesterValue === "" && statusValue !== "") {
-
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&status=${statusValue}`
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&status=${statusValue}`;
   } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}`
-
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}`;
   } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`
-  }
-  else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`
-  }
-  else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`
-  }
-  else {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`;
+  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`;
+  } else {
+    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`;
   }
 
-  var url = null
+  var url = null;
   if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
   } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}`
-
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}`;
   } else if (value === "" && semesterValue !== "" && statusValue === "") {
-
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}`
-
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}`;
   } else if (value === "" && semesterValue === "" && statusValue !== "") {
-
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&status=${statusValue}`
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&status=${statusValue}`;
   } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}`
-
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}`;
   } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`
-  }
-  else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`
-  }
-  else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`
-  }
-  else {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
+  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`;
+  } else {
+    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
   }
   ///////////////////// đây là hàm search tìm kiếm///////////////////////////////////////////////
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-
-      const response = await axios.get(url)
+      const response = await axios.get(url);
       const semesterData = response.data.items;
       console.log(response.data);
-      setPage(response.data.pagination.pageNum)
-      setPageCount(response.data.pagination.pageCount)
+      setPage(response.data.pagination.pageNum);
+      setPageCount(response.data.pagination.pageCount);
       setCourses(semesterData);
     } catch (error) {
-      toast.error('Please try agian !!!')
+      toast.error("Please try agian !!!");
     }
-  }
+  };
   /////////////////// handle việc next và prev trong page/////////////////////////
   function handlePrevious() {
     setPage((p) => {
@@ -185,7 +172,9 @@ function ManageCourses() {
       <Container>
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper}>
-          <div style={{ float: 'right', marginTop: '15px', marginRight: '10px' }}>
+          <div
+            style={{ float: "right", marginTop: "15px", marginRight: "10px" }}
+          >
             <Button
               variant="contained"
               color="success"
@@ -197,12 +186,12 @@ function ManageCourses() {
           </div>
           <form
             style={{
-              margin: 'auto',
-              padding: '15px',
-              maxWidth: '800px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              margin: "auto",
+              padding: "15px",
+              maxWidth: "800px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
             onSubmit={handleSearch}
           >
@@ -212,14 +201,13 @@ function ManageCourses() {
               placeholder="Search course name"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              style={{ marginRight: '1rem' }}
+              style={{ marginRight: "1rem" }}
             />
 
             <Select
               value={semesterValue}
               onChange={(e) => setSemesterValue(e.target.value)}
-              style={{ marginLeft: '1rem', marginRight: '1rem' }}
-
+              style={{ marginLeft: "1rem", marginRight: "1rem" }}
             >
               <MenuItem value="">All Semesters</MenuItem>
               {schedule.map((semester, index) => (
@@ -228,26 +216,29 @@ function ManageCourses() {
                 </MenuItem>
               ))}
             </Select>
-            <p style={{ fontWeight: 'normal', fontSize: '13px' }}>Select Semester</p>
+            <p style={{ fontWeight: "normal", fontSize: "13px" }}>
+              Select Semester
+            </p>
 
             <Select
               value={statusValue}
               onChange={(e) => setStatusValue(e.target.value)}
-              style={{ marginLeft: '1rem', marginRight: '1rem' }}
-
+              style={{ marginLeft: "1rem", marginRight: "1rem" }}
             >
               <MenuItem value="">All Statuses</MenuItem>
               <MenuItem value="true">Enabled</MenuItem>
               <MenuItem value="false">Disabled</MenuItem>
             </Select>
             <>
-              <p style={{ fontWeight: 'normal', fontSize: '13px' }}>Select Status</p>
+              <p style={{ fontWeight: "normal", fontSize: "13px" }}>
+                Select Status
+              </p>
             </>
             <Button type="submit" variant="contained" color="primary">
               Search
             </Button>
             <Button
-              style={{ marginLeft: '1rem' }}
+              style={{ marginLeft: "1rem" }}
               variant="outlined"
               onClick={handleReset}
             >
@@ -255,50 +246,69 @@ function ManageCourses() {
             </Button>
           </form>
 
-
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ textAlign: 'center' }}>ID</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Course Name</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Price</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Semester</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Disable/Enable </TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Status </TableCell>
-                <TableCell style={{ textAlign: 'center' }}>Action</TableCell>
+                <TableCell style={{ textAlign: "center" }}>ID</TableCell>
+                <TableCell style={{ textAlign: "center" }}>
+                  Course Name
+                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>Price</TableCell>
+                <TableCell style={{ textAlign: "center" }}>Semester</TableCell>
+                <TableCell style={{ textAlign: "center" }}>
+                  Disable/Enable{" "}
+                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>Status </TableCell>
+                <TableCell style={{ textAlign: "center" }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {courses.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} align="center" style={{ fontSize: '30px' }}>No courses available !!!</TableCell>
+                  <TableCell
+                    colSpan={7}
+                    align="center"
+                    style={{ fontSize: "30px" }}
+                  >
+                    No courses available !!!
+                  </TableCell>
                 </TableRow>
               ) : (
                 courses.map((courseItem, index) => {
-                  const semester = schedule.find((item2) => item2._id === courseItem.semester_id);
+                  const semester = schedule.find(
+                    (item2) => item2._id === courseItem.semester_id
+                  );
                   return (
                     <TableRow key={index}>
-                      <TableCell style={{ textAlign: 'center' }}>{index + 1}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>{courseItem.coursename}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>{courseItem.price}</TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>
-                        {semester ? semester.semestername : 'N/A'}
+                      <TableCell style={{ textAlign: "center" }}>
+                        {index + 1}
                       </TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>
+                      <TableCell style={{ textAlign: "center" }}>
+                        {courseItem.coursename}
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
+                        {courseItem.price}
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
+                        {semester ? semester.semestername : "N/A"}
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
                         <Switch
                           checked={courseItem.status}
                           onChange={(event) => handleToggle(event, courseItem)}
-                          color={courseItem.status ? 'success' : 'error'}
+                          color={courseItem.status ? "success" : "error"}
                         />
                       </TableCell>
-                      <TableCell style={{ textAlign: 'center' }}><StatusButton status={courseItem.status} /></TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>
+                      <TableCell style={{ textAlign: "center" }}>
+                        <StatusButton status={courseItem.status} />
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
                         <Button
                           variant="contained"
                           color="warning"
                           component={Link}
                           to={`/updatecourse/${courseItem._id}`}
-                          style={{ fontSize: '10px' }}
+                          style={{ fontSize: "10px" }}
                         >
                           Update & Detail
                         </Button>
@@ -310,14 +320,16 @@ function ManageCourses() {
             </TableBody>
           </Table>
         </TableContainer>
-        <footer style={{
-          margin: 'auto',
-          padding: '15px',
-          maxWidth: '400px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+        <footer
+          style={{
+            margin: "auto",
+            padding: "15px",
+            maxWidth: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <button
             disabled={page === 1}
             onClick={handlePrevious}
@@ -335,7 +347,6 @@ function ManageCourses() {
             value={page}
             onChange={(event) => {
               setPage(event.target.value);
-
             }}
             style={{
               marginRight: "1rem",
@@ -366,10 +377,8 @@ function ManageCourses() {
             Next
           </button>
         </footer>
-      </Container >
-
-
-    </div >
+      </Container>
+    </div>
   );
 }
 
