@@ -35,6 +35,9 @@ import Premium from "../pages/components/MemberPacket/Premium";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 import AdminHome from "../pages/components/Admin/AdminHome";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
+import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
+import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
+import CourseItems from "../pages/components/Courses/CourseItems";
 
 const routers = createBrowserRouter([
   {
@@ -44,6 +47,10 @@ const routers = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses></Courses>,
+  },
+  {
+    path: "/courseitem",
+    element: <CourseItems></CourseItems>,
   },
   {
     path: "/course",
@@ -95,7 +102,12 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element:<ProtectRouteCheckout> <Checkout /></ProtectRouteCheckout>,
+    element: (
+      <ProtectRouteCheckout>
+        {" "}
+        <Checkout />
+      </ProtectRouteCheckout>
+    ),
   },
   {
     path: "/paymentstatus",
@@ -113,7 +125,7 @@ const routers = createBrowserRouter([
     path: "/manageclass",
     element: <ManageClass></ManageClass>,
   },
-  { path: "/managemember", element: <ManageMember/> },
+  { path: "/managemember", element: <ManageMember /> },
   {
     path: "/addnewclass",
     element: <AddNewClass></AddNewClass>,

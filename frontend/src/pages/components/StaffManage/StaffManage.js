@@ -9,6 +9,7 @@ import ManageSchedule from "./ManageSchedule/ManageSchedule";
 import ManageSemester from "./MangeSemester/ManageSemester";
 import ManageCourses from "./ManageCourses/ManageCourses";
 import ManageClass from "./ManageClass/ManageClass";
+import ManagePremium from "./ManagePremium";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -73,6 +74,7 @@ function StaffManage() {
             <Tab label="Manage Class" {...a11yProps(2)} />
             <Tab label="Manage Schedule" {...a11yProps(3)} />
             <Tab label="Manage Member" {...a11yProps(4)} />
+            <Tab label="Manage Premium Pack" {...a11yProps(5)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -89,6 +91,9 @@ function StaffManage() {
         </TabPanel>
         <TabPanel value={value} index={4}>
           {<ManageMember />}
+        </TabPanel>
+        <TabPanel value={value} index={5}>
+          {<ManagePremium />}
         </TabPanel>
       </Box>
 
