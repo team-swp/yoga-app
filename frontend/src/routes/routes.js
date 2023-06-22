@@ -38,6 +38,7 @@ import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 import CourseItems from "../pages/components/Courses/CourseItems";
+import Dashboard from "../pages/components/DashBoard/Dashboard";
 
 const routers = createBrowserRouter([
   {
@@ -177,6 +178,10 @@ const routers = createBrowserRouter([
   {
     path: "/admin",
     element: <AdminHome></AdminHome>,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard></Dashboard>,
   },
 ]);
 
