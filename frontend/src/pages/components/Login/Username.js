@@ -90,21 +90,17 @@ function Username() {
   const handleGoogleSignIn = () => {
     try {
       let loginPromise = googleSignIn();
-      loginPromise
-        .then(() => {
-          if(checkLogin){
-            soundPlay(soundLogin);
-            toast.success('Login Successfully...!')
-            navigate("/");
-          }else{
-            toast.error('Your Account Have Been Banned!')
-          soundPlay(soundBonk);
-          }
-        })
-        .catch(() => {
-          toast.error('Login Not Successfully!')
-          soundPlay(soundBonk);
-        });
+      toast.promise(loginPromise, {
+        loading: "Checking...",
+        success: <b>Login Successfully...!</b>,
+        error: <b>Password Not Match!</b>,
+      });
+
+      loginPromise.then(() => {
+        navigate("/");
+      }).catch(()=>{
+        navigate("/login")
+      })
     } catch (error) {
       console.log(error);
     }

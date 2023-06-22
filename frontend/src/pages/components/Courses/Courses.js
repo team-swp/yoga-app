@@ -20,12 +20,19 @@ function Courses() {
       try {
         const response = await getCourse();
         setCourseList(response.data.filter((course) => course.status));
+        var newLink = document.createElement("a");
+        newLink.href = '#course_list';
+        newLink.click();
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
   }, []);
+
+  setTimeout(()=>{
+   
+  },0)
 
   const [ref, inView] = useInView({
     threshold: 0,
@@ -57,6 +64,7 @@ function Courses() {
         </h2>
         <hr className="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
         <div
+          id="course_list"
           className={cx("courses-container", { "in-view": inView })}
           ref={ref}
         >
@@ -71,6 +79,8 @@ function Courses() {
             </Link>
           ))}
         </div>
+
+        <div></div>
       </Container>
       <Footer />
     </div>

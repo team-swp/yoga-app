@@ -29,9 +29,7 @@ export const AuthContextProvider = ({ children }) => {
   };
   const dispatch = useDispatch();
   const logOut = async () => {
-    // if(user){
     signOut(auth);
-    // }else{
     dispatch(logOutNormal(""));
   };
 
@@ -47,27 +45,29 @@ export const AuthContextProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        const token = await currentUser.getIdToken();
-        const data =  verifyTokenGoogle(token);
-        data.then((data)=>{
-          setCheckLogin(true)
-          dispatch(setDataLogin(data));
-        })
-        .catch((error)=>{
-          setCheckLogin(false)
-          console.log(checkLogin);
-          signOut(auth);
-          dispatch(logOutNormal(""));
-        })
+        const tokenPromise = currentUser.getIdToken();
+        tokenPromise.then((token) => {
+          const data = verifyTokenGoogle(token);
+          data
+            .then((data) => {
+              dispatch(setDataLogin(data));
+            })
+            .catch((error) => {
+              signOut(auth);
+              dispatch(logOutNormal(""));
+            });
+        });
       }
     });
     return () => {
       unsubscribe();
     };
-  }, [user]);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ googleSignIn, logOut,soundPlay, checkLogin}}>
+    <AuthContext.Provider
+      value={{ googleSignIn, logOut, soundPlay, checkLogin }}
+    >
       {children}
     </AuthContext.Provider>
   );

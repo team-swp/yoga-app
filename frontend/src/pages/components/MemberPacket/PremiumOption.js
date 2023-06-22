@@ -31,7 +31,6 @@ function PremiumOption({ premium }) {
     });
   }
   const [check, setCheck] = useState(true);
-  const { soundPlay } = UserAuth();
 
   useEffect(() => {
     const benefitArray = premium.benefit.split(",");
