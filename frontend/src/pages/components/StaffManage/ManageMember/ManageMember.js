@@ -42,8 +42,6 @@ function ManageMember() {
   const [payments, setPayments] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
-  console.log(searchResults);
-
   async function fetchData() {
     try {
       const [paymentsResponse, bookingsResponse, membersResponse] =

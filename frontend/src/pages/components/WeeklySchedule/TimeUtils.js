@@ -7,7 +7,7 @@ export function parseTime(timeStr, days, startDate, endDate) {
   let targetDays;
 
   if (days && days.length > 0) {
-    var days = days.map((day) => day.toLowerCase());
+    days = days.map((day) => day.toLowerCase());
     const matchingDays = [];
 
     let i = 1;

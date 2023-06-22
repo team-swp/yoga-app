@@ -20,22 +20,15 @@
     "dotenv": "^16.0.3",
     "firebase": "^9.22.1",
     "formik": "^2.2.9",
-<<<<<<< HEAD
-    "lodash": "^4.17.21",
-=======
     "framer-motion": "^10.12.16",
     "howler": "^2.2.3",
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
     "materialize-css": "^1.0.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-big-calendar": "^1.8.1",
-<<<<<<< HEAD
-=======
     "react-bootstrap": "^2.7.4",
     "react-calendar": "^4.2.1",
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
     "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
     "react-google-button": "^0.7.2",

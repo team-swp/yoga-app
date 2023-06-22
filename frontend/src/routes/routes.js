@@ -122,15 +122,8 @@ const routers = createBrowserRouter([
       </ProtectRoute>
     ),
   },
-<<<<<<< HEAD
 
-=======
-  {
-    path: "/manageclass",
-    element: <ManageClass></ManageClass>,
-  },
   { path: "/managemember", element: <ManageMember /> },
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
   {
     path: "/addnewclass",
     element: (

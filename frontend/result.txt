@@ -1,21 +1,29 @@
-.\src\context\AuthGoogleContext.js:25:	GlobalVariable:	Avoid using global variables
+.\src\context\AuthGoogleContext.js:27:	GlobalVariable:	Avoid using global variables
+.\src\helper\bookingAPI.js:14:	GlobalVariable:	Avoid using global variables
+.\src\helper\paymentAPI.js:15:	GlobalVariable:	Avoid using global variables
 .\src\helper\validate.js:4:	GlobalVariable:	Avoid using global variables
 .\src\middleware\auth.js:8:	GlobalVariable:	Avoid using global variables
 .\src\middleware\auth.js:24:	GlobalVariable:	Avoid using global variables
 .\src\middleware\auth.js:33:	GlobalVariable:	Avoid using global variables
 .\src\middleware\auth.js:44:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\Checkout\Checkout.js:76:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\Checkout\Checkout.js:101:	GlobalVariable:	Avoid using global variables
+.\src\middleware\auth.js:54:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Admin\Status.js:4:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\Admin\TableUsers.js:124:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Admin\TableUsers.js:125:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Checkout\Checkout.js:40:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Checkout\Checkout.js:90:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Checkout\Checkout.js:140:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Courses\CourseItems.js:21:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Header\Sidebar\Sidebar.js:66:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\Header\Sidebar\Sidebar.js:280:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\Header\Sidebar\Sidebar.js:281:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Header\Sidebar\Sidebar.js:282:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Header\Sidebar\Sidebar.js:283:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Home\Home.js:143:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Home\Home.js:144:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Login\Recovery.js:23:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
 .\src\pages\components\Login\Register.js:23:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Login\Reset.js:25:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\Login\Username.js:182:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\Login\Username.js:183:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Login\Username.js:194:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\Login\Username.js:195:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Login\UsersSlice.js:21:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\ManageCourses\ManageCourses.js:62:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\ManageCourses\ManageCourses.js:64:	GlobalVariable:	Avoid using global variables
@@ -28,6 +36,8 @@
 .\src\pages\components\ManageCourses\ManageCourses.js:267:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\ManageCourses\ManageCourses.js:302:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\ManageCourses\ManageCourses.js:335:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\MemberPacket\Premium.js:48:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\MemberPacket\PremiumOption.js:177:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Profile\PasswordGoogle.js:23:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
 .\src\pages\components\Profile\PasswordReset.js:43:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
 .\src\pages\components\Profile\Profile.js:65:	GlobalVariable:	Avoid using global variables
@@ -43,80 +53,116 @@
 .\src\pages\components\Profile\Profile.js:299:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Profile\Profile.js:300:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\Profile\Profile.js:301:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:160:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:161:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:162:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:169:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:170:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:171:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:180:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:181:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:182:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:183:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:187:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:188:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:189:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:190:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:191:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:200:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:216:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:217:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:218:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:227:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:228:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:229:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:236:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:237:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:238:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:245:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:246:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:247:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:294:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:59:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:61:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:72:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:79:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:161:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:221:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:222:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:223:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:264:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:315:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:200:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:201:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:202:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:203:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:209:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:210:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:211:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:212:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:220:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:221:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:222:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:223:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:229:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:230:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:231:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:232:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:240:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:241:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:242:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:243:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:251:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:252:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:253:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:254:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:262:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:278:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:279:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:280:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:287:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:288:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:289:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:310:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:202:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:203:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:204:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:211:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:212:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:213:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:220:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:221:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:222:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:230:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:231:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:232:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\AddNewCourse.js:239:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:101:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:103:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:105:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:107:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:109:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:111:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:113:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:115:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:117:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:122:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:124:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:126:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:128:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:130:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:132:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:134:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:136:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:138:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:157:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:164:	IfStmtsMustUseBraces:	Avoid using if statements without curly braces
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:224:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:278:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\ManageCourses.js:347:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\StatusButton2.js:4:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManageCourses\StatusButton2.js:6:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManageCourses\StatusButton2.js:8:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:132:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:141:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:142:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:145:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:146:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:151:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:152:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:169:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:175:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:367:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:368:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:369:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:392:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:393:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:394:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:409:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:410:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageCourses\UpdateCourse.js:411:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\StaffManage\ManageMember\CustomeStatus.js:4:	NoElseReturn:	The else block is unnecessary
 .\src\pages\components\StaffManage\ManageMember\CustomeStatus.js:6:	NoElseReturn:	The else block is unnecessary
 .\src\pages\components\StaffManage\ManageMember\CustomeStatus.js:8:	NoElseReturn:	The else block is unnecessary
 .\src\pages\components\StaffManage\ManageMember\CustomeStatus.js:10:	NoElseReturn:	The else block is unnecessary
-.\src\pages\components\StaffManage\ManageMember\ManageMember.js:234:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageMember\ManageMember.js:140:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManageMember\ManageMember.js:163:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageMember\ManageMember.js:167:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageMember\ManageMember.js:322:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageMember\ManageMember.js:323:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageMember\filterAndSearch.js:6:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManageMember\filterAndSearch.js:29:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManageMember\filterAndSearch.js:33:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:96:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:97:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:110:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:111:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:121:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:122:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:134:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:135:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:147:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:148:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:162:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:163:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:164:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:171:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:53:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:57:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:229:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:230:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\Statusbutton2.js:4:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManagePremium\Statusbutton2.js:6:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManagePremium\Statusbutton2.js:8:	NoElseReturn:	The else block is unnecessary
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:105:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:106:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:119:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:120:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:131:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:132:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:143:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:144:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:155:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:156:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:167:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:168:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:184:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:185:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:186:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:193:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\WeeklySchedule\TimeUtils.js:10:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\WeeklySchedule\TimeUtils.js:22:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\WeeklySchedule\TimeUtils.js:62:	GlobalVariable:	Avoid using global variables
 .\src\redux\store.js:5:	GlobalVariable:	Avoid using global variables

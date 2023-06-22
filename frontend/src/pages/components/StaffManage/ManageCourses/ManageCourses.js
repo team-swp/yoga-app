@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 import { Select, MenuItem, TextField } from "@mui/material";
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -14,10 +11,6 @@ import {
   Paper,
   Button,
   Switch,
-<<<<<<< HEAD
-  Radio,
-=======
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
 } from "@mui/material";
 import "./ManageCourses.css";
 import { Link } from "react-router-dom";
@@ -30,19 +23,6 @@ import { updateCourse } from "../../../../helper/courseAPI";
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
   const [updatedCourse, setUpdatedCourse] = useState({});
-<<<<<<< HEAD
-  const [totalCourse, setTotalCourse] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(5);
-  const [totalPage, setTotalPage] = useState(0);
-  const [page, setPage] = useState(0);
-  const [schedule, setSchedule] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("both");
-  const [courseList, setcourseList] = useState([]);
-
-  //thay đổi status//////////////////////////////////////
-
-=======
   const [schedule, setSchedule] = useState([]);
   const [value, setValue] = useState("");
   const [page, setPage] = useState(1);
@@ -50,7 +30,6 @@ function ManageCourses() {
   const [semesterValue, setSemesterValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
   /////// update done////////////
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
   const handleToggle = async (event, course) => {
     try {
       const updatedCourseData = { ...course, status: event.target.checked };
@@ -186,159 +165,12 @@ function ManageCourses() {
       return parseInt(p) + 1;
     });
   }
-<<<<<<< HEAD
-  //////////////////////////////////////////////////
-  //Search
-  const handleSearchChange = (event) => {
-    setSearchKeyword(event.target.value);
-  };
-
-  //Search
-  const handleSearch = () => {
-    if (searchKeyword.trim() === "") {
-      return;
-    }
-    const filteredCourses = courseList.filter(
-      (course) =>
-        course.coursename.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        course.price
-          .toString()
-          .toLowerCase()
-          .includes(searchKeyword.toLowerCase()) ||
-        (course.status ? "Enabled" : "Disabled").toLowerCase() ===
-          searchKeyword.toLowerCase()
-    );
-    setSearchResults(filteredCourses);
-    // Kiểm tra nếu không có kết quả tìm kiếm
-    if (filteredCourses.length === 0) {
-      toast.error("Can not found!");
-    } else {
-    }
-  };
-
-  // dùng effect để chạy search
-  useEffect(() => {
-    if (searchKeyword === "") {
-      setSearchResults([]);
-    }
-  }, [searchKeyword]);
-  ///////////////////////////////////////////////////
-
-  useEffect(() => {
-    async function fetchSemesters() {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/api/coursesPaging/get"
-        );
-        const semesterData = response.data.items;
-        console.log(response.data);
-        setcourseList(semesterData);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchSemesters();
-  }, [updatedCourse]);
-
-  // chạy để lấy dữ liệu course
-  useEffect(() => {
-    fetchCourses();
-  }, [updatedCourse, courseList, currentPage]);
-
-  useEffect(() => {
-    async function fecthScheduleList() {
-      try {
-        const requestUrl = "http://localhost:3001/api/semester/get";
-        const response = await fetch(requestUrl);
-        const responseJSON = await response.json();
-        console.log(responseJSON);
-        setSchedule(responseJSON);
-        console.log(schedule);
-      } catch (error) {
-        console.log("Failed");
-      }
-    }
-    fecthScheduleList();
-  }, []);
-
-  //////////////////////// pagination
-
-  async function fetchCourses() {
-    const requestUrl = `http://localhost:3001/api/coursespaging/get?page=${currentPage}&limit=${perPage}&status=${statusFilter}`;
-    const response = await fetch(requestUrl);
-    const responseJSON = await response.json();
-    const { items } = responseJSON;
-    const { pagination } = responseJSON;
-    setTotalPage(pagination.pageCount);
-    setCourses(items);
-    setTotalCourse(pagination.count);
-    setPage(pagination.pageNum);
-  }
-=======
   //////////////////////////////////////////////////////////////////////////////////////
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
 
   return (
     <div>
       <Container>
         <Toaster position="top-center" reverseOrder={false} />
-<<<<<<< HEAD
-        <div style={{ float: "right", marginTop: "15px" }}>
-          <Button
-            variant="contained"
-            color="success"
-            component={Link}
-            to="/addnewcourse"
-          >
-            Add new course
-          </Button>
-        </div>
-        <div
-          style={{
-            marginTop: "10px",
-            marginBottom: "16px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <TextField
-            label="..."
-            variant="outlined"
-            value={searchKeyword}
-            onChange={handleSearchChange}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {searchKeyword && (
-                    <IconButton
-                      onClick={() => setSearchKeyword("")}
-                      style={{
-                        marginTop: "5px",
-                        padding: 0,
-                        color: "gray",
-                        fontSize: "20px",
-                      }}
-                    >
-                      clear
-                    </IconButton>
-                  )}
-                </InputAdornment>
-              ),
-            }}
-            style={{ marginRight: "8px" }}
-          />
-          <Button
-            variant="contained"
-            color="info"
-            onClick={handleSearch}
-            style={{ marginLeft: "8px" }}
-          >
-            Search
-          </Button>
-        </div>
-=======
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
         <TableContainer component={Paper}>
           <div
             style={{ float: "right", marginTop: "15px", marginRight: "10px" }}
@@ -431,10 +263,6 @@ function ManageCourses() {
               </TableRow>
             </TableHead>
             <TableBody>
-<<<<<<< HEAD
-              {(searchResults.length > 0 ? searchResults : courses).map(
-                (courseItem, index) => {
-=======
               {courses.length === 0 ? (
                 <TableRow>
                   <TableCell
@@ -447,28 +275,11 @@ function ManageCourses() {
                 </TableRow>
               ) : (
                 courses.map((courseItem, index) => {
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
                   const semester = schedule.find(
                     (item2) => item2._id === courseItem.semester_id
                   );
                   return (
                     <TableRow key={index}>
-<<<<<<< HEAD
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{courseItem.coursename}</TableCell>
-                      <TableCell>{courseItem.price}</TableCell>
-                      <TableCell>
-                        {semester ? semester.semestername : "N/A"}
-                      </TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={courseItem.status}
-                          onChange={(event) => handleToggle(event, courseItem)}
-                          color={courseItem.status ? "error" : "error"}
-                        />
-                      </TableCell>
-                      <TableCell>
-=======
                       <TableCell style={{ textAlign: "center" }}>
                         {index + 1}
                       </TableCell>
@@ -492,37 +303,23 @@ function ManageCourses() {
                         <StatusButton status={courseItem.status} />
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
                         <Button
                           variant="contained"
                           color="warning"
                           component={Link}
                           to={`/updatecourse/${courseItem._id}`}
-<<<<<<< HEAD
-                        >
-                          Update
-=======
                           style={{ fontSize: "10px" }}
                         >
                           Update & Detail
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
                         </Button>
                       </TableCell>
                     </TableRow>
                   );
-<<<<<<< HEAD
-                }
-=======
                 })
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
               )}
             </TableBody>
           </Table>
         </TableContainer>
-<<<<<<< HEAD
-
-        <footer style={{ marginTop: "10px", marginBottom: "10px" }}>
-=======
         <footer
           style={{
             margin: "auto",
@@ -533,7 +330,6 @@ function ManageCourses() {
             justifyContent: "center",
           }}
         >
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
           <button
             disabled={page === 1}
             onClick={handlePrevious}
@@ -569,11 +365,7 @@ function ManageCourses() {
               })}
           </select>
           <button
-<<<<<<< HEAD
-            disabled={page === totalPage}
-=======
             disabled={page == pageCount}
->>>>>>> ee8ce9dc7f024fddcf3d30f62591c915cc0e07ae
             onClick={handleNext}
             style={{
               padding: "0.5rem 1rem",
