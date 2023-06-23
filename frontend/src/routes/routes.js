@@ -33,17 +33,13 @@ import ManageSemester from "../pages/components/StaffManage/MangeSemester/Manage
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
-<<<<<<< HEAD
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 import AdminHome from "../pages/components/Admin/AdminHome";
-=======
-import AdminHome from "../pages/components/Admin/AdminHome";
-import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
+
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 import CourseItems from "../pages/components/Courses/CourseItems";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
->>>>>>> 81728f1b3cc487713eedb3e9faf578d154005c9d
 
 const routers = createBrowserRouter([
   {
@@ -182,7 +178,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminHome></AdminHome>,
+    element: (
+      <ProtectRoute>
+        <AdminHome />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/dashboard",
