@@ -40,6 +40,26 @@ import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/Upd
 import CourseItems from "../pages/components/Courses/CourseItems";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
 
+import {
+  Ecommerce,
+  Orders,
+  Calendar,
+  Employees,
+  Stacked,
+  Pyramid,
+  Customers,
+  Kanban,
+  Line,
+  Area,
+  Bar,
+  Pie,
+  Financial,
+  ColorPicker,
+  ColorMapping,
+  Editor,
+} from "../pages/components/DashBoard/pages";
+
+import{Cart,Chat,Notification,UserProfile} from '../pages/components/DashBoard/components'
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -183,6 +203,86 @@ const routers = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
   },
+  {
+    path: "/ecommerce",
+    element: <Ecommerce></Ecommerce>,
+  },
+  {
+    path: "/orders",
+    element: <Orders></Orders>,
+  },
+  {
+    path: "/employees",
+    element: <Employees></Employees>,
+  },
+  {
+    path: "/customers",
+    element: <Customers></Customers>,
+  },
+  {
+    path: "/kanban",
+    element: <Kanban></Kanban>,
+  },
+  {
+    path: "/editor",
+    element: <Editor></Editor>,
+  },
+  {
+    path: "/calendar",
+    element: <Calendar></Calendar>,
+  },
+  {
+    path: "/color-picker",
+    element: <ColorPicker></ColorPicker>,
+  },
+  {
+    path: "/line",
+    element: <Line></Line>,
+  },
+  {
+    path: "/area",
+    element: <Area></Area>,
+  },
+  {
+    path: "/bar",
+    element: <Bar></Bar>,
+  },
+  {
+    path: "/pie",
+   element: <Pie ></Pie>,
+  },
+  {
+    path: "/financial",
+    element: <Financial ></Financial>,
+  },
+  {
+    path: "/color-mapping",
+    element: <ColorMapping ></ColorMapping>,
+  },
+  {
+    path: "/pyramid",
+    element: <Pyramid ></Pyramid>,
+  },
+  {
+    path: "/stacked",
+    element: <Stacked ></Stacked>,
+  },
+  {
+    path: "/stacked",
+    element: <Stacked ></Stacked>,
+  },
+  {
+    path: "/cart",
+    element: <Cart ></Cart>,
+  },
+  {
+    path: "/chat",
+    element: <Chat ></Chat>,
+  },
+  {
+    path: "/notification",
+    element: <Notification ></Notification>,
+  }
 ]);
 
 export default routers;
