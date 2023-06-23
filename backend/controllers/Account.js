@@ -262,9 +262,7 @@ module.exports.Login = async (req, res) => {
               return res.status(500).send({ error: "Password does not Match" });
             });
         } else {
-          return res
-            .status(500)
-            .send({ error: "Your account have been banned" });
+          return res.status(404).send({ message: "Your account have been banned" });
         }
       })
       .catch((error) => {

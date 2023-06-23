@@ -21,7 +21,7 @@ import soundBonk from "../../../assets/bonk-sound-effect.mp3";
 function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { googleSignIn,soundPlay } = UserAuth();
+  const { googleSignIn,soundPlay,checkLogin } = UserAuth();
   const token = localStorage.getItem("token");
   const [emailType, setEmailType] = useState();
   if (token && token !== "undefined") {
@@ -81,7 +81,7 @@ function Username() {
               navigate("/login");
             });
         })
-        .catch((res) => {
+        .catch((error) => {
           soundPlay(soundBonk);
           navigate("/login");
         });
@@ -93,16 +93,14 @@ function Username() {
       toast.promise(loginPromise, {
         loading: "Checking...",
         success: <b>Login Successfully...!</b>,
-        error: <b>Login Not Successfully!</b>,
+        error: <b>Password Not Match!</b>,
       });
-      loginPromise
-        .then(() => {
-          soundPlay(soundLogin);
-          navigate("/");
-        })
-        .catch(() => {
-          soundPlay(soundBonk);
-        });
+
+      loginPromise.then(() => {
+        navigate("/");
+      }).catch(()=>{
+        navigate("/login")
+      })
     } catch (error) {
       console.log(error);
     }

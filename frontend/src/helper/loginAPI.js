@@ -42,6 +42,19 @@ export async function getUserByToken() {
   }
 }
 
+export async function sendMail({ username, email, text, subject }) {
+  try {
+    const { data } = await axios.post("/api/registerMail", {
+      username,
+      userEmail: email,
+      text,
+      subject
+    });
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error: "Cannot Send Email...!" });
+  }
+}
 /** register user function */
 export async function registerUser(credentials) {
   try {
