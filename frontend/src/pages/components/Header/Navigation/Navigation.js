@@ -2,20 +2,36 @@ import { Link } from "react-router-dom";
 import logo from "../../../../Heartbeat.svg";
 import Sidebar from "../Sidebar/Sidebar";
 import { useEffect } from "react";
+import { Typography } from "@mui/material";
 
 function Navigation() {
   const token = localStorage.getItem("token");
-  useEffect(()=>{
-
-  },[])
+  useEffect(() => {}, []);
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">
       <nav className="mx-20">
         <div className="flex justify-between items-center">
-          <div className="flex">
-            <Link to="/">
-              <img className="w-100 h-100" src={logo} alt="logo" />
-            </Link>
+          <div className="flex gap-16 justify-items-center items-center">
+            <div style={{}}>
+              <Link to="/">
+                <img  src={logo} alt="logo" />
+              </Link>
+            </div>
+            <div>
+              <Link to="/courses">
+                <Typography style={{fontWeight:400}}>Courses</Typography>
+              </Link>
+            </div>
+            <div>
+              <Link to="/premium">
+                <Typography>Premium</Typography>
+              </Link>
+            </div>
+            <div>
+              <Link to="/">
+                <Typography>Time Table</Typography>
+              </Link>
+            </div>
           </div>
           <div
             className="flex items-center mt-4 sm:mt-0"

@@ -73,9 +73,6 @@ function Sidebar() {
     }
   }, [user]);
 
-  useEffect(()=>{
-
-  },[])
   return (
     <div>
       <IconButton

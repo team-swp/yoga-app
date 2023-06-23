@@ -5,7 +5,8 @@ import Header from "./Header";
 import TableUsers from "./TableUsers";
 import { Container } from "@mui/material";
 import Loading from "./Loading";
-
+import styles from './admin.module.css'
+import Navigation from '../Header/Navigation/Navigation'
 const AdminHome = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,8 +18,8 @@ const AdminHome = () => {
 
   return (
     <div className="Container">
-      <Header />
-      <div>
+      <Navigation/>
+      <div style={{marginTop:'30px'}}>
         <Container>
           <div className="d-flex align-items-center">
             <Form className="d-flex">

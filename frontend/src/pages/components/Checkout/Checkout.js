@@ -63,6 +63,7 @@ function Checkout() {
   useEffect(()=>{
     toast.success(`Your premium booking is ${premium.premiumname}`)
     if(premium.premiumname.includes('Spring')){
+      console.log('zo');
       soundPlay(soundSpringFlower)
     }else if(premium.premiumname.includes('Half')){
       soundPlay(soundHalfLove)

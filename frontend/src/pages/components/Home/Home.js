@@ -8,12 +8,13 @@ import { itemData2 } from "./ClassList";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getCourse } from "../../../helper/courseAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCourseId } from "../../../redux/actions";
+import { userSelector } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
-
 function Home() {
+  const user = useSelector(userSelector)
   const [courseList, setCourseList] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -27,7 +28,11 @@ function Home() {
       }
     }
     fetchData();
-  }, []);
+  }, []); 
+
+  useEffect(()=>{   
+    console.log(user);
+  },[user])
 
   const [refFirts, inViewFirst] = useInView({
     threshold: 0,
