@@ -86,11 +86,10 @@ function ManageMember() {
   }, 500);
 
   function handleToggle(isMember, memberId, expiredDate, statusPaymented) {
-    if (statusPaymented !== 10) {
+    if (statusPaymented !== 10 && statusPaymented !== 4) {
       toast.error("Update failed");
       return;
     }
-
     const paymentIndex = payments.findIndex(
       (payment) => payment.member._id === memberId
     );
@@ -103,7 +102,6 @@ function ManageMember() {
       .then((res) => {
         console.log(res.data);
         toast.success("Update successfully");
-
         const updatedPayments = payments.map((payment) => {
           if (payment.member._id === memberId) {
             return {

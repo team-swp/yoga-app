@@ -36,8 +36,6 @@ function CourseDetail() {
 
   const handleSubmit = async () => {
     try {
-      // const response = await addBooking();
-      // console.log(response);
       navigate("/premium");
     } catch (error) {
       console.error(error);

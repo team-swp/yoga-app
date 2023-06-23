@@ -139,10 +139,10 @@
 .\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:163:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:164:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\StaffManage\ManagePremium\AddNewPremium.js:171:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:53:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:57:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:229:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:230:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:52:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:56:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:206:	GlobalVariable:	Avoid using global variables
+.\src\pages\components\StaffManage\ManagePremium\ManagePackage.js:207:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\StaffManage\ManagePremium\Statusbutton2.js:4:	NoElseReturn:	The else block is unnecessary
 .\src\pages\components\StaffManage\ManagePremium\Statusbutton2.js:6:	NoElseReturn:	The else block is unnecessary
 .\src\pages\components\StaffManage\ManagePremium\Statusbutton2.js:8:	NoElseReturn:	The else block is unnecessary
@@ -162,7 +162,6 @@
 .\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:185:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:186:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\StaffManage\ManagePremium\UpdatePremiumPack.js:193:	GlobalVariable:	Avoid using global variables
-.\src\pages\components\WeeklySchedule\TimeUtils.js:10:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\WeeklySchedule\TimeUtils.js:22:	GlobalVariable:	Avoid using global variables
 .\src\pages\components\WeeklySchedule\TimeUtils.js:62:	GlobalVariable:	Avoid using global variables
 .\src\redux\store.js:5:	GlobalVariable:	Avoid using global variables
