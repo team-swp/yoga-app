@@ -20,16 +20,13 @@ import {
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
-import ManageClass from "../pages/components/StaffManage/ManageClass/ManageClass";
 import AddNewClass from "../pages/components/StaffManage/ManageClass/AddNewClass";
 import UpdateClass from "../pages/components/StaffManage/ManageClass/UpdateClass";
-import ManageSchedule from "../pages/components/StaffManage/ManageSchedule/ManageSchedule";
 import ManageAddSchedule from "../pages/components/StaffManage/ManageSchedule/ManageAddSchedule";
 import ManageEditSchedule from "../pages/components/StaffManage/ManageSchedule/ManageEditSchedule";
 import ManageCourses from "../pages/components/StaffManage/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCourse";
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
-import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import Premium from "../pages/components/MemberPacket/Premium";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
@@ -121,56 +118,78 @@ const routers = createBrowserRouter([
   },
   {
     path: "/staffmanage",
-    element: <StaffManage></StaffManage>,
+    element: (
+      <ProtectRoute>
+        <StaffManage />
+      </ProtectRoute>
+    ),
   },
-  {
-    path: "/manageclass",
-    element: <ManageClass></ManageClass>,
-  },
+
   { path: "/managemember", element: <ManageMember /> },
   {
     path: "/addnewclass",
-    element: <AddNewClass></AddNewClass>,
+    element: (
+      <ProtectRoute>
+        <AddNewClass />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/updateclass/:id",
-    element: <UpdateClass></UpdateClass>,
+    element: (
+      <ProtectRoute>
+        <UpdateClass />
+      </ProtectRoute>
+    ),
   },
-  {
-    path: "/manageschedule",
-    element: <ManageSchedule></ManageSchedule>,
-  },
+
   {
     path: "/addnewschedule",
-    element: <ManageAddSchedule></ManageAddSchedule>,
+    element: (
+      <ProtectRoute>
+        <ManageAddSchedule />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/updateschedule/:id",
-    element: <ManageEditSchedule></ManageEditSchedule>,
-  },
-  {
-    path: "/managecourse",
-    element: <ManageCourses></ManageCourses>,
+    element: (
+      <ProtectRoute>
+        <ManageEditSchedule />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/addnewcourse",
-    element: <AddNewCourse></AddNewCourse>,
+    element: (
+      <ProtectRoute>
+        <AddNewCourse />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/updatecourse/:id",
-    element: <UpdateCourse></UpdateCourse>,
-  },
-  {
-    path: "/managesemester",
-    element: <ManageSemester></ManageSemester>,
+    element: (
+      <ProtectRoute>
+        <UpdateCourse />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/addnewsemester",
-    element: <ManageAddSemester></ManageAddSemester>,
+    element: (
+      <ProtectRoute>
+        <ManageAddSemester />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/updatesemester/:id",
-    element: <ManageUpdateSemester />,
+    element: (
+      <ProtectRoute>
+        <ManageUpdateSemester />
+      </ProtectRoute>
+    ),
   },
   {
     path: "/premium",

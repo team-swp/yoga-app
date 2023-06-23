@@ -211,7 +211,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                    {checkMember?'You are a member':'Become a member'}
+                    {checkMember ? "You are a member" : "Become a member"}
                   </div>
                 </div>
               </div>
@@ -249,9 +249,7 @@ function Sidebar() {
               {user.role === "staff" && (
                 <Link to="/staffmanage">
                   <div className={styles.sidebar_details}>
-                    <HomeRepairServiceIcon
-                      className={styles.sidebar_details_icon}
-                    />
+                    <BadgeIcon className={styles.sidebar_details_icon} />
                     <div> Staff Manager</div>
                     <ArrowForwardIosOutlinedIcon
                       className={styles.sidebar_details_arrow}

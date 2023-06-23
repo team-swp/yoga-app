@@ -11,6 +11,15 @@ export async function getPayment() {
   });
 }
 
+export async function getPaymentWithPaging() {
+  let apiPath = `/api/paymentsPaging/get?limit=99999999`;
+
+  return await getApi({
+    apiPath,
+    errorMessage: "Cannot Get Booking",
+  });
+}
+
 export async function getPaymentMethod() {
   return await getApi({
     apiPath: `/api/payment/method/get`,
@@ -35,7 +44,7 @@ export async function updatePayment(respone) {
 
 export async function createVnpay(respone) {
   try {
-    const { data } = await axios.post(`/api/create_payment_url`,respone);
+    const { data } = await axios.post(`/api/create_payment_url`, respone);
     return { data };
   } catch (error) {
     return { error: "Cannot open link...!" };
@@ -44,7 +53,7 @@ export async function createVnpay(respone) {
 
 export async function runUrlVnpay(respone) {
   try {
-    const { data } = await axios.post(`/api/runUrlVnPAY`,respone);
+    const { data } = await axios.post(`/api/runUrlVnPAY`, respone);
     return { data };
   } catch (error) {
     return { error: "Cannot open link...!" };

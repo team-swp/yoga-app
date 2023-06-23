@@ -40,12 +40,6 @@ function Courses() {
     rootMargin: "-100px",
   });
 
-  const dispatch = useDispatch();
-
-  const handleCourseClick = (courseId) => {
-    dispatch(setCourseId(courseId));
-  };
-
   return (
     <div>
       <Header />

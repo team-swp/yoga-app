@@ -1,0 +1,17 @@
+<ruleset name="Custom Rules"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Custom JS rules
+    </description>
+
+    <exclude-pattern>.*/node_modules/*.*</exclude-pattern>
+
+    <!-- Your rules will come here -->
+    <rule ref="category/ecmascript/bestpractices.xml/GlobalVariable" />
+    <rule ref="category/ecmascript/codestyle.xml/IfStmtsMustUseBraces" />
+    <rule ref="category/ecmascript/codestyle.xml/NoElseReturn" />
+   
+</ruleset>

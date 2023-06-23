@@ -10,6 +10,7 @@ import { getAvatarToAWS } from "../../../helper/loginAPI";
 function CourseItems({ course }) {
   const cx = classNames.bind(styles);
   const dispatch = useDispatch();
+
   const handleCourseClick = (courseId) => {
     dispatch(setCourseId(courseId));
   };
