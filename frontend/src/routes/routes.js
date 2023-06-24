@@ -191,9 +191,6 @@ const routers = createBrowserRouter([
     path: "/updatepremiumpack/:id",
     element: <UpdatePremiumPack></UpdatePremiumPack>,
   },
-
-
-
 ]);
 
 export default routers;
