@@ -207,6 +207,14 @@ const routers = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
   },
+  {
+    path: "/addnewpremium",
+    element: <AddNewPremium></AddNewPremium>,
+  },
+  {
+    path: "/updatepremiumpack/:id",
+    element: <UpdatePremiumPack></UpdatePremiumPack>,
+  },
 ]);
 
 export default routers;
