@@ -80,29 +80,39 @@ function Premium() {
               nowrap={false}
               variant="h4"
             >
-              59,000₫ cho 4 tháng dùng gói Premium
+              
             </Typography>
           </div>
           <div>
+          <Typography
+            style={{ fontWeight: "900" }}
+            className="font-bold"
+            nowrap={true}
+            variant="h5"
+          >
+             Half Love Premium Package
+          </Typography>
             <Typography className="font-bold" variant="subtitle1">
-              Ưu đãi kết thúc vào ngày 18/06/2023. Nghe nhạc không quảng cáo và
-              không cần kết nối mạng. Sau đó chỉ 59,000₫/tháng. Hủy bất cứ lúc
-              nào.
+            ✓ You will get all the benefits from Spring Flower package
+            </Typography>
+            <Typography className="font-bold" variant="subtitle1">
+            ✓ You will able to join our special yoga class at saturday weekly
+            </Typography>
+            <Typography className="font-bold" variant="subtitle1">
+            ✓ You will only pay 150$ for this package instead of the original price is 269$.
             </Typography>
           </div>
           <div className="flex items-center gap-3 font-bold">
             <div onClick={handleSubmitStart} className={styles.startBtn}>
-              Bắt đầu
+             Enroll now
             </div>
             <a href="#premium_packet">
-              <div className={styles.moreBtn}>Xem các gói</div>
+              <div className={styles.moreBtn}>Packages</div>
             </a>
           </div>
           <div>
             <Typography className="text-[10px]" variant="caption">
-              Chỉ áp dụng cho gói Individual. Sau đó là 59,000₫/tháng. Ưu đãi
-              kết thúc vào ngày 18/06/2023. Có áp dụng các điều khoản và điều
-              kiện. Ưu đãi không dành cho người đã dùng thử gói Premium.
+            Note: this special offers will end in 1/7/2023
             </Typography>
           </div>
         </div>
@@ -122,32 +132,45 @@ function Premium() {
             nowrap={true}
             variant="h4"
           >
-            Giới thiệu gói Premium Mini
+             Premium Mini
           </Typography>
         </div>
         <div>
           <Typography className="font-bold" variant="h5">
-            Tải 30 bài hát và nghe nhạc thỏa thích, không quảng cáo trên 1 thiết
-            bị di động
+          Able to learn all yoga classes for just 10$
+
           </Typography>
         </div>
         <div className="flex  justify-center justify-items-center items-center gap-2">
-          <div className={styles.tryByDay}>Dùng 1 ngày chỉ với 2,300đ</div>
-          <div className={styles.tryByWeek}>Dùng 1 tuần chỉ với 8,800đ</div>
+          
+          <div className={styles.tryByDay}>
+             <a href="#premium_packet">
+              <div >
+                Free trial
+              </div>
+            </a>
+            </div>
+          <div className={styles.tryByWeek}> 
+          <a href="#premium_packet">
+              <div >
+                Spring Flower
+                </div>
+            </a>
+            </div>
         </div>
         <div>
-          <a>
+          {/* <a>
             <Typography className="underline" variant="caption">
               Áp dụng điều khoản và điều kiện
             </Typography>
-          </a>
+          </a> */}
         </div>
       </div>
 
       <div className="bg-white flex flex-col justify-center justify-items-center items-center py-20">
         <div style={{ marginBottom: "5%" }}>
           <Typography style={{ fontWeight: "900" }} variant="h4">
-            Lý do dùng gói Premium?
+          The reason why you need to become our yoga center member 
           </Typography>
         </div>
         <div className="flex justify-center justify-items-center items-center gap-40">
@@ -156,10 +179,10 @@ function Premium() {
               <SelfImprovementRoundedIcon style={{ fontSize: "100px" }} />
             </div>
             <div>
-              <Typography className={styles.title1}>Tập Mọi Giờ</Typography>
+              <Typography className={styles.title1}>Always available class</Typography>
             </div>
             <div>
-              <Typography className={styles.title2}>Mờ đi Giới Hạn</Typography>
+              <Typography className={styles.title2}></Typography>
             </div>
           </div>
           <div className="flex flex-col justify-center justify-items-center items-center gap-4">
@@ -167,10 +190,10 @@ function Premium() {
               <VolunteerActivismTwoToneIcon style={{ fontSize: "100px" }} />
             </div>
             <div>
-              <Typography className={styles.title1}>Giảm Giá Nhiều</Typography>
+              <Typography className={styles.title1}>Many special offers</Typography>
             </div>
             <div>
-              <Typography className={styles.title2}>Chiều Khách VIP</Typography>
+              <Typography className={styles.title2}></Typography>
             </div>
           </div>
           <div className="flex flex-col justify-center justify-items-center items-center gap-4">
@@ -179,12 +202,12 @@ function Premium() {
             </div>
             <div>
               <Typography className={styles.title1}>
-                Giáo Viên Nhiệt Huyết
+              Instructor passionate
               </Typography>
             </div>
             <div>
               <Typography className={styles.title2}>
-                Quyết Tâm Chăm Cùng Học Viên
+          
               </Typography>
             </div>
           </div>
@@ -194,13 +217,13 @@ function Premium() {
             </div>
             <div>
               <Typography className={styles.title1}>
-                Như Trương Anh Ngọc
-              </Typography>
+              Flexible schedule
+               </Typography>
             </div>
             <div>
-              <Typography
+              {/* <Typography
                 className={styles.title2}
-              >{`Lịch Học (Flex)ible`}</Typography>
+              >{`Lịch Học (Flex)ible`}</Typography> */}
             </div>
           </div>
         </div>
@@ -212,12 +235,11 @@ function Premium() {
       >
         <div>
           <Typography style={{ fontWeight: 700 }} variant="h4">
-            Chọn gói Premium của bạn
+            Select your Package to join us now
           </Typography>
         </div>
         <div>
           <Typography variant="body1">
-            Nghe không giới hạn trên điện thoại, loa và các thiết bị khác.
           </Typography>
         </div>
         <div className="flex gap-2" style={{ marginBottom: "4%",  }}>
