@@ -147,7 +147,7 @@ function PremiumOption({ premium }) {
                   {priceDiscountFormat === 0
                     ? "Try Now"
                     : "" || priceOriginalFormat}{" "}
-                  $
+                  VND
                 </Typography>
               </div>
               <div>

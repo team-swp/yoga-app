@@ -14,11 +14,9 @@ import {
 } from "@mui/material";
 import "./ManageCourses.css";
 import { Link } from "react-router-dom";
-
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import StatusButton from "./StatusButton2";
-
 import { updateCourse } from "../../../../helper/courseAPI";
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
@@ -152,6 +150,9 @@ function ManageCourses() {
     }
   };
   /////////////////// handle việc next và prev trong page/////////////////////////
+  const handlePageChange = (page) => {
+    setPage(page);
+  };
   function handlePrevious() {
     setPage((p) => {
       if (p === 1) return p;
@@ -320,63 +321,39 @@ function ManageCourses() {
             </TableBody>
           </Table>
         </TableContainer>
-        <footer
-          style={{
-            margin: "auto",
-            padding: "15px",
-            maxWidth: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <button
+        <div className="pagination gap-7" style={{marginTop :'10px'}}>
+          <Button
             disabled={page === 1}
             onClick={handlePrevious}
-            style={{
-              marginRight: "1rem",
-              padding: "0.5rem 1rem",
-              borderRadius: "4px",
-              backgroundColor: "#ccc",
-              cursor: "pointer",
-            }}
+            className="previous-button border"
+            color="primary"
           >
             Previous
-          </button>
-          <select
-            value={page}
-            onChange={(event) => {
-              setPage(event.target.value);
-            }}
-            style={{
-              marginRight: "1rem",
-              padding: "0.5rem",
-              borderRadius: "4px",
-            }}
-          >
-            {Array(pageCount)
-              .fill(null)
-              .map((_, index) => {
-                return (
-                  <option key={index} style={{ padding: "0.5rem" }}>
-                    {parseInt(index + 1)}
-                  </option>
-                );
-              })}
-          </select>
-          <button
-            disabled={page == pageCount}
+          </Button>
+
+          {Array.from({ length: pageCount }, (_, index) => index + 1).map(
+            (page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`page-button ${
+                  page === page ? "active" : ""
+                }`}
+              >
+                {page}
+              </button>
+            )
+          )}
+          <Button
+            className="next-button border"
             onClick={handleNext}
-            style={{
-              padding: "0.5rem 1rem",
-              borderRadius: "4px",
-              backgroundColor: "#ccc",
-              cursor: "pointer",
-            }}
+            disabled={page === pageCount}
+            color="primary"
           >
             Next
-          </button>
-        </footer>
+          </Button>
+        </div>
+       
       </Container>
     </div>
   );
