@@ -197,11 +197,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: (
-      <ProtectRoute>
-        <AdminHome />
-      </ProtectRoute>
-    ),
+    element: <AdminHome />,
   },
   {
     path: "/dashboard",
