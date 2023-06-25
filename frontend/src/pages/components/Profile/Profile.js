@@ -22,43 +22,6 @@ import PasswordReset from "./PasswordReset";
 import Reset from "../Login/Reset";
 
 function Profile() {
-<<<<<<< .merge_file_ely9m2
-  const { logOut } = UserAuth();
-  const user = useSelector(userSelector);
-  const [file, setFile] = useState(user.avatar || "");
-  const [imageTemp, setImageTemp] = useState(true);
-  const [isNotPass, setIsNotPass] = useState(true);
-  const dispatch = useDispatch();
-  const userCurr = {
-    username: user,
-  };
-  const [screen, setScreen] = useState(false);
-  const formik = useFormik({
-    initialValues: {
-      email: user.email,
-      username: user.username,
-      phone: user.phone || "",
-    },
-    validate: profileValidation,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      values = Object.assign(values, {
-        avatar: file || user.avatar || "",
-      });
-      let updatePromise = updateUser(values);
-      console.log(values);
-      toast.promise(updatePromise, {
-        loading: "Updating...",
-        success: <b>Update Successfully...!</b>,
-        error: <b>Could not Update!</b>,
-      });
-      updatePromise.then((res) => {
-        dispatch(updateData(res.data.data));
-      });
-    },
-  });
-=======
     const { logOut } = UserAuth();
     const user = useSelector(userSelector);
     const [file, setFile] = useState(user.avatar || "");
@@ -95,7 +58,6 @@ function Profile() {
             });
         },
     });
->>>>>>> .merge_file_sAycas
 
     const resizeImage = (image, maxWidth, maxHeight) => {
         return new Promise((resolve) => {
@@ -142,28 +104,6 @@ function Profile() {
     //   const maxWidth = 500;
     //   const maxHeight = 500;
 
-<<<<<<< .merge_file_ely9m2
-  //   // Thay đổi kích thước ảnh
-  //   const resizedImage = resizeImage(base64, maxWidth, maxHeight);
-  //   resizedImage.then((resize) => {
-  //     console.log(resize);
-  //     setFile(resize);
-  //   });
-  // };
-  const loadImageAgain = async (e) => {
-    if (user.avatar) {
-      const { url } = await getAvatarToAWS({ imageName: user._id });
-      setFile(url);
-      e.target.src = file;
-      updateUser({ avatar: url });
-    }
-  };
-  const onUpload = async (e) => {
-    const avatar = e.target.files[0];
-    if (avatar) {
-      if (avatar.type.startsWith("image/")) {
-        const base64 = await convertToBase64(avatar);
-=======
     //   // Thay đổi kích thước ảnh
     //   const resizedImage = resizeImage(base64, maxWidth, maxHeight);
     //   resizedImage.then((resize) => {
@@ -189,7 +129,6 @@ function Profile() {
         if (avatar) {
             if (avatar.type.startsWith("image/")) {
                 const base64 = await convertToBase64(avatar);
->>>>>>> .merge_file_sAycas
 
                 // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
                 const maxWidth = 500;
@@ -205,14 +144,6 @@ function Profile() {
                 formData.append("avatar", avatar);
                 formData.append("imageName", user._id);
 
-<<<<<<< .merge_file_ely9m2
-        const { data, status } = await postAvatarToAWS(formData);
-        if (status === 200) {
-          data.imageName = user._id;
-          const { url } = await getAvatarToAWS(data);
-          setFile(url);
-          console.log(file);
-=======
                 const { data, status } = await postAvatarToAWS(formData);
                 if (status === 200) {
                     data.imageName = user._id;
@@ -222,7 +153,6 @@ function Profile() {
             } else {
                 toast.error("Please select an image");
             }
->>>>>>> .merge_file_sAycas
         }
     };
 
@@ -230,24 +160,12 @@ function Profile() {
         logOut();
     };
 
-<<<<<<< .merge_file_ely9m2
-  useEffect(() => {
-    const isPassword = async () => {
-      const isOldPassword = await getPasswordCurr();
-      if (isOldPassword.data.password) {
-        setIsNotPass(true);
-      } else {
-        setIsNotPass(false);
-      }
-      console.log(isOldPassword, "312312");
-=======
     const handleScreen = () => {
         if (screen) {
             setScreen(false);
         } else {
             setScreen(true);
         }
->>>>>>> .merge_file_sAycas
     };
 
     useEffect(() => {
@@ -285,15 +203,6 @@ function Profile() {
                             </div>
                         </div>
 
-<<<<<<< .merge_file_ely9m2
-                  <div
-                    className=" pt-3
-                  
-                "
-                  >
-                    <div className=" ml-10">
-                      <p>Avatar</p>
-=======
                         <div className="flex flex-col items-center py-24 gap-24 font-bold">
                             <button onClick={handleScreen} className=" uppercase">
                                 Update Information
@@ -302,7 +211,6 @@ function Profile() {
                                 Update Password
                             </button>
                         </div>
->>>>>>> .merge_file_sAycas
                     </div>
                     <div className="flex flex-col border-l-2 border-black w-full lg:w-[70%]">
                         <div className="border-b-2 border-black flex justify-center py-12">

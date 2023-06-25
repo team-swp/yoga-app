@@ -22,8 +22,6 @@ module.exports.addRole = async (req, res) => {
   }
 };
 
-
-
 module.exports.getRoleById = async (req, res, next) => {
   let role;
   try {

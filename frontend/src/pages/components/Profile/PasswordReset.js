@@ -4,18 +4,10 @@ import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { resetPasswordValidation } from "../../../helper/validate";
 import {
-<<<<<<< .merge_file_nJQRzU
-  resetPassword,
-  authenticatePassword,
-  getPasswordCurr,
-  updateUser,
-  updateUserPass,
-=======
     resetPassword,
     authenticatePassword,
     getPasswordCurr,
     updateUser,
->>>>>>> .merge_file_jnIFKA
 } from "../../../helper/loginAPI";
 import { userSelector } from "../../../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,32 +43,6 @@ function Reset() {
                 bcrypt
                     .compare(values.currentPassword, isOldPassword.data.password)
 
-<<<<<<< .merge_file_nJQRzU
-          .then((isSuccess) => {
-            if (isSuccess) {
-              bcrypt
-                .compare(values.password, isOldPassword.data.password)
-                .then((isSame) => {
-                  if (!isSame) {
-                    let updatePromise = updateUserPass({
-                      password: values.password,
-                    });
-                    console.log(values.password);
-                    toast.promise(updatePromise, {
-                      loading: "Updating...",
-                      success: <b>Update Successfully...!</b>,
-                      error: <b>Could not Update!</b>,
-                    });
-                  } else {
-                    toast.error("New password cannot same Old Password");
-                  }
-                });
-            } else {
-              toast.error("Old Password not match");
-            }
-            console.log(isSuccess);
-          })
-=======
                     .then((isSuccess) => {
                         if (isSuccess) {
                             bcrypt
@@ -100,7 +66,6 @@ function Reset() {
                         }
                         console.log(isSuccess);
                     })
->>>>>>> .merge_file_jnIFKA
 
                     .catch((isFail) => {
                         toast.error("Old Password not match");

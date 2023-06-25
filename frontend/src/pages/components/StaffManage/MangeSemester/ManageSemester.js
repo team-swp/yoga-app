@@ -1,7 +1,3 @@
-<<<<<<< .merge_file_fbivF9
-import React, { useState, useEffect } from "react";
-import { Container } from "@mui/material";
-=======
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -16,7 +12,6 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
->>>>>>> .merge_file_7gj8k8
 import { Link } from "react-router-dom";
 import { updateSemester } from "../../../../helper/semesterAPI";
 import { Toaster, toast } from "react-hot-toast";
@@ -33,8 +28,6 @@ function ManageSemester() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-<<<<<<< .merge_file_fbivF9
-=======
   const handleToggle = async (event, semester) => {
     try {
       const updatedSemesterData = { ...semester, status: event.target.checked };
@@ -53,7 +46,6 @@ function ManageSemester() {
     }
   };
 
->>>>>>> .merge_file_7gj8k8
   useEffect(() => {
     fetchSemesters();
   }, [manageUpdateSemester, page]);
@@ -148,10 +140,6 @@ function ManageSemester() {
     } catch (error) {
       toast.error('Not Found!!!')
     }
-<<<<<<< .merge_file_fbivF9
-    fecthSemesterList();
-  }, []);
-=======
   }
 
   function handlePrevious() {
@@ -169,46 +157,10 @@ function ManageSemester() {
   }
   //////////////////////////////////////////////////////////////////////////////////////
 
->>>>>>> .merge_file_7gj8k8
 
   return (
     <div>
       <Container>
-<<<<<<< .merge_file_fbivF9
-        <div className={cx("text-end")}>
-          <Link to="/addnewsemester" className={cx("btn btn-primary")}>
-            Add new Semester
-          </Link>
-        </div>
-        <table className="container">
-          <thead>
-            <tr>
-              <td>Semester ID</td>
-              <td>Semester Name</td>
-              <td>Start Date</td>
-              <td>End Date</td>
-              <td>Status</td>
-            </tr>
-          </thead>
-          <tbody>
-            {semesterList.map((semesterItem, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{semesterItem.semestername}</td>
-                <td>{semesterItem.startDate}</td>
-                <td>{semesterItem.endDate}</td>
-                <td>{semesterItem.status ? "Active" : "Inactive"}</td>
-                <Link
-                  to={`/updatesemester/${semesterItem._id}`}
-                  className={cx("btn btn-secondary")}
-                >
-                  Update
-                </Link>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-=======
         <Toaster position="top-center" reverseOrder={false} />
 
         <TableContainer component={Paper}>
@@ -365,7 +317,6 @@ function ManageSemester() {
             Next
           </Button>
         </footer>
->>>>>>> .merge_file_7gj8k8
       </Container>
 
 

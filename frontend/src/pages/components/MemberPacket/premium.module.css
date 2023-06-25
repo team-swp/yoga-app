@@ -32,7 +32,6 @@ html {
   background-color: white;
   padding: 10px 30px;
   border-radius: 25px;
-  font-weight: bold;
 }
 
 .tryByDay:hover{
@@ -45,41 +44,9 @@ html {
   background-color: white;
   padding: 10px 30px;
   border-radius: 25px;
-  font-weight: bold;
 }
 
 .tryByWeek:hover{
-  transform: scale(1.05) perspective(0px);
-  cursor: pointer;
-}
-
-.iconWhy{
-  background-color: #F5EBEB;
-  padding: 20px;
-  border-radius: 50%;
-}
-
-.title1{
-font-weight: 700 !important;
-}
-
-.title2{
-
-}
-
-.premiumOption{
-  box-shadow:  2px 2px 8px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-}
-
-.startBuyBtn{
-  color: white;
-  background-color: black;
-  padding: 10px 30px;
-  border-radius: 25px;
-}
-
-.startBuyBtn:hover {
   transform: scale(1.05) perspective(0px);
   cursor: pointer;
 }

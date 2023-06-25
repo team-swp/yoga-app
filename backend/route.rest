@@ -7,8 +7,8 @@ POST  http://localhost:3001/api/accounts/login
 Content-Type: application/json
 
 {
-   "email":"heartbeat.yoga.group@gmail.com",
-  "password":"admin@yogaheartbeat999"
+  "email":"tandm1510@gmail.com",
+  "password":"1234@"
 }
 ###
 DELETE    http://localhost:3001/api/accounts/64650d6163615c5820904cf8
@@ -17,12 +17,6 @@ DELETE    http://localhost:3001/api/accounts/64650d6163615c5820904cf8
 POST http://localhost:3001/api/accounts/register
 Content-Type: application/json
 
-{
-  "username": "Staff Yoga Center",
-  "email":"yogheartbeatstaff@gmail.com",
-  "password":"staffyoga@"
-}
-###
 {
   "username": "Instructor Test",
   "email":"1234@example",

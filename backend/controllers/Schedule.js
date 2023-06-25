@@ -37,11 +37,7 @@ module.exports.getSchedules = async (req, res) => {
 
 module.exports.getSchedulesPaging = async (req, res) => {
   try {
-<<<<<<< .merge_file_Y42BxW
-    const pagingPayload = await pagingnation(Schedule,'schedulename',req.query)
-=======
     const pagingPayload = await pagingnation(req.query.page, req.query.limit, Schedule, req.query.q, 'schedulename')
->>>>>>> .merge_file_IH2w6X
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

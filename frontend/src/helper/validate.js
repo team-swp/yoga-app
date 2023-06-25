@@ -46,6 +46,7 @@ function validateUsername(errors = {}, values) {
   }
 
   return errors;
+
 }
 
 /** validate register form */
@@ -66,6 +67,7 @@ export async function loginValidation(values) {
 /** validate profile page */
 export async function profileValidation(values) {
   const errors = emailVerify({}, values);
+  verifyPhoneNumber(errors, values);
 
   return errors;
 }
@@ -83,15 +85,9 @@ export async function resetPasswordValidation(values) {
 
 export async function paymentVerify(values) {
   const errors = emailVerify({}, values);
-<<<<<<< .merge_file_OZhdNz
-  verifyCurrency(errors, values);
-  verifyPhoneNumber(errors, values);
-  validateUsername(errors, values);
-=======
   verifyCurrency(errors, values)
   verifyPhoneNumber(errors, values)
   validateUsername(errors, values)
->>>>>>> .merge_file_4kuuZr
   return errors;
 }
 
