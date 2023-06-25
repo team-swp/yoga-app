@@ -87,6 +87,7 @@ function Checkout() {
     //   console.log('test 2');
     // }
     onSubmit: async (values) => {
+<<<<<<< .merge_file_VYKN4A
     
       const checkBookingPromise = checkBooking();
       checkBookingPromise
@@ -98,6 +99,51 @@ function Checkout() {
                 values.username || "Member"
               } ,${premium.premium_id}`, //bookingID lấy trong state
               orderType: 190004,
+=======
+      if (isSelected) {
+
+        const vnpayLink = createVnpay({
+          amount: values.amount,
+          orderDescription: `${user._id},${values.email},${values.username || "Member"
+            }`, //bookingID lấy trong state
+          orderType: 190004,
+        });
+        vnpayLink
+          .then((data) => {
+            console.log(data);
+            if (data.data) {
+              var newLink = document.createElement("a");
+              newLink.href = data.data;
+              newLink.textContent = "VNPAY PAYMENT";
+              newLink.target = "_blank";
+              newLink.click();
+              navigate('/')
+            } else {
+              toast.error("The system is maintenance");
+            }
+          })
+          .catch(() => {
+            toast.error("Payment is maintenance please choose other");
+          });
+      } else {
+        const date = new Date();
+        const bookingPromise = addBooking({ member_id: user._id });
+        toast.promise(bookingPromise, {
+          loading: "Checking...",
+          success: <b>Payment Successfully...!</b>,
+          error: <b>Payment not Successfully !</b>,
+        });
+        bookingPromise
+          .then((result) => {
+            const paymentPromise = addPayment({
+              recipient: "Yoga HeartBeat",
+              paymentDate: date,
+              paymentAmount: values.amount,
+              paymentMethod_id: "647496600eeb65cda05ee191",
+              booking_id: result.data.data.result._id,
+              status: 5,
+              meta_data: "Pay at Yoga Center",
+>>>>>>> .merge_file_Sy7kE6
             });
             vnpayLink
               .then((data) => {
@@ -210,7 +256,10 @@ function Checkout() {
                 </div>
                 <div className="textbox flex  items-left gap-6 mb-2">
                   <input
+<<<<<<< .merge_file_VYKN4A
                     readOnly
+=======
+>>>>>>> .merge_file_Sy7kE6
                     {...formik.getFieldProps("amount")}
                     className={styles.textbox}
                     type="text"
@@ -231,9 +280,8 @@ function Checkout() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div
-                    className={`${styles.div_radio} ${
-                      isSelected ? styles.active : ""
-                    } justify-between p-4`}
+                    className={`${styles.div_radio} ${isSelected ? styles.active : ""
+                      } justify-between p-4`}
                     onClick={handleRadioChange}
                   >
                     <label className={styles.lable}>
@@ -252,9 +300,8 @@ function Checkout() {
                   </div>
 
                   <div
-                    className={`${styles.div_radio} ${
-                      isSelected2 ? styles.active : ""
-                    } justify-between p-4`}
+                    className={`${styles.div_radio} ${isSelected2 ? styles.active : ""
+                      } justify-between p-4`}
                     onClick={handleRadioChange2}
                   >
                     <label className={`lable ${styles.lable}`}>

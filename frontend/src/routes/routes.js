@@ -28,6 +28,7 @@ import ManageCourses from "../pages/components/StaffManage/ManageCourses/ManageC
 import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCourse";
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
+<<<<<<< .merge_file_rS1EHC
 import Premium from "../pages/components/MemberPacket/Premium";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
@@ -37,6 +38,11 @@ import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewP
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 import CourseItems from "../pages/components/Courses/CourseItems";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
+=======
+import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
+import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+
+>>>>>>> .merge_file_lfVN2C
 
 const routers = createBrowserRouter([
   {
@@ -97,7 +103,13 @@ const routers = createBrowserRouter([
   },
   {
     path: "/paymentstatus",
+<<<<<<< .merge_file_rS1EHC
     element: <PaymentStatus />,
+=======
+    element: (
+      <PaymentStatus />
+    ),
+>>>>>>> .merge_file_lfVN2C
   },
   {
     path: "/checkout",
@@ -177,6 +189,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/addnewsemester",
+<<<<<<< .merge_file_rS1EHC
     element: (
       <ProtectRoute>
         <ManageAddSemester />
@@ -214,6 +227,13 @@ const routers = createBrowserRouter([
   {
     path: "/updatepremiumpack/:id",
     element: <UpdatePremiumPack></UpdatePremiumPack>,
+=======
+    element: <ManageAddSemester></ManageAddSemester>
+  },
+  {
+    path: "/updatesemester/:id",
+    element: <ManageUpdateSemester></ManageUpdateSemester>
+>>>>>>> .merge_file_lfVN2C
   },
 ]);
 

@@ -11,10 +11,23 @@ function Navigation() {
     <header className="sticky top-0 z-50 bg-white shadow-lg">
       <nav className="mx-20">
         <div className="flex justify-between items-center">
+<<<<<<< .merge_file_NKSfWd
           <div className="flex gap-16 justify-items-center items-center">
             <div style={{}}>
               <Link to="/">
                 <img  src={logo} alt="logo" />
+=======
+          <div className="flex">
+            <Link to="/">
+              <img className="w-100 h-100" src={logo} alt="logo" />
+            </Link>
+            <div class="hidden sm:-my-px sm:ml-6 sm:flex">
+              <Link
+                to="/courses"
+                class="inline-flex items-center px-4 pt-1 text-black text-sm font-medium leading-5 text-gray-900"
+              >
+                COURES
+>>>>>>> .merge_file_IUwdUO
               </Link>
             </div>
             <div>

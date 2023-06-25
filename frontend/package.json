@@ -8,6 +8,7 @@
     "@mui/base": "^5.0.0-beta.3",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.3",
+    "@mui/x-date-pickers": "^6.9.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -15,7 +16,10 @@
     "antd": "^5.6.1",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
+<<<<<<< .merge_file_0l6pXC
     "bootstrap": "^5.3.0",
+=======
+>>>>>>> .merge_file_bFheuG
     "classnames": "^2.3.2",
     "dotenv": "^16.0.3",
     "firebase": "^9.22.1",

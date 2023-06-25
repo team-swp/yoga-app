@@ -29,13 +29,19 @@ const rootReducer = (state = initState, action) => {
       return newState;
     }
     case "login/setDataLogin": {
+<<<<<<< .merge_file_rZZF9l
       const { _id, token, username, phone, avatar, email, meta_data, role } =
         action.payload;
       if (!localStorage.getItem("token")) {
+=======
+      const { _id, token, username, phone, avatar, email, meta_data, role } = action.payload;
+      if (!localStorage.getItem('token')) {
+>>>>>>> .merge_file_Mmf0zu
         localStorage.setItem("token", token);
       }
       return {
         ...state,
+<<<<<<< .merge_file_rZZF9l
         user: {
           ...state.user,
           _id,
@@ -46,6 +52,9 @@ const rootReducer = (state = initState, action) => {
           meta_data,
           role,
         },
+=======
+        user: { ...state.user, _id, username, phone, avatar, email, meta_data, role },
+>>>>>>> .merge_file_Mmf0zu
       };
     }
     case "login/updateData": {
