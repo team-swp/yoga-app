@@ -30,6 +30,8 @@ const {
   updateAccountForStaff,
   updatePassword,
   updateUserForAdmin,
+  charDataAccount,
+  charDataSparkLine,
 } = require("../controllers/Account");
 
 const crypto = require("crypto");
@@ -89,6 +91,9 @@ const {
   haveDonePayment,
   getPaymentsPaging,
   getPaymentParams,
+  charDataPayment,
+  charDataPaymentPremium,
+  charDataPaymentPremiumLineChart,
 } = require("../controllers/Payment");
 const {
   addBooking,
@@ -263,3 +268,9 @@ router.get("/classesPaging/get", getClassesPaging);
 
 //IP
 // router.get("/ipUser",getUserIP)
+//Chart 
+router.post('/chart/payments',charDataPayment)
+router.post('/chart/customer',charDataAccount)
+router.post('/chart/product',charDataPaymentPremium)
+router.post('/chart/members',charDataSparkLine)
+router.post('/chart/premium',charDataPaymentPremiumLineChart)

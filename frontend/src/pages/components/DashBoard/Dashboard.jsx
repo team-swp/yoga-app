@@ -19,7 +19,7 @@ function Dashboard() {
   }, []);
   return (
     <div>
-      <div className="flex relative dark:bg-main-dark-bg">
+      <div className="flex relative dark:bg-main-dark-bg" style={{height:'100px'}}>
         <div className="fixed right-4 bottom-4" style={{ zIndex: "1000",transform:'translate(1450px, 630px)' }}>
           <TooltipComponent content="Settings" position="Top">
             <button
@@ -45,11 +45,11 @@ function Dashboard() {
         )}
 
         <div
-          className={`dark:bg-main-dark-bg  bg-main-bg min-h-screen  w-full ${
+          className={`dark:bg-main-dark-bg  bg-main-bg    w-full ${
             activeMenu ? "md:ml-72" : "flex-2"
           } `}
         >
-          <div style={activeMenu?{marginLeft:'250px'}:{}}  className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full mb-10" >
+          <div style={activeMenu?{marginLeft:'250px',backgroundColor:'white'}:{backgroundColor:'white'}}  className=" md:static bg-main-bg dark:bg-main-dark-bg navbar w-full mb-10" >
             <Navbar/>
           </div>
           <div>
