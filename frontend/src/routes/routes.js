@@ -15,34 +15,24 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
-  ProtectRouteCheckout,
   ProtectRouteOTP,
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
+import ManageClass from "../pages/components/StaffManage/ManageClass/ManageClass";
 import AddNewClass from "../pages/components/StaffManage/ManageClass/AddNewClass";
 import UpdateClass from "../pages/components/StaffManage/ManageClass/UpdateClass";
+import ManageSchedule from "../pages/components/StaffManage/ManageSchedule/ManageSchedule";
 import ManageAddSchedule from "../pages/components/StaffManage/ManageSchedule/ManageAddSchedule";
 import ManageEditSchedule from "../pages/components/StaffManage/ManageSchedule/ManageEditSchedule";
 import ManageCourses from "../pages/components/StaffManage/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCourse";
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
+import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
-<<<<<<< .merge_file_rS1EHC
-import Premium from "../pages/components/MemberPacket/Premium";
-import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
-import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
-import AdminHome from "../pages/components/Admin/AdminHome";
-
-import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
-import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
-import CourseItems from "../pages/components/Courses/CourseItems";
-import Dashboard from "../pages/components/DashBoard/Dashboard";
-=======
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 
->>>>>>> .merge_file_lfVN2C
 
 const routers = createBrowserRouter([
   {
@@ -52,10 +42,6 @@ const routers = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses></Courses>,
-  },
-  {
-    path: "/courseitem",
-    element: <CourseItems></CourseItems>,
   },
   {
     path: "/course",
@@ -103,22 +89,13 @@ const routers = createBrowserRouter([
   },
   {
     path: "/paymentstatus",
-<<<<<<< .merge_file_rS1EHC
-    element: <PaymentStatus />,
-=======
     element: (
       <PaymentStatus />
     ),
->>>>>>> .merge_file_lfVN2C
   },
   {
     path: "/checkout",
-    element: (
-      <ProtectRouteCheckout>
-        {" "}
-        <Checkout />
-      </ProtectRouteCheckout>
-    ),
+    element: <Checkout />,
   },
   {
     path: "/paymentstatus",
@@ -130,110 +107,56 @@ const routers = createBrowserRouter([
   },
   {
     path: "/staffmanage",
-    element: (
-      <ProtectRoute>
-        <StaffManage />
-      </ProtectRoute>
-    ),
+    element: <StaffManage></StaffManage>,
   },
-
+  {
+    path: "/manageclass",
+    element: <ManageClass></ManageClass>,
+  },
   { path: "/managemember", element: <ManageMember /> },
   {
     path: "/addnewclass",
-    element: (
-      <ProtectRoute>
-        <AddNewClass />
-      </ProtectRoute>
-    ),
+    element: <AddNewClass></AddNewClass>,
   },
   {
     path: "/updateclass/:id",
-    element: (
-      <ProtectRoute>
-        <UpdateClass />
-      </ProtectRoute>
-    ),
+    element: <UpdateClass></UpdateClass>,
   },
-
+  {
+    path: "/manageschedule",
+    element: <ManageSchedule></ManageSchedule>,
+  },
   {
     path: "/addnewschedule",
-    element: (
-      <ProtectRoute>
-        <ManageAddSchedule />
-      </ProtectRoute>
-    ),
+    element: <ManageAddSchedule></ManageAddSchedule>,
   },
   {
     path: "/updateschedule/:id",
-    element: (
-      <ProtectRoute>
-        <ManageEditSchedule />
-      </ProtectRoute>
-    ),
+    element: <ManageEditSchedule></ManageEditSchedule>,
+  },
+  {
+    path: "/managecourse",
+    element: <ManageCourses></ManageCourses>,
   },
   {
     path: "/addnewcourse",
-    element: (
-      <ProtectRoute>
-        <AddNewCourse />
-      </ProtectRoute>
-    ),
+    element: <AddNewCourse></AddNewCourse>,
   },
   {
     path: "/updatecourse/:id",
-    element: (
-      <ProtectRoute>
-        <UpdateCourse />
-      </ProtectRoute>
-    ),
+    element: <UpdateCourse></UpdateCourse>,
+  },
+  {
+    path: "/managesemester",
+    element: <ManageSemester></ManageSemester>,
   },
   {
     path: "/addnewsemester",
-<<<<<<< .merge_file_rS1EHC
-    element: (
-      <ProtectRoute>
-        <ManageAddSemester />
-      </ProtectRoute>
-    ),
-  },
-  {
-    path: "/updatesemester/:id",
-    element: (
-      <ProtectRoute>
-        <ManageUpdateSemester />
-      </ProtectRoute>
-    ),
-  },
-  {
-    path: "/premium",
-    element: <Premium></Premium>,
-  },
-  {
-    path: "/admin",
-    element: (
-      <ProtectRoute>
-        <AdminHome />
-      </ProtectRoute>
-    ),
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard></Dashboard>,
-  },
-  {
-    path: "/addnewpremium",
-    element: <AddNewPremium></AddNewPremium>,
-  },
-  {
-    path: "/updatepremiumpack/:id",
-    element: <UpdatePremiumPack></UpdatePremiumPack>,
-=======
     element: <ManageAddSemester></ManageAddSemester>
   },
   {
     path: "/updatesemester/:id",
     element: <ManageUpdateSemester></ManageUpdateSemester>
->>>>>>> .merge_file_lfVN2C
   },
 ]);
 

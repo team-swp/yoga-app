@@ -46,6 +46,8 @@ function ScheduleInfo({ totalSchedule }) {
         <div className="date">{`End date: ${endDateString}`}</div>
       </StyledScheduleInfo>
     );
+  } else {
+    return <div>No schedule available</div>;
   }
 }
 

@@ -42,19 +42,6 @@ export async function getUserByToken() {
   }
 }
 
-export async function sendMail({ username, email, text, subject }) {
-  try {
-    const { data } = await axios.post("/api/registerMail", {
-      username,
-      userEmail: email,
-      text,
-      subject
-    });
-    return Promise.resolve({ data });
-  } catch (error) {
-    return Promise.reject({ error: "Cannot Send Email...!" });
-  }
-}
 /** register user function */
 export async function registerUser(credentials) {
   try {
@@ -113,19 +100,6 @@ export async function updateUser(response) {
   try {
     const token = localStorage.getItem("token");
     const data = await axios.patch("/api/accounts", response, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return Promise.resolve({ data });
-  } catch (error) {
-    return Promise.reject({ error: "Couldn't Update Profile...!" + error });
-  }
-}
-
-export async function updateUserPass(response) {
-  try {
-    console.log(response);
-    const token = localStorage.getItem("token");
-    const data = await axios.patch("/api/accountsPassword", response, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return Promise.resolve({ data });

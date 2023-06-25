@@ -1,26 +1,9 @@
-const Account = require("../models/accounts");
 const Booking = require("../models/bookings");
-const Payment = require("../models/payments");
 const { pagingnation } = require("./Pagingnation");
-
 module.exports.addBooking = async (req, res) => {
-<<<<<<< .merge_file_stoL9n
-  try {
-    const bookTry = await Booking.findOne({
-      member_id: req.account.userId,
-      meta_data: `"isTry":true`,
-    });
-
-    if (bookTry && req.body.isTry) {
-      res.status(400).json({ message: "Cannot book try" });
-    }
-    //check user trước nếu meta_data có isMember:true
-    const { member_id, class_id, booking_date, status, meta_data } = req.body;
-=======
   const { member_id, class_id, booking_date, status, meta_data } = req.body;
 
   try {
->>>>>>> .merge_file_ReyT83
     const booking = new Booking({
       member_id: req.account.userId,
       class_id,
@@ -51,11 +34,7 @@ module.exports.getBooking = async (req, res) => {
 
 module.exports.getBookingsPaging = async (req, res) => {
   try {
-<<<<<<< .merge_file_stoL9n
-    const pagingPayload = await pagingnation(Booking, "member_id", req.query);
-=======
     const pagingPayload = await pagingnation(req.query.page, req.query.limit, Booking, req.query.q, 'member_id')
->>>>>>> .merge_file_ReyT83
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

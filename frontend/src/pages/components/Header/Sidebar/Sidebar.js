@@ -72,10 +72,6 @@ function Sidebar() {
       setCheckMember(checkMem.isMember);
     }
   }, [user]);
-<<<<<<< .merge_file_nDb1o6
-
-=======
->>>>>>> .merge_file_HsYFVK
   return (
     <div>
       <IconButton
@@ -212,11 +208,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-<<<<<<< .merge_file_nDb1o6
-                    {checkMember ? "You are a member" : "Become a member"}
-=======
                     {checkMember ? "Your are a member" : "Become a member"}
->>>>>>> .merge_file_HsYFVK
                   </div>
                 </div>
               </div>
@@ -254,7 +246,9 @@ function Sidebar() {
               {user.role === "staff" && (
                 <Link to="/staffmanage">
                   <div className={styles.sidebar_details}>
-                    <BadgeIcon className={styles.sidebar_details_icon} />
+                    <HomeRepairServiceIcon
+                      className={styles.sidebar_details_icon}
+                    />
                     <div> Staff Manager</div>
                     <ArrowForwardIosOutlinedIcon
                       className={styles.sidebar_details_arrow}

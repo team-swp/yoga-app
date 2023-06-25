@@ -3,13 +3,12 @@ import { Box, Tab, Tabs, Typography } from "@mui/material";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ManageMember from "./ManageMember/ManageMember";
 import ManageSchedule from "./ManageSchedule/ManageSchedule";
 import ManageSemester from "./MangeSemester/ManageSemester";
 import ManageCourses from "./ManageCourses/ManageCourses";
 import ManageClass from "./ManageClass/ManageClass";
-import ManagePackage from "./ManagePremium/ManagePackage";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,19 +46,6 @@ function a11yProps(index) {
 function StaffManage() {
   const [value, setValue] = useState(0);
 
-  // Effect hook để load giá trị lưu trong localStorage
-  useEffect(() => {
-    const savedValue = localStorage.getItem("tabValue");
-    if (savedValue) {
-      setValue(parseInt(savedValue));
-    }
-  }, []);
-
-  // Effect hook để lưu giá trị mới vào localStorage khi thay đổi state
-  useEffect(() => {
-    localStorage.setItem("tabValue", value);
-  }, [value]);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -87,7 +73,6 @@ function StaffManage() {
             <Tab label="Manage Class" {...a11yProps(2)} />
             <Tab label="Manage Schedule" {...a11yProps(3)} />
             <Tab label="Manage Member" {...a11yProps(4)} />
-            <Tab label="Manage Package" {...a11yProps(5)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -105,10 +90,8 @@ function StaffManage() {
         <TabPanel value={value} index={4}>
           {<ManageMember />}
         </TabPanel>
-        <TabPanel value={value} index={5}>
-          {<ManagePackage />}
-        </TabPanel>
       </Box>
+
       <Footer />
     </div>
   );

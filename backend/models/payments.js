@@ -31,11 +31,6 @@ const paymentSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    premium_id:{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"Premium",
-      required: false,
-    },
     status: {
       type: Number,
       default: 5,
@@ -43,7 +38,6 @@ const paymentSchema = new mongoose.Schema(
       //0 thất bại book, do lớp đầy, do đã tham gia vào lớp r
       //10 book thành công thanh toán nộp tiền đầy đủ
       //5 book thành công, chọn phương thức thanh toán thành công, nhưng chưa nộp tiền
-      //4 dùng thử
     },
     meta_data: {
       type: String,
