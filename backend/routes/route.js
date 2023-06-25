@@ -28,13 +28,10 @@ const {
   getAccountPaging,
   updateRoleAccount,
   updateAccountForStaff,
-<<<<<<< HEAD
   updatePassword,
   updateUserForAdmin,
   charDataAccount,
   charDataSparkLine,
-=======
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
 } = require("../controllers/Account");
 
 const crypto = require("crypto");

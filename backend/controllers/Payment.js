@@ -145,15 +145,7 @@ module.exports.getPaymentParams = async (req, res) => {
 
 module.exports.getPaymentsPaging = async (req, res) => {
   try {
-<<<<<<< HEAD
     const pagingPayload = await pagingnation(Payment, null, req.query);
-=======
-    const pagingPayload = await pagingnation(
-      req.query.page,
-      req.query.limit,
-      Payment
-    );
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -472,7 +464,6 @@ module.exports.haveDonePayment = (req, res) => {
       res.redirect(url + "?pmid=" + result_id);
     })
     .catch((error) => res.status(500).send({ error }));
-<<<<<<< HEAD
 };
 
 //out put [
@@ -994,6 +985,3 @@ function removeDuplicateKeyValuePairs(arr) {
 
   return Object.values(uniquePairs);
 }
-=======
-};
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744

@@ -9,6 +9,7 @@ import { useContext, createContext } from "react";
 import { auth } from "../firebases/firebase";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Howl } from "howler";
 import {
   addUserLogin,
   setDataLogin,
@@ -27,10 +28,7 @@ const initialState = {
 };
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-<<<<<<< HEAD
   const [checkLogin, setCheckLogin] = useState(true);
-=======
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
@@ -47,7 +45,6 @@ export const AuthContextProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-<<<<<<< HEAD
         const tokenPromise = currentUser.getIdToken();
         tokenPromise.then((token) => {
           if(!checkLogin){
@@ -66,20 +63,12 @@ export const AuthContextProvider = ({ children }) => {
               dispatch(logOutNormal(""));
             });
         });
-=======
-        const token = await currentUser.getIdToken();
-        const data = await verifyTokenGoogle(token);
-        if (data) {
-          dispatch(setDataLogin(data));
-        }
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
       }
     });
     return () => {
       unsubscribe();
     };
   }, [user]);
-<<<<<<< HEAD
 
   
   const [screenSize, setScreenSize] = useState(undefined);
@@ -99,17 +88,20 @@ export const AuthContextProvider = ({ children }) => {
     localStorage.setItem('colorMode', color);
   };
 
+  const soundPlay = (src) => {
+    const sound = new Howl({
+      src,
+      html5: true,
+    });
+    sound.play();
+  };
+
   const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });
 
   return (
     <AuthContext.Provider
       value={{ googleSignIn, logOut, soundPlay, checkLogin,currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initialState, setIsClicked, setActiveMenu, setCurrentColor, setCurrentMode, setMode, setColor, themeSettings, setThemeSettings }}
     >
-=======
-
-  return (
-    <AuthContext.Provider value={{ googleSignIn, logOut }}>
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
       {children}
     </AuthContext.Provider>
   );

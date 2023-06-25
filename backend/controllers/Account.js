@@ -89,7 +89,6 @@ module.exports.delete = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 module.exports.updateUserForAdmin = async (req, res) => {
   const { _id } = req.body;
 
@@ -109,8 +108,6 @@ module.exports.updateUserForAdmin = async (req, res) => {
   }
 };
 
-=======
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
 module.exports.update = async (req, res) => {
   if (req.body.username != null) {
     res.account.username = req.body.username;
@@ -240,13 +237,8 @@ module.exports.Login = async (req, res) => {
             });
         } else {
           return res
-<<<<<<< HEAD
             .status(404)
             .send({ message: "Your account have been banned" });
-=======
-            .status(500)
-            .send({ error: "Your account have been banned" });
->>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
         }
       })
       .catch((error) => {
