@@ -54,6 +54,7 @@ import {
 } from "../pages/components/DashBoard/pages";
 
 import{Cart,Chat,Notification,UserProfile} from '../pages/components/DashBoard/components'
+import Dashboard from "../pages/components/DashBoard/Dashboard";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -257,6 +258,10 @@ const routers = createBrowserRouter([
   {
     path: "/notification",
     element: <Notification ></Notification>,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard ></Dashboard>,
   }
 ]);
 
