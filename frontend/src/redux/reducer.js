@@ -28,15 +28,33 @@ const rootReducer = (state = initState, action) => {
       };
       return newState;
     }
-
     case "login/setDataLogin": {
+<<<<<<< .merge_file_rZZF9l
+      const { _id, token, username, phone, avatar, email, meta_data, role } =
+        action.payload;
+      if (!localStorage.getItem("token")) {
+=======
       const { _id, token, username, phone, avatar, email, meta_data, role } = action.payload;
       if (!localStorage.getItem('token')) {
+>>>>>>> .merge_file_Mmf0zu
         localStorage.setItem("token", token);
       }
       return {
         ...state,
+<<<<<<< .merge_file_rZZF9l
+        user: {
+          ...state.user,
+          _id,
+          username,
+          phone,
+          avatar,
+          email,
+          meta_data,
+          role,
+        },
+=======
         user: { ...state.user, _id, username, phone, avatar, email, meta_data, role },
+>>>>>>> .merge_file_Mmf0zu
       };
     }
     case "login/updateData": {
@@ -63,13 +81,16 @@ const rootReducer = (state = initState, action) => {
         user: {},
       };
     }
-
     case "set_course_id": {
       const { courseId } = action.payload;
       localStorage.setItem("courseId", courseId);
       return { ...state, courseId };
     }
 
+    case "payment/premiumData": {
+      const { premium_id, paymentAmount, premiumname } = action.payload;
+      return { ...state, premium: { premium_id, paymentAmount, premiumname } };
+    }
     default:
       return state;
   }

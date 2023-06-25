@@ -14,11 +14,17 @@ import {
 } from "@mui/material";
 import "./ManageCourses.css";
 import { Link } from "react-router-dom";
+<<<<<<< .merge_file_RFXLoj
+import axios from "axios";
+import { Toaster, toast } from "react-hot-toast";
+import StatusButton from "./StatusButton2";
+=======
 
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import StatusButton from "./StatusButton2";
 
+>>>>>>> .merge_file_9BuYXc
 import { updateCourse } from "../../../../helper/courseAPI";
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
@@ -152,6 +158,12 @@ function ManageCourses() {
     }
   };
   /////////////////// handle việc next và prev trong page/////////////////////////
+<<<<<<< .merge_file_RFXLoj
+  const handlePageChange = (page) => {
+    setPage(page);
+  };
+=======
+>>>>>>> .merge_file_9BuYXc
   function handlePrevious() {
     setPage((p) => {
       if (p === 1) return p;
@@ -320,6 +332,37 @@ function ManageCourses() {
             </TableBody>
           </Table>
         </TableContainer>
+<<<<<<< .merge_file_RFXLoj
+        <div className="pagination gap-7" style={{marginTop :'10px'}}>
+          <Button
+            disabled={page === 1}
+            onClick={handlePrevious}
+            className="previous-button border"
+            color="primary"
+          >
+            Previous
+          </Button>
+
+          {Array.from({ length: pageCount }, (_, index) => index + 1).map(
+            (page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`page-button ${
+                  page === page ? "active" : ""
+                }`}
+              >
+                {page}
+              </button>
+            )
+          )}
+          <Button
+            className="next-button border"
+            onClick={handleNext}
+            disabled={page === pageCount}
+            color="primary"
+          >
+=======
         <footer
           style={{
             margin: "auto",
@@ -374,9 +417,11 @@ function ManageCourses() {
               cursor: "pointer",
             }}
           >
+>>>>>>> .merge_file_9BuYXc
             Next
-          </button>
-        </footer>
+          </Button>
+        </div>
+       
       </Container>
     </div>
   );

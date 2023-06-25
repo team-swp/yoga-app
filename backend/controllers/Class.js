@@ -43,7 +43,11 @@ module.exports.getClasses = async (req, res) => {
 
 module.exports.getClassesPaging = async (req, res) => {
   try {
+<<<<<<< .merge_file_GgetNp
+    const pagingPayload = await pagingnation(Class,'classname',req.query)
+=======
     const pagingPayload = await pagingnation(req.query.page, req.query.limit, Class, req.query.q, 'classname')
+>>>>>>> .merge_file_iIdHvG
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

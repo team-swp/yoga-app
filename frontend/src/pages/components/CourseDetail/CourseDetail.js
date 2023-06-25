@@ -10,11 +10,6 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import CheckIcon from "@mui/icons-material/Check";
 import ScrollToTopOnMount from "../../ScrollToTopOnMount";
 import { getCourse } from "../../../helper/courseAPI";
-import { getClass } from "../../../helper/classAPI";
-import { addBooking } from "../../../helper/bookingAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { setDataBooking } from "../../../redux/actions";
-import { userSelector } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
@@ -41,9 +36,7 @@ function CourseDetail() {
 
   const handleSubmit = async () => {
     try {
-      // const response = await addBooking();
-      // console.log(response);
-      navigate("/checkout");
+      navigate("/premium");
     } catch (error) {
       console.error(error);
     }
@@ -86,13 +79,12 @@ function CourseDetail() {
                 <div className={cx("course-image")}>
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
-                <p className={cx("course-price")}>{course.price}$</p>
                 <div className="flex justify-evenly align-center">
                   <button
                     className={cx("course-button")}
                     onClick={() => {
                       if (token) handleSubmit();
-                      else navigate("/login");
+                      else navigate("/premium");
                     }}
                   >
                     JOIN US NOW

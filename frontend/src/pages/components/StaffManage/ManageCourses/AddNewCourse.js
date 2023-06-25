@@ -1,91 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { addCourse } from "../../../../helper/courseAPI";
-import {
-  Container,
-  TextField,
-  Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Typography,
-  CircularProgress,
-  FormLabel,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Autocomplete,
-} from "@mui/material";
+import React, { useEffect } from "react";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { Container, TextField, Button, Autocomplete } from "@mui/material";
 import { Link } from "react-router-dom";
 import Header from "../../Header/Header";
-import Footer from "../../Footer/Footer";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { addCourse } from "../../../../helper/courseAPI";
+
+const validationSchema = Yup.object().shape({
+  coursename: Yup.string().required("Course Name is required"),
+  description: Yup.string(),
+  price: Yup.number()
+    .min(0, "Price must be greater than zero")
+    .typeError("Price must be a number")
+    .required("Price is required"),
+  willLearn: Yup.string(),
+  requirement: Yup.string(),
+  forWho: Yup.string(),
+  images: Yup.string(),
+  videos: Yup.string(),
+});
 
 function AddNewCourse() {
-  const [coursename, setCoursename] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [willLearn, setWillLearn] = useState("");
-  const [requirement, setRequirement] = useState("");
-  const [forWho, setForWho] = useState("");
-  const [semester_id, setSemesterId] = useState("");
-  const [status, setStatus] = useState("");
-  const [images, setImages] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [addSuccess, setAddSuccess] = useState(false);
-  const [videos, setVideos] = useState([]);
-
-  const [semesterList, setSemesterList] = useState([]);
-  const [selectedSemester, setSelectedSemester] = useState(null);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrorMessage(null);
-    setAddSuccess(false);
-    try {
-      const semesterId = selectedSemester ? selectedSemester._id : null;
-      const response = await addCourse({
-        coursename: coursename,
-        description,
-        price: price,
-        willLearn,
-        requirement,
-        forWho,
-        semester_id: semesterId,
-        images,
-        videos,
-        status: status,
-      });
-
-      if (response) {
-        setAddSuccess(true);
-        setTimeout(() => {
-          setAddSuccess(false);
-        }, 3000);
-        setCoursename("");
-        setDescription("");
-        setPrice("");
-        setWillLearn("");
-        setRequirement("");
-        setForWho("");
-        setSemesterId("");
-        setStatus("");
-        setVideos([]);
-        setImages([]);
-      } else {
-        setErrorMessage("Failed to update course");
-      }
-    } catch (error) {
-      console.error(error);
-      setErrorMessage(
-        "Error occurred while updating the course. Please try again later."
-      );
-    }
-    setIsSubmitting(false);
-  };
+  const [semesterList, setSemesterList] = React.useState([]);
+  const [selectedSemester, setSelectedSemester] = React.useState(null);
 
   useEffect(() => {
     async function fetchSemesters() {
@@ -103,9 +42,46 @@ function AddNewCourse() {
     fetchSemesters();
   }, []);
 
+  const handleSubmit = async (values) => {
+    try {
+      const semesterId = selectedSemester ? selectedSemester._id : null;
+      const response = await addCourse({
+        coursename: values.coursename,
+        description: values.description,
+        price: values.price,
+        willLearn: values.willLearn,
+        requirement: values.requirement,
+        forWho: values.forWho,
+        semester_id: semesterId,
+        images: values.images,
+        videos: values.videos,
+        status: values.status,
+      });
+
+      if (response) {
+        toast.success("Added new course success");
+        values.coursename = "";
+        values.description = "";
+        values.price = "";
+        values.willLearn = "";
+        values.requirement = "";
+        values.forWho = "";
+        values.images = "";
+        values.videos = "";
+        values.status = "";
+        setSelectedSemester(null);
+      } else {
+        toast.error("Failed to add new class");
+      }
+    } catch (error) {
+      toast.error("Failed to add new class");
+    }
+  };
+
   return (
     <div>
       <Header />
+      <Toaster></Toaster>
       <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
         <div
           style={{
@@ -118,203 +94,175 @@ function AddNewCourse() {
           }}
         >
           Add New Course
-          {errorMessage && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "red",
-                color: "white",
-                padding: "10px",
-                borderRadius: "8px",
-                marginBottom: "20px",
-              }}
-            >
-              <CancelOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">{errorMessage}</Typography>
-            </div>
-          )}
-          {addSuccess && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#4caf50",
-                color: "white",
-                padding: "10px",
-                borderRadius: "8px",
-                marginBottom: "20px",
-              }}
-            >
-              <CheckCircleOutlineOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">
-                Course updated successfully!
-              </Typography>
-            </div>
-          )}
         </div>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Course Name"
-            type="text"
-            value={coursename}
-            onChange={(e) => setCoursename(e.target.value)}
-            fullWidth
-            required
-            sx={{ marginBottom: "10px" }}
-          />
-          <TextField
-            label="Description"
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            fullWidth
-            required
-            multiline
-            rows={4}
-            sx={{ marginBottom: "10px" }}
-          />
-          <TextField
-            label="Price"
-            type="number"
-            name="price"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-            required
-            sx={styles.textField}
-          />
-          <TextField
-            label="Will learn"
-            type="text"
-            value={willLearn}
-            onChange={(e) => setWillLearn(e.target.value)}
-            fullWidth
-            required
-            multiline
-            rows={4}
-            sx={{ marginBottom: "10px" }}
-          />
-          <Autocomplete
-            value={selectedSemester}
-            onChange={(event, newValue) => setSelectedSemester(newValue)}
-            options={semesterList}
-            getOptionLabel={(option) => option.semestername}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Semester"
-                type="text"
-                name="semester_id"
+        <Formik
+          initialValues={{
+            coursename: "",
+            description: "",
+            price: "",
+            willLearn: "",
+            requirement: "",
+            forWho: "",
+            images: "",
+            videos: "",
+            status: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ errors, touched }) => (
+            <Form>
+              <Field
+                name="coursename"
+                as={TextField}
+                label="Course Name"
+                fullWidth
+                required
+                sx={{ marginBottom: "10px" }}
+                error={errors.coursename && touched.coursename}
+                helperText={
+                  errors.coursename && touched.coursename && errors.coursename
+                }
+              />
+              <Field
+                name="description"
+                as={TextField}
+                label="Description"
+                fullWidth
+                multiline
+                rows={4}
+                sx={{ marginBottom: "10px" }}
+                error={errors.description && touched.description}
+                helperText={
+                  errors.description &&
+                  touched.description &&
+                  errors.description
+                }
+              />
+              <Field
+                name="price"
+                as={TextField}
+                label="Price"
+                type="number"
                 required
                 sx={styles.textField}
+                error={errors.price && touched.price}
+                helperText={errors.price && touched.price && errors.price}
               />
-            )}
-          />
-          <TextField
-            label="Requirement"
-            type="text"
-            value={requirement}
-            onChange={(e) => setRequirement(e.target.value)}
-            fullWidth
-            required
-            multiline
-            rows={4}
-            sx={{ marginBottom: "10px" }}
-          />
-          <TextField
-            label="For Who"
-            type="text"
-            value={forWho}
-            onChange={(e) => setForWho(e.target.value)}
-            fullWidth
-            required
-            sx={{ marginBottom: "10px" }}
-          />
-          <TextField
-            label="For images"
-            type="text"
-            value={images}
-            onChange={(e) => setImages(e.target.value)}
-            fullWidth
-            required
-            sx={{ marginBottom: "10px" }}
-          />
-          <TextField
-            label="For video"
-            type="text"
-            value={videos}
-            onChange={(e) => setVideos(e.target.value)}
-            fullWidth
-            required
-            sx={{ marginBottom: "10px" }}
-          />
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Status</FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={status === "true"}
-                    onChange={(event) =>
-                      setStatus(event.target.checked ? "true" : "false")
+              <Field
+                name="willLearn"
+                as={TextField}
+                label="Will learn"
+                fullWidth
+                multiline
+                rows={4}
+                sx={{ marginBottom: "10px" }}
+                error={errors.willLearn && touched.willLearn}
+                helperText={
+                  errors.willLearn && touched.willLearn && errors.willLearn
+                }
+              />
+              <Autocomplete
+                value={selectedSemester}
+                onChange={(event, newValue) => setSelectedSemester(newValue)}
+                options={semesterList}
+                getOptionLabel={(option) => option.semestername}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Semester"
+                    name="semester_id"
+                    required
+                    sx={styles.textField}
+                    error={errors.semester_id && touched.semester_id}
+                    helperText={
+                      errors.semester_id &&
+                      touched.semester_id &&
+                      errors.semester_id
                     }
                   />
-                }
-                label="Active"
+                )}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={status === "false"}
-                    onChange={(event) =>
-                      setStatus(event.target.checked ? "false" : "true")
-                    }
-                  />
+              <Field
+                name="requirement"
+                as={TextField}
+                label="Requirement"
+                fullWidth
+                multiline
+                rows={4}
+                sx={{ marginBottom: "10px" }}
+                error={errors.requirement && touched.requirement}
+                helperText={
+                  errors.requirement &&
+                  touched.requirement &&
+                  errors.requirement
                 }
-                label="Inactive"
               />
-            </FormGroup>
-          </FormControl>
+              <Field
+                name="forWho"
+                as={TextField}
+                label="For Who"
+                fullWidth
+                sx={{ marginBottom: "10px" }}
+                error={errors.forWho && touched.forWho}
+                helperText={errors.forWho && touched.forWho && errors.forWho}
+              />
+              <Field
+                name="images"
+                as={TextField}
+                label="For images"
+                fullWidth
+                sx={{ marginBottom: "10px" }}
+                error={errors.images && touched.images}
+                helperText={errors.images && touched.images && errors.images}
+              />
+              <Field
+                name="videos"
+                as={TextField}
+                label="For video"
+                fullWidth
+                sx={{ marginBottom: "10px" }}
+                error={errors.videos && touched.videos}
+                helperText={errors.videos && touched.videos && errors.videos}
+              />
 
-          {isSubmitting ? (
-            <CircularProgress style={{ marginTop: "1rem" }} />
-          ) : (
-            <Button
-              color="success"
-              type="submit"
-              variant="contained"
-              sx={styles.button}
-            >
-              ADD A CLASS
-            </Button>
+              <Button
+                color="success"
+                type="submit"
+                variant="contained"
+                sx={styles.button}
+              >
+                Submit
+              </Button>
+
+              <Link
+                to="/staffmanage"
+                style={{
+                  marginBlock: "30px",
+                  float: "right",
+                  backgroundColor: "grey",
+                  border: "none",
+                  color: "white",
+                  padding: "10px 20px",
+                  textAlign: "center",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </Link>
+            </Form>
           )}
-          <Link
-            to="/managecourse"
-            style={{
-              marginBlock: "30px",
-              float: "right",
-              backgroundColor: "grey",
-              border: "none",
-              color: "white",
-              padding: "10px 20px",
-              textAlign: "center",
-              textDecoration: "none",
-              display: "inline-block",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            Back
-          </Link>
-        </form>
+        </Formik>
       </Container>
     </div>
   );
 }
 
 export default AddNewCourse;
+
 const styles = {
   container: {
     marginTop: "2rem",

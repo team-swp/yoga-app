@@ -26,8 +26,8 @@ module.exports.addCourse = async (req, res) => {
       requirement:
         requirement || "For beginners that do not any knowledge about yoga",
       forWho: forWho || "For everyone that find the thing to heal them soul",
-      images: images||[],
-      videos: videos||[],
+      images: images || [],
+      videos: videos || [],
       semester_id: semester_id, //base 64
       meta_data: meta_data || "", //to side data
     });
@@ -36,7 +36,7 @@ module.exports.addCourse = async (req, res) => {
       .then((result) =>
         res.status(201).send({ msg: "Add Course Successfully" })
       )
-      .catch((error) => { console.log(error); return res.status(500).send({ error: error.message })});
+      .catch((error) => { console.log(error); return res.status(500).send({ error: error.message }) });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -53,7 +53,7 @@ module.exports.getCourses = async (req, res) => {
 
 module.exports.getCoursesPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Course,req.query.q,'coursename')
+    const pagingPayload = await pagingnation(Course, 'coursename', req.query)
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

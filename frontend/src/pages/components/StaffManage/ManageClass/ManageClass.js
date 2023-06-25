@@ -1,3 +1,9 @@
+<<<<<<< .merge_file_evzkNV
+import { useEffect, useState } from "react";
+import styles from "./ManageClass.css";
+import classNames from "classnames/bind";
+import { Container, Switch, colors } from "@mui/material";
+=======
 import { Select, MenuItem, TextField, FormControl } from '@mui/material';
 
 import { useEffect, useState } from "react";
@@ -13,6 +19,7 @@ import {
     Button,
     Switch,
 } from '@mui/material';
+>>>>>>> .merge_file_rMxxgT
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
@@ -25,6 +32,29 @@ const cx = classNames.bind(styles);
 
 
 function ManageClass() {
+<<<<<<< .merge_file_evzkNV
+  const [query, setQuery] = useState("");
+  const [classList, setClassList] = useState([]);
+  const [scheduleList, setScheduleList] = useState([]);
+  const [updatedClass, setUpdatedClass] = useState({});
+  const [classes, setClasses] = useState([]);
+
+  const classIformation = classList.concat.scheduleList;
+
+  const handleToggle = async (events, classes) => {
+    try {
+      const updatedClassData = { ...classes, status: events.target.checked };
+      const response = await updateClass(updatedClassData);
+      if (response && response.data) {
+        setUpdatedClass(response.data);
+        const updatedClasses = classes.map((courseItem) =>
+          courseItem._id === response.data._id ? response.data : courseItem
+        );
+        setClasses(updatedClasses);
+      }
+    } catch (error) {
+      console.error(error);
+=======
     const [classes, setClasses] = useState([]);
     const [updatedClass, setUpdatedClass] = useState({})
     const [classList, setClassList] = useState([])
@@ -131,6 +161,7 @@ function ManageClass() {
         setPage(response.data.pagination.pageNum)
         setPageCount(response.data.pagination.pageCount)
         setClasses(classData);
+>>>>>>> .merge_file_rMxxgT
     }
 
     /////////////////////// hàm reset này sẽ làm mới lại trang mà trả ô tìm kiếm bằng rỗng//////////////////////////////////
@@ -257,6 +288,18 @@ function ManageClass() {
                         alignItems: "center",
                         justifyContent: "center",
                     }}
+<<<<<<< .merge_file_evzkNV
+                  >
+                    Update
+                  </Link>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Container>
+    </div>
+  );
+=======
                 >
                     <Button
                         disabled={page === 1}
@@ -295,6 +338,7 @@ function ManageClass() {
             </Container>
         </div >
     );
+>>>>>>> .merge_file_rMxxgT
 }
 
 export default ManageClass;

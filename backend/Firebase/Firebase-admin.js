@@ -26,49 +26,82 @@ module.exports.verifyTokenGoogle = async (req, res, next) => {
 module.exports.CheckExistAccount = async (req, res) => {
   try {
     const { email } = req.authUser;
-    const existAccount = await Account.findOne({ email });
-    if (existAccount) {
-      if (existAccount.status) {
-        const token = jwt.sign(
-          {
-            userId: existAccount._id,
-            email: existAccount.email,
-            role: existAccount.role,
-          },
-          process.env.JWT_SECRET,
-          { expiresIn: "24h" }
-        );
-        return res.status(200).send({
-          msg: "Login Successful...!",
-          email: existAccount.email,
-          token,
-          username: existAccount.username,
-          _id: existAccount._id,
-          role: existAccount.role,
-          avatar: existAccount.avatar,
-          meta_data: existAccount.meta_data,
-          phone: existAccount.phone,
-        });
-      } else {
-        return res.status(500).send({ error: "Your account have been banned" });
-      }
-    } else {
-      const { name, email, phone, picture, meta_data } = req.authUser;
-      const account = new Account({
-        username: name,
-        email: email,
-        phone: phone || null,
-        avatar: picture || null,
-        meta_data: meta_data || "", //base 64
+    const existAccountPromise = Account.findOne({ email });
+    existAccountPromise
+      .then((existAccount) => {
+        console.log(existAccount);
+        if (existAccount) {
+          if (existAccount.status) {
+            const token = jwt.sign(
+              {
+                userId: existAccount._id,
+                email: existAccount.email,
+                role: existAccount.role,
+              },
+              process.env.JWT_SECRET,
+              { expiresIn: "24h" }
+            );
+            return res.status(200).send({
+              msg: "Login Successful...!",
+              email: existAccount.email,
+              token,
+              username: existAccount.username,
+              _id: existAccount._id,
+              role: existAccount.role,
+              avatar: existAccount.avatar,
+              meta_data: existAccount.meta_data,
+              phone: existAccount.phone,
+            });
+          } else {
+            return res
+              .status(500)
+              .send({ error: "Your account have been banned" });
+          }
+        } else {
+          const { name, email, phone, picture, meta_data } = req.authUser;
+          const account = new Account({
+            username: name,
+            email: email,
+            phone: phone || null,
+            avatar: picture || null,
+            meta_data: meta_data, //base 64
+          });
+          console.log('1');
+          account
+            .save()
+            .then((result) => {
+              const token = jwt.sign(
+                {
+                  userId: result._id,
+                  email: result.email,
+                  role: result.role,
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: "24h" }
+              );
+              console.log('2');
+              return res.status(201).send({
+                email: result.email,
+                token,
+                username: result.username,
+                _id: result._id,
+                role: result.role,
+                avatar: result.avatar,
+                meta_data: result.meta_data,
+                phone: result.phone,
+                msg: "User Register Successfully",
+              });
+              console.log('3');
+            })
+            .catch((error) => {
+              console.log(error);
+              return res.status(500).send({ error });
+            });
+        }
+      })
+      .catch((result) => {
+        return res.status(404).send("Authenticate fail");
       });
-
-      account
-        .save()
-        .then((result) =>
-          res.status(201).send({ msg: "User Register Successfully" })
-        )
-        .catch((error) => res.status(500).send({ error }));
-    }
   } catch (error) {
     return res.status(401).send("Authenticate fail");
   }

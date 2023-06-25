@@ -12,10 +12,16 @@ import {
   Switch,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+<<<<<<< .merge_file_nMjQr4
+import styles from "./ManageSchedule.css";
+import classNames from "classnames/bind";
+import Navigation from "../../Header/Navigation/Navigation";
+=======
 import { Toaster, toast } from "react-hot-toast";
 import { updateSchedule } from "../../../../helper/scheduleAPI";
 import StatusButton from "./StatusButons";
 import axios from "axios";
+>>>>>>> .merge_file_CaNyWE
 
 
 function ManageSchedule() {
@@ -72,6 +78,41 @@ function ManageSchedule() {
 
   return (
     <div>
+<<<<<<< .merge_file_nMjQr4
+      <Navigation/>
+      <Container style={{marginTop:'5%'}}>
+        <div className={cx("text-end")}>
+          <Link to="/addnewschedule" className={cx("btn btn-primary")}>
+            Add new Schedule
+          </Link>
+        </div>
+        <table className="container">
+          <thead>
+            <tr>
+              <td>Schedule Name</td>
+              <td>Start Time</td>
+              <td>End Time</td>
+              <td>Status</td>
+            </tr>
+          </thead>
+          <tbody>
+            {scheduleList.map((scheduleItem, index) => (
+              <tr key={index}>
+                <td>{scheduleItem.schedulename}</td>
+                <td>{scheduleItem.startTime}</td>
+                <td>{scheduleItem.endTime}</td>
+                <td>{scheduleItem.status ? "Active" : "Inactive"}</td>
+                <Link
+                  to={`/updateschedule/${scheduleItem._id}`}
+                  className={cx("btn btn-secondary")}
+                >
+                  Update
+                </Link>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+=======
       <Container>
         <Toaster position="top-center" reverseOrder={false} />
 
@@ -138,6 +179,7 @@ function ManageSchedule() {
             </TableBody>
           </Table>
         </TableContainer>
+>>>>>>> .merge_file_CaNyWE
       </Container>
     </div>
   );
