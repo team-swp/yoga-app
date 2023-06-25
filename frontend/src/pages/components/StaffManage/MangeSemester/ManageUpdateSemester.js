@@ -123,6 +123,6 @@ const styles = {
     },
     button: {
         marginTop: "1rem",
-        width: "100%",
+        width: "25%",
     },
 };

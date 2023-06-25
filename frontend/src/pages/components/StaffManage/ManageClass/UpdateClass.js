@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getClass, updateClass } from "../../../../helper/classAPI";
-import { Container, TextField, Button, MenuItem, Autocomplete } from "@mui/material";
+import {
+    Container,
+    TextField,
+    Button,
+    MenuItem,
+    Autocomplete,
+    Checkbox,
+    FormControl,
+    InputLabel,
+    Select,
+    OutlinedInput,
+    ListItemText,
+} from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import axios from "axios";
@@ -24,6 +36,27 @@ function UpdateClass() {
     const [instructorList, setInstructorList] = useState("");
     const [selectedInstructor, setSelectedInstructor] = useState(null);
     const [days, setDays] = useState([]);
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuDay = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
+
+    const daysOfWeek = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+    ];
 
     useEffect(() => {
         fetchClasses();
@@ -86,7 +119,7 @@ function UpdateClass() {
                 setScheduleId(schedulename.schedulename);
             }
             if (classes.course_id) {
-                const response = await getCourse();
+                const response = await getCourse(); console.log(response, 123);
                 const coursename = response.data.find((obj) => obj._id === classes.course_id);
                 setCourseId(coursename.coursename);
             }
@@ -114,7 +147,7 @@ function UpdateClass() {
                 schedule_id: scheduleId,
                 course_id: courseId,
                 instructor_id: instructorId,
-                days: [days],
+                days: days,
             });
             if (response) {
                 toast.success("Updated successfully!");
@@ -126,6 +159,16 @@ function UpdateClass() {
             toast.error("Failed to update class...");
         }
     }
+
+    const handleChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setDays(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     return (
         <>
@@ -193,22 +236,26 @@ function UpdateClass() {
                             />
                         )}
                     />
-                    <TextField
-                        select
-                        label="Day of the week"
-                        value={days}
-                        onChange={(e) => setDays(e.target.value)}
-                        variant="outlined"
-                        sx={styles.textField}
-                    >
-                        <MenuItem value="Monday">Monday</MenuItem>
-                        <MenuItem value="Tuesday">Tuesday</MenuItem>
-                        <MenuItem value="Wednesday">Wednesday</MenuItem>
-                        <MenuItem value="Thursday">Thursday</MenuItem>
-                        <MenuItem value="Friday">Friday</MenuItem>
-                        <MenuItem value="Saturday">Saturday</MenuItem>
-                        <MenuItem value="Sunday">Sunday</MenuItem>
-                    </TextField>
+                    <FormControl sx={{ width: 852 }}>
+                        <InputLabel id="demo-multiple-checkbox-label">Day</InputLabel>
+                        <Select
+                            labelId="demo-multiple-checkbox-label"
+                            id="demo-multiple-checkbox"
+                            multiple
+                            value={days}
+                            onChange={handleChange}
+                            input={<OutlinedInput label="Tag" />}
+                            renderValue={(selected) => selected.join(', ')}
+                            MenuProps={MenuDay}
+                        >
+                            {daysOfWeek.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                    <Checkbox checked={days.indexOf(daysOfWeek) > -1} />
+                                    <ListItemText primary={name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <Button type="submit" variant="contained" sx={styles.button}>
                         Update Course
                     </Button>

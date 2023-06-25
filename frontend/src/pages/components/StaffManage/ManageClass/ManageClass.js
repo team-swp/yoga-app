@@ -3,12 +3,21 @@ import { Select, MenuItem, TextField, FormControl } from '@mui/material';
 import { useEffect, useState } from "react";
 import {
     Container,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Button,
     Switch,
 } from '@mui/material';
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { updateClass } from '../../../../helper/classAPI';
+import StatusButton from './StatusButon';
 import classNames from "classnames/bind";
 import styles from './ManageClass.css'
 
@@ -169,88 +178,98 @@ function ManageClass() {
         <div>
             <Container>
                 <Toaster position="top-center" reverseOrder={false} />
-                <div className={cx("text-end")}>
-                    <Link to="/addnewclass" className={cx("btn btn-primary")}>Add new class</Link>
-                </div>
-                <table className="container">
-                    <thead>
-                        <tr>
-                            <td>Class Id</td>
-                            <td> Class Name</td>
-                            <td> Schedule </td>
-                            <td>Course</td>
-                            <td>Intructor</td>
-                            <td>Days</td>
-                            <td>Status</td>
-                            <td>Action</td>
-                        </tr>
-
-                    </thead>
-                    <tbody>
-                        {classes.map((classItem, index) => {
-                            const scheduleId = classItem.schedule_id;
-                            const courseId = classItem.course_id;
-                            const instructorId = classItem.instructor_id;
-                            const scheduleName = scheduleList.find((schedule) => schedule._id === scheduleId)?.schedulename;
-                            const courseName = courseList.find((course) => course._id === courseId)?.coursename;
-                            const instructor = instructorList.find((inst) => inst._id === instructorId)?.username;
-
-                            return (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{classItem.classname}</td>
-                                    <td>{scheduleName}</td>
-                                    <td>{courseName}</td>
-                                    <td>{instructor}</td>
-                                    <td>{classItem.days}</td>
-                                    <td>
-                                        <Switch
-                                            checked={classItem.status}
-                                            onChange={(event) => handleToggle(event, classItem)}
-                                            color={classItem.status ? 'success' : 'error'}
-                                        />
-                                    </td>
-                                    <Link
-                                        to={`/updateclass/${classItem._id} `}
-                                        className={cx("btn btn-secondary")}
-                                        onClick={() => { console.log(classItem); }}
-                                    >
-                                        Update
-                                    </Link>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-                <footer style={{
-                    margin: 'auto',
-                    padding: '15px',
-                    maxWidth: '400px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
-                    <button
+                <TableContainer component={Paper}>
+                    <div
+                        style={{ float: "right", marginTop: "15px", marginBottom: '15px', marginRight: "10px" }}
+                    >
+                        <Button
+                            variant="contained"
+                            color="success"
+                            component={Link}
+                            to="/addnewclass"
+                        >
+                            Add new Class
+                        </Button>
+                    </div>
+                    <Table sx={{ minWidth: 650 }} aria-label="class table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Class Id</TableCell>
+                                <TableCell>Class Name</TableCell>
+                                <TableCell>Schedule</TableCell>
+                                <TableCell>Course</TableCell>
+                                <TableCell>Instructor</TableCell>
+                                <TableCell>Days</TableCell>
+                                <TableCell>Disable-Enable</TableCell>
+                                <TableCell>Status</TableCell>
+                                <TableCell>Action</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {classes.map((classItem, index) => {
+                                const scheduleId = classItem.schedule_id;
+                                const courseId = classItem.course_id;
+                                const instructorId = classItem.instructor_id;
+                                const scheduleName = scheduleList.find((schedule) => schedule._id === scheduleId)?.schedulename;
+                                const courseName = courseList.find((course) => course._id === courseId)?.coursename;
+                                const instructor = instructorList.find((inst) => inst._id === instructorId)?.username;
+                                return (
+                                    <TableRow key={classItem._id}>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{classItem.classname}</TableCell>
+                                        <TableCell>{scheduleName}</TableCell>
+                                        <TableCell>{courseName}</TableCell>
+                                        <TableCell>{instructor}</TableCell>
+                                        <TableCell>{classItem.days}</TableCell>
+                                        <TableCell>
+                                            <Switch
+                                                checked={classItem.status}
+                                                onChange={(event) => handleToggle(event, classItem)}
+                                                color={classItem.status ? "success" : "error"}
+                                            />
+                                        </TableCell>
+                                        <TableCell style={{ textAlign: "center" }}>
+                                            <StatusButton status={classItem.status} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button
+                                                variant="contained"
+                                                color="warning"
+                                                component={Link}
+                                                to={`/updateclass/${classItem._id} `}
+                                                style={{ fontSize: "10px" }}
+                                            >
+                                                Update
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <footer
+                    style={{
+                        margin: "auto",
+                        padding: "15px",
+                        maxWidth: "400px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Button
                         disabled={page === 1}
                         onClick={handlePrevious}
-                        style={{
-                            marginRight: "1rem",
-                            padding: "0.5rem 1rem",
-                            borderRadius: "4px",
-                            backgroundColor: "#ccc",
-                            cursor: "pointer",
-                        }}
+                        variant="contained"
                     >
                         Previous
-                    </button>
+                    </Button>
                     <select
                         value={page}
-                        onChange={(event) => {
-                            setPage(event.target.value);
-
-                        }}
+                        onChange={(event) => setPage(event.target.value)}
                         style={{
-                            marginRight: "1rem",
+                            margin: "0 1rem",
                             padding: "0.5rem",
                             borderRadius: "4px",
                         }}
@@ -265,22 +284,15 @@ function ManageClass() {
                                 );
                             })}
                     </select>
-                    <button
+                    <Button
                         disabled={page == pageCount}
                         onClick={handleNext}
-                        style={{
-                            padding: "0.5rem 1rem",
-                            borderRadius: "4px",
-                            backgroundColor: "#ccc",
-                            cursor: "pointer",
-                        }}
+                        variant="contained"
                     >
                         Next
-                    </button>
+                    </Button>
                 </footer>
-            </Container >
-
-
+            </Container>
         </div >
     );
 }

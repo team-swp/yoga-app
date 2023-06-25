@@ -1,15 +1,22 @@
-
 import { useEffect, useState } from "react";
-import { Container, TableCell, Switch } from '@mui/material';
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Switch,
+  TextField,
+} from '@mui/material';
 import { Link } from "react-router-dom";
 import { updateSemester } from "../../../../helper/semesterAPI";
-import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
-import styles from "./ManageSemester.css"
-import classNames from "classnames/bind";
-
-const cx = classNames.bind(styles);
-
+import axios from "axios";
+import StatusButton from "./StatusButtons";
 
 function ManageSemester() {
   const [semesters, setSemesters] = useState([]);
@@ -18,8 +25,9 @@ function ManageSemester() {
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [statusValue, setStatusValue] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  /////// update done//////////// 
   const handleToggle = async (event, semester) => {
     try {
       const updatedSemesterData = { ...semester, status: event.target.checked };
@@ -62,7 +70,7 @@ function ManageSemester() {
   //   fecthSemester();
   // }, [])
 
-  ////////////////////////////  chạy lại cái này để reset lại trang ////////////////////////////////////////////////
+  //reset page//
   async function fetchSemesters2() {
     const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`)
     const semestersData = response.data.items;
@@ -71,10 +79,18 @@ function ManageSemester() {
     setSemesters(semestersData);
   }
 
-  ////////////////////////////// cái này thì là khi update nó k bị load lại với page////////////////////////////
-  async function fetchSemesters() {
-    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`)
-    console.log(response.data.items);
+  //reset button//
+  const handleReset = () => {
+    fetchSemesters();
+    setPage(1);
+    setPageCount(0);
+    setStartDate('');
+    setEndDate('');
+  }
+
+  //update khong load lai trang//
+  async function fetchSemesters(startDate = '', endDate = '') {
+    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=3&startDate=${startDate}&endDate=${endDate}`);
     const semestersData = response.data.items;
     setPage(response.data.pagination.pageNum)
     setPageCount(response.data.pagination.pageCount)
@@ -107,6 +123,25 @@ function ManageSemester() {
   // }
 
   /////////////////// handle việc next và prev trong page/////////////////////////
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    // Chuyển đổi giá trị startDate và endDate sang định dạng dd/mm/yyyy
+    const formattedStartDate = new Date(startDate).toLocaleDateString('en-GB');
+    const formattedEndDate = new Date(endDate).toLocaleDateString('en-GB');
+
+    console.log("formattedStartDate:", formattedStartDate);
+    console.log("formattedEndDate:", formattedEndDate);
+
+    try {
+      await fetchSemesters(formattedStartDate, formattedEndDate);
+      setStartDate('');
+      setEndDate('');
+    } catch (error) {
+      toast.error('Not Found!!!')
+    }
+  }
+
   function handlePrevious() {
     setPage((p) => {
       if (p === 1) return p;
@@ -127,72 +162,139 @@ function ManageSemester() {
     <div>
       <Container>
         <Toaster position="top-center" reverseOrder={false} />
-        <div className={cx("text-end")}><Link to="/addnewsemester" className={cx("btn btn-primary")}>Add new Semester</Link></div>
-        <table className="container">
-          <thead>
-            <tr>
-              <td>Semester ID</td>
-              <td>Semester Name</td>
-              <td>Start Date</td>
-              <td>End Date</td>
-              <td>Status</td>
-              <td>Action</td>
-            </tr>
 
-          </thead>
-          <tbody>
-            {semesters.map((semesterItem, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{semesterItem.semestername}</td>
-                <td>{semesterItem.startDate.split('T00:00:00.000Z')}</td>
-                <td>{semesterItem.endDate.split('T00:00:00.000Z')}</td>
-                <TableCell>
-                  <Switch
-                    checked={semesterItem.status}
-                    onChange={(event) => handleToggle(event, semesterItem)}
-                    color={semesterItem.status ? 'success' : 'error'}
-                  />
-                </TableCell>
-                <Link
-                  to={`/updatesemester/${semesterItem._id}`}
-                  className={cx("btn btn-secondary")}
-                >
-                  Update
-                </Link>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <footer style={{
-          margin: 'auto',
-          padding: '15px',
-          maxWidth: '400px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <button
+        <TableContainer component={Paper}>
+          <div
+            style={{ float: "right", marginTop: "15px", marginRight: "10px" }}
+          >
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="/addnewsemester"
+            >
+              Add new Semester
+            </Button>
+          </div>
+          <form
+            style={{
+              margin: "auto",
+              padding: "15px",
+              maxWidth: "800px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onSubmit={handleSearch}
+          >
+            <TextField
+              id="start-date"
+              label="Start Date"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              id="end-date"
+              label="End Date"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              style={{ marginLeft: "1rem" }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <Button type="submit" variant="contained" color="primary" style={{ marginLeft: "1rem" }}>
+              Search
+            </Button>
+            <Button
+              style={{ marginLeft: "1rem" }}
+              variant="outlined"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+          </form>
+
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ textAlign: "center" }} >Semester ID</TableCell>
+                <TableCell style={{ textAlign: "center" }} >Semester Name</TableCell>
+                <TableCell style={{ textAlign: "center" }} >Start Date</TableCell>
+                <TableCell style={{ textAlign: "center" }} >End Date</TableCell>
+                <TableCell style={{ textAlign: "center" }} >Disable-Enable</TableCell>
+                <TableCell style={{ textAlign: "center" }} >Status</TableCell>
+                <TableCell style={{ textAlign: "center" }} >Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {semesters.map((semesterItem, index) => (
+                <TableRow key={index}>
+                  <TableCell style={{ textAlign: "center" }} >
+                    {index + 1}
+                  </TableCell>
+                  <TableCell style={{ textAlign: "center" }} >
+                    {semesterItem.semestername}
+                  </TableCell>
+                  <TableCell style={{ textAlign: "center" }} >
+                    {new Date(semesterItem.startDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell style={{ textAlign: "center" }} >
+                    {new Date(semesterItem.endDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <Switch
+                      checked={semesterItem.status}
+                      onChange={(event) => handleToggle(event, semesterItem)}
+                      color={semesterItem.status ? 'success' : 'error'}
+                    />
+                  </TableCell>
+                  <TableCell style={{ textAlign: "center" }}>
+                    <StatusButton status={semesterItem.status} />
+                  </TableCell>
+                  <TableCell style={{ textAlign: "center" }}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      component={Link}
+                      to={`/updatesemester/${semesterItem._id}`}
+                      style={{ fontSize: "10px", backgroundColor: 'orange' }}
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <footer
+          style={{
+            margin: "auto",
+            padding: "15px",
+            maxWidth: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Button
             disabled={page === 1}
             onClick={handlePrevious}
-            style={{
-              marginRight: "1rem",
-              padding: "0.5rem 1rem",
-              borderRadius: "4px",
-              backgroundColor: "#ccc",
-              cursor: "pointer",
-            }}
+            variant="contained"
           >
             Previous
-          </button>
+          </Button>
           <select
             value={page}
-            onChange={(event) => {
-              setPage(event.target.value);
-
-            }}
+            onChange={(event) => setPage(event.target.value)}
             style={{
-              marginRight: "1rem",
+              margin: "0 1rem",
               padding: "0.5rem",
               borderRadius: "4px",
             }}
@@ -207,20 +309,15 @@ function ManageSemester() {
                 );
               })}
           </select>
-          <button
+          <Button
             disabled={page == pageCount}
             onClick={handleNext}
-            style={{
-              padding: "0.5rem 1rem",
-              borderRadius: "4px",
-              backgroundColor: "#ccc",
-              cursor: "pointer",
-            }}
+            variant="contained"
           >
             Next
-          </button>
+          </Button>
         </footer>
-      </Container >
+      </Container>
 
 
     </div >

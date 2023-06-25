@@ -1,11 +1,42 @@
-
 import { useState, useEffect } from "react";
-import { Container, TextField, Autocomplete, MenuItem } from "@mui/material";
+import {
+    Container,
+    TextField,
+    Autocomplete,
+    Checkbox,
+    FormControl,
+    InputLabel,
+    Select,
+    OutlinedInput,
+    MenuItem,
+    ListItemText,
+} from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import axios from "axios";
 import { addClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuDay = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+const daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+];
 
 function AddNewClass() {
     const [classname, setClassname] = useState("");
@@ -34,7 +65,7 @@ function AddNewClass() {
                 schedule_id: scheduleId,
                 course_id: courseId,
                 instructor_id: instructorId,
-                days: [days]
+                days: days
             })
             if (response) {
                 // Lớp học được thêm thành công
@@ -93,6 +124,16 @@ function AddNewClass() {
 
         fetchInstructor();
     }, []);
+
+    const handleChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setDays(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     return (
         <div>
@@ -159,24 +200,28 @@ function AddNewClass() {
                                 />
                             )}
                         />
-                        <TextField
-                            select
-                            label="Day of the week"
-                            value={days}
-                            onChange={(e) => setDays(e.target.value)}
-                            variant="outlined"
-                            sx={styles.textField}
-                        >
-                            <MenuItem value="Monday">Monday</MenuItem>
-                            <MenuItem value="Tuesday">Tuesday</MenuItem>
-                            <MenuItem value="Wednesday">Wednesday</MenuItem>
-                            <MenuItem value="Thursday">Thursday</MenuItem>
-                            <MenuItem value="Friday">Friday</MenuItem>
-                            <MenuItem value="Saturday">Saturday</MenuItem>
-                            <MenuItem value="Sunday">Sunday</MenuItem>
-                        </TextField>
+                        <FormControl sx={{ width: 400 }}>
+                            <InputLabel id="demo-multiple-checkbox-label">Day</InputLabel>
+                            <Select
+                                labelId="demo-multiple-checkbox-label"
+                                id="demo-multiple-checkbox"
+                                multiple
+                                value={days}
+                                onChange={handleChange}
+                                input={<OutlinedInput label="Tag" />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuDay}
+                            >
+                                {daysOfWeek.map((name) => (
+                                    <MenuItem key={name} value={name}>
+                                        <Checkbox checked={days.indexOf(daysOfWeek) > -1} />
+                                        <ListItemText primary={name} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
 
-                        <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer' }}>Update Class</button>
+                        <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em' }}>Add Class</button>
                     </form>
                 </div>
             </Container>
