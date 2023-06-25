@@ -27,12 +27,12 @@ function App() {
               
             })
             .catch((res) => {
-              localStorage.removeItem("token");
+              // localStorage.removeItem("token");
               return <Navigate to={"/login"} replace={true}></Navigate>;
             });
         }
       } catch (error) {
-        localStorage.removeItem("token");
+        // localStorage.removeItem("token");
         return <Navigate to={"/login"} replace={true} />;
       }
     };

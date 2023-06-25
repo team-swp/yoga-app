@@ -10,7 +10,6 @@ const Mailgen = require("mailgen");
 const { pagingnation } = require("./Pagingnation");
 const Booking = require("../models/bookings");
 const Account = require("../models/accounts");
-const Premium = require("../models/premiums");
 //payment medthod
 module.exports.addPaymentMethod = async (req, res) => {
   const { paymentname } = req.body;
@@ -70,11 +69,10 @@ module.exports.getPaymentMethodById = async (req, res, next) => {
 };
 
 module.exports.addPaymentMethod = async (req, res) => {
-  const { paymentname, image } = req.body;
+  const { paymentname } = req.body;
   try {
     const paymentMethod = new PaymentMethod({
       paymentname: paymentname,
-      image: image,
     });
     // return save result as a response
     paymentMethod
@@ -98,7 +96,6 @@ module.exports.addPayment = async (req, res) => {
     paymentMethod_id,
     booking_id,
     description,
-    premium_id,
     status,
     meta_data,
   } = req.body;
@@ -110,7 +107,6 @@ module.exports.addPayment = async (req, res) => {
       paymentMethod_id,
       booking_id,
       description,
-      premium_id,
       status,
       meta_data,
     });
@@ -149,7 +145,15 @@ module.exports.getPaymentParams = async (req, res) => {
 
 module.exports.getPaymentsPaging = async (req, res) => {
   try {
+<<<<<<< HEAD
     const pagingPayload = await pagingnation(Payment, null, req.query);
+=======
+    const pagingPayload = await pagingnation(
+      req.query.page,
+      req.query.limit,
+      Payment
+    );
+>>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -164,7 +168,6 @@ module.exports.updatePayment = async (req, res) => {
     "paymentMethod_id",
     "booking_id",
     "description",
-    "premium_id",
     "status",
     "meta_data",
   ];
@@ -287,8 +290,6 @@ module.exports.vnpayIPN = async (req, res, next) => {
   const dataArray = getData.split("%2C");
   const userID = dataArray[0];
   const email = dataArray[1];
-  const usernamePayment = dataArray[2];
-  const premium_id = dataArray[3];
   const replacedEmail = email.replace("%40", "@");
   if (secureHash === signed) {
     //kiểm tra checksum
@@ -300,7 +301,8 @@ module.exports.vnpayIPN = async (req, res, next) => {
             const booking = new Booking({
               member_id: userID,
             });
-            booking.save().then((result) => {
+            booking.save()
+              .then((result) => {
               const bookingID = result._id;
               const payment = new Payment({
                 recipient: "Yoga HeartBeat",
@@ -308,33 +310,18 @@ module.exports.vnpayIPN = async (req, res, next) => {
                 paymentAmount: vnp_Params["vnp_Amount"] / 100,
                 paymentMethod_id: "647da80b6aa8563399cbc6ff",
                 booking_id: bookingID,
-                premium_id: premium_id,
                 status: 10,
                 meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
               });
               // return save result as a response
-              payment
-                .save()
+              const usernamePayment = dataArray[2];
+              payment.save()
                 .then(async (result) => {
-                  const premiumName = await Premium.findOne({
-                    _id: premium_id,
-                  });
-                  const date = new Date();
-                  const dateString = date.toISOString();
-                  const memeberAccount = await Account.findOneAndUpdate(
-                    { _id: userID },
-                    {
-                      meta_data: `{"isMember":true,"MemberDuration":${premiumName.durationByMonth},"startDateMember":"${dateString}"}`,
-                    }
-                  );
+                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":true}`})
                   req.user = {
                     userEmail: replacedEmail,
                     username: usernamePayment,
-                    text: `We are pleased to inform you that your payment (id; ${
-                      result._id
-                    }) for ${
-                      premiumName && premiumName.premiumname
-                    } package has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
+                    text: `We are pleased to inform you that your payment (id; ${result._id}) has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
                     subject: "Payment Successful",
                     result_id: result._id,
                   };
@@ -349,28 +336,24 @@ module.exports.vnpayIPN = async (req, res, next) => {
             const booking = new Booking({
               member_id: userID,
             });
-            booking.save().then((result) => {
+            booking.save()
+              .then((result) => {
               const bookingID = result._id;
-
+              
               const payment = new Payment({
                 recipient: "Yoga HeartBeat",
                 paymentDate: vnp_Params["vnp_PayDate"],
                 paymentAmount: vnp_Params["vnp_Amount"] / 100,
                 paymentMethod_id: "647da80b6aa8563399cbc6ff",
                 booking_id: bookingID,
-                premium_id: premium_id,
                 status: 5,
                 meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
               });
               // return save result as a response
               const usernamePayment = dataArray[2];
-              payment
-                .save()
+              payment.save()
                 .then(async (result) => {
-                  const memeberAccount = await Account.findOneAndUpdate(
-                    { _id: userID },
-                    { meta_data: `{"isMember":false}` }
-                  );
+                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":false}`})
                   req.user = {
                     userEmail: replacedEmail,
                     username: usernamePayment,
@@ -463,10 +446,9 @@ module.exports.haveDonePayment = (req, res) => {
   });
   const { username, userEmail, text, subject, result_id } = req.user;
   // body of the email
-  var modifiedUsername = username.replace(/\+/g, " ");
   var email = {
     body: {
-      name: modifiedUsername || "No Name",
+      name: username || "No Name",
       intro:
         text ||
         "Welcome to Yoga HeartBeat! We're very excited to have you join with us.",
@@ -490,6 +472,7 @@ module.exports.haveDonePayment = (req, res) => {
       res.redirect(url + "?pmid=" + result_id);
     })
     .catch((error) => res.status(500).send({ error }));
+<<<<<<< HEAD
 };
 
 //out put [
@@ -1011,3 +994,6 @@ function removeDuplicateKeyValuePairs(arr) {
 
   return Object.values(uniquePairs);
 }
+=======
+};
+>>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744

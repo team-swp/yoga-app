@@ -1,0 +1,14 @@
+pmd run:
+	check: check mode
+	-f: output format as text, in CLI
+	-R + reference path: can be either XML or reference to included rules
+	-d .: run the check in the current directory as the src
+	-r: report
+
+Single rules
+pmd check -f text -R category/ecmascript/bestpractices.xml/ConsistentReturn -d .
+
+Custom rules
+pmd check -f text -R .\demo.xml -d .
+
+pmd check -f text -R .\demo.xml -d . -r result.txt

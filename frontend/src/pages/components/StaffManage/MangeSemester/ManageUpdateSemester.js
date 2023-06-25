@@ -4,6 +4,7 @@ import { getSemester, updateSemester } from "../../../../helper/semesterAPI";
 import { Container, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
+import { Toaster, toast } from "react-hot-toast";
 
 function ManageUpdateSemester() {
     const [semester, setSemester] = useState({});
@@ -47,12 +48,12 @@ function ManageUpdateSemester() {
                 status: status,
             });
             if (response) {
-                alert("Schedule updated successfully!");
+                toast.success(" Updated successfully!");
             } else {
-                alert("Failed to update schedule");
+                toast.error("Failed to update...");
             }
         } catch (error) {
-            console.error(error);
+            toast.error("Failed to update...", error);
         }
     }
 
@@ -61,6 +62,7 @@ function ManageUpdateSemester() {
         <>
             <Header />
             <Container maxWidth="md" sx={styles.container}>
+                <Toaster position="top-center"></Toaster>
                 <div style={{ maxWidth: '400px', margin: '0 auto' }}>
                     <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px' }}>Update Semester</h1>
                 </div>
@@ -121,6 +123,6 @@ const styles = {
     },
     button: {
         marginTop: "1rem",
-        width: "100%",
+        width: "25%",
     },
 };

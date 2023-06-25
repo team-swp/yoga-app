@@ -15,13 +15,10 @@ import {
 import { GoogleButton } from "react-google-button";
 import { UserAuth } from "../../../context/AuthGoogleContext";
 import { addBooking } from "../../../helper/bookingAPI";
-import { Howl } from "howler";
-import soundLogin from "../../../assets/ding-sound-effect_2.mp3";
-import soundBonk from "../../../assets/bonk-sound-effect.mp3";
+
 function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { googleSignIn,soundPlay,checkLogin } = UserAuth();
   const token = localStorage.getItem("token");
   const [emailType, setEmailType] = useState();
   if (token && token !== "undefined") {
@@ -31,13 +28,12 @@ function Username() {
         res.data.data = Object.assign(res.data.data, { token });
         dispatch(addUserLogin(res.data.data));
         dispatch(setDataLogin(res.data.data));
-        navigate("/");
+        navigate("/profile");
       })
       .catch((res) => {
         navigate("/");
       });
   }
-
 
   const formik = useFormik({
     initialValues: {
@@ -61,7 +57,7 @@ function Username() {
       toast.promise(loginPromise, {
         loading: "Checking...",
         success: <b>Login Successfully...!</b>,
-        error: <b>Password Or Email Not Match!</b>,
+        error: <b>Password Not Match!</b>,
       });
 
       loginPromise
@@ -71,22 +67,20 @@ function Username() {
           let getUserData = getUser({ id });
           getUserData
             .then((res) => {
-              soundPlay(soundLogin);
               res.data = Object.assign(res.data, { token });
               dispatch(setDataLogin(res.data)); //reducer là kho lưu trữ nhận giá trị lưu trữ không phải phần xử lí
               navigate("/");
             })
             .catch((res) => {
-              soundPlay(soundBonk);
               navigate("/login");
             });
         })
-        .catch((error) => {
-          soundPlay(soundBonk);
+        .catch((res) => {
           navigate("/login");
         });
     },
   });
+  const { googleSignIn } = UserAuth();
   const handleGoogleSignIn = () => {
     try {
       let loginPromise = googleSignIn();
@@ -98,9 +92,7 @@ function Username() {
 
       loginPromise.then(() => {
         navigate("/");
-      }).catch(()=>{
-        navigate("/login")
-      })
+      });
     } catch (error) {
       console.log(error);
     }

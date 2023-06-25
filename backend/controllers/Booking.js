@@ -1,20 +1,9 @@
-const Account = require("../models/accounts");
 const Booking = require("../models/bookings");
-const Payment = require("../models/payments");
 const { pagingnation } = require("./Pagingnation");
-
 module.exports.addBooking = async (req, res) => {
-  try {
-    const bookTry = await Booking.findOne({
-      member_id: req.account.userId,
-      meta_data: `"isTry":true`,
-    });
+  const { member_id, class_id, booking_date, status, meta_data } = req.body;
 
-    if (bookTry && req.body.isTry) {
-      res.status(400).json({ message: "Cannot book try" });
-    }
-    //check user trước nếu meta_data có isMember:true
-    const { member_id, class_id, booking_date, status, meta_data } = req.body;
+  try {
     const booking = new Booking({
       member_id: req.account.userId,
       class_id,
@@ -22,7 +11,6 @@ module.exports.addBooking = async (req, res) => {
       status,
       meta_data: meta_data || "",
     });
-    console.log(booking);
     // return save result as a response
     booking
       .save()
@@ -46,7 +34,7 @@ module.exports.getBooking = async (req, res) => {
 
 module.exports.getBookingsPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(Booking, "member_id", req.query);
+    const pagingPayload = await pagingnation(req.query.page, req.query.limit, Booking, req.query.q, 'member_id')
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

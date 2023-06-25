@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { premiumSelector, userSelector } from "../redux/selectors";
+import { userSelector } from "../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserByToken } from "../helper/loginAPI";
 import { addUserLogin, setDataLogin } from "../redux/actions";
@@ -46,14 +46,6 @@ export const ProtectRouteOTP = ({ children }) => {
   console.log("checkOTP", checkOTP);
   if (!checkOTP) {
     return <Navigate to={"/"} replace={true}></Navigate>;
-  }
-  return children;
-};
-
-export const ProtectRouteCheckout = ({ children }) => {
-  const premium = useSelector(premiumSelector);
-  if (!premium) {
-    return <Navigate to={"/premium"} replace={true}></Navigate>;
   }
   return children;
 };

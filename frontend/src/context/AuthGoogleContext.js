@@ -17,7 +17,6 @@ import {
 } from "../redux/actions";
 import { useDispatch } from "react-redux";
 import { verifyTokenGoogle } from "../helper/loginAPI";
-import { Howl } from "howler";
 
 const AuthContext = createContext(); //tạo ra 1 cái kho
 const initialState = {
@@ -28,29 +27,27 @@ const initialState = {
 };
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
+<<<<<<< HEAD
   const [checkLogin, setCheckLogin] = useState(true);
+=======
+>>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   };
   const dispatch = useDispatch();
   const logOut = async () => {
+    // if(user){
     signOut(auth);
+    // }else{
     dispatch(logOutNormal(""));
-  };
-
-  const soundPlay = (src) => {
-    const sound = new Howl({
-      src,
-      html5: true,
-    });
-    sound.play();
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
+<<<<<<< HEAD
         const tokenPromise = currentUser.getIdToken();
         tokenPromise.then((token) => {
           if(!checkLogin){
@@ -69,12 +66,20 @@ export const AuthContextProvider = ({ children }) => {
               dispatch(logOutNormal(""));
             });
         });
+=======
+        const token = await currentUser.getIdToken();
+        const data = await verifyTokenGoogle(token);
+        if (data) {
+          dispatch(setDataLogin(data));
+        }
+>>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
       }
     });
     return () => {
       unsubscribe();
     };
   }, [user]);
+<<<<<<< HEAD
 
   
   const [screenSize, setScreenSize] = useState(undefined);
@@ -100,6 +105,11 @@ export const AuthContextProvider = ({ children }) => {
     <AuthContext.Provider
       value={{ googleSignIn, logOut, soundPlay, checkLogin,currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initialState, setIsClicked, setActiveMenu, setCurrentColor, setCurrentMode, setMode, setColor, themeSettings, setThemeSettings }}
     >
+=======
+
+  return (
+    <AuthContext.Provider value={{ googleSignIn, logOut }}>
+>>>>>>> 2a44cf877dc5be9bc304ee6200ffa14b2023c744
       {children}
     </AuthContext.Provider>
   );

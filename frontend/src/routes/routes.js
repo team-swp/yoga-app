@@ -15,7 +15,6 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
-  ProtectRouteCheckout,
   ProtectRouteOTP,
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
@@ -31,14 +30,9 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
-import Premium from "../pages/components/MemberPacket/Premium";
-import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
-import AdminHome from "../pages/components/Admin/AdminHome";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
-import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
-import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
-import CourseItems from "../pages/components/Courses/CourseItems";
-import Dashboard from "../pages/components/DashBoard/Dashboard";
+import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+
 
 import {
   Ecommerce,
@@ -68,10 +62,6 @@ const routers = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses></Courses>,
-  },
-  {
-    path: "/courseitem",
-    element: <CourseItems></CourseItems>,
   },
   {
     path: "/course",
@@ -119,16 +109,13 @@ const routers = createBrowserRouter([
   },
   {
     path: "/paymentstatus",
-    element: <PaymentStatus />,
+    element: (
+      <PaymentStatus />
+    ),
   },
   {
     path: "/checkout",
-    element: (
-      <ProtectRouteCheckout>
-        {" "}
-        <Checkout />
-      </ProtectRouteCheckout>
-    ),
+    element: <Checkout />,
   },
   {
     path: "/paymentstatus",
@@ -185,23 +172,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/addnewsemester",
-    element: <ManageAddSemester></ManageAddSemester>,
+    element: <ManageAddSemester></ManageAddSemester>
   },
   {
     path: "/updatesemester/:id",
-    element: <ManageUpdateSemester />,
-  },
-  {
-    path: "/premium",
-    element: <Premium></Premium>,
-  },
-  {
-    path: "/admin",
-    element: <AdminHome></AdminHome>,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard></Dashboard>,
+    element: <ManageUpdateSemester></ManageUpdateSemester>
   },
   {
     path: "/ecommerce",

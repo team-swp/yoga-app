@@ -18,7 +18,7 @@ import {
 } from "../../../helper/loginAPI";
 import { GoogleButton } from "react-google-button";
 import { UserAuth } from "../../../context/AuthGoogleContext";
-import { addBooking, checkBooking } from "../../../helper/bookingAPI";
+import { addBooking } from "../../../helper/bookingAPI";
 import styles from "./checkout.module.css";
 import vnpayImage from "../../../assets/vnpay.png";
 import homepayImage from "../../../assets/yogapaymenthome.png";
@@ -28,21 +28,17 @@ import {
   runUrlVnpay,
 } from "../../../helper/paymentAPI";
 import axios from "axios";
-import { premiumSelector, userSelector } from "../../../redux/selectors";
+import { userSelector } from "../../../redux/selectors";
 import { Box, Typography } from "@mui/material";
 import { Modal } from "@mui/base";
 import classNames from "classnames/bind";
-import soundSpringFlower from '../../../assets/LisaSpringFlower.mp3'
-import soundHalfLove from '../../../assets/LisaHalfLove.mp3'
-import soundBigDeal from '../../../assets/LisaBigDeal.mp3'
 
 function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const { soundPlay } = UserAuth();
   const user = useSelector(userSelector);
-  const premium = useSelector(premiumSelector);
+
   const [emailType, setEmailType] = useState(user.email);
   const [isSelected, setIsSelected] = useState(true);
   const [isSelected2, setIsSelected2] = useState(false);
@@ -60,22 +56,11 @@ function Checkout() {
     e.preventDefault();
     setOpen(true);
   };
-  useEffect(()=>{
-    toast.success(`Your premium booking is ${premium.premiumname}`)
-    if(premium.premiumname.includes('Spring')){
-      console.log('zo');
-      soundPlay(soundSpringFlower)
-    }else if(premium.premiumname.includes('Half')){
-      soundPlay(soundHalfLove)
-    }else{
-      soundPlay(soundBigDeal)
-    }
-  },[])
   const formik = useFormik({
     initialValues: {
       email: user.email,
-      phone: (user.phone && `0${user.phone}`) || "",
-      amount: premium.paymentAmount,
+      phone: `0${user.phone}` || "",
+      amount: 1000000,
       username: user.username || "",
     },
     validate: paymentVerify,
@@ -87,84 +72,71 @@ function Checkout() {
     //   console.log('test 2');
     // }
     onSubmit: async (values) => {
-    
-      const checkBookingPromise = checkBooking();
-      checkBookingPromise
-        .then(() => {
-          if (isSelected) {
-            const vnpayLink = createVnpay({
-              amount: values.amount,
-              orderDescription: `${user._id},${values.email},${
-                values.username || "Member"
-              } ,${premium.premium_id}`, //bookingID lấy trong state
-              orderType: 190004,
-            });
-            vnpayLink
-              .then((data) => {
-                console.log(data);
-                if (data.data) {
-                  var newLink = document.createElement("a");
-                  newLink.href = data.data;
-                  newLink.textContent = "VNPAY PAYMENT";
-                  newLink.target = "_blank";
-                  newLink.click();
-                  navigate("/");
-                } else {
-                  toast.error("The system is maintenance");
-                }
-              })
-              .catch(() => {
-                toast.error("Payment is maintenance please choose other");
-              });
-          } else {
-            const date = new Date();
-            const bookingPromise = addBooking({ member_id: user._id });
-            toast.promise(bookingPromise, {
-              loading: "Checking...",
-              success: <b>Payment Successfully...!</b>,
-              error: <b>Payment not Successfully !</b>,
-            });
-            bookingPromise
-              .then((result) => {
-                const paymentPromise = addPayment({
-                  recipient: "Yoga HeartBeat",
-                  paymentDate: date,
-                  paymentAmount: values.amount,
-                  paymentMethod_id: "647496600eeb65cda05ee191",
-                  booking_id: result.data.data.result._id,
-                  premium_id: premium.premium_id,
-                  status: 5,
-                  meta_data: "Pay at Yoga Center",
-                });
-                paymentPromise
-                  .then( async(result) => {
-                    const urlID = result.data.data.result._id;
-                    const date = new Date()
-                  const dateString = date.toISOString();
-                    const updateMember = updateUser({
-                      meta_data:`{"isMember":false}` ,
-                      // meta_data:`{"isMember":true,"MemberDuration":"${premium.duration}","startDateMember":"${dateString}"}` ,
-                    });
-                    updateMember.then((result) => {
-                      //qua trang thanh toán thành công
-                      dispatch(setDataLogin(result.data.data))
-                      navigate(`/paymentstatus?pmid=${urlID}`);
-                    });
-                  })
-                  .catch(() => {
-                    //chỗ này làm thêm delete nếu ko thành công xóa mấy thg cũ
-                    // toast.error("Payment not Successfully");
-                  });
-              })
-              .catch(() => {
-                // toast.error("Booking not Successfully");
-              });
-          }
-        })
-        .catch((error) => {
-          // console.log(error.error.response.data.message);
-          toast.error(error.error.response.data.message);
+      if (isSelected) {
+
+        const vnpayLink = createVnpay({
+          amount: values.amount,
+          orderDescription: `${user._id},${values.email},${values.username || "Member"
+            }`, //bookingID lấy trong state
+          orderType: 190004,
         });
+        vnpayLink
+          .then((data) => {
+            console.log(data);
+            if (data.data) {
+              var newLink = document.createElement("a");
+              newLink.href = data.data;
+              newLink.textContent = "VNPAY PAYMENT";
+              newLink.target = "_blank";
+              newLink.click();
+              navigate('/')
+            } else {
+              toast.error("The system is maintenance");
+            }
+          })
+          .catch(() => {
+            toast.error("Payment is maintenance please choose other");
+          });
+      } else {
+        const date = new Date();
+        const bookingPromise = addBooking({ member_id: user._id });
+        toast.promise(bookingPromise, {
+          loading: "Checking...",
+          success: <b>Payment Successfully...!</b>,
+          error: <b>Payment not Successfully !</b>,
+        });
+        bookingPromise
+          .then((result) => {
+            const paymentPromise = addPayment({
+              recipient: "Yoga HeartBeat",
+              paymentDate: date,
+              paymentAmount: values.amount,
+              paymentMethod_id: "647496600eeb65cda05ee191",
+              booking_id: result.data.data.result._id,
+              status: 5,
+              meta_data: "Pay at Yoga Center",
+            });
+            paymentPromise
+              .then((result) => {
+                const urlID = result.data.data.result._id;
+                console.log(urlID);
+                const updateMember = updateUser({
+                  meta_data: `{"isMember":false}`,
+                });
+                updateMember.then(() => {
+                  //qua trang thanh toán thành công
+                  navigate(`/paymentstatus?pmid=${urlID}`);
+                });
+              })
+              .catch(() => {
+                //chỗ này làm thêm delete nếu ko thành công xóa mấy thg cũ
+                toast.error("Payment not Successfully");
+              });
+          })
+          .catch(() => {
+            toast.error("Booking not Successfully");
+          });
+      }
     },
   });
 
@@ -210,7 +182,6 @@ function Checkout() {
                 </div>
                 <div className="textbox flex  items-left gap-6 mb-2">
                   <input
-                    readOnly
                     {...formik.getFieldProps("amount")}
                     className={styles.textbox}
                     type="text"
@@ -231,9 +202,8 @@ function Checkout() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div
-                    className={`${styles.div_radio} ${
-                      isSelected ? styles.active : ""
-                    } justify-between p-4`}
+                    className={`${styles.div_radio} ${isSelected ? styles.active : ""
+                      } justify-between p-4`}
                     onClick={handleRadioChange}
                   >
                     <label className={styles.lable}>
@@ -252,9 +222,8 @@ function Checkout() {
                   </div>
 
                   <div
-                    className={`${styles.div_radio} ${
-                      isSelected2 ? styles.active : ""
-                    } justify-between p-4`}
+                    className={`${styles.div_radio} ${isSelected2 ? styles.active : ""
+                      } justify-between p-4`}
                     onClick={handleRadioChange2}
                   >
                     <label className={`lable ${styles.lable}`}>
