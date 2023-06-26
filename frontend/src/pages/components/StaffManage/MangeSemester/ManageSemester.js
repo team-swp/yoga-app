@@ -11,12 +11,16 @@ import {
   Button,
   Switch,
   TextField,
+  Select,
+  MenuItem,
+  IconButton
 } from '@mui/material';
 import { Link } from "react-router-dom";
 import { updateSemester } from "../../../../helper/semesterAPI";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import StatusButton from "./StatusButtons";
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 function ManageSemester() {
   const [semesters, setSemesters] = useState([]);
@@ -24,9 +28,11 @@ function ManageSemester() {
   const [value, setValue] = useState('')
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
+  const [semesterValue, setSemesterValue] = useState('');
   const [statusValue, setStatusValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleToggle = async (event, semester) => {
     try {
@@ -50,97 +56,31 @@ function ManageSemester() {
     fetchSemesters();
   }, [manageUpdateSemester, page]);
 
-
-
-
-  // useEffect(() => {
-  //   async function fecthSemester() {
-  //     try {
-  //       const requestUrl = 'http://localhost:3001/api/semester/get'
-  //       const response = await fetch(requestUrl)
-
-  //       const responseJSON = await response.json()
-  //       console.log(responseJSON);
-  //       setSchedule(responseJSON)
-
-  //     } catch (error) {
-  //       console.log('Failed')
-  //     }
-  //   }
-  //   fecthSemester();
-  // }, [])
-
-  //reset page//
-  async function fetchSemesters2() {
-    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`)
-    const semestersData = response.data.items;
-    setPage(response.data.pagination.pageNum)
-    setPageCount(response.data.pagination.pageCount)
-    setSemesters(semestersData);
-  }
-
-  //reset button//
   const handleReset = () => {
     fetchSemesters();
-    setPage(1);
-    setPageCount(0);
-    setStartDate('');
-    setEndDate('');
-  }
+    setSearchQuery('');
+  };
 
-  //update khong load lai trang//
-  async function fetchSemesters(startDate = '', endDate = '') {
-    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=3&startDate=${startDate}&endDate=${endDate}`);
+  async function fetchSemester2() {
+    const url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${100}&q=${searchQuery}`;
+    const response = await axios.get(url);
     const semestersData = response.data.items;
-    setPage(response.data.pagination.pageNum)
-    setPageCount(response.data.pagination.pageCount)
+    setPage(response.data.pagination.pageNum);
+    setPageCount(response.data.pagination.pageCount);
     setSemesters(semestersData);
   }
 
-  /////////////////////// hàm reset này sẽ làm mới lại trang mà trả ô tìm kiếm bằng rỗng//////////////////////////////////
-  // const handleReset = () => {
-  //   fetchSemesters2()
-  //   setSemesterValue("")
-  //   setValue("")
-  //   setStatusValue("")
-  //   setPrice('')
-  //   setPageCount(1)
-  // }
-  ///////////////////// đây là hàm search tìm kiếm///////////////////////////////////////////////
-  // const handleSearch = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.get(`http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester=${semesterValue}&status=${statusValue}&price=${price}`)
-
-  //     const semesterData = response.data.items;
-  //     console.log(response.data);
-  //     setPage(response.data.pagination.pageNum)
-  //     setPageCount(response.data.pagination.pageCount)
-  //     setCourses(semesterData);
-  //   } catch (error) {
-  //     toast.error('Not Found!!!')
-  //   }
-  // }
-
-  /////////////////// handle việc next và prev trong page/////////////////////////
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    // Chuyển đổi giá trị startDate và endDate sang định dạng dd/mm/yyyy
-    const formattedStartDate = new Date(startDate).toLocaleDateString('en-GB');
-    const formattedEndDate = new Date(endDate).toLocaleDateString('en-GB');
-
-    console.log("formattedStartDate:", formattedStartDate);
-    console.log("formattedEndDate:", formattedEndDate);
-
-    try {
-      await fetchSemesters(formattedStartDate, formattedEndDate);
-      setStartDate('');
-      setEndDate('');
-    } catch (error) {
-      toast.error('Not Found!!!')
-    }
+  async function fetchSemesters() {
+    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`);
+    const semestersData = response.data.items;
+    setPage(response.data.pagination.pageNum);
+    setPageCount(response.data.pagination.pageCount);
+    setSemesters(semestersData);
   }
+
+  const handleSearch = () => {
+    fetchSemester2();
+  };
 
   function handlePrevious() {
     setPage((p) => {
@@ -155,8 +95,6 @@ function ManageSemester() {
       return parseInt(p) + 1;
     });
   }
-  //////////////////////////////////////////////////////////////////////////////////////
-
 
   return (
     <div>
@@ -165,7 +103,7 @@ function ManageSemester() {
 
         <TableContainer component={Paper}>
           <div
-            style={{ float: "right", marginTop: "15px", marginRight: "10px" }}
+            style={{ float: "right", marginTop: "15px", marginBottom: '15px', marginRight: "10px" }}
           >
             <Button
               variant="contained"
@@ -176,50 +114,26 @@ function ManageSemester() {
               Add new Semester
             </Button>
           </div>
-          <form
-            style={{
-              margin: "auto",
-              padding: "15px",
-              maxWidth: "800px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onSubmit={handleSearch}
-          >
+          <div style={{
+            margin: "auto",
+            padding: "15px",
+            maxWidth: "800px",
+            display: "flex",
+            alignItems: "center",
+          }}>
             <TextField
-              id="start-date"
-              label="Start Date"
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              InputLabelProps={{
-                shrink: true,
-              }}
+              label="Search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value.toLowerCase())}
+              style={{ marginRight: "1rem" }}
             />
-            <TextField
-              id="end-date"
-              label="End Date"
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              style={{ marginLeft: "1rem" }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <Button type="submit" variant="contained" color="primary" style={{ marginLeft: "1rem" }}>
+            <IconButton onClick={handleReset} sx={{ ml: -8 }}>
+              <RestartAltOutlinedIcon />
+            </IconButton>
+            <Button onClick={handleSearch} type="submit" variant="contained" color="primary" sx={{ ml: 3 }}>
               Search
             </Button>
-            <Button
-              style={{ marginLeft: "1rem" }}
-              variant="outlined"
-              onClick={handleReset}
-            >
-              Reset
-            </Button>
-          </form>
-
+          </div>
           <Table>
             <TableHead>
               <TableRow>

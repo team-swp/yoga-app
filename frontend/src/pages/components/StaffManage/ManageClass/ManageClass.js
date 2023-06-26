@@ -12,6 +12,7 @@ import {
     Paper,
     Button,
     Switch,
+    IconButton
 } from '@mui/material';
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -20,9 +21,9 @@ import { updateClass } from '../../../../helper/classAPI';
 import StatusButton from './StatusButon';
 import classNames from "classnames/bind";
 import styles from './ManageClass.css'
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 const cx = classNames.bind(styles);
-
 
 function ManageClass() {
     const [classes, setClasses] = useState([]);
@@ -36,9 +37,9 @@ function ManageClass() {
     const [pageCount, setPageCount] = useState(0)
     const [semesterValue, setSemesterValue] = useState('');
     const [statusValue, setStatusValue] = useState('');
-    const [price, setPrice] = useState('')
+    const [price, setPrice] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
 
-    /////// update done//////////// 
     const handleToggle = async (event, classs) => {
         try {
             const updatedClassData = { ...classs, status: event.target.checked };
@@ -116,15 +117,14 @@ function ManageClass() {
         fetchInstructorList();
     }, [])
 
-    ////////////////////////////  chạy lại cái này để reset lại trang ////////////////////////////////////////////////
     async function fetchClasses2() {
-        const response = await axios.get(`http://localhost:3001/api/classesPaging/get?page=${page}&limit=${3}`)
+        const response = await axios.get(`http://localhost:3001/api/classesPaging/get?page=${1}&limit=${100}&q=${searchQuery}`)
         const classData = response.data.items;
         setPage(response.data.pagination.pageNum)
         setPageCount(response.data.pagination.pageCount)
         setClasses(classData);
     }
-    ////////////////////////////// cái này thì là khi update nó k bị load lại với page////////////////////////////
+
     async function fetchClasses() {
         const response = await axios.get(`http://localhost:3001/api/classesPaging/get?page=${page}&limit=${3}`)
         const classData = response.data.items;
@@ -133,31 +133,15 @@ function ManageClass() {
         setClasses(classData);
     }
 
-    /////////////////////// hàm reset này sẽ làm mới lại trang mà trả ô tìm kiếm bằng rỗng//////////////////////////////////
-    // const handleReset = () => {
-    //   fetchCourses2()
-    //   setSemesterValue("")
-    //   setValue("")
-    //   setStatusValue("")
-    //   setPrice('')
-    //   setPageCount(1)
-    // }
-    ///////////////////// đây là hàm search tìm kiếm///////////////////////////////////////////////
-    // const handleSearch = async (e) => {
-    //   e.preventDefault();
-    //   try {
-    //     const response = await axios.get(`http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester=${semesterValue}&status=${statusValue}&price=${price}`)
+    const handleSearch = () => {
+        fetchClasses2();
 
-    //     const semesterData = response.data.items;
-    //     console.log(response.data);
-    //     setPage(response.data.pagination.pageNum)
-    //     setPageCount(response.data.pagination.pageCount)
-    //     setCourses(semesterData);
-    //   } catch (error) {
-    //     toast.error('Not Found!!!')
-    //   }
-    // }
-    /////////////////// handle việc next và prev trong page/////////////////////////
+    }
+
+    const handleReset = () => {
+        fetchClasses();
+        setSearchQuery('');
+    }
 
     function handlePrevious() {
         setPage((p) => {
@@ -172,7 +156,6 @@ function ManageClass() {
             return parseInt(p) + 1;
         });
     }
-    //////////////////////////////////////////////////////////////////////////////////////
 
     return (
         <div>
@@ -189,6 +172,26 @@ function ManageClass() {
                             to="/addnewclass"
                         >
                             Add new Class
+                        </Button>
+                    </div>
+                    <div style={{
+                        margin: "auto",
+                        padding: "15px",
+                        maxWidth: "800px",
+                        display: "flex",
+                        alignItems: "center",
+                    }}>
+                        <TextField
+                            label="Search"
+                            value={searchQuery}
+                            onChange={(event) => setSearchQuery(event.target.value.toLowerCase())}
+                            style={{ marginRight: "1rem" }}
+                        />
+                        <IconButton onClick={handleReset} sx={{ ml: -8 }}>
+                            <RestartAltOutlinedIcon />
+                        </IconButton>
+                        <Button onClick={handleSearch} type="submit" variant="contained" color="primary" sx={{ ml: 3 }}>
+                            Search
                         </Button>
                     </div>
                     <Table sx={{ minWidth: 650 }} aria-label="class table">

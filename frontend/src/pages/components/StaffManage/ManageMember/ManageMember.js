@@ -82,12 +82,12 @@ function ManageMember() {
         const updatedBookings = bookings.map((bookingItem) =>
           bookingItem.member._id === memberId
             ? {
-                ...bookingItem,
-                member: {
-                  ...bookingItem.member,
-                  meta_data: response.meta_data,
-                },
-              }
+              ...bookingItem,
+              member: {
+                ...bookingItem.member,
+                meta_data: response.meta_data,
+              },
+            }
             : bookingItem
         );
         setBookings(updatedBookings);

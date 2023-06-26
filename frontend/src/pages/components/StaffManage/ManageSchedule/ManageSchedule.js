@@ -10,12 +10,16 @@ import {
   Paper,
   Button,
   Switch,
+  TextField,
+  IconButton
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { updateSchedule } from "../../../../helper/scheduleAPI";
 import StatusButton from "./StatusButons";
 import axios from "axios";
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
+
 
 
 function ManageSchedule() {
@@ -26,6 +30,7 @@ function ManageSchedule() {
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [statusValue, setStatusValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleToggle = async (event, schedule) => {
     try {
@@ -49,6 +54,14 @@ function ManageSchedule() {
     fetchSchedules();
   }, [manageEditSchedule, page]);
 
+  async function fetchSchedule2() {
+    const response = await axios.get(`http://localhost:3001/api/schedulesPaging/get?page=${page}&limit=${100}&q=${searchQuery}`);
+    const schedulesData = response.data.items;
+    setPage(response.data.pagination.pageNum)
+    setPageCount(response.data.pagination.pageCount)
+    setSchedules(schedulesData);
+  }
+
   async function fetchSchedules() {
     const response = await axios.get(`http://localhost:3001/api/schedulesPaging/get?page=${page}&limit=${3}`);
     const schedulesData = response.data.items;
@@ -71,6 +84,15 @@ function ManageSchedule() {
     }
     fecthScheduleList();
   }, []);
+
+  const handleSearch = () => {
+    fetchSchedule2();
+  }
+
+  const handleReset = () => {
+    fetchSchedules();
+    setSearchQuery('');
+  };
 
   function handlePrevious() {
     setPage((p) => {
@@ -105,7 +127,27 @@ function ManageSchedule() {
               Add new Schedule
             </Button>
           </div>
+          <div style={{
+            margin: "auto",
+            padding: "15px",
+            maxWidth: "800px",
+            display: "flex",
+            alignItems: "center",
+          }}>
+            <TextField
+              label="Search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value.toLowerCase())}
+              style={{ marginRight: "1rem" }}
+            />
+            <IconButton onClick={handleReset} sx={{ ml: -8 }}>
+              <RestartAltOutlinedIcon />
+            </IconButton>
+            <Button onClick={handleSearch} type="submit" variant="contained" color="primary" sx={{ ml: 3 }}>
+              Search
+            </Button>
 
+          </div>
           <Table>
             <TableHead>
               <TableRow>
