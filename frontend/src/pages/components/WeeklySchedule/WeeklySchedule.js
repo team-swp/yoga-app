@@ -27,6 +27,7 @@ function Schedules() {
       endTime,
       days,
       courseName,
+      className,
       scheduleName,
     } = totalSchedule[i];
     const start = moment(new Date(startDate));
@@ -47,6 +48,7 @@ function Schedules() {
         events.push({
           title: courseName,
           description: scheduleName,
+          room: className,
           start: startDateTime[j],
           end: endDateTime[j],
         });
@@ -81,6 +83,7 @@ function Schedules() {
           <Calendar
             localizer={localizer}
             events={events}
+            step={15}
             showMultiDayTimes
             defaultView={"week"}
             views={["day", "week"]}
