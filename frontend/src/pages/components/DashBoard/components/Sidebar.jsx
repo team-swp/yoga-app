@@ -22,10 +22,10 @@ const Sidebar = () => {
     "flex items-center   gap-3 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black  hover:bg-light-gray m-2";
 
   return (
-    <div className="ml-3 h-screen  md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
+    <div style={activeMenu?{width:'240px',marginLeft:'10px'}:{marginLeft:'10px'}} className="ml-3 h-screen  md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
       {activeMenu && (
         <div>
-          <div className="flex justify-between items-center">
+          <div style={{marginTop:'16px'}} className="flex justify-between items-center">
             <Link
               to="/"
               onClick={handleCloseSideBar}

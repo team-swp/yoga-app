@@ -2914,6 +2914,35 @@ export const scheduleData = [
   },
 ];
 
+export const dropdownData = [
+  {
+    Id: "1",
+    Time: "March 2021",
+  },
+  {
+    Id: "2",
+    Time: "April 2021",
+  },
+  {
+    Id: "3",
+    Time: "May 2021",
+  },
+];
+export const SparklineAreaData = [
+  { x: 1, yval: 1},
+  { x: 2, yval: 1},
+  { x: 3, yval: 1},
+  { x: 4, yval: 1},
+  { x: 5, yval: 1 },
+  { x: 6, yval: 1},
+  { x: 7, yval: 1},
+  { x: 8, yval: 1},
+  { x: 9, yval: 1},
+  { x: 10, yval: 1 },
+  { x: 11, yval: 1},
+  { x: 12, yval: 1 },
+];
+
 export const lineChartData = [
   [
     { x: new Date(2023, 6, 1), y: 21 },
@@ -2944,34 +2973,7 @@ export const lineChartData = [
   //   { x: new Date(2011, 0, 1), y: 100 },
   // ],
 ];
-export const dropdownData = [
-  {
-    Id: "1",
-    Time: "March 2021",
-  },
-  {
-    Id: "2",
-    Time: "April 2021",
-  },
-  {
-    Id: "3",
-    Time: "May 2021",
-  },
-];
-export const SparklineAreaData = [
-  { x: 1, yval: 1},
-  { x: 2, yval: 1},
-  { x: 3, yval: 1},
-  { x: 4, yval: 1},
-  { x: 5, yval: 1 },
-  { x: 6, yval: 1},
-  { x: 7, yval: 1},
-  { x: 8, yval: 1},
-  { x: 9, yval: 1},
-  { x: 10, yval: 1 },
-  { x: 11, yval: 1},
-  { x: 12, yval: 1 },
-];
+
 
 export const lineCustomSeries = [
   {

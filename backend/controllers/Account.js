@@ -9,7 +9,7 @@ require("dotenv").config();
 
 module.exports.getAllAccount = async (req, res) => {
   try {
-    const accounts = await Account.find();
+    const accounts = await Account.find({role: { $ne: 'admin' }})
     const temp = [];
     accounts.filter((acc, index) => {
       const { password, ...rest } = Object.assign({}, acc.toJSON());
@@ -39,13 +39,7 @@ module.exports.getAccountByIdAuth = async (req, res, next) => {
 
 module.exports.getAccountPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(
-      req.query.page,
-      req.query.limit,
-      Account,
-      req.query.q,
-      "username"
-    );
+    const pagingPayload = await pagingnation(Account, "username", req.query);
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -55,6 +55,7 @@ import {
 
 import{Cart,Chat,Notification,UserProfile} from '../pages/components/DashBoard/components'
 import Dashboard from "../pages/components/DashBoard/Dashboard";
+import Admin from "../pages/components/Admin/AdminHome";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -262,7 +263,11 @@ const routers = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard ></Dashboard>,
-  }
+  },
+  {
+    path: "/admin",
+    element: <Admin ></Admin>,
+  },
 ]);
 
 export default routers;

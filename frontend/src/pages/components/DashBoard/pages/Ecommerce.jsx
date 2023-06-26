@@ -134,11 +134,11 @@ const Ecommerce = () => {
 
   const month = ["All", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   return (
-    <>
+    <div>
       <Dashboard />
-      <div className="mt-24" style={activeMenu ? { marginLeft: "250px" } : {}}>
+      <div className="mt-24" style={activeMenu ? { marginLeft: "260px" } : {}}>
         <div className="flex flex-wrap lg:flex-nowrap justify-center">
-          <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
+          <div  className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
             <div className="flex justify-between items-center">
               <div>
                 <p className="font-bold text-gray-400">Earnings</p>
@@ -162,8 +162,8 @@ const Ecommerce = () => {
             </div>
           </div>
           <div
-            className={`flex m-3 flex-wrap justify-between ${
-              activeMenu ? "gap-20" : "gap-40"
+            className={`flex m-3 mt-10 mb-10 flex-wrap justify-between ${
+              activeMenu ? "gap-20" : "gap-20"
             } items-center`}
           >
             {earningData.map((item) => (
@@ -218,7 +218,7 @@ const Ecommerce = () => {
                 style={{ width: "300px" }}
                 className=" border-r-1 border-color m-4 pr-10"
               >
-                <div style={{ marginTop: "-50px", marginBottom: "20px" }}>
+                <div style={{ marginTop: "-25px", marginBottom: "20px" }}>
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="demo-simple-select-label">Month</InputLabel>
                     <Select
@@ -310,10 +310,11 @@ const Ecommerce = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div style={{margin:'40px 0'}}>
             <div
+            
               className=" rounded-2xl md:w-400 p-4 m-3"
-              style={{ backgroundColor: currentColor,width:'600px' }}
+              style={{ backgroundColor: currentColor,width:'800px' }}
             >
               <div className="flex justify-between items-center ">
                 <p className="font-semibold text-white text-2xl">Members</p>
@@ -326,13 +327,13 @@ const Ecommerce = () => {
                 </div>
               </div>
 
-              <div className="mt-4">
+              <div  className="mt-4">
                 <SparkLine
                   currentColor="white" //{currentColor}
                   id="line-sparkLine"
                   type="Line"
-                  height="100px"
-                  width="320px"
+                  height="200px"
+                  width="600px"
                   data={sparkLineState}
                   color="rgb(242, 252, 253)"
                 />
@@ -411,9 +412,9 @@ const Ecommerce = () => {
           <div style={{width:'1200px'}} className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-96 md:w-760">
             <div className="flex justify-between items-center gap-2 mb-10">
               <p className="text-xl font-semibold">Premium Overview</p>
-              <DropDown currentMode={currentMode} />
+              {/* <DropDown currentMode={currentMode} /> */}
             </div>
-            <div  className="md:w-full overflow-auto">
+            <div style={{marginLeft:'70px'}}  className="md:w-full overflow-auto">
               <LineChart />
             </div>
           </div>
@@ -421,17 +422,17 @@ const Ecommerce = () => {
 
         <div className="flex flex-wrap justify-center">
           <div className="md:w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
-            <div className="flex justify-between">
-              <p className="text-xl font-semibold">Weekly Stats</p>
-              <button
-                type="button"
-                className="text-xl font-semibold text-gray-500"
-              >
-                <IoIosMore />
-              </button>
-            </div>
+              {/* <div className="flex justify-between">
+                <p className="text-xl font-semibold">Weekly Stats</p>
+                <button
+                  type="button"
+                  className="text-xl font-semibold text-gray-500"
+                >
+                  <IoIosMore />
+                </button>
+              </div> */}
 
-            <div className="mt-10 ">
+            {/* <div className="mt-10 ">
               {weeklyStats.map((item) => (
                 <div
                   key={item.title}
@@ -465,9 +466,9 @@ const Ecommerce = () => {
                   color="rgb(242, 252, 253)"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
+          {/* <div className="w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
             <div className="flex justify-between">
               <p className="text-xl font-semibold">MedicalPro Branding</p>
               <button
@@ -532,8 +533,8 @@ const Ecommerce = () => {
 
               <p className="text-gray-400 text-sm">36 Recent Transactions</p>
             </div>
-          </div>
-          <div className="w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
+          </div> */}
+          {/* <div className="w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
             <div className="flex justify-between">
               <p className="text-xl font-semibold">Daily Activities</p>
               <button
@@ -562,10 +563,10 @@ const Ecommerce = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

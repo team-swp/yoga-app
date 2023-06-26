@@ -17,3 +17,7 @@ export async function getProductPercent(respone){
 export async function getMemberSparkLine(respone){
   return await addApi(respone||{},{apiPath:`/api/chart/members`,errorMessage:'Cannot Get Product Chart'}) 
 }
+
+export async function getPremiumLine(respone){
+  return await addApi(respone||{},{apiPath:`/api/chart/premium`,errorMessage:'Cannot Get Product Chart'}) 
+}

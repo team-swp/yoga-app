@@ -10,6 +10,7 @@ const Mailgen = require("mailgen");
 const { pagingnation } = require("./Pagingnation");
 const Booking = require("../models/bookings");
 const Account = require("../models/accounts");
+const Premium = require('../models/premiums')
 //payment medthod
 module.exports.addPaymentMethod = async (req, res) => {
   const { paymentname } = req.body;
@@ -293,8 +294,7 @@ module.exports.vnpayIPN = async (req, res, next) => {
             const booking = new Booking({
               member_id: userID,
             });
-            booking.save()
-              .then((result) => {
+            booking.save().then((result) => {
               const bookingID = result._id;
               const payment = new Payment({
                 recipient: "Yoga HeartBeat",
@@ -307,9 +307,13 @@ module.exports.vnpayIPN = async (req, res, next) => {
               });
               // return save result as a response
               const usernamePayment = dataArray[2];
-              payment.save()
+              payment
+                .save()
                 .then(async (result) => {
-                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":true}`})
+                  const memeberAccount = await Account.findOneAndUpdate(
+                    { _id: userID },
+                    { meta_data: `{"isMember":true}` }
+                  );
                   req.user = {
                     userEmail: replacedEmail,
                     username: usernamePayment,
@@ -328,10 +332,9 @@ module.exports.vnpayIPN = async (req, res, next) => {
             const booking = new Booking({
               member_id: userID,
             });
-            booking.save()
-              .then((result) => {
+            booking.save().then((result) => {
               const bookingID = result._id;
-              
+
               const payment = new Payment({
                 recipient: "Yoga HeartBeat",
                 paymentDate: vnp_Params["vnp_PayDate"],
@@ -343,9 +346,13 @@ module.exports.vnpayIPN = async (req, res, next) => {
               });
               // return save result as a response
               const usernamePayment = dataArray[2];
-              payment.save()
+              payment
+                .save()
                 .then(async (result) => {
-                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":false}`})
+                  const memeberAccount = await Account.findOneAndUpdate(
+                    { _id: userID },
+                    { meta_data: `{"isMember":false}` }
+                  );
                   req.user = {
                     userEmail: replacedEmail,
                     username: usernamePayment,
@@ -798,35 +805,25 @@ module.exports.charDataPaymentPremium = async (req, res) => {
     let currentMonthIncome = 0;
     let previousMonthIncome = 0;
 
-    DataMonth.forEach((item) => {
-      currentMonthIncome += item.paymentAmount;
-    });
+    for (let i = 0; i < DataMonth.length; i++) {
+      currentMonthIncome += DataMonth[i].paymentAmount;
+    }
 
-    DataLastMonth.forEach((item) => {
-      previousMonthIncome += item.paymentAmount;
-    });
+    for (let i = 0; i < DataLastMonth.length; i++) {
+      previousMonthIncome += DataLastMonth[i].paymentAmount;
+    }
     let percentage2;
-    if (currentMonthIncome - previousMonthIncome < 0) {
-      percentage2 = (
-        (Math.abs(
-          (currentMonthIncome - previousMonthIncome) /
-            (previousMonthIncome === 0 ? 1 : previousMonthIncome)
-        ) *
-          100) /
-        100000000
-      )
+    const difference = currentMonthIncome - previousMonthIncome;
+    const previousMonthIncomeAdjusted =
+      previousMonthIncome === 0 ? 1 : previousMonthIncome;
+
+    if (difference < 0) {
+      percentage2 = ((Math.abs(difference) / previousMonthIncomeAdjusted) * 100)
         .toFixed(2)
         .toString();
       percentage2 = "-" + percentage2;
     } else {
-      percentage2 = (
-        (Math.abs(
-          (currentMonthIncome - previousMonthIncome) /
-            (previousMonthIncome === 0 ? 1 : previousMonthIncome)
-        ) *
-          100) /
-        100000000
-      )
+      percentage2 = ((Math.abs(difference) / previousMonthIncomeAdjusted) * 100)
         .toFixed(2)
         .toString();
       percentage2 = "+" + percentage2;
@@ -840,72 +837,6 @@ module.exports.charDataPaymentPremium = async (req, res) => {
     return res.status(404).send({ error });
   }
 };
-
-// module.exports.charDataPaymentPremiumLineChart =async (req,res)=>{
-//   try {
-//     let arrTemp = []
-//     const getPremium = await Premium.find();
-//     const lengthPremium = getPremium.length
-//   const result = await  getPremium.forEach( async (item,index)=> {
-//       let idPremium = item._id
-//       const getPremiumOnPayment = await Payment.find({premium_id:idPremium});
-//       arrTemp.push(getPremiumOnPayment)
-//       console.log('1');
-//     })
-//     console.log('2');
-//     res.status(201).send(arrTemp)
-//   } catch (error) {
-//   return res.status(404).send({error})
-//   }
-// }
-
-// module.exports.charDataPaymentPremiumLineChart = async (req, res) => {
-//   try {
-//     const arrTemp = [];
-//     const arrName = [];
-//     const arrCreateAt = [];
-//     const getPremium = await Premium.find();
-//     const lengthPremium = getPremium.length;
-//     for (let index = 0; index < lengthPremium; index++) {
-//       const item = getPremium[index];
-//       const idPremium = item._id;
-//       const getPremiumOnPayment = await Payment.find({ premium_id: idPremium });
-//       const lengthPrePay = getPremiumOnPayment.length
-//       for (let j = 0; j <lengthPrePay ; j++) {
-//         let itemTemp = getPremiumOnPayment[j].createdAt.getMonth() +1
-//         let prename = item.premiumname
-//         arrCreateAt.push({[prename]:itemTemp})
-//       }
-//     }
-//     const uniqueData = removeDuplicateKeyValuePairs(arrCreateAt)
-//     //{name:Free Trial, dataSource : [{x:date,y:value}]}
-//     const arrDataSource=[]
-//     const lengthData = uniqueData.length
-    
-//     const today = new Date();
-//     const yearNow = today.getFullYear();
-
-//     for(let i =0 ; i<lengthData;i++){
-//       const startDate = new Date(`${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-01`);
-//       const endDate = new Date(`${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-31`);
-
-//       endDate.setHours(23, 59, 59, 999);
-//       const premiumName = Object.keys(uniqueData[i])[0];
-//       const premium = await Premium.findOne({premiumname:premiumName});
-
-//       const dataSourceTemp = await Payment.find({
-//         createdAt: { $gte: startDate, $lt: endDate },
-//         premium_id:premium._id
-//       });
-
-//       console.log('2');
-//     }
-//     console.log('1');
-//     res.status(201).send(dataSourceTemp);
-//   } catch (error) {
-//     return res.status(404).send({ error });
-//   }
-// };
 
 module.exports.charDataPaymentPremiumLineChart = async (req, res) => {
   try {
@@ -947,33 +878,51 @@ module.exports.charDataPaymentPremiumLineChart = async (req, res) => {
       });
       arrData.push(dataSourceTemp)
     }
-    //{name:Free Trial, dataSource : [{x:date,y:value}]}
+    //{name:Free Trial, dataSource : [{x:date,y:value},{}]}
+    //
     const arrDataSource =[]
     const arrDataResult =[]
-    for(let index = 0 ; index < arrData.length;index++){
-      const month = arrData[index][0].createdAt.getMonth()+1
+    const total = arrData.length
+    for(let index = 0 ; index < total;index++){
+      let obj = {}
+      let objname = {}
+      const month = arrData[index][0].createdAt.getMonth()
       const newDate = new Date(yearNow,month,1)
       const premium_name = Object.values(arrNameData[index])[0]
       let value = arrData[index].length
-      arrDataSource.push({x:newDate,y:value})
+      Object.assign(obj,{x:newDate,y:value/total*100})
+      arrDataSource.push({name:premium_name,dataSource:[obj]})
     }
 
-    // for(let index = 0 ; index < arrDataSource.length;index++){
-    //   const premium_name = Object.values(arrNameData[index])[0]
-    //   arrDataResult.push({name:premium_name,dataSource:arrDataSource[index]})
-    // }
-
-    res.status(201).send(arrDataSource);
+ 
+    const data = combineDataSourceByName(arrDataSource)
+    res.status(201).send(data);
   } catch (error) {
-    return res.status(404).send({ error });
+    return res.status(404).send({ error:error.message });
   }
+};
+
+ const combineDataSourceByName = (data) => {
+  const combinedData = [];
+
+  data.forEach(item => {
+    const existingItem = combinedData.find(entry => entry.name === item.name);
+
+    if (existingItem) {
+      existingItem.dataSource.push(...item.dataSource);
+    } else {
+      combinedData.push({ name: item.name, dataSource: [...item.dataSource] });
+    }
+  });
+
+  return combinedData;
 };
 
 
 function removeDuplicateKeyValuePairs(arr) {
   const uniquePairs = {};
 
-  arr.forEach(obj => {
+  arr.forEach((obj) => {
     const key = Object.keys(obj)[0];
     const value = obj[key];
     const pair = `${key}:${value}`;

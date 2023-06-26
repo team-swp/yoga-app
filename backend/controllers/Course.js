@@ -53,7 +53,7 @@ module.exports.getCourses = async (req, res) => {
 
 module.exports.getCoursesPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page,req.query.limit,Course,req.query.q,'coursename')
+    const pagingPayload = await pagingnation(Course, 'coursename', req.query)
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

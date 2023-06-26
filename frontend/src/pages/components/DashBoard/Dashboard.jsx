@@ -19,7 +19,7 @@ function Dashboard() {
   }, []);
   return (
     <div>
-      <div className="flex relative dark:bg-main-dark-bg" style={{height:'100px'}}>
+      <div className="flex relative dark:bg-main-dark-bg" style={{height:'100px',marginLeft:'-10px'}}>
         <div className="fixed right-4 bottom-4" style={{ zIndex: "1000",transform:'translate(1450px, 630px)' }}>
           <TooltipComponent content="Settings" position="Top">
             <button
