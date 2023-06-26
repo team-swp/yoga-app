@@ -21,7 +21,6 @@ import { Toaster, toast } from "react-hot-toast";
 import classNames from "classnames/bind";
 import styles from "./ManageMember.module.css";
 import _, { debounce } from "lodash";
-import { filterPayments, searchPayments } from "./filterAndSearch";
 
 const cx = classNames.bind(styles);
 

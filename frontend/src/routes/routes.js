@@ -61,7 +61,6 @@ import {
 } from "../pages/components/DashBoard/components";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
-import Premium from "../pages/components/MemberPacket/Premium";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -121,7 +120,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element:<ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>  ,
+    element: (
+      <ProtectRouteCheckout>
+        <Checkout />
+      </ProtectRouteCheckout>
+    ),
   },
   {
     path: "/premium",
