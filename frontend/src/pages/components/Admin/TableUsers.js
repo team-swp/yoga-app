@@ -131,9 +131,9 @@ function BasicExample() {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th className="text-left">ID</th>
-            <th className="text-left">Avatar</th>
-            <th className="text-left">Email</th>
+            <th className="text-left fixed-column">ID</th>
+            <th className="text-left fixed-column">Avatar</th>
+            <th className="text-left fixed-column">Email</th>
             <th className="text-left">
               <div className=" flex justify-between items-center">
                 <span>Username</span>
@@ -175,8 +175,10 @@ function BasicExample() {
               const avatarURL = item.avatar || defaultAvatarURL;
               return (
                 <tr key={`users=${index}`}>
-                  <td className="text-left">{startIndex + index + 1}</td>
-                  <td className="text-left">
+                  <td className="text-left fixed-column">
+                    {startIndex + index + 1}
+                  </td>
+                  <td className="text-left fixed-column">
                     {avatarURL ? (
                       <div className={imageContainerStyle}>
                         <img
@@ -196,8 +198,8 @@ function BasicExample() {
                       </div>
                     )}
                   </td>
-                  <td className="text-left">{item.email}</td>
-                  <td className="text-left">{item.username}</td>
+                  <td className="text-left fixed-column">{item.email}</td>
+                  <td className="text-left ">{item.username}</td>
                   <td className="text-left">{item.phone}</td>
                   <td className="text-left">{item.role}</td>
                   <td className="text-left">
