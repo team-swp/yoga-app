@@ -80,8 +80,10 @@ function PremiumOption({ premium }) {
               paymentPromise.then((result) => {
                 toast.success("Successful");
                 const urlID = result.data.data.result._id;
+                const date = new Date();
+                const dateString = date.toISOString();
                 const updateUserPromise = updateUser({
-                  meta_data: `{"isMember":true,"isTry":true}`,
+                  meta_data: `{"isMember":true,"isTry":true,"MemberDuration":"7day","startDateMember":"${dateString}"}`,
                 });
                 sendMail({
                   username: user.username,

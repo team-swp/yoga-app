@@ -13,12 +13,14 @@ import {
   TextField,
   Select,
   MenuItem,
+  IconButton
 } from '@mui/material';
 import { Link } from "react-router-dom";
 import { updateSemester } from "../../../../helper/semesterAPI";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import StatusButton from "./StatusButtons";
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 function ManageSemester() {
   const [semesters, setSemesters] = useState([]);
@@ -30,6 +32,7 @@ function ManageSemester() {
   const [statusValue, setStatusValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleToggle = async (event, semester) => {
     try {
@@ -54,71 +57,30 @@ function ManageSemester() {
   }, [manageUpdateSemester, page]);
 
   const handleReset = () => {
-    fetchSemester2();
-    setStartDate('');
-    setEndDate('');
-    setValue('');
+    fetchSemesters();
+    setSearchQuery('');
   };
 
   async function fetchSemester2() {
-    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`);
-    const semestersData = response.data.items;
-    setPage(response.data.pagination.pageNum);
-    setPageCount(response.data.pagination.pageCount);
-    setSemesters(semestersData); console.log(semestersData);
-  }
-
-  async function fetchSemesters() {
-    const response = await axios.get(url2);
+    const url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${100}&q=${searchQuery}`;
+    const response = await axios.get(url);
     const semestersData = response.data.items;
     setPage(response.data.pagination.pageNum);
     setPageCount(response.data.pagination.pageCount);
     setSemesters(semestersData);
   }
 
-
-  var url2 = null;
-  if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&semestername=${semesterValue}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}`;
-  } else if (value === "" && semesterValue !== "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&semestername=${semesterValue}`;
-  } else if (value === "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&semestername=${semesterValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&status=${statusValue}`;
-  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&semestername=${semesterValue}&status=${statusValue}`;
-  } else {
-    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`;
+  async function fetchSemesters() {
+    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`);
+    const semestersData = response.data.items;
+    setPage(response.data.pagination.pageNum);
+    setPageCount(response.data.pagination.pageCount);
+    setSemesters(semestersData);
   }
 
-
-  var url = null;
-  if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&semestername=${semesterValue}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}`;
-  } else if (value === "" && semesterValue !== "" && statusValue === "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&semestername=${semesterValue}`;
-  } else if (value === "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&semestername=${semesterValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&semestername=${semesterValue}&status=${statusValue}`;
-  } else {
-    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&semestername=${semesterValue}&status=${statusValue}`;
-  }
+  const handleSearch = () => {
+    fetchSemester2();
+  };
 
   function handlePrevious() {
     setPage((p) => {
@@ -147,12 +109,31 @@ function ManageSemester() {
               variant="contained"
               color="success"
               component={Link}
-              to="/addnewclass"
+              to="/addnewsemester"
             >
               Add new Semester
             </Button>
           </div>
-
+          <div style={{
+            margin: "auto",
+            padding: "15px",
+            maxWidth: "800px",
+            display: "flex",
+            alignItems: "center",
+          }}>
+            <TextField
+              label="Search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value.toLowerCase())}
+              style={{ marginRight: "1rem" }}
+            />
+            <IconButton onClick={handleReset} sx={{ ml: -8 }}>
+              <RestartAltOutlinedIcon />
+            </IconButton>
+            <Button onClick={handleSearch} type="submit" variant="contained" color="primary" sx={{ ml: 3 }}>
+              Search
+            </Button>
+          </div>
           <Table>
             <TableHead>
               <TableRow>

@@ -33,6 +33,8 @@ const daysOfWeek = [
     'Tuesday',
     'Wednesday',
     'Thursday',
+    'Wednesday',
+    'Thursday',
     'Friday',
     'Saturday',
     'Sunday'

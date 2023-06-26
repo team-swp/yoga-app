@@ -1,81 +1,43 @@
-import { useEffect, useState } from "react";
+
+import { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import Switch from "@mui/material/Switch";
+import toast, { Toaster } from "react-hot-toast";
+
+import _, { debounce } from "lodash";
+import { getPremium, updatePremium } from "../../../../helper/premiumAPI";
 import {
   Container,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Button,
-  Switch,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { Toaster, toast } from "react-hot-toast";
 import StatusButton from "./Statusbutton2";
-import { getPremium, updatePremium } from "../../../../helper/premiumAPI";
-import _, { debounce } from "lodash";
-function ManagePremium() {
+import {  Link } from "react-router-dom";
+
+function BasicExample() {
+  const moment = require("moment");
+
+  const [listUser, setListUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
-  const [packages, setPackages] = useState([]);
-  const [updatedPackages, setUpdatedPackages] = useState({});
-
-
-  const handleSearch = debounce((event) => {
-    let term = event.target.value;
-    if (term) {
-      let cloneListUsers = _.cloneDeep(packages);
-      cloneListUsers = cloneListUsers.filter((item) =>
-        item.premiumname.toLowerCase().includes(term)
-      );
-      setPackages(cloneListUsers);
-    } else {
-      async function fetchUsers() {
-        try {
-          const response = await getPremium();
-          setPackages(response.data);
-        } catch {
-          console.log("fail");
-        }
-      }
-      fetchUsers()
-    }
-  }, 500);
-
-  const handleToggle = async (event, course) => {
-    try {
-      const updatedPackagesData = { ...course, status: event.target.checked };
-      const response = await updatePremium(updatedPackagesData);
-      if (response && response.data) {
-        setUpdatedPackages(packages)
-        const updatedpackages = packages.map(
-        
-          (courseItem) =>
-            courseItem._id === response.data._id ? response.data : courseItem,
-          toast.success(
-            `${response.data.data.premiumname} status updated success`
-          )
-        );
-     
-        setPackages(updatedpackages);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
-    fetchPackages();
-  }, [updatedPackages]);
+    async function fetchUsers() {
+      try {
+        const response = await getPremium();
+        setListUsers(response.data);
+      } catch {
+        console.log("fail");
+      }
+    }
 
-  async function fetchPackages() {
-    const response = await axios.get(`http://localhost:3001/api/premium/get`);
-    const coureseData = response.data;
-    setPackages(coureseData);
-  }
+    fetchUsers();
+  }, []);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -93,24 +55,40 @@ function ManagePremium() {
     }
   };
 
-  const totalPages = Math.ceil(packages.length / itemsPerPage);
+  const handleSearch = debounce((event) => {
+    let term = event.target.value;
+    if (term) {
+      let cloneListUsers = _.cloneDeep(listUser);
+      cloneListUsers = cloneListUsers.filter((item) =>
+        item.premiumname.toLowerCase().includes(term)
+      );
+      setCurrentPage(1)
+      setListUsers(cloneListUsers);
+    } else {
+      async function fetchUsers() {
+        try {
+          const response = await getPremium();
+          setListUsers(response.data);
+        } catch {
+          console.log("fail");
+        }
+      }
+      fetchUsers();
+    }
+  }, 500);
+
+  const totalPages = Math.ceil(listUser.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
   return (
     <div>
       <Container>
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster></Toaster>
+        <TableContainer component={Paper} >
         
-        <TableContainer component={Paper}>
-       
-          <div
-            style={{
-              float: "right",
-              marginTop: "15px",
-              marginRight: "10px",
-              marginBottom: "15px",
-            }}
+        <div
+            style={{ float: "right", marginTop: "15px", marginRight: "10px" ,marginBottom:'10px'}}
           >
             <Button
               variant="contained"
@@ -118,93 +96,98 @@ function ManagePremium() {
               component={Link}
               to="/addnewpremium"
             >
-              Add New Premium
+              Add new package
             </Button>
           </div>
+       <form  style={{
+            
+              padding: "15px",
+              maxWidth: "800px",
+              display: "flex",
+              alignItems: "end",
+              justifyContent: "left",
+            }}
+            onSubmit={handleSearch}>  
+               <input
+              placeholder="Search by name"
+              className="border-solid border-2 border-black p-2"
+              onChange={(event) => handleSearch(event)}
+            />
+            </form>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ textAlign: "center" }}>ID</TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Premium Name
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Price origin
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Price Discount
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Duration by month
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Disable/Enable{" "}
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>Status </TableCell>
-                <TableCell style={{ textAlign: "center" }}>Action</TableCell>
+                <TableCell>ID</TableCell>
+                <TableCell>Premium name</TableCell>
+                <TableCell>Original price</TableCell>
+                <TableCell>Discount price</TableCell>
+                <TableCell>Duration by months</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Disable/Enable</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {packages.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} align="center">
-                    No package premium available
-                  </TableCell>
-                </TableRow>
-              ) : (
-                packages &&
-                packages.length > 0 &&
-                packages
-                  .slice(startIndex, endIndex)
-                  .map((courseItem, index) => {
-                    return (
-                      <TableRow key={index}>
-                        <TableCell style={{ textAlign: "center" }}>
-                          {index + 1}
-                        </TableCell>
-                        <TableCell style={{ textAlign: "center" }}>
-                          {courseItem.premiumname}
-                        </TableCell>
-                        <TableCell style={{ textAlign: "center" }}>
-                          {courseItem.priceOriginal}
-                        </TableCell>
-                        <TableCell style={{ textAlign: "center" }}>
-                          {courseItem.priceDiscount}
-                        </TableCell>
-                        <TableCell style={{ textAlign: "center" }}>
-                          {courseItem.durationByMonth}
-                        </TableCell>
-                        <TableCell style={{ textAlign: "center" }}>
-                          <Switch
-                            checked={courseItem.status}
-                            onChange={(event) =>
-                              handleToggle(event, courseItem)
-                            }
-                            color={courseItem.status ? "success" : "error"}
-                          />
-                        </TableCell>
-                        <TableCell style={{ textAlign: "center" }}>
-                          <StatusButton status={courseItem.status} />
-                        </TableCell>
-                        <TableCell style={{ textAlign: "center" }}>
-                          <Button
-                            variant="contained"
-                            color="warning"
-                            component={Link}
-                            to={`/updatepremiumpack/${courseItem._id}`}
-                            style={{ fontSize: "10px" }}
-                          >
-                            Update and Detail
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
-              )}
+              {listUser &&
+                listUser.length > 0 &&
+                listUser.slice(startIndex, endIndex).map((item, index) => {
+                  const handleStatusToggle = async () => {
+                    const updatedList = [...listUser];
+                    updatedList[startIndex + index].status = !item.status;
+                    setListUsers(updatedList);
+                    try {
+                      await updatePremium({
+                        _id: item._id,
+                        status: updatedList[startIndex + index].status,
+                      });
+                      console.log("Status updated successfully.");
+                      toast.success(`${item.premiumname} ` + " status updated success")
+                      console.log(updatedList);
+                    } catch {
+                      console.log("error");
+                    }
+                  };
+
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>{startIndex + index + 1}</TableCell>
+                      <TableCell >
+                        {item.premiumname}
+                      </TableCell>
+                      <TableCell >
+                        {item.priceOriginal}
+                      </TableCell>
+                      <TableCell >
+                        {item.priceDiscount}
+                      </TableCell>
+                      <TableCell >
+                        {item.durationByMonth}
+                      </TableCell>
+                      <TableCell >  <StatusButton status={item.status} /></TableCell>
+                      <TableCell>
+                        <Switch
+                          checked={item.status}
+                          onChange={handleStatusToggle}
+                          color="primary"
+                        />
+                      </TableCell>
+                      <TableCell style={{ textAlign: "center" }}>
+                        <Button
+                          variant="contained"
+                          color="warning"
+                          component={Link}
+                          to={`/updatepremiumpack/${item._id}`}
+                          style={{ fontSize: "10px" }}
+                        >
+                          Update & Detail
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
-
         <div className="pagination gap-7" style={{marginTop :'10px'}}>
           <Button
             disabled={currentPage === 1}
@@ -242,4 +225,4 @@ function ManagePremium() {
   );
 }
 
-export default ManagePremium;
+export default BasicExample;

@@ -53,9 +53,11 @@ function UpdateClass() {
         'Tuesday',
         'Wednesday',
         'Thursday',
+        'Wednesday',
+        'Thursday',
         'Friday',
         'Saturday',
-        'Sunday',
+        'Sunday'
     ];
 
     useEffect(() => {

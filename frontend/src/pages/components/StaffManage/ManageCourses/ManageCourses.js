@@ -152,6 +152,9 @@ function ManageCourses() {
     }
   };
   /////////////////// handle việc next và prev trong page/////////////////////////
+  const handlePageChange = (page) => {
+    setPage(page);
+  };
   function handlePrevious() {
     setPage((p) => {
       if (p === 1) return p;
@@ -165,6 +168,8 @@ function ManageCourses() {
       return parseInt(p) + 1;
     });
   }
+  const startIndex = (page - 1) * 4;
+  const endIndex = startIndex + 4;
   //////////////////////////////////////////////////////////////////////////////////////
 
   return (
@@ -173,7 +178,7 @@ function ManageCourses() {
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper}>
           <div
-            style={{ float: "right", marginTop: "15px", marginRight: "10px" }}
+            style={{ float: "right", marginTop: "40px", marginRight: "10px" }}
           >
             <Button
               variant="contained"
@@ -184,66 +189,89 @@ function ManageCourses() {
               Add new course
             </Button>
           </div>
-          <form
-            style={{
-              margin: "auto",
-              padding: "15px",
-              maxWidth: "800px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onSubmit={handleSearch}
-          >
-            <TextField
-              type="text"
-              variant="outlined"
-              placeholder="Search course name"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              style={{ marginRight: "1rem" }}
-            />
-
-            <Select
-              value={semesterValue}
-              onChange={(e) => setSemesterValue(e.target.value)}
-              style={{ marginLeft: "1rem", marginRight: "1rem" }}
+          <form onSubmit={handleSearch}>
+            <div
+              style={{
+                marginTop:'10px',
+                maxWidth: "800px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
             >
-              <MenuItem value="">All Semesters</MenuItem>
-              {schedule.map((semester, index) => (
-                <MenuItem key={index} value={semester._id}>
-                  {semester.semestername}
-                </MenuItem>
-              ))}
-            </Select>
-            <p style={{ fontWeight: "normal", fontSize: "13px" }}>
-              Select Semester
-            </p>
-
-            <Select
-              value={statusValue}
-              onChange={(e) => setStatusValue(e.target.value)}
-              style={{ marginLeft: "1rem", marginRight: "1rem" }}
-            >
-              <MenuItem value="">All Statuses</MenuItem>
-              <MenuItem value="true">Enabled</MenuItem>
-              <MenuItem value="false">Disabled</MenuItem>
-            </Select>
-            <>
+              <input
+              autoFocus
+              style={{marginLeft:'10px',marginRight:'10px'}}
+                type="text"
+                variant="outlined"
+                placeholder="Search by  name"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                className="border-solid border-2 border-black p-2"
+              />
               <p style={{ fontWeight: "normal", fontSize: "13px" }}>
-                Select Status
+                Select Semester :
               </p>
-            </>
-            <Button type="submit" variant="contained" color="primary">
-              Search
-            </Button>
-            <Button
-              style={{ marginLeft: "1rem" }}
-              variant="outlined"
-              onClick={handleReset}
+              <Select
+                value={semesterValue}
+                onChange={(e) => setSemesterValue(e.target.value)}
+                style={{ marginLeft: "1rem", marginRight: "1rem" }}
+              >
+                <MenuItem value="">All Semesters</MenuItem>
+                {schedule.map((semester, index) => (
+                  <MenuItem key={index} value={semester._id}>
+                    {semester.semestername}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <>
+                <p
+                  style={{
+                    fontWeight: "normal",
+                    fontSize: "13px",
+    
+                  }}
+                >
+                  Select Status :
+                </p>
+              </>
+              <Select
+                value={statusValue}
+                onChange={(e) => setStatusValue(e.target.value)}
+                style={{ marginLeft: "1rem", marginRight: "1rem" }}
+              >
+                <MenuItem value="">All Statuses</MenuItem>
+                <MenuItem value="true">Enabled</MenuItem>
+                <MenuItem value="false">Disabled</MenuItem>
+              </Select>
+            </div>
+            <div
+              style={{
+                marginLeft: "10px",
+                marginBottom: "10px",
+                maxWidth: "500px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
             >
-              Reset
-            </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                style={{ display: "block" }}
+              >
+                Search
+              </Button>
+              <Button
+                style={{ marginLeft: "1rem" }}
+                variant="outlined"
+                onClick={handleReset}
+              >
+                Reset
+              </Button>
+            </div>
           </form>
 
           <Table>
@@ -281,7 +309,7 @@ function ManageCourses() {
                   return (
                     <TableRow key={index}>
                       <TableCell style={{ textAlign: "center" }}>
-                        {index + 1}
+                        {startIndex + index + 1}
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
                         {courseItem.coursename}
@@ -296,7 +324,7 @@ function ManageCourses() {
                         <Switch
                           checked={courseItem.status}
                           onChange={(event) => handleToggle(event, courseItem)}
-                          color={courseItem.status ? "success" : "error"}
+                          color="primary"
                         />
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
@@ -320,17 +348,8 @@ function ManageCourses() {
             </TableBody>
           </Table>
         </TableContainer>
-        <footer
-          style={{
-            margin: "auto",
-            padding: "15px",
-            maxWidth: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <button
+        <div className="pagination gap-7" style={{ marginTop: "10px" }}>
+          <Button
             disabled={page === 1}
             onClick={handlePrevious}
             style={{
@@ -342,30 +361,21 @@ function ManageCourses() {
             }}
           >
             Previous
-          </button>
-          <select
-            value={page}
-            onChange={(event) => {
-              setPage(event.target.value);
-            }}
-            style={{
-              marginRight: "1rem",
-              padding: "0.5rem",
-              borderRadius: "4px",
-            }}
-          >
-            {Array(pageCount)
-              .fill(null)
-              .map((_, index) => {
-                return (
-                  <option key={index} style={{ padding: "0.5rem" }}>
-                    {parseInt(index + 1)}
-                  </option>
-                );
-              })}
-          </select>
-          <button
-            disabled={page == pageCount}
+          </Button>
+
+          {Array.from({ length: pageCount }, (_, index) => index + 1).map(
+            (page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`page-button ${page === page ? "active" : ""}`}
+              >
+                {page}
+              </button>
+            )
+          )}
+          <Button
+            className="next-button border"
             onClick={handleNext}
             style={{
               padding: "0.5rem 1rem",
@@ -375,8 +385,8 @@ function ManageCourses() {
             }}
           >
             Next
-          </button>
-        </footer>
+          </Button>
+        </div>
       </Container>
     </div>
   );
