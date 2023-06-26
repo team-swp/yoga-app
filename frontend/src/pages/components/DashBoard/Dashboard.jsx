@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import {UserAuth} from '../../../context/AuthGoogleContext'
+import { ThemeSettings } from "./components";
 function Dashboard() {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = UserAuth();
   const navigate = useNavigate()
@@ -22,12 +23,12 @@ function Dashboard() {
       <div className="flex relative dark:bg-main-dark-bg" style={{height:'100px',marginLeft:'-10px'}}>
         <div className="fixed right-4 bottom-4" style={{ zIndex: "1000",transform:'translate(1450px, 630px)' }}>
           <TooltipComponent content="Settings" position="Top">
-            <button
-              type="button"
-              onClick={() => setThemeSettings(true)}
-              style={{ background: currentColor, borderRadius: '50%' }}
-              className="text-3xl text-white p-3 hover:drop-shadow-xl hover:bg-light-gray"
-            >
+          <button
+                type="button"
+                onClick={() => setThemeSettings(!themeSettings)}
+                style={{ background: currentColor, borderRadius: '50%' }}
+                className="text-3xl text-white p-3 hover:drop-shadow-xl hover:bg-light-gray"
+              >
               <FiSettings />
             </button>
           </TooltipComponent>
@@ -49,11 +50,11 @@ function Dashboard() {
             activeMenu ? "md:ml-72" : "flex-2"
           } `}
         >
-          <div style={activeMenu?{marginLeft:'250px',backgroundColor:'white'}:{backgroundColor:'white'}}  className=" md:static bg-main-bg dark:bg-main-dark-bg navbar w-full mb-10" >
+          <div style={{background:'white'}}  className=" md:static bg-main-bg dark:bg-main-dark-bg navbar w-full mb-10" >
             <Navbar/>
           </div>
           <div>
-          {themeSettings && (<themeSettings />)}
+          {themeSettings && (<ThemeSettings />)}
           </div>
         </div>
         <div>
