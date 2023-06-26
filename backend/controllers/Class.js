@@ -21,7 +21,6 @@ module.exports.addClass = async (req, res) => {
       status,
       meta_data: meta_data || "", //to side data
     });
-    console.log(newClass);
     // return save result as a response
     newClass
       .save()
@@ -43,7 +42,7 @@ module.exports.getClasses = async (req, res) => {
 
 module.exports.getClassesPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page, req.query.limit, Class, req.query.q, 'classname')
+    const pagingPayload = await pagingnation(Class,'classname',req.query)
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -67,11 +66,9 @@ module.exports.updateClass = async (req, res) => {
     }
   }
   try {
-    console.log(res.newClass);
     const updateClass = await res.newClass.save();
     res.json(updateClass);
   } catch (error) {
-    console.log(error.message);
     res.status(400).json({ message: error.message });
   }
 };

@@ -10,6 +10,7 @@ const Mailgen = require("mailgen");
 const { pagingnation } = require("./Pagingnation");
 const Booking = require("../models/bookings");
 const Account = require("../models/accounts");
+const Premium = require('../models/premiums')
 //payment medthod
 module.exports.addPaymentMethod = async (req, res) => {
   const { paymentname } = req.body;
@@ -69,10 +70,11 @@ module.exports.getPaymentMethodById = async (req, res, next) => {
 };
 
 module.exports.addPaymentMethod = async (req, res) => {
-  const { paymentname } = req.body;
+  const { paymentname, image } = req.body;
   try {
     const paymentMethod = new PaymentMethod({
       paymentname: paymentname,
+      image: image,
     });
     // return save result as a response
     paymentMethod
@@ -96,6 +98,7 @@ module.exports.addPayment = async (req, res) => {
     paymentMethod_id,
     booking_id,
     description,
+    premium_id,
     status,
     meta_data,
   } = req.body;
@@ -107,6 +110,7 @@ module.exports.addPayment = async (req, res) => {
       paymentMethod_id,
       booking_id,
       description,
+      premium_id,
       status,
       meta_data,
     });
@@ -145,11 +149,7 @@ module.exports.getPaymentParams = async (req, res) => {
 
 module.exports.getPaymentsPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(
-      req.query.page,
-      req.query.limit,
-      Payment
-    );
+    const pagingPayload = await pagingnation(Payment, null, req.query);
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -164,6 +164,7 @@ module.exports.updatePayment = async (req, res) => {
     "paymentMethod_id",
     "booking_id",
     "description",
+    "premium_id",
     "status",
     "meta_data",
   ];
@@ -249,7 +250,6 @@ module.exports.createPayment = async (req, res, next) => {
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
-  console.log(vnpUrl);
   res.send(vnpUrl);
   // res.redirect(vnpUrl);
 
@@ -287,6 +287,8 @@ module.exports.vnpayIPN = async (req, res, next) => {
   const dataArray = getData.split("%2C");
   const userID = dataArray[0];
   const email = dataArray[1];
+  const usernamePayment = dataArray[2];
+  const premium_id = dataArray[3];
   const replacedEmail = email.replace("%40", "@");
   if (secureHash === signed) {
     //kiểm tra checksum
@@ -298,27 +300,41 @@ module.exports.vnpayIPN = async (req, res, next) => {
             const booking = new Booking({
               member_id: userID,
             });
-            booking.save()
-              .then((result) => {
+            booking.save().then((result) => {
               const bookingID = result._id;
               const payment = new Payment({
                 recipient: "Yoga HeartBeat",
                 paymentDate: vnp_Params["vnp_PayDate"],
-                paymentAmount: vnp_Params["vnp_Amount"],
+                paymentAmount: vnp_Params["vnp_Amount"] / 100,
                 paymentMethod_id: "647da80b6aa8563399cbc6ff",
                 booking_id: bookingID,
+                premium_id: premium_id,
                 status: 10,
                 meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
               });
               // return save result as a response
-              const usernamePayment = dataArray[2];
-              payment.save()
+              payment
+                .save()
                 .then(async (result) => {
-                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":true}`})
+                  const premiumName = await Premium.findOne({
+                    _id: premium_id,
+                  });
+                  const date = new Date();
+                  const dateString = date.toISOString();
+                  const memeberAccount = await Account.findOneAndUpdate(
+                    { _id: userID },
+                    {
+                      meta_data: `{"isMember":true,"MemberDuration":${premiumName.durationByMonth},"startDateMember":"${dateString}"}`,
+                    }
+                  );
                   req.user = {
                     userEmail: replacedEmail,
                     username: usernamePayment,
-                    text: `We are pleased to inform you that your payment (id; ${result._id}) has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
+                    text: `We are pleased to inform you that your payment (id; ${
+                      result._id
+                    }) for ${
+                      premiumName && premiumName.premiumname
+                    } package has been successfully processed. Thank you for your purchase and for choosing our services. If you have any questions or need further assistance, please don't hesitate to contact our support team.`,
                     subject: "Payment Successful",
                     result_id: result._id,
                   };
@@ -333,24 +349,28 @@ module.exports.vnpayIPN = async (req, res, next) => {
             const booking = new Booking({
               member_id: userID,
             });
-            booking.save()
-              .then((result) => {
+            booking.save().then((result) => {
               const bookingID = result._id;
-              
+
               const payment = new Payment({
                 recipient: "Yoga HeartBeat",
                 paymentDate: vnp_Params["vnp_PayDate"],
-                paymentAmount: vnp_Params["vnp_Amount"],
+                paymentAmount: vnp_Params["vnp_Amount"] / 100,
                 paymentMethod_id: "647da80b6aa8563399cbc6ff",
                 booking_id: bookingID,
+                premium_id: premium_id,
                 status: 5,
                 meta_data: `${vnp_Params["vnp_BankCode"]} ${vnp_Params["vnp_CardType"]}`,
               });
               // return save result as a response
               const usernamePayment = dataArray[2];
-              payment.save()
+              payment
+                .save()
                 .then(async (result) => {
-                  const memeberAccount = await Account.findOneAndUpdate({_id:userID},{meta_data:`{"isMember":false}`})
+                  const memeberAccount = await Account.findOneAndUpdate(
+                    { _id: userID },
+                    { meta_data: `{"isMember":false}` }
+                  );
                   req.user = {
                     userEmail: replacedEmail,
                     username: usernamePayment,
@@ -443,9 +463,10 @@ module.exports.haveDonePayment = (req, res) => {
   });
   const { username, userEmail, text, subject, result_id } = req.user;
   // body of the email
+  var modifiedUsername = username.replace(/\+/g, " ");
   var email = {
     body: {
-      name: username || "No Name",
+      name: modifiedUsername || "No Name",
       intro:
         text ||
         "Welcome to Yoga HeartBeat! We're very excited to have you join with us.",
@@ -470,3 +491,465 @@ module.exports.haveDonePayment = (req, res) => {
     })
     .catch((error) => res.status(500).send({ error }));
 };
+
+//out put [
+// {x:'month',y:'average'}
+//
+//]
+module.exports.charDataPayment = async (req, res) => {
+  const { month, year } = req.body;
+  console.log(year);
+  console.log(month);
+  const today = new Date();
+  const yearNow = today.getFullYear();
+  const startDate = new Date(`${year || yearNow}-${month || "01"}-01`);
+  const endDate = new Date(`${year || yearNow}-${month || "12"}-31`);
+  endDate.setHours(23, 59, 59, 999);
+
+  const paymentByYear = await Payment.find({
+    createdAt: { $gte: startDate, $lt: endDate },
+  });
+
+  let arrJan = { x: "Jan", y: 0 };
+  let arrFeb = { x: "Feb", y: 0 };
+  let arrMar = { x: "Mar", y: 0 };
+  let arrApr = { x: "Apr", y: 0 };
+  let arrMay = { x: "May", y: 0 };
+  let arrJun = { x: "Jun", y: 0 };
+  let arrJul = { x: "Jul", y: 0 };
+  let arrAug = { x: "Aug", y: 0 };
+  let arrSep = { x: "Sep", y: 0 };
+  let arrOct = { x: "Oct", y: 0 };
+  let arrNov = { x: "Nov", y: 0 };
+  let arrDec = { x: "Dec", y: 0 };
+
+  let arrJanNotPayment = { x: "Jan", y: 0 };
+  let arrFebNotPayment = { x: "Feb", y: 0 };
+  let arrMarNotPayment = { x: "Mar", y: 0 };
+  let arrAprNotPayment = { x: "Apr", y: 0 };
+  let arrMayNotPayment = { x: "May", y: 0 };
+  let arrJunNotPayment = { x: "Jun", y: 0 };
+  let arrJulNotPayment = { x: "Jul", y: 0 };
+  let arrAugNotPayment = { x: "Aug", y: 0 };
+  let arrSepNotPayment = { x: "Sep", y: 0 };
+  let arrOctNotPayment = { x: "Oct", y: 0 };
+  let arrNovNotPayment = { x: "Nov", y: 0 };
+  let arrDecNotPayment = { x: "Dec", y: 0 };
+  const result = paymentByYear.map((obj) => {
+    let date = new Date(obj.createdAt);
+    let month = date.getMonth() + 1;
+    if (obj.paymentAmount != 0) {
+      let amount = obj.paymentAmount / 1000000;
+      switch (month) {
+        case 1:
+          if (obj.status !== 10) {
+            Object.assign(arrJanNotPayment, {
+              x: "Jan",
+              y: amount + arrJanNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrJan, {
+            x: "Jan",
+            y: amount + arrJan.y,
+          });
+          break;
+        case 2:
+          if (obj.status !== 10) {
+            Object.assign(arrFebNotPayment, {
+              x: "Feb",
+              y: amount + arrFebNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrFeb, {
+            x: "Feb",
+            y: amount + arrFeb.y,
+          });
+          break;
+        case 3:
+          if (obj.status !== 10) {
+            Object.assign(arrMarNotPayment, {
+              x: "Mar",
+              y: amount + arrMarNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrMar, {
+            x: "Mar",
+            y: amount + arrMar.y,
+          });
+          break;
+        case 4:
+          if (obj.status !== 10) {
+            Object.assign(arrAprNotPayment, {
+              x: "Apr",
+              y: amount + arrAprNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrApr, {
+            x: "Apr",
+            y: amount + arrApr.y,
+          });
+          break;
+        case 5:
+          if (obj.status !== 10) {
+            Object.assign(arrMayNotPayment, {
+              x: "May",
+              y: amount + arrMayNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrMay, {
+            x: "May",
+            y: amount + arrMay.y,
+          });
+          break;
+        case 6:
+          if (obj.status !== 10) {
+            Object.assign(arrJunNotPayment, {
+              x: "Jun",
+              y: amount + arrJunNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrJun, {
+            x: "Jun",
+            y: amount + arrJun.y,
+          });
+          break;
+        case 7:
+          if (obj.status !== 10) {
+            Object.assign(arrJulNotPayment, {
+              x: "Jul",
+              y: amount + arrJulNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrJul, {
+            x: "Jul",
+            y: amount + arrJul.y,
+          });
+          break;
+        case 8:
+          if (obj.status !== 10) {
+            Object.assign(arrAugNotPayment, {
+              x: "Aug",
+              y: amount + arrAugNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrAug, {
+            x: "Aug",
+            y: amount + arrAug.y,
+          });
+          break;
+        case 9:
+          if (obj.status !== 10) {
+            Object.assign(arrSepNotPayment, {
+              x: "Sep",
+              y: amount + arrSepNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrSep, {
+            x: "Sep",
+            y: amount + arrSep.y,
+          });
+          break;
+        case 10:
+          if (obj.status !== 10) {
+            Object.assign(arrOctNotPayment, {
+              x: "Oct",
+              y: amount + arrOctNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrOct, {
+            x: "Oct",
+            y: amount + arrOct.y,
+          });
+          break;
+        case 11:
+          if (obj.status !== 10) {
+            Object.assign(arrNovNotPayment, {
+              x: "Nov",
+              y: amount + arrNovNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrNov, {
+            x: "Nov",
+            y: amount + arrNov.y,
+          });
+          break;
+        case 12:
+          if (obj.status !== 10) {
+            Object.assign(arrDecNotPayment, {
+              x: "Dec",
+              y: amount + arrDecNotPayment.y,
+            });
+            break;
+          }
+          Object.assign(arrDec, {
+            x: "Dec",
+            y: amount + arrDec.y,
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  });
+  // let max_y = 0;
+
+  // result.forEach((array) => {
+  //   array.forEach((item) => {
+  //     if (item.y > max_y) {
+  //       max_y = item.y;
+  //     }
+  //   });
+  // });
+  const chartData = [
+    arrJan,
+    arrFeb,
+    arrMar,
+    arrApr,
+    arrMay,
+    arrJun,
+    arrJul,
+    arrAug,
+    arrSep,
+    arrOct,
+    arrNov,
+    arrDec,
+  ];
+
+  const chartData2 = [
+    arrJanNotPayment,
+    arrFebNotPayment,
+    arrMarNotPayment,
+    arrAprNotPayment,
+    arrMayNotPayment,
+    arrJunNotPayment,
+    arrJulNotPayment,
+    arrAugNotPayment,
+    arrSepNotPayment,
+    arrOctNotPayment,
+    arrNovNotPayment,
+    arrDecNotPayment,
+  ];
+
+  let maxY = Number.NEGATIVE_INFINITY;
+  const lengthData = chartData.length;
+  for (let i = 0; i < lengthData; i++) {
+    const point = chartData[i];
+    if (point.y > maxY) {
+      maxY = point.y;
+    }
+  }
+
+  let totalSum = 0;
+
+  // Iterate through the array and add up the "y" values
+  for (let i = 0; i < chartData.length; i++) {
+    totalSum += chartData[i].y;
+  }
+
+  let totalSumNotPaid = 0;
+  for (let i = 0; i < chartData2.length; i++) {
+    totalSumNotPaid += chartData2[i].y;
+  }
+
+  res.status(201).send({
+    data: [chartData, chartData2],
+    maxium: maxY,
+    total: totalSum,
+    totalNotPaid: totalSumNotPaid,
+  });
+};
+
+module.exports.charDataPaymentPremium = async (req, res) => {
+  try {
+    //output {amount:value,percentage:% }
+    const today = new Date();
+    const yearNow = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const startDate = new Date(`${yearNow}-${month}-01`);
+    const endDate = new Date(`${yearNow}-${month}-31`);
+    endDate.setHours(23, 59, 59, 999);
+
+    const startDateLast = new Date(`${yearNow}-${month - 1}-01`);
+    const endDateLast = new Date(`${yearNow}-${month - 1}-31`);
+    endDateLast.setHours(23, 59, 59, 999);
+
+    const userByMonth = Payment.find({
+      createdAt: { $gte: startDate, $lt: endDate },
+    });
+
+    const userByLastMonth = Payment.find({
+      createdAt: { $gte: startDateLast, $lt: endDateLast },
+    });
+
+    let [DataMonth, DataLastMonth] = await Promise.all([
+      userByMonth,
+      userByLastMonth,
+    ]);
+    const currentMonthCount = DataMonth.length;
+    const previousMonthCount = DataLastMonth.length;
+    let percentage;
+    if (currentMonthCount - previousMonthCount < 0) {
+      percentage = (
+        Math.abs(
+          (currentMonthCount - previousMonthCount) /
+            (previousMonthCount === 0 ? 1 : previousMonthCount)
+        ) * 100
+      )
+        .toFixed(2)
+        .toString();
+      percentage = "-" + percentage;
+    } else {
+      percentage = (
+        Math.abs(
+          (currentMonthCount - previousMonthCount) /
+            (previousMonthCount === 0 ? 1 : previousMonthCount)
+        ) * 100
+      )
+        .toFixed(2)
+        .toString();
+      percentage = "+" + percentage;
+    }
+    //////
+    let currentMonthIncome = 0;
+    let previousMonthIncome = 0;
+
+    for (let i = 0; i < DataMonth.length; i++) {
+      currentMonthIncome += DataMonth[i].paymentAmount;
+    }
+
+    for (let i = 0; i < DataLastMonth.length; i++) {
+      previousMonthIncome += DataLastMonth[i].paymentAmount;
+    }
+    let percentage2;
+    const difference = currentMonthIncome - previousMonthIncome;
+    const previousMonthIncomeAdjusted =
+      previousMonthIncome === 0 ? 1 : previousMonthIncome;
+
+    if (difference < 0) {
+      percentage2 = ((Math.abs(difference) / previousMonthIncomeAdjusted) * 100)
+        .toFixed(2)
+        .toString();
+      percentage2 = "-" + percentage2;
+    } else {
+      percentage2 = ((Math.abs(difference) / previousMonthIncomeAdjusted) * 100)
+        .toFixed(2)
+        .toString();
+      percentage2 = "+" + percentage2;
+    }
+
+    res.status(201).send([
+      { amount: DataMonth.length, percentage: percentage + "%" },
+      { amount: currentMonthIncome / 1000000, percentage: percentage2 + "%" },
+    ]);
+  } catch (error) {
+    return res.status(404).send({ error });
+  }
+};
+
+module.exports.charDataPaymentPremiumLineChart = async (req, res) => {
+  try {
+    const arrTemp = [];
+    const arrName = [];
+    const arrCreateAt = [];
+    const getPremium = await Premium.find();
+    const lengthPremium = getPremium.length;
+    for (let index = 0; index < lengthPremium; index++) {
+      const item = getPremium[index];
+      const idPremium = item._id;
+      const getPremiumOnPayment = await Payment.find({ premium_id: idPremium });
+      const lengthPrePay = getPremiumOnPayment.length;
+      for (let j = 0; j < lengthPrePay; j++) {
+        let itemTemp = getPremiumOnPayment[j].createdAt.getMonth() + 1;
+        let prename = item.premiumname;
+        arrCreateAt.push({ [prename]: itemTemp });
+      }
+    }
+    const uniqueData = removeDuplicateKeyValuePairs(arrCreateAt);
+    const lengthData = uniqueData.length;
+
+    const today = new Date();
+    const yearNow = today.getFullYear();
+    const arrNameData = []
+    const arrData = []
+    for (let i = 0; i < lengthData; i++) {
+      const startDate = new Date(`${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-01`);
+      const endDate = new Date(`${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-31`);
+
+      endDate.setHours(23, 59, 59, 999);
+      const premiumName = Object.keys(uniqueData[i])[0];
+      const premium = await Premium.findOne({ premiumname: premiumName });
+      const idPremium = premium._id
+      arrNameData.push({[idPremium]:premiumName})
+      const dataSourceTemp = await Payment.find({
+        createdAt: { $gte: startDate, $lt: endDate },
+        premium_id: premium._id
+      });
+      arrData.push(dataSourceTemp)
+    }
+    //{name:Free Trial, dataSource : [{x:date,y:value},{}]}
+    //
+    const arrDataSource =[]
+    const arrDataResult =[]
+    const total = arrData.length
+    for(let index = 0 ; index < total;index++){
+      let obj = {}
+      let objname = {}
+      const month = arrData[index][0].createdAt.getMonth()
+      const newDate = new Date(yearNow,month,1)
+      const premium_name = Object.values(arrNameData[index])[0]
+      let value = arrData[index].length
+      Object.assign(obj,{x:newDate,y:value/total*100})
+      arrDataSource.push({name:premium_name,dataSource:[obj]})
+    }
+
+ 
+    const data = combineDataSourceByName(arrDataSource)
+    res.status(201).send(data);
+  } catch (error) {
+    return res.status(404).send({ error:error.message });
+  }
+};
+
+ const combineDataSourceByName = (data) => {
+  const combinedData = [];
+
+  data.forEach(item => {
+    const existingItem = combinedData.find(entry => entry.name === item.name);
+
+    if (existingItem) {
+      existingItem.dataSource.push(...item.dataSource);
+    } else {
+      combinedData.push({ name: item.name, dataSource: [...item.dataSource] });
+    }
+  });
+
+  return combinedData;
+};
+
+
+function removeDuplicateKeyValuePairs(arr) {
+  const uniquePairs = {};
+
+  arr.forEach((obj) => {
+    const key = Object.keys(obj)[0];
+    const value = obj[key];
+    const pair = `${key}:${value}`;
+
+    if (!uniquePairs.hasOwnProperty(pair)) {
+      uniquePairs[pair] = obj;
+    }
+  });
+
+  return Object.values(uniquePairs);
+}

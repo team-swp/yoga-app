@@ -9,12 +9,10 @@ module.exports.addSchedule = async (req, res) => {
       startTime: startTime,
       endTime: endTime,
       meta_data: meta_data || "", //to store side data
-
     });
-    console.log(schedule);
 
     // return save result as a response 
-
+    
     schedule
       .save()
       .then((result) =>
@@ -37,7 +35,7 @@ module.exports.getSchedules = async (req, res) => {
 
 module.exports.getSchedulesPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(req.query.page, req.query.limit, Schedule, req.query.q, 'schedulename')
+    const pagingPayload = await pagingnation(Schedule,'schedulename',req.query)
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });

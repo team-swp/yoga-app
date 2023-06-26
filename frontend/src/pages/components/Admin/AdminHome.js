@@ -13,27 +13,22 @@ const AdminHome = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 1300);
   }, []);
 
   return (
     <div className="Container">
       <Navigation />
-      <div style={{ marginTop: "30px" }}>
+      <div className="bg-gray-400">
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 py-2">
+          <h1 className="text-black-100 text-center font-bold text-md sm:text-xs md:text-md lg:text-xl">
+            ADMIN MANAGER
+          </h1>
+        </div>
+      </div>
+      <div style={{ marginTop: "10px" }}>
         <Container>
-          <div className="d-flex align-items-center">
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-success" className=" pb-2">
-                Search
-              </Button>
-            </Form>
-          </div>
+          <div className="d-flex align-items-center"></div>
         </Container>
       </div>
       <Container>{isLoading ? <Loading /> : <TableUsers />}</Container>
