@@ -82,3 +82,19 @@ input[type="file"] {
   overflow: hidden; /* Ẩn nội dung vượt quá kích thước cố định */
   text-overflow: ellipsis; /* Hiển thị dấu chấm elipsis (...) nếu nội dung vượt quá kích thước cố định */
 }
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table-container table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-container th,
+.table-container td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

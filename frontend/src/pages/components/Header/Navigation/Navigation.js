@@ -12,14 +12,14 @@ function Navigation() {
       <nav className="mx-20">
         <div className="flex justify-between items-center">
           <div className="flex gap-16 justify-items-center items-center">
-            <div style={{transform:'scale(1.6)'}}>
+            <div style={{ transform: "scale(1.6)" }}>
               <Link to="/">
                 <img src={logo} alt="logo" />
               </Link>
             </div>
             <div>
               <Link to="/courses">
-                <Typography style={{fontWeight:400}}>Courses</Typography>
+                <Typography style={{ fontWeight: 400 }}>Courses</Typography>
               </Link>
             </div>
             <div>
