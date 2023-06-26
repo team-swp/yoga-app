@@ -77,7 +77,7 @@ function ManageMember() {
     if (term) {
       let cloneListPayment = _.cloneDeep(payments);
       cloneListPayment = cloneListPayment.filter((item) =>
-        item.member.username.includes(term)
+        item.member.username.toLowerCase().includes(term.toLowerCase())
       );
       setSearchResults(cloneListPayment);
     } else {
