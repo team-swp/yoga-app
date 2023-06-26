@@ -10,7 +10,7 @@ function Navigation() {
     <header className="sticky top-0 z-50 bg-white shadow-lg">
       <nav className="mx-20 flex justify-between items-center">
         <div className="flex gap-16 justify-items-center items-center">
-          <div>
+          <div style={{ transform: "scale(1.6)" }}>
             <Link to="/">
               <img src={logo} alt="logo" />
             </Link>
