@@ -15,6 +15,7 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
+  ProtectRouteCheckout,
   ProtectRouteOTP,
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
@@ -119,7 +120,15 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element: <Checkout />,
+    element: (
+      <ProtectRouteCheckout>
+        <Checkout />
+      </ProtectRouteCheckout>
+    ),
+  },
+  {
+    path: "/premium",
+    element: <Premium />,
   },
   {
     path: "/paymentstatus",

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import logo from "../../../../Heartbeat.svg";
 import Sidebar from "../Sidebar/Sidebar";
-import { Typography } from "@mui/material";
+import { useEffect } from "react";
 
 function Navigation() {
   const token = localStorage.getItem("token");
-
+  useEffect(() => {}, []);
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">
       <nav className="mx-20 flex justify-between items-center">

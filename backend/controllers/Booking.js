@@ -1,9 +1,20 @@
+const Account = require("../models/accounts");
 const Booking = require("../models/bookings");
+const Payment = require("../models/payments");
 const { pagingnation } = require("./Pagingnation");
-module.exports.addBooking = async (req, res) => {
-  const { member_id, class_id, booking_date, status, meta_data } = req.body;
 
+module.exports.addBooking = async (req, res) => {
   try {
+    const bookTry = await Booking.findOne({
+      member_id: req.account.userId,
+      meta_data: `"isTry":true`,
+    });
+
+    if (bookTry && req.body.isTry) {
+      res.status(400).json({ message: "Cannot book try" });
+    }
+    //check user trước nếu meta_data có isMember:true
+    const { member_id, class_id, booking_date, status, meta_data } = req.body;
     const booking = new Booking({
       member_id: req.account.userId,
       class_id,
@@ -11,6 +22,7 @@ module.exports.addBooking = async (req, res) => {
       status,
       meta_data: meta_data || "",
     });
+    console.log(booking);
     // return save result as a response
     booking
       .save()
