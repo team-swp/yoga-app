@@ -7,9 +7,6 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import yoga2 from "../../../assets/yoga2.jpg";
 import { getCourse } from "../../../helper/courseAPI";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setCourseId } from "../../../redux/actions";
 import CourseItems from "./CourseItems";
 
 const cx = classNames.bind(styles);
@@ -22,7 +19,7 @@ function Courses() {
         const response = await getCourse();
         setCourseList(response.data.filter((course) => course.status));
         var newLink = document.createElement("a");
-        newLink.href = '#course_list';
+        newLink.href = "#course_list";
         newLink.click();
       } catch (error) {
         console.log(error);
@@ -31,9 +28,7 @@ function Courses() {
     fetchData();
   }, []);
 
-  setTimeout(()=>{
-   
-  },0)
+  setTimeout(() => {}, 0);
 
   const [ref, inView] = useInView({
     threshold: 0,
@@ -67,8 +62,6 @@ function Courses() {
             <CourseItems course={course} />
           ))}
         </div>
-
-        <div></div>
       </Container>
       <Footer />
     </div>
