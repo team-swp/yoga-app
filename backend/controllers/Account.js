@@ -9,7 +9,7 @@ require("dotenv").config();
 
 module.exports.getAllAccount = async (req, res) => {
   try {
-    const accounts = await Account.find();
+    const accounts = await Account.find({ role: { $ne: 'admin' } });
     const temp = [];
     accounts.filter((acc, index) => {
       const { password, ...rest } = Object.assign({}, acc.toJSON());
