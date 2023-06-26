@@ -99,11 +99,7 @@ function Premium() {
             ✓ You will able to join our special yoga class at saturday weekly
             </Typography>
             <Typography className="font-bold" variant="subtitle1">
-<<<<<<< HEAD
             ✓ You will only pay 1.690.000VND for this package instead of the 4.500.000VND.
-=======
-            ✓ You will only pay 1.690.000VND for this package instead of the 3.700.000VND.
->>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
             </Typography>
           </div>
           <div className="flex items-center gap-3 font-bold">
