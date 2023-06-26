@@ -72,7 +72,6 @@ function Sidebar() {
       setCheckMember(checkMem.isMember);
     }
   }, [user]);
-
   return (
     <div>
       <IconButton
@@ -89,9 +88,8 @@ function Sidebar() {
         >
           <img
             src={user.avatar}
-            className={` ${
-              checkMember ? styles.profile_img : styles.profile_img_normal
-            } object-cover h-44`}
+            className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
+              } object-cover h-44`}
             alt="avatar"
             onError={loadImageAgain}
           />
@@ -166,11 +164,10 @@ function Sidebar() {
                     >
                       <img
                         src={user.avatar}
-                        className={` ${
-                          checkMember
+                        className={` ${checkMember
                             ? styles.profile_img_details
                             : styles.profile_img_details_normal
-                        } object-cover h-44`}
+                          } object-cover h-44`}
                         alt="avatar"
                         onError={loadImageAgain}
                       />
@@ -211,7 +208,7 @@ function Sidebar() {
                   className={styles.profile}
                 >
                   <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                    {checkMember ? "You are a member" : "Become a member"}
+                    {checkMember ? "Your are a member" : "Become a member"}
                   </div>
                 </div>
               </div>
@@ -249,7 +246,9 @@ function Sidebar() {
               {user.role === "staff" && (
                 <Link to="/staffmanage">
                   <div className={styles.sidebar_details}>
-                    <BadgeIcon className={styles.sidebar_details_icon} />
+                    <HomeRepairServiceIcon
+                      className={styles.sidebar_details_icon}
+                    />
                     <div> Staff Manager</div>
                     <ArrowForwardIosOutlinedIcon
                       className={styles.sidebar_details_arrow}

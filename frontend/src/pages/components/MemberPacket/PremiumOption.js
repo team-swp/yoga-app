@@ -137,7 +137,7 @@ function PremiumOption({ premium }) {
                   className="p-1 px-2"
                   style={{
                     fontWeight: 900,
-                    fontSize: "14px",
+                    fontSize: "20px",
                     borderRadius: "5px",
                     backgroundColor: "#0d72ea",
                     color: "#ffffff",
@@ -164,7 +164,7 @@ function PremiumOption({ premium }) {
                 <div className="flex flex-wrap mb-2">
                   <Typography
                     style={{ lineHeight: "22px" }}
-                    className="break-all flex gap-2"
+                    className="break-normal break-words flex gap-2"
                   >
                     <DoneIcon />
                     {item}
@@ -176,7 +176,7 @@ function PremiumOption({ premium }) {
               onClick={handleSubmit}
               className={`${styles.startBuyBtn} flex justify-center mb-4`}
             >
-              <Typography style={{ fontWeight: 700 }}>BẮT ĐẦU</Typography>
+              <Typography style={{ fontWeight: 700 }}>ENROLL</Typography>
             </div>
             <div>
               <Typography className="underline" variant="caption">

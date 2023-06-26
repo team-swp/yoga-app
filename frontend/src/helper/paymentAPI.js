@@ -11,22 +11,6 @@ export async function getPayment() {
   });
 }
 
-export async function getPaymentWithPaging() {
-  let apiPath = `/api/paymentsPaging/get?limit=99999999`;
-
-  return await getApi({
-    apiPath,
-    errorMessage: "Cannot Get Booking",
-  });
-}
-
-export async function getPaymentMethod() {
-  return await getApi({
-    apiPath: `/api/payment/method/get`,
-    errorMessage: "Cannot Get Payment",
-  });
-}
-
 export async function addPayment(respone) {
   //respone là 1 object nhận giá trị cần để add, add thì ko cần id
   return await addApi(respone, {
@@ -39,6 +23,15 @@ export async function updatePayment(respone) {
   return await updateApi(respone, {
     apiPath: `/api/payment/update`,
     errorMessage: "Cannot Update Payment",
+  });
+}
+
+export async function getPaymentWithPaging() {
+  let apiPath = `/api/paymentsPaging/get?limit=99999999`;
+
+  return await getApi({
+    apiPath,
+    errorMessage: "Cannot Get Booking",
   });
 }
 

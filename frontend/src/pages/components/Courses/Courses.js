@@ -7,7 +7,10 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import yoga2 from "../../../assets/yoga2.jpg";
 import { getCourse } from "../../../helper/courseAPI";
-import CourseItems from "./CourseItems";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setCourseId } from "../../../redux/actions";
+import { getCourseID } from "../../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
@@ -18,9 +21,6 @@ function Courses() {
       try {
         const response = await getCourse();
         setCourseList(response.data.filter((course) => course.status));
-        var newLink = document.createElement("a");
-        newLink.href = "#course_list";
-        newLink.click();
       } catch (error) {
         console.log(error);
       }
@@ -28,12 +28,16 @@ function Courses() {
     fetchData();
   }, []);
 
-  setTimeout(() => {}, 0);
-
   const [ref, inView] = useInView({
     threshold: 0,
     rootMargin: "-100px",
   });
+
+  const dispatch = useDispatch();
+
+  const handleCourseClick = (courseId) => {
+    dispatch(setCourseId(courseId));
+  };
 
   return (
     <div>
@@ -54,12 +58,19 @@ function Courses() {
         </h2>
         <hr className="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
         <div
-          id="course_list"
           className={cx("courses-container", { "in-view": inView })}
           ref={ref}
         >
           {courseList.map((course) => (
-            <CourseItems course={course} />
+            <Link to="/course" onClick={() => handleCourseClick(course._id)}>
+              <div className={cx("courses-items")} key={course._id}>
+                <div className={cx("courses-image")}>
+                  <img src={course.images[0]} alt={course.coursename} />
+                </div>
+                <p className={cx("courses-title")}>{course.coursename}</p>
+                <p className={cx("courses-price")}>${course.price}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </Container>

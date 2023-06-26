@@ -15,28 +15,52 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import StatusButton from "./Statusbutton2";
-import { updatePremium } from "../../../../helper/premiumAPI";
-
+import { getPremium, updatePremium } from "../../../../helper/premiumAPI";
+import _, { debounce } from "lodash";
 function ManagePremium() {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-
+  const itemsPerPage = 4;
   const [packages, setPackages] = useState([]);
   const [updatedPackages, setUpdatedPackages] = useState({});
+
+
+  const handleSearch = debounce((event) => {
+    let term = event.target.value;
+    if (term) {
+      let cloneListUsers = _.cloneDeep(packages);
+      cloneListUsers = cloneListUsers.filter((item) =>
+        item.premiumname.toLowerCase().includes(term)
+      );
+      setPackages(cloneListUsers);
+    } else {
+      async function fetchUsers() {
+        try {
+          const response = await getPremium();
+          setPackages(response.data);
+        } catch {
+          console.log("fail");
+        }
+      }
+      fetchUsers()
+    }
+  }, 500);
 
   const handleToggle = async (event, course) => {
     try {
       const updatedPackagesData = { ...course, status: event.target.checked };
       const response = await updatePremium(updatedPackagesData);
       if (response && response.data) {
+        setUpdatedPackages(packages)
         const updatedpackages = packages.map(
+        
           (courseItem) =>
             courseItem._id === response.data._id ? response.data : courseItem,
           toast.success(
             `${response.data.data.premiumname} status updated success`
           )
         );
-        setUpdatedPackages(updatedpackages);
+     
+        setPackages(updatedpackages);
       }
     } catch (error) {
       console.error(error);
@@ -77,7 +101,9 @@ function ManagePremium() {
     <div>
       <Container>
         <Toaster position="top-center" reverseOrder={false} />
+        
         <TableContainer component={Paper}>
+       
           <div
             style={{
               float: "right",
@@ -179,7 +205,7 @@ function ManagePremium() {
           </Table>
         </TableContainer>
 
-        <div className="pagination gap-7">
+        <div className="pagination gap-7" style={{marginTop :'10px'}}>
           <Button
             disabled={currentPage === 1}
             onClick={handlePreviousPage}
