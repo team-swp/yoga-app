@@ -106,7 +106,7 @@ const { log } = require("console");
 const { addRole, updateRole, getRoleById } = require("../controllers/Role");
 const { getUserIP } = require("../middleware/blockIP");
 const { updatePremium, getPremiumById, getPremiums, addPremiumOption } = require("../controllers/Premium");
-
+const { checkIsMember } = require("../middleware/checkDateIsMember");
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
@@ -229,7 +229,11 @@ router.patch(
   getPaymentMethodById,
   updatePaymentMethod
 );
-router.post("/booking/add", Auth, addBooking); // có tài khoản thì mới đucợ book
+router.post("/booking/add", Auth, checkIsMember, addBooking); // có tài khoản thì mới đucợ book
+
+router.post("/booking/check", Auth, checkIsMember, (req, res) =>
+  res.status(201).send()
+); // check book
 router.get("/booking/get", getBooking);
 router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
 //google

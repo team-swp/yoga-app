@@ -25,3 +25,20 @@ export async function updateBooking(respone) {
     errorMessage: "Cannot Update Booking",
   });
 }
+
+export async function checkBooking() {
+  //sửa lại phần này dùng callback hàm lồng dễ hơn
+  try {
+    const token = localStorage.getItem("token");
+    const data = await axios.post(
+      "/api/booking/check",
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error});
+  }
+}

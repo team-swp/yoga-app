@@ -5,6 +5,9 @@ import { Container, TextField, Button, FormControl, InputLabel, Select, MenuItem
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Toaster, toast } from "react-hot-toast";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 function ManageEditSchedule() {
     const [schedule, setSchedule] = useState({});
@@ -12,12 +15,19 @@ function ManageEditSchedule() {
     const [schedulename, setSchedulename] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
-    const [days, setDays] = useState([]);
 
     console.log(schedule);
     useEffect(() => {
         fetchSchedules();
     }, [scheduleId]);
+
+    const handleStartTimeChange = (moment) => {
+        setStartTime(moment.format('hh:mm A'));
+    };
+
+    const handleEndTimeChange = (moment) => {
+        setEndTime(moment.format('hh:mm A'));
+    };
 
     async function fetchSchedules() {
         try {
@@ -31,7 +41,6 @@ function ManageEditSchedule() {
             setSchedulename(schedule.schedulename);
             setStartTime(schedule.startTime);
             setEndTime(schedule.endTime);
-            setDays(schedule.days);
 
         } catch (error) {
             console.error(error);
@@ -60,50 +69,59 @@ function ManageEditSchedule() {
 
 
     return (
-        <>
+        <div>
             <Header />
-            <Container maxWidth="md" sx={styles.container}>
+            <Container>
                 <Toaster position="top-center"></Toaster>
-                <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                    <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px' }}>Update Schedule</h1>
+                <div style={{ maxWidth: '400px', margin: '0 auto', }}>
+                    <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', margin: '1em' }}>Update Schedule</h1>
+                    <form onSubmit={handleSubmit} style={{ width: 400, marginLeft: '4.3em' }}>
+                        <TextField
+                            label="Schedule Name"
+                            type="text"
+                            name="schedule"
+                            value={schedulename}
+                            onChange={(event) => setSchedulename(event.target.value)}
+                            required
+                            style={{ width: 260 }}
+                        />
+
+                        <div style={{ marginBottom: '10px', marginTop: '10px', width: '400px' }}>
+                            <label style={{ display: 'block', fontWeight: 'bold' }}>Start Time:</label>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                <TimePicker
+                                    ampm={true}
+                                    value={startTime}
+                                    onChange={handleStartTimeChange}
+                                    inputFormat="hh:mm A"
+                                    inputProps={{ style: { width: '100%', padding: '5px', border: '1px solid #ccc' } }}
+
+                                />
+
+                            </LocalizationProvider>
+                        </div>
+
+                        <div style={{ marginBottom: '10px', marginTop: '10px' }}>
+                            <label style={{ display: 'block', fontWeight: 'bold' }}>End Time:</label>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                <TimePicker
+                                    ampm={true}
+                                    value={endTime}
+                                    onChange={handleEndTimeChange}
+                                    inputFormat="hh:mm A"
+                                    inputProps={{ style: { width: '100%', padding: '5px', border: '1px solid #ccc' } }}
+
+                                />
+                            </LocalizationProvider>
+                        </div>
+                        <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em', marginBottom: '1em' }}>
+                            Update Schedule
+                        </button>
+                    </form>
                 </div>
-                <form onSubmit={handleSubmit} sx={styles.form}>
-                    <TextField
-                        label="Schedule Name"
-                        type="text"
-                        name="schedule"
-                        value={schedulename}
-                        onChange={(event) => setSchedulename(event.target.value)}
-                        required
-                        sx={styles.textField}
-                    />
-                    <TextField
-                        label="Start Time"
-                        type="text"
-                        name="startTime"
-                        value={startTime}
-                        onChange={(event) => setStartTime(event.target.value)}
-                        required
-                        multiline
-                        sx={styles.textField}
-                    />
-                    <TextField
-                        label="End Time"
-                        type="text"
-                        name="endTime"
-                        value={endTime}
-                        onChange={(event) => setEndTime(event.target.value)}
-                        required
-                        multiline
-                        sx={styles.textField}
-                    />
-                    <Button type="submit" variant="contained" sx={styles.button}>
-                        Update Schedule
-                    </Button>
-                </form>
             </Container>
             <Footer />
-        </>
+        </div>
     );
 }
 export default ManageEditSchedule;
@@ -120,7 +138,7 @@ const styles = {
     },
     textField: {
         marginBottom: "1rem",
-        width: "100%",
+        width: "260px",
     },
     button: {
         marginTop: "1rem",

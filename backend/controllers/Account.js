@@ -9,7 +9,7 @@ require("dotenv").config();
 
 module.exports.getAllAccount = async (req, res) => {
   try {
-    const accounts = await Account.find({role: { $ne: 'admin' }})
+    const accounts = await Account.find({ role: { $ne: 'admin' } });
     const temp = [];
     accounts.filter((acc, index) => {
       const { password, ...rest } = Object.assign({}, acc.toJSON());
@@ -107,6 +107,7 @@ module.exports.update = async (req, res) => {
     res.account.username = req.body.username;
   }
   if (req.body.password != null) {
+    console.log(req.body.password);
     bcrypt.hash(req.body.password, 10).then(async (hashedPassword) => {
       res.account.password = hashedPassword;
 
@@ -119,6 +120,7 @@ module.exports.update = async (req, res) => {
       //   })()
       //  }
       // );
+      console.log(res.account, "123");
     });
   }
   if (req.body.phone != null) {
@@ -130,11 +132,35 @@ module.exports.update = async (req, res) => {
   if (req.body.meta_data != null) {
     res.account.meta_data = req.body.meta_data;
   }
-
   try {
     const updateUser = await res.account.save();
+    console.log(updateUser, "132233");
     console.log(req.body.password);
-    res.json(updateUser);
+    res.status(201).send(updateUser);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.updatePassword = async (req, res) => {
+  try {
+    bcrypt.hash(req.body.password, 10).then(async (hashedPassword) => {
+      res.account.password = hashedPassword;
+
+      const updateUser = await res.account.save();
+
+      res.json(updateUser);
+      //  Account.findOneAndUpdate({ email: user.email },{ password: hashedPassword },{
+      //   run: (async function (err, data) {
+      //     if (err) throw err;
+      //     req.app.locals.resetSession = false; // reset session
+      //     await user.save();
+      //     return res.status(201).send({ msg: "Record Updated...!" });
+      //   })()
+      //  }
+      // );
+      console.log(res.account, "123");
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -300,16 +326,6 @@ module.exports.updateAccountForStaff = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
-// {
-//   icon: <MdOutlineSupervisorAccount />,
-//   amount: "39,354",
-//   percentage: "-4%",
-//   title: "Customers",
-//   iconColor: "#03C9D7",
-//   iconBg: "#E5FAFB",
-//   pcColor: "red-600",
-// },
 module.exports.charDataAccount = async (req, res) => {
   try {
     //output {amount:value,percentage:% }

@@ -11,6 +11,8 @@ import {
   Button,
   Switch,
   TextField,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { Link } from "react-router-dom";
 import { updateSemester } from "../../../../helper/semesterAPI";
@@ -24,6 +26,7 @@ function ManageSemester() {
   const [value, setValue] = useState('')
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
+  const [semesterValue, setSemesterValue] = useState('');
   const [statusValue, setStatusValue] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -50,96 +53,71 @@ function ManageSemester() {
     fetchSemesters();
   }, [manageUpdateSemester, page]);
 
-
-
-
-  // useEffect(() => {
-  //   async function fecthSemester() {
-  //     try {
-  //       const requestUrl = 'http://localhost:3001/api/semester/get'
-  //       const response = await fetch(requestUrl)
-
-  //       const responseJSON = await response.json()
-  //       console.log(responseJSON);
-  //       setSchedule(responseJSON)
-
-  //     } catch (error) {
-  //       console.log('Failed')
-  //     }
-  //   }
-  //   fecthSemester();
-  // }, [])
-
-  //reset page//
-  async function fetchSemesters2() {
-    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`)
-    const semestersData = response.data.items;
-    setPage(response.data.pagination.pageNum)
-    setPageCount(response.data.pagination.pageCount)
-    setSemesters(semestersData);
-  }
-
-  //reset button//
   const handleReset = () => {
-    fetchSemesters();
-    setPage(1);
-    setPageCount(0);
+    fetchSemester2();
     setStartDate('');
     setEndDate('');
+    setValue('');
+  };
+
+  async function fetchSemester2() {
+    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`);
+    const semestersData = response.data.items;
+    setPage(response.data.pagination.pageNum);
+    setPageCount(response.data.pagination.pageCount);
+    setSemesters(semestersData); console.log(semestersData);
   }
 
-  //update khong load lai trang//
-  async function fetchSemesters(startDate = '', endDate = '') {
-    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=3&startDate=${startDate}&endDate=${endDate}`);
+  async function fetchSemesters() {
+    const response = await axios.get(url2);
     const semestersData = response.data.items;
-    setPage(response.data.pagination.pageNum)
-    setPageCount(response.data.pagination.pageCount)
+    setPage(response.data.pagination.pageNum);
+    setPageCount(response.data.pagination.pageCount);
     setSemesters(semestersData);
   }
 
-  /////////////////////// hàm reset này sẽ làm mới lại trang mà trả ô tìm kiếm bằng rỗng//////////////////////////////////
-  // const handleReset = () => {
-  //   fetchSemesters2()
-  //   setSemesterValue("")
-  //   setValue("")
-  //   setStatusValue("")
-  //   setPrice('')
-  //   setPageCount(1)
-  // }
-  ///////////////////// đây là hàm search tìm kiếm///////////////////////////////////////////////
-  // const handleSearch = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.get(`http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester=${semesterValue}&status=${statusValue}&price=${price}`)
 
-  //     const semesterData = response.data.items;
-  //     console.log(response.data);
-  //     setPage(response.data.pagination.pageNum)
-  //     setPageCount(response.data.pagination.pageCount)
-  //     setCourses(semesterData);
-  //   } catch (error) {
-  //     toast.error('Not Found!!!')
-  //   }
-  // }
+  var url2 = null;
+  if (value !== "" && semesterValue !== "" && statusValue !== "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&semestername=${semesterValue}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue === "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}`;
+  } else if (value === "" && semesterValue !== "" && statusValue === "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&semestername=${semesterValue}`;
+  } else if (value === "" && semesterValue === "" && statusValue !== "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&semestername=${semesterValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&q=${value}&status=${statusValue}`;
+  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${1000}&semestername=${semesterValue}&status=${statusValue}`;
+  } else {
+    url2 = `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`;
+  }
 
-  /////////////////// handle việc next và prev trong page/////////////////////////
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    // Chuyển đổi giá trị startDate và endDate sang định dạng dd/mm/yyyy
-    const formattedStartDate = new Date(startDate).toLocaleDateString('en-GB');
-    const formattedEndDate = new Date(endDate).toLocaleDateString('en-GB');
-
-    console.log("formattedStartDate:", formattedStartDate);
-    console.log("formattedEndDate:", formattedEndDate);
-
-    try {
-      await fetchSemesters(formattedStartDate, formattedEndDate);
-      setStartDate('');
-      setEndDate('');
-    } catch (error) {
-      toast.error('Not Found!!!')
-    }
+  var url = null;
+  if (value !== "" && semesterValue !== "" && statusValue !== "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&semestername=${semesterValue}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue === "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}`;
+  } else if (value === "" && semesterValue !== "" && statusValue === "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&semestername=${semesterValue}`;
+  } else if (value === "" && semesterValue === "" && statusValue !== "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&semestername=${semesterValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
+  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
+  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&semestername=${semesterValue}&status=${statusValue}`;
+  } else {
+    url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${4}&q=${value}&semestername=${semesterValue}&status=${statusValue}`;
   }
 
   function handlePrevious() {
@@ -155,8 +133,6 @@ function ManageSemester() {
       return parseInt(p) + 1;
     });
   }
-  //////////////////////////////////////////////////////////////////////////////////////
-
 
   return (
     <div>
@@ -165,60 +141,17 @@ function ManageSemester() {
 
         <TableContainer component={Paper}>
           <div
-            style={{ float: "right", marginTop: "15px", marginRight: "10px" }}
+            style={{ float: "right", marginTop: "15px", marginBottom: '15px', marginRight: "10px" }}
           >
             <Button
               variant="contained"
               color="success"
               component={Link}
-              to="/addnewsemester"
+              to="/addnewclass"
             >
               Add new Semester
             </Button>
           </div>
-          <form
-            style={{
-              margin: "auto",
-              padding: "15px",
-              maxWidth: "800px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onSubmit={handleSearch}
-          >
-            <TextField
-              id="start-date"
-              label="Start Date"
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <TextField
-              id="end-date"
-              label="End Date"
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              style={{ marginLeft: "1rem" }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <Button type="submit" variant="contained" color="primary" style={{ marginLeft: "1rem" }}>
-              Search
-            </Button>
-            <Button
-              style={{ marginLeft: "1rem" }}
-              variant="outlined"
-              onClick={handleReset}
-            >
-              Reset
-            </Button>
-          </form>
 
           <Table>
             <TableHead>

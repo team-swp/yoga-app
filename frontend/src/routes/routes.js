@@ -15,6 +15,7 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
+  ProtectRouteCheckout,
   ProtectRouteOTP,
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
@@ -60,6 +61,7 @@ import {
 } from "../pages/components/DashBoard/components";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
+import Premium from "../pages/components/MemberPacket/Premium";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -119,7 +121,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element: <Checkout />,
+    element:<ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>  ,
+  },
+  {
+    path: "/premium",
+    element: <Premium />,
   },
   {
     path: "/paymentstatus",
