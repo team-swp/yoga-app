@@ -30,7 +30,7 @@ const UpdatePremiumPack = () => {
       .required("Price Origin is required")
       .positive("Price Origin must be a positive number"),
     priceDiscount: Yup.number()
-      .required("Price Discount is required")
+      
       .positive("Price Discount must be a positive number"),
     benefit: Yup.string().required("Benefit is required"),
     rules: Yup.string().required("Rules is required"),
@@ -119,7 +119,7 @@ const UpdatePremiumPack = () => {
             label="Price Discount"
             type="number"
             fullWidth
-            required
+          
             {...formik.getFieldProps("priceDiscount")}
             error={formik.touched.priceDiscount && formik.errors.priceDiscount}
             helperText={

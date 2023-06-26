@@ -48,9 +48,9 @@ function ManageAddSchedule() {
             <Header />
             <Container>
                 <Toaster position="top-center"></Toaster>
-                <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                    <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '2em', marginTop: "2em" }}>Add New Schedule</h1>
-                    <form onSubmit={handleSubmit} style={{ width: 800 }}>
+                <div style={{ maxWidth: '400px', margin: '0 auto', }}>
+                    <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', margin: '1em' }}>Add New Schedule</h1>
+                    <form onSubmit={handleSubmit} style={{ width: 400, marginLeft: '4.3em' }}>
                         <TextField
                             label="Schedule Name"
                             type="text"
@@ -58,11 +58,12 @@ function ManageAddSchedule() {
                             value={schedulename}
                             onChange={(event) => setSchedulename(event.target.value)}
                             required
-                            style={{ width: 530 }}
+                            style={{ width: 260 }}
                         />
-                        <div style={{ marginBottom: '10px' }}>
+
+                        <div style={{ marginBottom: '10px', marginTop: '10px', width: '400px' }}>
                             <label style={{ display: 'block', fontWeight: 'bold' }}>Start Time:</label>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} >
                                 <TimePicker
                                     ampm={true}
                                     value={startTime}
@@ -75,7 +76,7 @@ function ManageAddSchedule() {
                             </LocalizationProvider>
                         </div>
 
-                        <div style={{ marginBottom: '10px' }}>
+                        <div style={{ marginBottom: '10px', marginTop: '10px' }}>
                             <label style={{ display: 'block', fontWeight: 'bold' }}>End Time:</label>
                             <LocalizationProvider dateAdapter={AdapterDayjs} >
                                 <TimePicker

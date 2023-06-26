@@ -99,12 +99,12 @@ function Premium() {
             ✓ You will able to join our special yoga class at saturday weekly
             </Typography>
             <Typography className="font-bold" variant="subtitle1">
-            ✓ You will only pay 1.690.000VND for this package instead of the 3.700.000VND.
+            ✓ You will only pay 1.690.000VND for this package instead of the 4.500.000VND.
             </Typography>
           </div>
           <div className="flex items-center gap-3 font-bold">
             <div onClick={handleSubmitStart} className={styles.startBtn}>
-             Enroll now
+             Enroll
             </div>
             <a href="#premium_packet">
               <div className={styles.moreBtn}>Packages</div>
@@ -132,7 +132,7 @@ function Premium() {
             nowrap={true}
             variant="h4"
           >
-             Premium Mini
+             MINI PREMIUM PACKAGES
           </Typography>
         </div>
         <div>
@@ -143,20 +143,20 @@ function Premium() {
         </div>
         <div className="flex  justify-center justify-items-center items-center gap-2">
           
-          <div className={styles.tryByDay}>
+        
              <a href="#premium_packet">
-              <div >
+              <div  className={styles.tryByDay}>
                 Free trial
               </div>
             </a>
-            </div>
-          <div className={styles.tryByWeek}> 
+          
+
           <a href="#premium_packet">
-              <div >
+              <div  className={styles.tryByDay}>
                 Spring Flower
                 </div>
             </a>
-            </div>
+           
         </div>
         <div>
           {/* <a>
