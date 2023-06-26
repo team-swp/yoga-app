@@ -6,17 +6,20 @@ import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../../../context/AuthGoogleContext";
 import { userSelector } from "../../../../redux/selectors";
 import { getAvatarToAWS } from "../../../../helper/loginAPI";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
-import NewspaperIcon from "@mui/icons-material/Newspaper";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
+import StarIcon from "@mui/icons-material/Star";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -31,6 +34,7 @@ const style = {
 const cx = classNames.bind(styles);
 
 function Sidebar() {
+  const navigate = useNavigate();
   const { logOut } = UserAuth();
   const [checkMember, setCheckMember] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -53,6 +57,10 @@ function Sidebar() {
 
   const handleLogout = () => {
     logOut();
+  };
+
+  const handleBecomeMember = () => {
+    navigate("/premium");
   };
 
   const [open, setOpen] = useState(false);
@@ -88,8 +96,9 @@ function Sidebar() {
         >
           <img
             src={user.avatar}
-            className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
-              } object-cover h-44`}
+            className={` ${
+              checkMember ? styles.profile_img : styles.profile_img_normal
+            } object-cover h-44`}
             alt="avatar"
             onError={loadImageAgain}
           />
@@ -164,10 +173,11 @@ function Sidebar() {
                     >
                       <img
                         src={user.avatar}
-                        className={` ${checkMember
+                        className={` ${
+                          checkMember
                             ? styles.profile_img_details
                             : styles.profile_img_details_normal
-                          } object-cover h-44`}
+                        } object-cover h-44`}
                         alt="avatar"
                         onError={loadImageAgain}
                       />
@@ -192,31 +202,32 @@ function Sidebar() {
                     borderBottom: "2px solid #C4DFDF",
                     margin: "5px 20px",
                   }}
-                >
-                  {" "}
-                </div>
-                <div
-                  style={{
-                    flexBasis: "100%",
-                    marginTop: "10px",
-                    margin: "0 10px",
-                    color: "blueviolet",
-                    fontWeight: "bold",
-                    borderRadius: "10px",
-                    padding: "10px 0",
-                  }}
-                  className={styles.profile}
-                >
-                  <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                    {checkMember ? "Your are a member" : "Become a member"}
+                ></div>
+                {(user.role === "user" || user.role === "instructor") && (
+                  <div
+                    style={{
+                      flexBasis: "100%",
+                      marginTop: "10px",
+                      margin: "0 10px",
+                      color: "blueviolet",
+                      fontWeight: "bold",
+                      borderRadius: "10px",
+                      padding: "10px 0",
+                    }}
+                    className={styles.profile}
+                    onClick={handleBecomeMember}
+                  >
+                    <div style={{ margin: "auto 0", marginLeft: "20px" }}>
+                      {checkMember ? "Your are a member" : "Become a member"}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <Link to="/timetable">
                 <div className={styles.sidebar_details}>
                   <CalendarMonthIcon className={styles.sidebar_details_icon} />
-                  <div>Weekly Schedule</div>
+                  <div>Schedule</div>
                   <ArrowForwardIosOutlinedIcon
                     className={styles.sidebar_details_arrow}
                   />
@@ -234,10 +245,10 @@ function Sidebar() {
                   />
                 </div>
               </Link>
-              <Link to="/*">
+              <Link to="/premium">
                 <div className={styles.sidebar_details}>
-                  <NewspaperIcon className={styles.sidebar_details_icon} />
-                  <div>News</div>
+                  <StarIcon className={styles.sidebar_details_icon} />
+                  <div>Premium</div>
                   <ArrowForwardIosOutlinedIcon
                     className={styles.sidebar_details_arrow}
                   />
@@ -246,9 +257,7 @@ function Sidebar() {
               {user.role === "staff" && (
                 <Link to="/staffmanage">
                   <div className={styles.sidebar_details}>
-                    <HomeRepairServiceIcon
-                      className={styles.sidebar_details_icon}
-                    />
+                    <BadgeIcon className={styles.sidebar_details_icon} />
                     <div> Staff Manager</div>
                     <ArrowForwardIosOutlinedIcon
                       className={styles.sidebar_details_arrow}
@@ -257,7 +266,32 @@ function Sidebar() {
                 </Link>
               )}
 
-              <Link to="/*">
+              {user.role === "admin" && (
+                <div>
+                  <Link to="/admin">
+                    <div className={styles.sidebar_details}>
+                      <AdminPanelSettingsIcon
+                        className={styles.sidebar_details_icon}
+                      />
+                      <div>User Manager</div>
+                      <ArrowForwardIosOutlinedIcon
+                        className={styles.sidebar_details_arrow}
+                      />
+                    </div>
+                  </Link>
+                  <Link to="/dashboard">
+                    <div className={styles.sidebar_details}>
+                      <EqualizerIcon className={styles.sidebar_details_icon} />
+                      <div>Dashboard</div>
+                      <ArrowForwardIosOutlinedIcon
+                        className={styles.sidebar_details_arrow}
+                      />
+                    </div>
+                  </Link>
+                </div>
+              )}
+
+              {/* <Link to="/*">
                 <div className={styles.sidebar_details}>
                   <HomeRepairServiceIcon
                     className={styles.sidebar_details_icon}
@@ -267,7 +301,7 @@ function Sidebar() {
                     className={styles.sidebar_details_arrow}
                   />
                 </div>
-              </Link>
+              </Link> */}
               <div>
                 <div className={styles.sidebar_details} onClick={handleOpen}>
                   <LogoutIcon className={styles.sidebar_details_icon} />
