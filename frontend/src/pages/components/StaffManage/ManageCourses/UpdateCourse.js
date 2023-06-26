@@ -17,15 +17,12 @@ import {
 } from "@mui/material";
 
 import { Link, useParams } from "react-router-dom";
-import { getCourse, updateCourse } from "../../../../helper/courseAPI";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-// import { getSemester } from "../../../helper/semesterAPI";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import Header from "../../Header/Header";
-import Footer from "../../Footer/Footer";
-import { getSemester } from "../../../../helper/semesterAPI";
 import axios from "axios";
-
+import toast, { Toaster } from "react-hot-toast";
+import { updateCourse } from "../../../../helper/courseAPI";
 function UpdateCourse() {
   const [course, setCourse] = useState({});
   const courseId = useParams();
@@ -44,46 +41,48 @@ function UpdateCourse() {
   const [semesterList, setSemesterList] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsSubmitting(true);
-    setErrorMessage(null);
-    setUpdateSuccess(false);
+  const formik = useFormik({
+    initialValues: {
+      coursename: "",
+      description: "",
+      price: 0,
+      willLearn: "",
+      requirement: "",
+      forWho: "",
+      images: "",
+      videos: "",
+    },
+    validationSchema: Yup.object({
+      coursename: Yup.string().required("Course Name is required"),
+      description: Yup.string().required("Description is required"),
+      price: Yup.number().required("Price is required"),
+      willLearn: Yup.string().required("What you will learn is required"),
+      requirement: Yup.string().required("Requirements are required"),
+      forWho: Yup.string().required("Target audience is required"),
+      images: Yup.mixed().required("Images are required"),
+      videos: Yup.mixed().required("Videos are required"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        // Lấy id của học kỳ từ selectedSemester
+        const semesterId = selectedSemester ? selectedSemester._id : null;
 
-    try {
-      // Lấy id của học kỳ từ selectedSemester
-      const semesterId = selectedSemester ? selectedSemester._id : null;
+        const response = await updateCourse({
+          _id: courseId.id,
+          ...values,
+          semester_id: semesterId, // Sử dụng id học kỳ
+        });
 
-      const response = await updateCourse({
-        _id: courseId.id,
-        coursename: coursename,
-        description: description,
-        price: price,
-        willLearn: willLearn,
-        requirement: requirement,
-        forWho: forWho,
-        semester_id: semesterId, // Sử dụng id học kỳ
-        videos,
-        images,
-      });
-
-      if (response) {
-        setUpdateSuccess(true);
-        setTimeout(() => {
-          setUpdateSuccess(false);
-        }, 3000);
-      } else {
-        setErrorMessage("Failed to update course");
+        if (response) {
+          toast.success("Updated course success");
+        } else {
+          toast.error("Failed to update");
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-      setErrorMessage(
-        "Error occurred while updating the course. Please try again later."
-      );
-    }
-
-    setIsSubmitting(false);
-  };
+    },
+  });
 
   useEffect(() => {
     async function fetchData() {
@@ -111,15 +110,17 @@ function UpdateCourse() {
         const course = combinedData.find((obj) => obj._id === courseId.id);
         console.log(course);
         setCourse(course);
-        setCoursename(course.coursename);
-        setDescription(course.description);
-        setPrice(course.price);
-        setWillLearn(course.willLearn);
-        setRequirement(course.requirement);
-        setForWho(course.forWho);
-        setSemesterId(course.semestername);
-        setImages(course.images);
-        setVideos(course.videos);
+        formik.setValues({
+          coursename: course.coursename,
+          description: course.description,
+          price: course.price,
+          willLearn: course.willLearn,
+          requirement: course.requirement,
+          forWho: course.forWho,
+          images: course.images,
+          videos: course.videos,
+        });
+        setSelectedSemester(combinedData.semester.semestername);
       } catch (error) {
         console.error(error);
       }
@@ -146,6 +147,8 @@ function UpdateCourse() {
 
   return (
     <>
+      <Header />
+      <Toaster />
       <Container maxWidth="md" sx={styles.container}>
         <div
           style={{
@@ -158,44 +161,8 @@ function UpdateCourse() {
           }}
         >
           Update Course
-          {errorMessage && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "red",
-                color: "white",
-                padding: "10px",
-                borderRadius: "8px",
-                marginBottom: "20px",
-              }}
-            >
-              <CancelOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">{errorMessage}</Typography>
-            </div>
-          )}
-          {updateSuccess && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#4caf50",
-                color: "white",
-                padding: "10px",
-                borderRadius: "8px",
-                marginBottom: "20px",
-              }}
-            >
-              <CheckCircleOutlineOutlinedIcon sx={{ mr: 1 }} />
-              <Typography variant="body1">
-                Course updated successfully!
-              </Typography>
-            </div>
-          )}
         </div>
-        <form onSubmit={handleSubmit} sx={styles.form}>
+        <form onSubmit={formik.handleSubmit} sx={styles.form}>
           <TextField
             label="Course Name"
             type="text"
@@ -204,17 +171,38 @@ function UpdateCourse() {
             onChange={(event) => setCoursename(event.target.value)}
             required
             sx={styles.textField}
+            error={
+              formik.touched.coursename && formik.errors.coursename
+                ? true
+                : false
+            }
+            helperText={
+              formik.touched.coursename && formik.errors.coursename
+                ? formik.errors.coursename
+                : ""
+            }
           />
           <TextField
             label="Description"
             type="text"
             name="description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             required
             multiline
             rows={4}
             sx={styles.textField}
+            error={
+              formik.touched.description && formik.errors.description
+                ? true
+                : false
+            }
+            helperText={
+              formik.touched.description && formik.errors.description
+                ? formik.errors.description
+                : ""
+            }
           />
           <TextField
             label="Price"
@@ -224,39 +212,76 @@ function UpdateCourse() {
             onChange={(event) => setPrice(event.target.value)}
             required
             sx={styles.textField}
+            error={
+              formik.touched.price && formik.errors.price ? true : false
+            }
+            helperText={
+              formik.touched.price && formik.errors.price
+                ? formik.errors.price
+                : ""
+            }
           />
           <TextField
             label="What you will learn"
             type="text"
             name="willLearn"
-            value={willLearn}
-            onChange={(event) => setWillLearn(event.target.value)}
+            value={formik.values.willLearn}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             required
             multiline
             rows={4}
             sx={styles.textField}
+            error={
+              formik.touched.willLearn && formik.errors.willLearn
+                ? true
+                : false
+            }
+            helperText={
+              formik.touched.willLearn && formik.errors.willLearn
+                ? formik.errors.willLearn
+                : ""
+            }
           />
           <TextField
             label="Requirements"
             type="text"
             name="requirement"
-            value={requirement}
-            onChange={(event) => setRequirement(event.target.value)}
+            value={formik.values.requirement}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             required
             multiline
             rows={4}
             sx={styles.textField}
+            error={
+              formik.touched.requirement && formik.errors.requirement
+                ? true
+                : false
+            }
+            helperText={
+              formik.touched.requirement && formik.errors.requirement
+                ? formik.errors.requirement
+                : ""
+            }
           />
           <TextField
             label="Who is this course for?"
             type="text"
             name="forWho"
-            value={forWho}
-            onChange={(event) => setForWho(event.target.value)}
+            value={formik.values.forWho}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             required
             multiline
             rows={4}
             sx={styles.textField}
+            error={formik.touched.forWho && formik.errors.forWho ? true : false}
+            helperText={
+              formik.touched.forWho && formik.errors.forWho
+                ? formik.errors.forWho
+                : ""
+            }
           />
           <Autocomplete
             value={selectedSemester}
@@ -271,43 +296,65 @@ function UpdateCourse() {
                 name="semester_id"
                 required
                 sx={styles.textField}
+                error={
+                  formik.touched.semester_id && formik.errors.semester_id
+                    ? true
+                    : false
+                }
+                helperText={
+                  formik.touched.semester_id && formik.errors.semester_id
+                    ? formik.errors.semester_id
+                    : ""
+                }
               />
             )}
           />
           <TextField
             label="Images (comma separated URLs)"
             type="text"
-            value={images}
-            onChange={(e) => setImages(e.target.value)}
+            name="images"
+            value={formik.values.images}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             fullWidth
             required
             sx={styles.textField}
+            error={formik.touched.images && formik.errors.images ? true : false}
+            helperText={
+              formik.touched.images && formik.errors.images
+                ? formik.errors.images
+                : ""
+            }
           />
           <TextField
             label="Videos (comma separated URLs)"
             type="text"
-            value={videos}
-            onChange={(e) => setVideos(e.target.value)}
+            name="videos"
+            value={formik.values.videos}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             fullWidth
             required
             sx={styles.textField}
+            error={formik.touched.videos && formik.errors.videos ? true : false}
+            helperText={
+              formik.touched.videos && formik.errors.videos
+                ? formik.errors.videos
+                : ""
+            }
           />
 
-          {isSubmitting ? (
-            <CircularProgress style={{ marginTop: "1rem" }} />
-          ) : (
-            <Button
-              color="success"
-              type="submit"
-              variant="contained"
-              sx={styles.button}
-            >
-              Update Course
-            </Button>
-          )}
+          <Button
+            color="success"
+            type="submit"
+            variant="contained"
+            sx={styles.button}
+          >
+            Update Course
+          </Button>
 
           <Link
-            to="/managecourse"
+            to="/staffmanage"
             style={{
               float: "right",
               backgroundColor: "grey",

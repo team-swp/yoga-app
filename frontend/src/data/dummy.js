@@ -70,13 +70,6 @@ export const kanbanGrid = [
 
   { headerText: "In Progress", keyField: "InProgress", allowToggle: true },
 
-  {
-    headerText: "Testing",
-    keyField: "Testing",
-    allowToggle: true,
-    isExpanded: false,
-  },
-
   { headerText: "Done", keyField: "Close", allowToggle: true },
 ];
 const gridEmployeeProfile = (props) => (
@@ -525,10 +518,6 @@ export const links = [
     title: "Pages",
     links: [
       {
-        name: "orders",
-        icon: <AiOutlineShoppingCart />,
-      },
-      {
         name: "employees",
         icon: <IoMdContacts />,
       },
@@ -541,10 +530,10 @@ export const links = [
   {
     title: "Apps",
     links: [
-      {
-        name: "calendar",
-        icon: <AiOutlineCalendar />,
-      },
+      // {
+      //   name: "calendar",
+      //   icon: <AiOutlineCalendar />,
+      // },
       {
         name: "kanban",
         icon: <BsKanban />,
@@ -563,10 +552,6 @@ export const links = [
     title: "Charts",
     links: [
       {
-        name: "line",
-        icon: <AiOutlineStock />,
-      },
-      {
         name: "area",
         icon: <AiOutlineAreaChart />,
       },
@@ -576,24 +561,12 @@ export const links = [
         icon: <AiOutlineBarChart />,
       },
       {
-        name: "pie",
-        icon: <FiPieChart />,
-      },
-      {
         name: "financial",
         icon: <RiStockLine />,
       },
       {
         name: "color-mapping",
         icon: <BsBarChart />,
-      },
-      {
-        name: "pyramid",
-        icon: <GiLouvrePyramid />,
-      },
-      {
-        name: "stacked",
-        icon: <AiOutlineBarChart />,
       },
     ],
   },
