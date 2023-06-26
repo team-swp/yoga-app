@@ -44,8 +44,7 @@ export const setCourseId = (courseId) => ({
   type: "set_course_id",
   payload: { courseId },
 });
-
 export const setPremiumData = (data) => ({
   type: "payment/premiumData",
-  payload: data,
+  payload:data,
 });

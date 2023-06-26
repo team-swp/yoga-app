@@ -4,8 +4,6 @@ require("dotenv").config();
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const compression = require("compression")
-
 app.use(express.json())
 //env
 const PORT = process.env.PORT;
@@ -20,16 +18,8 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.use(compression({
-  level:6,
-  threshold:100*1000,
-  filter:(req,res)=>{
-    if(req.headers['x-no-compression']){
-      return false
-    }
-    return compression.filter(req,res)
-  }
-}))
+// app.use(express.json())
+
 //connect database
 mongoose.connect(MONGO_URI);
 const db = mongoose.connection;

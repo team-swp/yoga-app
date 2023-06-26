@@ -1,18 +1,59 @@
 import { useEffect, useState } from "react";
-import { Container, TextField, Button, Autocomplete } from "@mui/material";
+import {
+  Container,
+  TextField,
+  Button,
+  Select,
+  Menu,
+  MenuItem,
+  FormGroup,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Checkbox,
+  CircularProgress,
+  Typography,
+  Autocomplete,
+} from "@mui/material";
+
 import { Link, useParams } from "react-router-dom";
+<<<<<<< HEAD
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Header from "../../Header/Header";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { updateCourse } from "../../../../helper/courseAPI";
+=======
+import { getCourse, updateCourse } from "../../../../helper/courseAPI";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+// import { getSemester } from "../../../helper/semesterAPI";
+import Header from "../../Header/Header";
+import Footer from "../../Footer/Footer";
+import { getSemester } from "../../../../helper/semesterAPI";
+import axios from "axios";
+
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
 function UpdateCourse() {
   const [course, setCourse] = useState({});
   const courseId = useParams();
+  const [coursename, setCoursename] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [willLearn, setWillLearn] = useState("");
+  const [requirement, setRequirement] = useState("");
+  const [forWho, setForWho] = useState("");
+  const [semesterId, setSemesterId] = useState("");
+  const [videos, setVideos] = useState([]);
+  const [images, setImages] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const [semesterList, setSemesterList] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
 
+<<<<<<< HEAD
   const formik = useFormik({
     initialValues: {
       coursename: "",
@@ -55,6 +96,48 @@ function UpdateCourse() {
       }
     },
   });
+=======
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    setUpdateSuccess(false);
+
+    try {
+      // Lấy id của học kỳ từ selectedSemester
+      const semesterId = selectedSemester ? selectedSemester._id : null;
+
+      const response = await updateCourse({
+        _id: courseId.id,
+        coursename: coursename,
+        description: description,
+        price: price,
+        willLearn: willLearn,
+        requirement: requirement,
+        forWho: forWho,
+        semester_id: semesterId, // Sử dụng id học kỳ
+        videos,
+        images,
+      });
+
+      if (response) {
+        setUpdateSuccess(true);
+        setTimeout(() => {
+          setUpdateSuccess(false);
+        }, 3000);
+      } else {
+        setErrorMessage("Failed to update course");
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(
+        "Error occurred while updating the course. Please try again later."
+      );
+    }
+
+    setIsSubmitting(false);
+  };
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
 
   useEffect(() => {
     async function fetchData() {
@@ -82,6 +165,7 @@ function UpdateCourse() {
         const course = combinedData.find((obj) => obj._id === courseId.id);
         console.log(course);
         setCourse(course);
+<<<<<<< HEAD
         formik.setValues({
           coursename: course.coursename,
           description: course.description,
@@ -93,6 +177,17 @@ function UpdateCourse() {
           videos: course.videos,
         });
         setSelectedSemester(combinedData.semester.semestername);
+=======
+        setCoursename(course.coursename);
+        setDescription(course.description);
+        setPrice(course.price);
+        setWillLearn(course.willLearn);
+        setRequirement(course.requirement);
+        setForWho(course.forWho);
+        setSemesterId(course.semestername);
+        setImages(course.images);
+        setVideos(course.videos);
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
       } catch (error) {
         console.error(error);
       }
@@ -119,8 +214,11 @@ function UpdateCourse() {
 
   return (
     <>
+<<<<<<< HEAD
       <Header />
       <Toaster />
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
       <Container maxWidth="md" sx={styles.container}>
         <div
           style={{
@@ -133,17 +231,58 @@ function UpdateCourse() {
           }}
         >
           Update Course
+<<<<<<< HEAD
         </div>
         <form onSubmit={formik.handleSubmit} sx={styles.form}>
+=======
+          {errorMessage && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "red",
+                color: "white",
+                padding: "10px",
+                borderRadius: "8px",
+                marginBottom: "20px",
+              }}
+            >
+              <CancelOutlinedIcon sx={{ mr: 1 }} />
+              <Typography variant="body1">{errorMessage}</Typography>
+            </div>
+          )}
+          {updateSuccess && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#4caf50",
+                color: "white",
+                padding: "10px",
+                borderRadius: "8px",
+                marginBottom: "20px",
+              }}
+            >
+              <CheckCircleOutlineOutlinedIcon sx={{ mr: 1 }} />
+              <Typography variant="body1">
+                Course updated successfully!
+              </Typography>
+            </div>
+          )}
+        </div>
+        <form onSubmit={handleSubmit} sx={styles.form}>
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
           <TextField
             label="Course Name"
             type="text"
             name="coursename"
-            value={formik.values.coursename}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={coursename}
+            onChange={(event) => setCoursename(event.target.value)}
             required
             sx={styles.textField}
+<<<<<<< HEAD
             error={
               formik.touched.coursename && formik.errors.coursename
                 ? true
@@ -154,18 +293,26 @@ function UpdateCourse() {
                 ? formik.errors.coursename
                 : ""
             }
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
           />
           <TextField
             label="Description"
             type="text"
             name="description"
+<<<<<<< HEAD
             value={formik.values.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+=======
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
             required
             multiline
             rows={4}
             sx={styles.textField}
+<<<<<<< HEAD
             error={
               formik.touched.description && formik.errors.description
                 ? true
@@ -176,16 +323,18 @@ function UpdateCourse() {
                 ? formik.errors.description
                 : ""
             }
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
           />
           <TextField
             label="Price"
             type="number"
             name="price"
-            value={formik.values.price}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={price}
+            onChange={(event) => setPrice(event.target.value)}
             required
             sx={styles.textField}
+<<<<<<< HEAD
             error={
               formik.touched.price && formik.errors.price ? true : false
             }
@@ -194,18 +343,26 @@ function UpdateCourse() {
                 ? formik.errors.price
                 : ""
             }
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
           />
           <TextField
             label="What you will learn"
             type="text"
             name="willLearn"
+<<<<<<< HEAD
             value={formik.values.willLearn}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+=======
+            value={willLearn}
+            onChange={(event) => setWillLearn(event.target.value)}
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
             required
             multiline
             rows={4}
             sx={styles.textField}
+<<<<<<< HEAD
             error={
               formik.touched.willLearn && formik.errors.willLearn
                 ? true
@@ -216,18 +373,26 @@ function UpdateCourse() {
                 ? formik.errors.willLearn
                 : ""
             }
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
           />
           <TextField
             label="Requirements"
             type="text"
             name="requirement"
+<<<<<<< HEAD
             value={formik.values.requirement}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+=======
+            value={requirement}
+            onChange={(event) => setRequirement(event.target.value)}
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
             required
             multiline
             rows={4}
             sx={styles.textField}
+<<<<<<< HEAD
             error={
               formik.touched.requirement && formik.errors.requirement
                 ? true
@@ -238,24 +403,34 @@ function UpdateCourse() {
                 ? formik.errors.requirement
                 : ""
             }
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
           />
           <TextField
             label="Who is this course for?"
             type="text"
             name="forWho"
+<<<<<<< HEAD
             value={formik.values.forWho}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+=======
+            value={forWho}
+            onChange={(event) => setForWho(event.target.value)}
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
             required
             multiline
             rows={4}
             sx={styles.textField}
+<<<<<<< HEAD
             error={formik.touched.forWho && formik.errors.forWho ? true : false}
             helperText={
               formik.touched.forWho && formik.errors.forWho
                 ? formik.errors.forWho
                 : ""
             }
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
           />
           <Autocomplete
             value={selectedSemester}
@@ -270,6 +445,7 @@ function UpdateCourse() {
                 name="semester_id"
                 required
                 sx={styles.textField}
+<<<<<<< HEAD
                 error={
                   formik.touched.semester_id && formik.errors.semester_id
                     ? true
@@ -280,11 +456,14 @@ function UpdateCourse() {
                     ? formik.errors.semester_id
                     : ""
                 }
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
               />
             )}
           />
           <TextField
             label="Images (comma separated URLs)"
+<<<<<<< HEAD
             type="text"
             name="images"
             value={formik.values.images}
@@ -329,6 +508,40 @@ function UpdateCourse() {
 
           <Link
             to="/staffmanage"
+=======
+            type="text"
+            value={images}
+            onChange={(e) => setImages(e.target.value)}
+            fullWidth
+            required
+            sx={styles.textField}
+          />
+          <TextField
+            label="Videos (comma separated URLs)"
+            type="text"
+            value={videos}
+            onChange={(e) => setVideos(e.target.value)}
+            fullWidth
+            required
+            sx={styles.textField}
+          />
+
+          {isSubmitting ? (
+            <CircularProgress style={{ marginTop: "1rem" }} />
+          ) : (
+            <Button
+              color="success"
+              type="submit"
+              variant="contained"
+              sx={styles.button}
+            >
+              Update Course
+            </Button>
+          )}
+
+          <Link
+            to="/managecourse"
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
             style={{
               float: "right",
               backgroundColor: "grey",
@@ -350,9 +563,11 @@ function UpdateCourse() {
     </>
   );
 }
-
 export default UpdateCourse;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 65377656e335824ddc87cae7be9a821275dde5ed
 const styles = {
   container: {
     marginTop: "2rem",

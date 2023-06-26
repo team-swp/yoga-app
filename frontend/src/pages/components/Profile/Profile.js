@@ -151,10 +151,6 @@ function Profile() {
     }
   };
 
-  const handleLogout = () => {
-    logOut();
-  };
-
   const handleScreen = () => {
     if (screen) {
       setScreen(false);

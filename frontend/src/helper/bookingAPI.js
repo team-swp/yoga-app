@@ -10,14 +10,6 @@ export async function getBooking() {
     errorMessage: "Cannot Get Booking",
   });
 }
-export async function getBookingWithPaging(currentPage, perPage) {
-  let apiPath = `/api/bookingsPaging/get?page=${currentPage}&limit=${perPage}`;
-
-  return await getApi({
-    apiPath,
-    errorMessage: "Cannot Get Booking",
-  });
-}
 
 export async function addBooking(respone) {
   //respone là 1 object nhận giá trị cần để add, add thì ko cần id
@@ -47,6 +39,6 @@ export async function checkBooking() {
     );
     return Promise.resolve({ data });
   } catch (error) {
-    return Promise.reject({ error });
+    return Promise.reject({ error});
   }
 }

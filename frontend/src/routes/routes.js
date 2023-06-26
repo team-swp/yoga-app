@@ -20,24 +20,48 @@ import {
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
+import ManageClass from "../pages/components/StaffManage/ManageClass/ManageClass";
 import AddNewClass from "../pages/components/StaffManage/ManageClass/AddNewClass";
 import UpdateClass from "../pages/components/StaffManage/ManageClass/UpdateClass";
+import ManageSchedule from "../pages/components/StaffManage/ManageSchedule/ManageSchedule";
 import ManageAddSchedule from "../pages/components/StaffManage/ManageSchedule/ManageAddSchedule";
 import ManageEditSchedule from "../pages/components/StaffManage/ManageSchedule/ManageEditSchedule";
 import ManageCourses from "../pages/components/StaffManage/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCourse";
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
+import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
-import Premium from "../pages/components/MemberPacket/Premium";
-import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
-import AdminHome from "../pages/components/Admin/AdminHome";
+import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 
-import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
-import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
-import CourseItems from "../pages/components/Courses/CourseItems";
+import {
+  Ecommerce,
+  Orders,
+  Calendar,
+  Employees,
+  Stacked,
+  Pyramid,
+  Customers,
+  Kanban,
+  Line,
+  Area,
+  Bar,
+  Pie,
+  Financial,
+  ColorPicker,
+  ColorMapping,
+  Editor,
+} from "../pages/components/DashBoard/pages";
+
+import {
+  Cart,
+  Chat,
+  Notification,
+  UserProfile,
+} from "../pages/components/DashBoard/components";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
-
+import Admin from "../pages/components/Admin/AdminHome";
+import Premium from "../pages/components/MemberPacket/Premium";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -46,10 +70,6 @@ const routers = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses></Courses>,
-  },
-  {
-    path: "/courseitem",
-    element: <CourseItems></CourseItems>,
   },
   {
     path: "/course",
@@ -101,12 +121,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element: (
-      <ProtectRouteCheckout>
-        {" "}
-        <Checkout />
-      </ProtectRouteCheckout>
-    ),
+    element:<ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>  ,
+  },
+  {
+    path: "/premium",
+    element: <Premium />,
   },
   {
     path: "/paymentstatus",
@@ -118,102 +137,144 @@ const routers = createBrowserRouter([
   },
   {
     path: "/staffmanage",
-    element: (
-      <ProtectRoute>
-        <StaffManage />
-      </ProtectRoute>
-    ),
+    element: <StaffManage></StaffManage>,
   },
-
+  {
+    path: "/manageclass",
+    element: <ManageClass></ManageClass>,
+  },
   { path: "/managemember", element: <ManageMember /> },
   {
     path: "/addnewclass",
-    element: (
-      <ProtectRoute>
-        <AddNewClass />
-      </ProtectRoute>
-    ),
+    element: <AddNewClass></AddNewClass>,
   },
   {
     path: "/updateclass/:id",
-    element: (
-      <ProtectRoute>
-        <UpdateClass />
-      </ProtectRoute>
-    ),
+    element: <UpdateClass></UpdateClass>,
   },
-
+  {
+    path: "/manageschedule",
+    element: <ManageSchedule></ManageSchedule>,
+  },
   {
     path: "/addnewschedule",
-    element: (
-      <ProtectRoute>
-        <ManageAddSchedule />
-      </ProtectRoute>
-    ),
+    element: <ManageAddSchedule></ManageAddSchedule>,
   },
   {
     path: "/updateschedule/:id",
-    element: (
-      <ProtectRoute>
-        <ManageEditSchedule />
-      </ProtectRoute>
-    ),
+    element: <ManageEditSchedule></ManageEditSchedule>,
+  },
+  {
+    path: "/managecourse",
+    element: <ManageCourses></ManageCourses>,
   },
   {
     path: "/addnewcourse",
-    element: (
-      <ProtectRoute>
-        <AddNewCourse />
-      </ProtectRoute>
-    ),
+    element: <AddNewCourse></AddNewCourse>,
   },
   {
     path: "/updatecourse/:id",
-    element: (
-      <ProtectRoute>
-        <UpdateCourse />
-      </ProtectRoute>
-    ),
+    element: <UpdateCourse></UpdateCourse>,
+  },
+  {
+    path: "/managesemester",
+    element: <ManageSemester></ManageSemester>,
   },
   {
     path: "/addnewsemester",
-    element: (
-      <ProtectRoute>
-        <ManageAddSemester />
-      </ProtectRoute>
-    ),
+    element: <ManageAddSemester></ManageAddSemester>,
   },
   {
     path: "/updatesemester/:id",
-    element: (
-      <ProtectRoute>
-        <ManageUpdateSemester />
-      </ProtectRoute>
-    ),
+    element: <ManageUpdateSemester></ManageUpdateSemester>,
   },
   {
-    path: "/premium",
-    element: <Premium></Premium>,
+    path: "/ecommerce",
+    element: <Ecommerce></Ecommerce>,
   },
   {
-    path: "/admin",
-    element: (
-      <ProtectRoute>
-        <AdminHome />
-      </ProtectRoute>
-    ),
+    path: "/orders",
+    element: <Orders></Orders>,
+  },
+  {
+    path: "/employees",
+    element: <Employees></Employees>,
+  },
+  {
+    path: "/customers",
+    element: <Customers></Customers>,
+  },
+  {
+    path: "/kanban",
+    element: <Kanban></Kanban>,
+  },
+  {
+    path: "/editor",
+    element: <Editor></Editor>,
+  },
+  {
+    path: "/calendar",
+    element: <Calendar></Calendar>,
+  },
+  {
+    path: "/color-picker",
+    element: <ColorPicker></ColorPicker>,
+  },
+  {
+    path: "/line",
+    element: <Line></Line>,
+  },
+  {
+    path: "/area",
+    element: <Area></Area>,
+  },
+  {
+    path: "/bar",
+    element: <Bar></Bar>,
+  },
+  {
+    path: "/pie",
+    element: <Pie></Pie>,
+  },
+  {
+    path: "/financial",
+    element: <Financial></Financial>,
+  },
+  {
+    path: "/color-mapping",
+    element: <ColorMapping></ColorMapping>,
+  },
+  {
+    path: "/pyramid",
+    element: <Pyramid></Pyramid>,
+  },
+  {
+    path: "/stacked",
+    element: <Stacked></Stacked>,
+  },
+  {
+    path: "/stacked",
+    element: <Stacked></Stacked>,
+  },
+  {
+    path: "/cart",
+    element: <Cart></Cart>,
+  },
+  {
+    path: "/chat",
+    element: <Chat></Chat>,
+  },
+  {
+    path: "/notification",
+    element: <Notification></Notification>,
   },
   {
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
   },
   {
-    path: "/addnewpremium",
-    element: <AddNewPremium></AddNewPremium>,
-  },
-  {
-    path: "/updatepremiumpack/:id",
-    element: <UpdatePremiumPack></UpdatePremiumPack>,
+    path: "/admin",
+    element: <Admin></Admin>,
   },
 ]);
 
