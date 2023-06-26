@@ -7,6 +7,10 @@ const paymentMethodSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    image:{
+      type: String,
+      required:false
+    },
     status: {
       type: Boolean,
       default: true,

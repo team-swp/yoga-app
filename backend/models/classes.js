@@ -109,6 +109,7 @@ classSchema.pre("save", async function (next) {
     "sunday",
   ];
 
+
   // Kiểm tra days chỉ chứa các giá trị thứ hợp lệ
   const invalidDays = this.days.filter((day) => !allowedDays.includes(day.toLowerCase()));
   if (invalidDays.length > 0) {

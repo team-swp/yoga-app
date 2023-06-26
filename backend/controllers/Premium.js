@@ -90,4 +90,3 @@ module.exports.getPremiumById = async (req, res, next) => {
   res.premium = premium;
   next();
 };
-
