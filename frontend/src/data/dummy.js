@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   AiOutlineCalendar,
   AiOutlineShoppingCart,
@@ -2929,17 +2929,17 @@ export const dropdownData = [
   },
 ];
 export const SparklineAreaData = [
-  { x: 1, yval: 1},
-  { x: 2, yval: 1},
-  { x: 3, yval: 1},
-  { x: 4, yval: 1},
+  { x: 1, yval: 1 },
+  { x: 2, yval: 1 },
+  { x: 3, yval: 1 },
+  { x: 4, yval: 1 },
   { x: 5, yval: 1 },
-  { x: 6, yval: 1},
-  { x: 7, yval: 1},
-  { x: 8, yval: 1},
-  { x: 9, yval: 1},
+  { x: 6, yval: 1 },
+  { x: 7, yval: 1 },
+  { x: 8, yval: 1 },
+  { x: 9, yval: 1 },
   { x: 10, yval: 1 },
-  { x: 11, yval: 1},
+  { x: 11, yval: 1 },
   { x: 12, yval: 1 },
 ];
 
@@ -2973,7 +2973,6 @@ export const lineChartData = [
   //   { x: new Date(2011, 0, 1), y: 100 },
   // ],
 ];
-
 
 export const lineCustomSeries = [
   {
@@ -3043,17 +3042,15 @@ export const ecomPieChartData = [
   { x: "2021", y: 18, text: "25%" },
 ];
 
-
-
 export const stackedChartData = [
   [
-    { x: 'Jan', y: 111.1 },
-    { x: 'Feb', y: 127.3 },
-    { x: 'Mar', y: 143.4 },
-    { x: 'Apr', y: 159.9 },
-    { x: 'May', y: 159.9 },
-    { x: 'Jun', y: 159.9 },
-    { x: 'July', y: 159.9 },
+    { x: "Jan", y: 111.1 },
+    { x: "Feb", y: 127.3 },
+    { x: "Mar", y: 143.4 },
+    { x: "Apr", y: 159.9 },
+    { x: "May", y: 159.9 },
+    { x: "Jun", y: 159.9 },
+    { x: "July", y: 159.9 },
   ],
 ];
 

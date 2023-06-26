@@ -33,7 +33,6 @@ import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/Man
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
 
-
 import {
   Ecommerce,
   Orders,
@@ -53,7 +52,12 @@ import {
   Editor,
 } from "../pages/components/DashBoard/pages";
 
-import{Cart,Chat,Notification,UserProfile} from '../pages/components/DashBoard/components'
+import {
+  Cart,
+  Chat,
+  Notification,
+  UserProfile,
+} from "../pages/components/DashBoard/components";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
 const routers = createBrowserRouter([
@@ -111,9 +115,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/paymentstatus",
-    element: (
-      <PaymentStatus />
-    ),
+    element: <PaymentStatus />,
   },
   {
     path: "/checkout",
@@ -174,21 +176,17 @@ const routers = createBrowserRouter([
   },
   {
     path: "/addnewsemester",
-    element: <ManageAddSemester></ManageAddSemester>
+    element: <ManageAddSemester></ManageAddSemester>,
   },
   {
     path: "/updatesemester/:id",
-    element: <ManageUpdateSemester></ManageUpdateSemester>
+    element: <ManageUpdateSemester></ManageUpdateSemester>,
   },
   {
     path: "/ecommerce",
     element: <Ecommerce></Ecommerce>,
   },
   {
-<<<<<<< HEAD
-    path: "/admin",
-    element: <AdminHome />,
-=======
     path: "/orders",
     element: <Orders></Orders>,
   },
@@ -230,48 +228,47 @@ const routers = createBrowserRouter([
   },
   {
     path: "/pie",
-   element: <Pie ></Pie>,
+    element: <Pie></Pie>,
   },
   {
     path: "/financial",
-    element: <Financial ></Financial>,
+    element: <Financial></Financial>,
   },
   {
     path: "/color-mapping",
-    element: <ColorMapping ></ColorMapping>,
+    element: <ColorMapping></ColorMapping>,
   },
   {
     path: "/pyramid",
-    element: <Pyramid ></Pyramid>,
+    element: <Pyramid></Pyramid>,
   },
   {
     path: "/stacked",
-    element: <Stacked ></Stacked>,
+    element: <Stacked></Stacked>,
   },
   {
     path: "/stacked",
-    element: <Stacked ></Stacked>,
+    element: <Stacked></Stacked>,
   },
   {
     path: "/cart",
-    element: <Cart ></Cart>,
+    element: <Cart></Cart>,
   },
   {
     path: "/chat",
-    element: <Chat ></Chat>,
+    element: <Chat></Chat>,
   },
   {
     path: "/notification",
-    element: <Notification ></Notification>,
->>>>>>> f08b34f951b3181060f21c466f9f6508b202ad80
+    element: <Notification></Notification>,
   },
   {
     path: "/dashboard",
-    element: <Dashboard ></Dashboard>,
+    element: <Dashboard></Dashboard>,
   },
   {
     path: "/admin",
-    element: <Admin ></Admin>,
+    element: <Admin></Admin>,
   },
 ]);
 
