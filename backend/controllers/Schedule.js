@@ -9,10 +9,12 @@ module.exports.addSchedule = async (req, res) => {
       startTime: startTime,
       endTime: endTime,
       meta_data: meta_data || "", //to store side data
+
     });
+    console.log(schedule);
 
     // return save result as a response 
-    
+
     schedule
       .save()
       .then((result) =>
@@ -41,6 +43,7 @@ module.exports.getSchedulesPaging = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 module.exports.updateSchedule = async (req, res) => {
   const fieldsToUpdate = [

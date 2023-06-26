@@ -25,6 +25,12 @@
   box-shadow: rgba(100, 100, 111, 0.6) 0px 8px 40px 0px;
 }
 
+.course-price {
+  text-align: center;
+  font-size: x-large;
+  margin: 15px 0;
+}
+
 .course-button {
   border: 1px solid #0b101e;
   background-color: #0b101e;
@@ -32,7 +38,6 @@
   padding: 5px 30px;
   border-radius: 50px;
   font-size: 18px;
-  margin: 15px 0;
 }
 
 .course-button p {
