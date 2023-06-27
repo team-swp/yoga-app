@@ -28,6 +28,11 @@ function Navigation() {
               </Link>
             </div>
             <div>
+              <Link to="/weather">
+                <Typography>Weather</Typography>
+              </Link>
+            </div>
+            <div>
               <Link to="/">
                 <Typography>Time Table</Typography>
               </Link>
@@ -35,7 +40,7 @@ function Navigation() {
           </div>
           <div
             className="flex items-center mt-4 sm:mt-0"
-            style={{ width: "fit-content" }}
+            style={{ marginRight:'-20px',width: "fit-content" }}
           >
             {token ? (
               <Sidebar />
