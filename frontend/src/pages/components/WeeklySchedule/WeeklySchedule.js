@@ -17,7 +17,7 @@ const cx = classNames.bind(styles);
 function Schedules() {
   const moment = require("moment");
   const { totalSchedule } = useSchedule();
-
+  console.log(totalSchedule);
   const events = [];
   for (let i = 0; i < totalSchedule.length; i++) {
     const {

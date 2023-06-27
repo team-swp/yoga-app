@@ -53,7 +53,7 @@ function Courses() {
         <img src={yoga2} alt="yoga2" />
       </div>
       <Container>
-        <h2 className="w-full text-2xl text-left font-bold mt-8 mb-6">
+        <h2 className="w-full text-2xl text-left font-bold mt-8 mb-6 text-up">
           OUR COURSES
         </h2>
         <hr className="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
@@ -68,7 +68,6 @@ function Courses() {
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
                 <p className={cx("courses-title")}>{course.coursename}</p>
-                <p className={cx("courses-price")}>${course.price}</p>
               </div>
             </Link>
           ))}

@@ -15,6 +15,7 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
+  ProtectRouteAdmin,
   ProtectRouteCheckout,
   ProtectRouteOTP,
   ProtectRouteStaff,
@@ -263,11 +264,19 @@ const routers = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard></Dashboard>,
+    element: (
+      <ProtectRouteAdmin>
+        <Dashboard />
+      </ProtectRouteAdmin>
+    ),
   },
   {
     path: "/admin",
-    element: <Admin></Admin>,
+    element: (
+      <ProtectRouteAdmin>
+        <Admin />
+      </ProtectRouteAdmin>
+    ),
   },
 ]);
 

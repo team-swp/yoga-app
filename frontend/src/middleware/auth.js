@@ -63,7 +63,18 @@ export const ProtectRouteStaff = ({ children }) => {
   const staff = user.role;
 
   if (!staff || staff !== "staff") {
-    return <Navigate to={"/"} replace={true} />;
+    return <Navigate to={"/*"} replace={true} />;
+  }
+
+  return children;
+};
+
+export const ProtectRouteAdmin = ({ children }) => {
+  const user = useSelector(userSelector);
+  const admin = user.role;
+
+  if (!admin || admin !== "admin") {
+    return <Navigate to={"/*"} replace={true} />;
   }
 
   return children;

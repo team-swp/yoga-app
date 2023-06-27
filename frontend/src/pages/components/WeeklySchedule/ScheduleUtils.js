@@ -3,6 +3,7 @@ import { getCourse } from "../../../helper/courseAPI";
 import { getSemester } from "../../../helper/semesterAPI";
 import { getClass } from "../../../helper/classAPI";
 import { getSchedule } from "../../../helper/scheduleAPI";
+import { getMember } from "../../../helper/loginAPI";
 
 export default function useSchedule() {
   const [courseList, setCourseList] = useState([]);
@@ -17,6 +18,7 @@ export default function useSchedule() {
             getSemester(),
             getClass(),
             getSchedule(),
+            getMember(),
           ]);
 
         const updatedCourseList = response.data.map((course) => ({
