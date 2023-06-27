@@ -68,7 +68,6 @@ function Courses() {
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
                 <p className={cx("courses-title")}>{course.coursename}</p>
-                <p className={cx("courses-price")}>${course.price}</p>
               </div>
             </Link>
           ))}

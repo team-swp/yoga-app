@@ -63,6 +63,9 @@ import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
 import Premium from "../pages/components/MemberPacket/Premium";
 import Weather from "../pages/components/Weather/components/Weather";
+import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
+import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
+
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -122,7 +125,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element:<ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>  ,
+    element: (
+      <ProtectRouteCheckout>
+        <Checkout />
+      </ProtectRouteCheckout>
+    ),
   },
   {
     path: "/premium",
@@ -279,8 +286,16 @@ const routers = createBrowserRouter([
   },
   {
     path: "/weather",
-    element: <Weather/>,
-  }
+    element: <Weather />,
+  },
+  {
+    path: "/addnewpremium",
+    element: <AddNewPremium />,
+  },
+  {
+    path: "/updatepremiumpack/:id",
+    element: <UpdatePremiumPack />,
+  },
 ]);
 
 export default routers;
