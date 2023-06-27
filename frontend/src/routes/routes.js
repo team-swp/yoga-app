@@ -62,6 +62,7 @@ import {
 import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
 import Premium from "../pages/components/MemberPacket/Premium";
+import Weather from "../pages/components/Weather/components/Weather";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -276,6 +277,10 @@ const routers = createBrowserRouter([
     path: "/admin",
     element: <Admin></Admin>,
   },
+  {
+    path: "/weather",
+    element: <Weather/>,
+  }
 ]);
 
 export default routers;
