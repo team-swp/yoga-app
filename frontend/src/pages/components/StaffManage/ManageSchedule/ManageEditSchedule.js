@@ -8,6 +8,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { useNavigate } from "react-router-dom";
 
 function ManageEditSchedule() {
     const [schedule, setSchedule] = useState({});
@@ -15,6 +16,11 @@ function ManageEditSchedule() {
     const [schedulename, setSchedulename] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
+    const navigate = useNavigate()
+
+    const handleBack = () => {
+        navigate("/staffmanage")
+    }
 
     console.log(schedule);
     useEffect(() => {
@@ -117,6 +123,24 @@ function ManageEditSchedule() {
                         <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em', marginBottom: '1em' }}>
                             Update Schedule
                         </button>
+                        <Button
+                            onClick={handleBack}
+                            style={{
+                                marginBlock: "20px",
+                                float: "right",
+                                backgroundColor: "grey",
+                                border: "none",
+                                color: "white",
+                                padding: "10px 20px",
+                                textAlign: "center",
+                                textDecoration: "none",
+                                display: "inline-block",
+                                fontSize: "10px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Back
+                        </Button>
                     </form>
                 </div>
             </Container>

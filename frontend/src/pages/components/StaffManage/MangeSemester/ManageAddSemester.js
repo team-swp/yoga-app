@@ -1,14 +1,24 @@
 import { useState } from "react";
-import { Container, TextField, Button } from "@mui/material";
+import { Container, TextField, Button, } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { addSemester } from "../../../../helper/semesterAPI";
 import { Toaster, toast } from "react-hot-toast";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useNavigate } from "react-router-dom";
+
 
 function ManageAddSemester() {
     const [semestername, setSemestername] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const navigate = useNavigate()
+
+    const handleBack = () => {
+        navigate("/staffmanage")
+    }
     // Thêm các trạng thái khác nếu cần thiết
 
     const handleSubmit = async (event) => {
@@ -29,13 +39,21 @@ function ManageAddSemester() {
         }
     };
 
+    const handleStartDateChange = (date) => {
+        setStartDate(date);
+    };
+
+    const handleEndtDateChange = (date) => {
+        setEndDate(date);
+    };
+
     return (
         <div>
             <Header />
             <Container>
                 <Toaster position="top-center"></Toaster>
-                <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px', marginTop: '1em' }}>Add New Semester</h1>
-                <form onSubmit={handleSubmit}>
+                <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginTop: '1em' }}>Add New Semester</h1>
+                <form onSubmit={handleSubmit} style={{ marginLeft: '39%' }}>
                     <TextField
                         label="Semester Name"
                         type="text"
@@ -43,27 +61,55 @@ function ManageAddSemester() {
                         onChange={(e) => setSemestername(e.target.value)}
                         fullWidth
                         required
-                        sx={styles.textField}
+                        style={{ width: '250px' }}
                     />
-                    <TextField
-                        label="Start Date"
-                        type="text"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        fullWidth
-                        required
-                        sx={styles.textField}
-                    />
-                    <TextField
-                        label="End Date"
-                        type="text"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        fullWidth
-                        required
-                        sx={styles.textField}
-                    />
-                    <Button type="submit" variant="contained" style={{ backgroundColor: '#007bff', color: '#fff', fontWeight: 'bold', cursor: 'pointer', marginBottom: '1em' }}>Add Semester</Button>
+                    <div style={{ marginTop: '1em' }}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
+                            <DatePicker
+                                label="Start Date"
+                                value={startDate}
+                                onChange={handleStartDateChange}
+                                inputFormat="MM/DD/YYYY"
+                                animateYearScrolling
+                                fullWidth
+                                required
+                            />
+                        </LocalizationProvider>
+                    </div>
+                    <div style={{ marginTop: '1em' }}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} locale="en" >
+                            <DatePicker
+                                label="End Date"
+                                value={endDate}
+                                onChange={handleEndtDateChange}
+                                inputFormat="MM/DD/YYYY"
+                                animateYearScrolling
+                                fullWidth
+                                required
+                            />
+                        </LocalizationProvider>
+                    </div>
+                    <Button type="submit" variant="contained" style={{ backgroundColor: '#007bff', color: '#fff', fontWeight: 'bold', cursor: 'pointer', marginBottom: '1em', marginTop: '1em' }}>
+                        Add Semester
+                    </Button>
+                    <Button
+                        onClick={handleBack}
+                        style={{
+                            marginBlock: "20px",
+                            float: "right",
+                            backgroundColor: "grey",
+                            border: "none",
+                            color: "white",
+                            padding: "10px 20px",
+                            textAlign: "center",
+                            textDecoration: "none",
+                            display: "inline-block",
+                            fontSize: "10px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Back
+                    </Button>
                 </form>
             </Container>
 
@@ -74,22 +120,3 @@ function ManageAddSemester() {
 }
 
 export default ManageAddSemester;
-const styles = {
-    container: {
-        marginTop: "2rem",
-        marginBottom: "2rem",
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    textField: {
-        marginBottom: "1rem",
-        width: "100%",
-    },
-    button: {
-        marginTop: "1rem",
-        width: "100%",
-    },
-};

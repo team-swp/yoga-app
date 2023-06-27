@@ -803,7 +803,7 @@ module.exports.charDataPaymentPremium = async (req, res) => {
       percentage = (
         Math.abs(
           (currentMonthCount - previousMonthCount) /
-            (previousMonthCount === 0 ? 1 : previousMonthCount)
+            (previousMonthCount === 0 ? currentMonthCount : previousMonthCount)
         ) * 100
       )
         .toFixed(2)
@@ -813,7 +813,7 @@ module.exports.charDataPaymentPremium = async (req, res) => {
       percentage = (
         Math.abs(
           (currentMonthCount - previousMonthCount) /
-            (previousMonthCount === 0 ? 1 : previousMonthCount)
+            (previousMonthCount === 0 ? currentMonthCount : previousMonthCount)
         ) * 100
       )
         .toFixed(2)
@@ -834,8 +834,7 @@ module.exports.charDataPaymentPremium = async (req, res) => {
     let percentage2;
     const difference = currentMonthIncome - previousMonthIncome;
     const previousMonthIncomeAdjusted =
-      previousMonthIncome === 0 ? 1 : previousMonthIncome;
-
+      previousMonthIncome === 0 ? currentMonthIncome : previousMonthIncome;
     if (difference < 0) {
       percentage2 = ((Math.abs(difference) / previousMonthIncomeAdjusted) * 100)
         .toFixed(2)

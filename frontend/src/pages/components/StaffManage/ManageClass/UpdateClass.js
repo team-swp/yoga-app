@@ -21,6 +21,7 @@ import { getSchedule } from "../../../../helper/scheduleAPI";
 import { getCourse } from "../../../../helper/courseAPI";
 import { getUser } from "../../../../helper/loginAPI";
 import { Toaster, toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function UpdateClass() {
     const [classes, setClasses] = useState({});
@@ -36,6 +37,11 @@ function UpdateClass() {
     const [instructorList, setInstructorList] = useState("");
     const [selectedInstructor, setSelectedInstructor] = useState(null);
     const [days, setDays] = useState([]);
+    const navigate = useNavigate()
+
+    const handleBack = () => {
+        navigate("/staffmanage")
+    }
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -258,8 +264,24 @@ function UpdateClass() {
                             ))}
                         </Select>
                     </FormControl>
-                    <Button type="submit" variant="contained" sx={styles.button}>
-                        Update Course
+                    <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em' }}>Update Class</button>
+                    <Button
+                        onClick={handleBack}
+                        style={{
+                            marginBlock: "20px",
+                            float: "right",
+                            backgroundColor: "grey",
+                            border: "none",
+                            color: "white",
+                            padding: "10px 20px",
+                            textAlign: "center",
+                            textDecoration: "none",
+                            display: "inline-block",
+                            fontSize: "10px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Back
                     </Button>
                 </form>
             </Container>

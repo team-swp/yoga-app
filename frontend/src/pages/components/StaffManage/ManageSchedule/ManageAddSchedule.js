@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from "react";
-import { Container, TextField } from "@mui/material";
+import { Container, TextField, Button } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { addSchedule } from "../../../../helper/scheduleAPI";
@@ -8,11 +8,17 @@ import { Toaster, toast } from "react-hot-toast";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { useNavigate } from "react-router-dom";
 
 function ManageAddSchedule() {
     const [schedulename, setSchedulename] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
+    const navigate = useNavigate()
+
+    const handleBack = () => {
+        navigate("/staffmanage")
+    }
     // Thêm các trạng thái khác nếu cần thiết
 
     const handleStartTimeChange = (moment) => {
@@ -58,7 +64,7 @@ function ManageAddSchedule() {
                             value={schedulename}
                             onChange={(event) => setSchedulename(event.target.value)}
                             required
-                            style={{ width: 260 }}
+                            style={{ width: 250 }}
                         />
 
                         <div style={{ marginBottom: '10px', marginTop: '10px', width: '400px' }}>
@@ -92,6 +98,24 @@ function ManageAddSchedule() {
                         <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em', marginBottom: '1em' }}>
                             Add Schedule
                         </button>
+                        <Button
+                            onClick={handleBack}
+                            style={{
+                                marginBlock: "20px",
+                                float: "right",
+                                backgroundColor: "grey",
+                                border: "none",
+                                color: "white",
+                                padding: "10px 20px",
+                                textAlign: "center",
+                                textDecoration: "none",
+                                display: "inline-block",
+                                fontSize: "10px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Back
+                        </Button>
                     </form>
                 </div>
             </Container>

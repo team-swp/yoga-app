@@ -21,12 +21,12 @@ function Dashboard() {
   return (
     <div>
       <div className="flex relative dark:bg-main-dark-bg" style={{height:'100px',marginLeft:'-10px'}}>
-        <div className="fixed right-4 bottom-4" style={{ zIndex: "1000",transform:'translate(1450px, 630px)' }}>
+        <div className="fixed right-4 bottom-4" style={{ zIndex: "1000",transform:'translate(1500px, 680px)' }}>
           <TooltipComponent content="Settings" position="Top">
           <button
                 type="button"
                 onClick={() => setThemeSettings(!themeSettings)}
-                style={{ background: currentColor, borderRadius: '50%' }}
+                style={{ background: currentColor, borderRadius: '50%'}}
                 className="text-3xl text-white p-3 hover:drop-shadow-xl hover:bg-light-gray"
               >
               <FiSettings />
