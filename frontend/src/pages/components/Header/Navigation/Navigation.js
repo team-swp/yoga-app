@@ -32,16 +32,6 @@ function Navigation() {
               </Link>
             </div>
           </div>
-          <div>
-            <Link to="/premium">
-              <p className="text-xs uppercase">Premium</p>
-            </Link>
-          </div>
-          <div>
-            <Link to="/timetable">
-              <p className="text-xs uppercase">Schedule</p>
-            </Link>
-          </div>
         </div>
         <div className="flex items-center ml-auto">
           {token ? (
