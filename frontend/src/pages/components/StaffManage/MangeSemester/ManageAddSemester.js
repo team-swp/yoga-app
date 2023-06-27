@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, TextField, Button } from "@mui/material";
+import { Container, TextField, Button, } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { addSemester } from "../../../../helper/semesterAPI";
@@ -7,12 +7,18 @@ import { Toaster, toast } from "react-hot-toast";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useNavigate } from "react-router-dom";
 
 
 function ManageAddSemester() {
     const [semestername, setSemestername] = useState("");
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const navigate = useNavigate()
+
+    const handleBack = () => {
+        navigate("/staffmanage")
+    }
     // Thêm các trạng thái khác nếu cần thiết
 
     const handleSubmit = async (event) => {
@@ -47,7 +53,7 @@ function ManageAddSemester() {
             <Container>
                 <Toaster position="top-center"></Toaster>
                 <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginTop: '1em' }}>Add New Semester</h1>
-                <form onSubmit={handleSubmit} style={{ marginLeft: '38%' }}>
+                <form onSubmit={handleSubmit} style={{ marginLeft: '39%' }}>
                     <TextField
                         label="Semester Name"
                         type="text"
@@ -83,7 +89,27 @@ function ManageAddSemester() {
                             />
                         </LocalizationProvider>
                     </div>
-                    <Button type="submit" variant="contained" style={{ backgroundColor: '#007bff', color: '#fff', fontWeight: 'bold', cursor: 'pointer', marginBottom: '1em', marginTop: '1em' }}>Add Semester</Button>
+                    <Button type="submit" variant="contained" style={{ backgroundColor: '#007bff', color: '#fff', fontWeight: 'bold', cursor: 'pointer', marginBottom: '1em', marginTop: '1em' }}>
+                        Add Semester
+                    </Button>
+                    <Button
+                        onClick={handleBack}
+                        style={{
+                            marginBlock: "20px",
+                            float: "right",
+                            backgroundColor: "grey",
+                            border: "none",
+                            color: "white",
+                            padding: "10px 20px",
+                            textAlign: "center",
+                            textDecoration: "none",
+                            display: "inline-block",
+                            fontSize: "10px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Back
+                    </Button>
                 </form>
             </Container>
 

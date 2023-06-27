@@ -13,6 +13,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useNavigate } from "react-router-dom";
 
 function ManageUpdateSemester() {
     const [semester, setSemester] = useState({});
@@ -21,6 +22,11 @@ function ManageUpdateSemester() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [status, setStatus] = useState("");
+    const navigate = useNavigate()
+
+    const handleBack = () => {
+        navigate("/staffmanage")
+    }
 
     useEffect(() => {
         fetchSemester();
@@ -80,7 +86,7 @@ function ManageUpdateSemester() {
                 <div style={{ maxWidth: '400px', margin: '0 auto' }}>
                     <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px', marginTop: '1em' }}>Update Semester</h1>
                 </div>
-                <form onSubmit={handleSubmit} style={{ marginLeft: '38%' }}>
+                <form onSubmit={handleSubmit} style={{ marginLeft: '39%' }}>
                     <TextField
                         label="Semester Name"
                         type="text"
@@ -88,6 +94,7 @@ function ManageUpdateSemester() {
                         value={semestername}
                         onChange={(event) => setSemestername(event.target.value)}
                         required
+                        style={{ width: 250 }}
                     />
                     <div style={{ marginTop: '1em' }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
@@ -117,6 +124,24 @@ function ManageUpdateSemester() {
                     </div>
                     <Button type="submit" variant="contained" style={{ backgroundColor: '#007bff', color: '#fff', fontWeight: 'bold', cursor: 'pointer', marginBottom: '1em', marginTop: '1em' }}>
                         Update Semester
+                    </Button>
+                    <Button
+                        onClick={handleBack}
+                        style={{
+                            marginBlock: "20px",
+                            float: "right",
+                            backgroundColor: "grey",
+                            border: "none",
+                            color: "white",
+                            padding: "10px 20px",
+                            textAlign: "center",
+                            textDecoration: "none",
+                            display: "inline-block",
+                            fontSize: "10px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        Back
                     </Button>
                 </form>
             </Container>
