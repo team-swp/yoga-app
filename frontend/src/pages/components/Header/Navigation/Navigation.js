@@ -8,17 +8,29 @@ function Navigation() {
   useEffect(() => {}, []);
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">
-      <nav className="mx-20 flex justify-between items-center">
-        <div className="flex gap-16 justify-items-center items-center">
+      <nav className="m-0 mx-20 flex justify-between items-center">
+        <div className="flex ml-14 gap-4 justify-items-center items-center">
           <div style={{ transform: "scale(1.6)" }}>
             <Link to="/">
               <img src={logo} alt="logo" />
             </Link>
           </div>
-          <div>
-            <Link to="/courses">
-              <p className="text-xs uppercase">Courses</p>
-            </Link>
+          <div className="flex gap-6 ml-8">
+            <div>
+              <Link to="/courses">
+                <p className="text-xs uppercase">Courses</p>
+              </Link>
+            </div>
+            <div>
+              <Link to="/premium">
+                <p className="text-xs uppercase">Premium</p>
+              </Link>
+            </div>
+            <div>
+              <Link to="/timetable">
+                <p className="text-xs uppercase">Schedule</p>
+              </Link>
+            </div>
           </div>
           <div>
             <Link to="/premium">
@@ -31,7 +43,7 @@ function Navigation() {
             </Link>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center ml-auto">
           {token ? (
             <Sidebar />
           ) : (
