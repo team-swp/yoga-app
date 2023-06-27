@@ -10,12 +10,14 @@ import {
     OutlinedInput,
     MenuItem,
     ListItemText,
+    Button,
 } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import axios from "axios";
 import { addClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -49,6 +51,11 @@ function AddNewClass() {
     const [instructorList, setInstructorList] = useState("");
     const [selectedInstructor, setSelectedInstructor] = useState(null);
     const [days, setDays] = useState([]);
+    const navigate = useNavigate()
+
+    const handleBack = () => {
+        navigate("/staffmanage")
+    }
     // Thêm các trạng thái khác nếu cần thiết
 
 
@@ -224,6 +231,24 @@ function AddNewClass() {
                         </FormControl>
 
                         <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em' }}>Add Class</button>
+                        <Button
+                            onClick={handleBack}
+                            style={{
+                                marginBlock: "20px",
+                                float: "right",
+                                backgroundColor: "grey",
+                                border: "none",
+                                color: "white",
+                                padding: "10px 20px",
+                                textAlign: "center",
+                                textDecoration: "none",
+                                display: "inline-block",
+                                fontSize: "10px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Back
+                        </Button>
                     </form>
                 </div>
             </Container>

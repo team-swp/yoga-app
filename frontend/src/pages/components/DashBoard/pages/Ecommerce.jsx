@@ -65,8 +65,11 @@ const Ecommerce = () => {
   };
 
   const handleChangeYear = (event) => {
+    const options = [0, 'All'];
+    const randomIndex = Math.floor(Math.random() * options.length);
     setYearData(event.target.value);
-    setAge(0);
+    setAge(randomIndex);
+    
   };
   useEffect(() => {
     const getDataChartDummy = async () => {

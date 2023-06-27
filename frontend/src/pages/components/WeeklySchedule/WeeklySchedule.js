@@ -29,6 +29,8 @@ function Schedules() {
       courseName,
       className,
       scheduleName,
+      statusSemester,
+      instructorName,
     } = totalSchedule[i];
     const start = moment(new Date(startDate));
     const end = moment(new Date(endDate));
@@ -44,11 +46,16 @@ function Schedules() {
     for (let j = 0; j < startDateTime.length && j < endDateTime.length; j++) {
       const currentStart = moment(startDateTime[j]);
       const currentEnd = moment(endDateTime[j]);
-      if (currentStart.isSameOrAfter(start) && currentEnd.isSameOrBefore(end)) {
+      if (
+        statusSemester &&
+        currentStart.isSameOrAfter(start) &&
+        currentEnd.isSameOrBefore(end)
+      ) {
         events.push({
           title: courseName,
           description: scheduleName,
           room: className,
+          instructor: instructorName,
           start: startDateTime[j],
           end: endDateTime[j],
         });

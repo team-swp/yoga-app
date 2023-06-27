@@ -8,18 +8,23 @@ import { getMember } from "../../../helper/loginAPI";
 export default function useSchedule() {
   const [courseList, setCourseList] = useState([]);
   const [totalSchedule, setTotalSchedule] = useState([]);
-  console.log(courseList);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [response, semesterResponse, classResponse, scheduleResponse] =
-          await Promise.all([
-            getCourse(),
-            getSemester(),
-            getClass(),
-            getSchedule(),
-            getMember(),
-          ]);
+        const [
+          response,
+          semesterResponse,
+          classResponse,
+          scheduleResponse,
+          userResponse,
+        ] = await Promise.all([
+          getCourse(),
+          getSemester(),
+          getClass(),
+          getSchedule(),
+          getMember(),
+        ]);
 
         const updatedCourseList = response.data.map((course) => ({
           id: course._id,
@@ -41,12 +46,22 @@ export default function useSchedule() {
             return acc;
           }, []);
 
+          const instructorList = userResponse.data.filter(
+            (instructorItem) => classItem.instructor_id === instructorItem._id
+          );
+
+          const instructor = instructorList.reduce((acc, instructorItem) =>
+            acc.push({
+              instructorName: instructorItem.username,
+            })
+          );
           const newClassItem = {
             id: classItem._id,
             name: classItem.classname,
             course_id: classItem.course_id,
             days: classItem.days,
             schedules: schedules,
+            instructor: instructor,
           };
 
           return newClassItem;
@@ -56,7 +71,6 @@ export default function useSchedule() {
           course.classes = newClassList.filter(
             (classItem) => classItem.course_id === course.id
           );
-
           const courseSemester = semesterResponse.data.find(
             (semester) => semester._id === course.semester_id
           );
@@ -66,10 +80,10 @@ export default function useSchedule() {
               name: courseSemester.semestername,
               startDate: courseSemester.startDate,
               endDate: courseSemester.endDate,
+              statusSemester: courseSemester.status,
             };
           }
         });
-
         setCourseList(updatedCourseList);
       } catch (error) {
         console.log(error);
@@ -91,9 +105,11 @@ export default function useSchedule() {
               endTime: scheduleItem.endTime,
               days: classItem.days,
               className: classItem.name,
+              instructorName: classItem.instructor.username,
               scheduleName: scheduleItem.schedulename,
               courseName: course.coursename,
               semesterName: course.semester.name,
+              statusSemester: course.semester.statusSemester,
             });
           }
         });

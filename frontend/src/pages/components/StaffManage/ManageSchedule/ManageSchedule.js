@@ -37,7 +37,6 @@ function ManageSchedule() {
       const updatedScheduleData = { ...schedule, status: event.target.checked };
       const response = await updateSchedule(updatedScheduleData);
       if (response && response.data) {
-        console.log(response.data.data.schedulename);
         setManageEditSchedule(schedules);
         const manageEditSchedule = schedules.map((scheduleItem) =>
           scheduleItem._id === response.data._id ? response.data : scheduleItem,
@@ -76,7 +75,6 @@ function ManageSchedule() {
         const requestUrl = "http://localhost:3001/api/schedule/get";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
-        console.log(responseJSON);
         setScheduleList(responseJSON);
       } catch (error) {
         console.log("Failed");

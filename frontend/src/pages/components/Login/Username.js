@@ -89,12 +89,11 @@ function Username() {
         success: <b>Login Successfully...!</b>,
         error: <b>Password Not Match!</b>,
       });
-
-      loginPromise.then(() => {
+    loginPromise.then(() => {
         navigate("/");
       });
     } catch (error) {
-      console.log(error);
+      navigate('/login')
     }
   };
   const socialLoginComing = (social) => {

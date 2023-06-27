@@ -30,7 +30,8 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
-import Premium from "../pages/components/MemberPacket/Premium";
+import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+
 import {
   Ecommerce,
   Orders,
@@ -58,6 +59,8 @@ import {
 } from "../pages/components/DashBoard/components";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
+import Premium from "../pages/components/MemberPacket/Premium";
+import Weather from "../pages/components/Weather/components/Weather";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -259,10 +262,6 @@ const routers = createBrowserRouter([
     element: <Notification></Notification>,
   },
   {
-    path: "/premium",
-    element: <Premium></Premium>,
-  },
-  {
     path: "/dashboard",
     element: (
       <ProtectRouteAdmin>
@@ -277,6 +276,10 @@ const routers = createBrowserRouter([
         <Admin />
       </ProtectRouteAdmin>
     ),
+  },
+  {
+    path: "/weather",
+    element: <Weather />,
   },
 ]);
 

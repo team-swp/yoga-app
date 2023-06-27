@@ -10,7 +10,7 @@ const ThemeSettings = () => {
   const { setColor, setMode, currentMode, currentColor, setThemeSettings } = UserAuth();
 
   return (
-    <div style={{width:'400px',transform:'translateX(285%)'}} className="bg-half-transparent fixed nav-item top-0 right-0">
+    <div style={{width:'400px',transform:'translateX(285%)',zIndex:99999999 }} className="bg-half-transparent fixed nav-item top-0 right-0">
       <div className="float-right h-screen dark:text-gray-200  bg-white dark:bg-[#484B52] w-400">
         <div className="flex justify-between items-center p-4 ml-4">
           <p className="font-semibold text-lg">Settings</p>
