@@ -357,7 +357,7 @@ module.exports.charDataAccount = async (req, res) => {
     if (currentMonthCount - previousMonthCount < 0) {
       percentage = (
         (Math.abs(currentMonthCount - previousMonthCount) /
-          (previousMonthCount === 0 ? 1 : previousMonthCount)) *
+          (previousMonthCount === 0 ? currentMonthCount : previousMonthCount)) *
         100
       )
         .toFixed(2)
@@ -366,7 +366,7 @@ module.exports.charDataAccount = async (req, res) => {
     } else {
       percentage = (
         (Math.abs(currentMonthCount - previousMonthCount) /
-          (previousMonthCount === 0 ? 1 : previousMonthCount)) *
+          (previousMonthCount === 0 ? currentMonthCount : previousMonthCount)) *
         100
       )
         .toFixed(2)

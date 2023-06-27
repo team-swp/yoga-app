@@ -30,8 +30,12 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [checkLogin, setCheckLogin] = useState(true);
   const googleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+     console.log('error'); 
+    }
   };
   const dispatch = useDispatch();
   const logOut = async () => {
@@ -61,6 +65,7 @@ export const AuthContextProvider = ({ children }) => {
               setCheckLogin(true)
               signOut(auth);
               dispatch(logOutNormal(""));
+              console.log('123');
             });
         });
       }
