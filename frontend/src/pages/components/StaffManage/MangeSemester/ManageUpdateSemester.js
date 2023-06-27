@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getSemester, updateSemester } from "../../../../helper/semesterAPI";
-import { Container, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+    Container,
+    TextField,
+    Button,
+
+} from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
 import { Toaster, toast } from "react-hot-toast";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 function ManageUpdateSemester() {
     const [semester, setSemester] = useState({});
@@ -17,7 +25,6 @@ function ManageUpdateSemester() {
     useEffect(() => {
         fetchSemester();
     }, [semesterId]);
-    console.log(semester);
 
     async function fetchSemester() {
         try {
@@ -25,12 +32,11 @@ function ManageUpdateSemester() {
             const semester = response.data.find((obj) => obj._id === semesterId.id);
 
 
-            setSemester(semester); console.log(semester);
-
+            setSemester(semester);
             // Set initial values for the input fields
             setSemestername(semester.semestername);
-            setStartDate(semester.startDate);
-            setEndDate(semester.endDate);
+            // setStartDate(semester.startDate);
+            // setEndDate(semester.endDate);
             setStatus(semester.status);
         } catch (error) {
             console.error(error);
@@ -57,16 +63,24 @@ function ManageUpdateSemester() {
         }
     }
 
+    const handleStartDateChange = (date) => {
+        setStartDate(date);
+    };
+
+    const handleEndtDateChange = (date) => {
+        setEndDate(date);
+    };
+
 
     return (
         <>
             <Header />
-            <Container maxWidth="md" sx={styles.container}>
+            <Container>
                 <Toaster position="top-center"></Toaster>
                 <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                    <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px' }}>Update Semester</h1>
+                    <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px', marginTop: '1em' }}>Update Semester</h1>
                 </div>
-                <form onSubmit={handleSubmit} sx={styles.form}>
+                <form onSubmit={handleSubmit} style={{ marginLeft: '38%' }}>
                     <TextField
                         label="Semester Name"
                         type="text"
@@ -74,29 +88,34 @@ function ManageUpdateSemester() {
                         value={semestername}
                         onChange={(event) => setSemestername(event.target.value)}
                         required
-                        sx={styles.textField}
                     />
-                    <TextField
-                        label="Start Date"
-                        type="text"
-                        name="startDate"
-                        value={startDate}
-                        onChange={(event) => setStartDate(event.target.value)}
-                        required
-                        multiline
-                        sx={styles.textField}
-                    />
-                    <TextField
-                        label="End Date"
-                        type="text"
-                        name="endDate"
-                        value={endDate}
-                        onChange={(event) => setEndDate(event.target.value)}
-                        required
-                        multiline
-                        sx={styles.textField}
-                    />
-                    <Button type="submit" variant="contained" sx={styles.button}>
+                    <div style={{ marginTop: '1em' }}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
+                            <DatePicker
+                                label="Start Date"
+                                value={startDate}
+                                onChange={handleStartDateChange}
+                                inputFormat="MM/DD/YYYY"
+                                animateYearScrolling
+                                fullWidth
+                                required
+                            />
+                        </LocalizationProvider>
+                    </div>
+                    <div style={{ marginTop: '1em' }}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} locale="en" >
+                            <DatePicker
+                                label="End Date"
+                                value={endDate}
+                                onChange={handleEndtDateChange}
+                                inputFormat="MM/DD/YYYY"
+                                animateYearScrolling
+                                fullWidth
+                                required
+                            />
+                        </LocalizationProvider>
+                    </div>
+                    <Button type="submit" variant="contained" style={{ backgroundColor: '#007bff', color: '#fff', fontWeight: 'bold', cursor: 'pointer', marginBottom: '1em', marginTop: '1em' }}>
                         Update Semester
                     </Button>
                 </form>
@@ -106,23 +125,3 @@ function ManageUpdateSemester() {
     );
 }
 export default ManageUpdateSemester;
-
-const styles = {
-    container: {
-        marginTop: "2rem",
-        marginBottom: "2rem",
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    textField: {
-        marginBottom: "1rem",
-        width: "100%",
-    },
-    button: {
-        marginTop: "1rem",
-        width: "25%",
-    },
-};

@@ -167,7 +167,7 @@ function UpdateCourse() {
             label="Course Name"
             type="text"
             name="coursename"
-            value={coursename}
+            value={formik.values.coursename}
             onChange={(event) => setCoursename(event.target.value)}
             required
             sx={styles.textField}

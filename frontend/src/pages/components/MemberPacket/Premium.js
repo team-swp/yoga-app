@@ -135,7 +135,8 @@ function Premium() {
         </div>
         <div>
           <Typography className="font-bold" variant="h5">
-            Able to learn all yoga classes for just 0$
+          Able to learn all yoga classes for just 0$
+
           </Typography>
         </div>
         <div className="flex  justify-center justify-items-center items-center gap-2">
