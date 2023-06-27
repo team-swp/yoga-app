@@ -137,7 +137,7 @@ function Premium() {
         </div>
         <div>
           <Typography className="font-bold" variant="h5">
-          Able to learn all yoga classes for just 10$
+          Able to learn all yoga classes for just 0$
 
           </Typography>
         </div>
