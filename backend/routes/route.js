@@ -105,7 +105,12 @@ const Semester = require("../models/semesters");
 const { log } = require("console");
 const { addRole, updateRole, getRoleById } = require("../controllers/Role");
 const { getUserIP } = require("../middleware/blockIP");
-const { updatePremium, getPremiumById, getPremiums, addPremiumOption } = require("../controllers/Premium");
+const {
+  updatePremium,
+  getPremiumById,
+  getPremiums,
+  addPremiumOption,
+} = require("../controllers/Premium");
 const { checkIsMember } = require("../middleware/checkDateIsMember");
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -209,6 +214,7 @@ router.patch(
 //Role
 router.post("/role/add", AuthAdmin, addRole);
 router.patch("/role/update", AuthAdmin, getRoleById, updateRole);
+router.patch("/admin/update", AuthAdmin, updateUserForAdmin);
 
 //premium
 router.post("/premium/add", AuthStaff, addPremiumOption);
@@ -261,9 +267,9 @@ router.get("/classesPaging/get", getClassesPaging);
 
 //IP
 // router.get("/ipUser",getUserIP)
-//Chart 
-router.post('/chart/payments',charDataPayment)
-router.post('/chart/customer',charDataAccount)
-router.post('/chart/product',charDataPaymentPremium)
-router.post('/chart/members',charDataSparkLine)
-router.post('/chart/premium',charDataPaymentPremiumLineChart)
+//Chart
+router.post("/chart/payments", charDataPayment);
+router.post("/chart/customer", charDataAccount);
+router.post("/chart/product", charDataPaymentPremium);
+router.post("/chart/members", charDataSparkLine);
+router.post("/chart/premium", charDataPaymentPremiumLineChart);

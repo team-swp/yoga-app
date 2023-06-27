@@ -19,6 +19,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
 import StarIcon from "@mui/icons-material/Star";
+import SchoolIcon from "@mui/icons-material/School";
 
 const style = {
   position: "absolute",
@@ -224,7 +225,7 @@ function Sidebar() {
                 )}
               </div>
 
-              <Link to="/timetable">
+              <Link to="/schedule">
                 <div className={styles.sidebar_details}>
                   <CalendarMonthIcon className={styles.sidebar_details_icon} />
                   <div>Schedule</div>
@@ -254,11 +255,23 @@ function Sidebar() {
                   />
                 </div>
               </Link>
+
               {user.role === "staff" && (
                 <Link to="/staffmanage">
                   <div className={styles.sidebar_details}>
                     <BadgeIcon className={styles.sidebar_details_icon} />
                     <div> Staff Manager</div>
+                    <ArrowForwardIosOutlinedIcon
+                      className={styles.sidebar_details_arrow}
+                    />
+                  </div>
+                </Link>
+              )}
+              {user.role === "instructor" && (
+                <Link to="/teachschedule">
+                  <div className={styles.sidebar_details}>
+                    <SchoolIcon className={styles.sidebar_details_icon} />
+                    <div>Teaching Schedule</div>
                     <ArrowForwardIosOutlinedIcon
                       className={styles.sidebar_details_arrow}
                     />

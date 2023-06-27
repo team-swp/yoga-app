@@ -30,7 +30,7 @@ import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCo
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
-import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+import ManageUpdatePackage from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 
 import {
   Ecommerce,
@@ -61,6 +61,7 @@ import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
 import Premium from "../pages/components/MemberPacket/Premium";
 import Weather from "../pages/components/Weather/components/Weather";
+import InsctructorSchedule from "../pages/components/WeeklySchedule/InstructorSchedule";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -75,8 +76,12 @@ const routers = createBrowserRouter([
     element: <CourseDetail></CourseDetail>,
   },
   {
-    path: "/timetable",
+    path: "/schedule",
     element: <WeeklySchedule />,
+  },
+  {
+    path: "/teachschedule",
+    element: <InsctructorSchedule />,
   },
   {
     path: "/login",
@@ -154,7 +159,6 @@ const routers = createBrowserRouter([
     path: "/updateclass/:id",
     element: <UpdateClass></UpdateClass>,
   },
-
   {
     path: "/addnewschedule",
     element: <ManageAddSchedule></ManageAddSchedule>,
@@ -181,6 +185,7 @@ const routers = createBrowserRouter([
     path: "/updatesemester/:id",
     element: <ManageUpdateSemester></ManageUpdateSemester>,
   },
+
   {
     path: "/ecommerce",
     element: <Ecommerce></Ecommerce>,

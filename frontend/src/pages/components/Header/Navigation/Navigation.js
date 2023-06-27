@@ -27,7 +27,7 @@ function Navigation() {
               </Link>
             </div>
             <div>
-              <Link to="/timetable">
+              <Link to="/schedule">
                 <p className="text-xs uppercase">Schedule</p>
               </Link>
             </div>

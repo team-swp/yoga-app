@@ -1,24 +1,25 @@
-import styles from "./WeeklySchedule.module.css";
-import classNames from "classnames/bind";
-import moment from "moment";
+import { useEffect, useState } from "react";
 import yoga2 from "../../../assets/yoga2.jpg";
+import useSchedule from "./ScheduleUtils";
 import { Container } from "@mui/material";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import ScheduleInfo from "./ScheduleInfo";
+import moment from "moment";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import classNames from "classnames/bind";
+import styles from "./WeeklySchedule.module.css";
 import { CustomEvent, EventWrapper, minTime, parseTime } from "./TimeUtils";
-import ScheduleInfo from "./ScheduleInfo";
-import useSchedule from "./ScheduleUtils";
-import { useEffect, useState } from "react";
+import { userSelector } from "../../../redux/selectors";
+import { useSelector } from "react-redux";
 
 const localizer = momentLocalizer(moment);
 const cx = classNames.bind(styles);
 
-function Schedules() {
+function InsctructorSchedule() {
   const moment = require("moment");
+  const instructor = useSelector(userSelector);
   const { totalSchedule } = useSchedule();
-
   const [totalEvents, setTotalEvents] = useState([]);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ function Schedules() {
         className,
         scheduleName,
         instructorName,
+        statusSemester,
       } = totalSchedule[i];
       const start = moment(new Date(startDate));
       const end = moment(new Date(endDate));
@@ -56,8 +58,10 @@ function Schedules() {
         const currentStart = moment(startDateTime[j]);
         const currentEnd = moment(endDateTime[j]);
         if (
+          statusSemester &&
           currentStart.isSameOrAfter(start) &&
-          currentEnd.isSameOrBefore(end)
+          currentEnd.isSameOrBefore(end) &&
+          instructorName === instructor.username
         ) {
           events.push({
             title: courseName,
@@ -71,7 +75,7 @@ function Schedules() {
       }
     }
     setTotalEvents(events);
-  }, [totalSchedule, moment]);
+  }, [totalSchedule, moment, instructor.username]);
 
   return (
     <div>
@@ -89,7 +93,7 @@ function Schedules() {
       <Container>
         <div>
           <h2 className="w-full text-2xl text-left font-bold mt-8 mb-6">
-            WEEKLY SCHEDULE
+            TEACHING SCHEDULE
           </h2>
           <hr className="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
         </div>
@@ -117,4 +121,4 @@ function Schedules() {
   );
 }
 
-export default Schedules;
+export default InsctructorSchedule;

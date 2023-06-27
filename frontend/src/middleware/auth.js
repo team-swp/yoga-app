@@ -58,9 +58,18 @@ export const ProtectRouteCheckout = ({ children }) => {
   return children;
 };
 
+export const ProtectRouteInstructor = ({ children }) => {
+  const instructor = localStorage.getItem("role");
+
+  if (!instructor || instructor !== "instructor") {
+    return <Navigate to={"/*"} replace={true} />;
+  }
+
+  return children;
+};
+
 export const ProtectRouteStaff = ({ children }) => {
-  const user = useSelector(userSelector);
-  const staff = user.role;
+  const staff = localStorage.getItem("role");
 
   if (!staff || staff !== "staff") {
     return <Navigate to={"/*"} replace={true} />;
@@ -70,8 +79,7 @@ export const ProtectRouteStaff = ({ children }) => {
 };
 
 export const ProtectRouteAdmin = ({ children }) => {
-  const user = useSelector(userSelector);
-  const admin = user.role;
+  const admin = localStorage.getItem("role");
 
   if (!admin || admin !== "admin") {
     return <Navigate to={"/*"} replace={true} />;
