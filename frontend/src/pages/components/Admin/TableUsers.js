@@ -9,9 +9,6 @@ import _, { debounce } from "lodash";
 import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
 import { getAvatarToAWS } from "../../../helper/loginAPI";
 
-import { useSelector } from "react-redux";
-import { userSelector } from "../../../redux/selectors";
-
 import styles from "../../../styles/Username.module.css";
 import classNames from "classnames/bind";
 
@@ -27,8 +24,6 @@ function BasicExample() {
   const [sortField, setSortField] = useState("id");
   const [originalListUsers, setOriginalListUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const user = useSelector(userSelector);
 
   const [avatarURLs, setAvatarURLs] = useState([]);
   const defaultAvatarURL =
@@ -119,7 +114,6 @@ function BasicExample() {
     }
   };
 
-  const tableContainerStyle = `${styles.tableContainer} table-container`;
   const imgStyle = `${styles.profile_img} object-cover h-12 w-12 rounded-full`; // Thêm lớp CSS "rounded-full" để tạo hình tròn
   const imageContainerStyle = "flex items-center justify-center h-12 w-12";
   const idColumnStyle = { width: "50px" };
