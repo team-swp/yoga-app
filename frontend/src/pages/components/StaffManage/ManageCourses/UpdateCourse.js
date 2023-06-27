@@ -3,16 +3,6 @@ import {
   Container,
   TextField,
   Button,
-  Select,
-  Menu,
-  MenuItem,
-  FormGroup,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  Checkbox,
-  CircularProgress,
-  Typography,
   Autocomplete,
 } from "@mui/material";
 
@@ -27,17 +17,7 @@ function UpdateCourse() {
   const [course, setCourse] = useState({});
   const courseId = useParams();
   const [coursename, setCoursename] = useState("");
-  const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  const [willLearn, setWillLearn] = useState("");
-  const [requirement, setRequirement] = useState("");
-  const [forWho, setForWho] = useState("");
-  const [semesterId, setSemesterId] = useState("");
-  const [videos, setVideos] = useState([]);
-  const [images, setImages] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
   const [semesterList, setSemesterList] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
 
@@ -50,7 +30,7 @@ function UpdateCourse() {
       requirement: "",
       forWho: "",
       images: "",
-      videos: "",
+     
     },
     validationSchema: Yup.object({
       coursename: Yup.string().required("Course Name is required"),
@@ -60,7 +40,7 @@ function UpdateCourse() {
       requirement: Yup.string().required("Requirements are required"),
       forWho: Yup.string().required("Target audience is required"),
       images: Yup.mixed().required("Images are required"),
-      videos: Yup.mixed().required("Videos are required"),
+  
     }),
     onSubmit: async (values) => {
       try {
@@ -118,7 +98,7 @@ function UpdateCourse() {
           requirement: course.requirement,
           forWho: course.forWho,
           images: course.images,
-          videos: course.videos,
+     
         });
         setSelectedSemester(combinedData.semester.semestername);
       } catch (error) {
@@ -323,23 +303,6 @@ function UpdateCourse() {
             helperText={
               formik.touched.images && formik.errors.images
                 ? formik.errors.images
-                : ""
-            }
-          />
-          <TextField
-            label="Videos (comma separated URLs)"
-            type="text"
-            name="videos"
-            value={formik.values.videos}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            fullWidth
-            required
-            sx={styles.textField}
-            error={formik.touched.videos && formik.errors.videos ? true : false}
-            helperText={
-              formik.touched.videos && formik.errors.videos
-                ? formik.errors.videos
                 : ""
             }
           />
