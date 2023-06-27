@@ -33,7 +33,7 @@ import ManageSemester from "../pages/components/StaffManage/MangeSemester/Manage
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
 import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
-
+import Premium from "../pages/components/MemberPacket/Premium";
 import {
   Ecommerce,
   Orders,
@@ -61,7 +61,7 @@ import {
 } from "../pages/components/DashBoard/components";
 import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
-import Premium from "../pages/components/MemberPacket/Premium";
+
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 const routers = createBrowserRouter([
@@ -123,7 +123,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element:<ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>  ,
+    element: (
+      <ProtectRouteCheckout>
+        <Checkout />
+      </ProtectRouteCheckout>
+    ),
   },
   {
     path: "/premium",
@@ -269,6 +273,10 @@ const routers = createBrowserRouter([
   {
     path: "/notification",
     element: <Notification></Notification>,
+  },
+  {
+    path: "/premium",
+    element: <Premium></Premium>,
   },
   {
     path: "/dashboard",

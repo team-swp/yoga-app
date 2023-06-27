@@ -22,7 +22,7 @@ const Sidebar = () => {
     "flex items-center   gap-3 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black  hover:bg-light-gray m-2";
 
   return (
-    <div style={activeMenu?{width:'240px',marginLeft:'10px'}:{marginLeft:'10px'}} className="ml-3 h-screen  md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
+    <div style={activeMenu?{width:'240px',marginLeft:'20px'}:{marginLeft:'10px'}} className="ml-3 h-screen  md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
       {activeMenu && (
         <div>
           <div style={{marginTop:'16px'}} className="flex justify-between items-center">
@@ -69,7 +69,7 @@ const Sidebar = () => {
                       isActive ? activeLink : normalLink
                     }
                   >
-                    <div className="flex gap-4 justify-center justify-items-center items-center pb-2">
+                    <div style={{paddingBottom:'10px'}} className="flex gap-4 justify-center justify-items-center items-center pb-2">
                       <span style={{ marginLeft: "20px" }}>{link.icon}</span>
                       <span className="capitalize ">{link.name}</span>
                     </div>

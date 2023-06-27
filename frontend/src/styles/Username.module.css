@@ -75,3 +75,26 @@ input[type="file"] {
   margin-top: 8%;
   margin-bottom: 4%;
 }
+
+.fixed-column {
+  width: 150px; /* Đặt kích thước cố định cho cột */
+  white-space: nowrap; /* Ngăn chặn xếp dòng nội dung trong cột */
+  overflow: hidden; /* Ẩn nội dung vượt quá kích thước cố định */
+  text-overflow: ellipsis; /* Hiển thị dấu chấm elipsis (...) nếu nội dung vượt quá kích thước cố định */
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table-container table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-container th,
+.table-container td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

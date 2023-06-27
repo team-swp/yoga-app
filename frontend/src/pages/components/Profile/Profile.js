@@ -167,7 +167,6 @@ function Profile() {
       } else {
         setIsNotPass(false);
       }
-      console.log(isOldPassword, "312312");
     };
     isPassword();
   }, []);
