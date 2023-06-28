@@ -1,4 +1,11 @@
+import { useEffect, useState } from "react";
+import { Box, Button, Modal, Typography } from "@mui/material";
+import useSchedule from "./ScheduleUtils";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+
 let lastParsedDayOfWeek = -1; // initialize to an impossible value
+const localizer = momentLocalizer(moment);
 
 export function parseTime(timeStr, days, startDate, endDate) {
   const [hourMinuteStr, amPmStr] = timeStr.split(" ");
@@ -92,6 +99,36 @@ export const minTime = new Date(
 ); // Giờ bắt đầu là 7h sáng
 
 export function CustomEvent({ event }) {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setSelectedDate(event.start);
+    setOpen(true);
+  };
+
+  return (
+    <div>
+      <strong style={{ fontSize: "15px" }}>{event.title}</strong>
+      <p style={{ marginTop: "5px", fontSize: "16px" }}>{event.room}</p>
+      <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.description}</p>
+      <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.instructor}</p>
+      <button
+        style={{ marginTop: "5px", fontSize: "12px" }}
+        onClick={handleOpen}
+      >
+        View more...
+      </button>
+      {open && (
+        <KeepMountedModal
+          selectedDate={selectedDate}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+export function CustomEventforModal({ event }) {
   return (
     <div>
       <strong style={{ fontSize: "15px" }}>{event.title}</strong>
@@ -104,4 +141,105 @@ export function CustomEvent({ event }) {
 
 export function EventWrapper({ children, event }) {
   return <div style={{ backgroundColor: event.color }}>{children}</div>;
+}
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 1200,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
+export default function KeepMountedModal({ onClose, selectedDate }) {
+  const moment = require("moment");
+  const { totalSchedule } = useSchedule();
+
+  const [totalEvents, setTotalEvents] = useState([]);
+
+  useEffect(() => {
+    const events = [];
+
+    for (let i = 0; i < totalSchedule.length; i++) {
+      const {
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        days,
+        courseName,
+        className,
+        scheduleName,
+        instructorName,
+      } = totalSchedule[i];
+      const start = moment(new Date(startDate));
+      const end = moment(new Date(endDate));
+
+      const startDateTime = parseTime(
+        startTime,
+        days,
+        start.toDate(),
+        end.toDate()
+      );
+      const endDateTime = parseTime(
+        endTime,
+        days,
+        start.toDate(),
+        end.toDate()
+      );
+
+      for (let j = 0; j < startDateTime.length && j < endDateTime.length; j++) {
+        const currentStart = moment(startDateTime[j]);
+        const currentEnd = moment(endDateTime[j]);
+        if (
+          currentStart.isSameOrAfter(start) &&
+          currentEnd.isSameOrBefore(end)
+        ) {
+          events.push({
+            title: courseName,
+            description: scheduleName,
+            instructor: instructorName,
+            room: className,
+            start: startDateTime[j],
+            end: endDateTime[j],
+          });
+        }
+      }
+    }
+    setTotalEvents(events);
+  }, [totalSchedule, moment]);
+  return (
+    <div>
+      <Modal
+        keepMounted
+        open={true}
+        onClose={onClose}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+          <div style={{ height: "500px" }}>
+            <Calendar
+              localizer={localizer}
+              events={totalEvents}
+              step={15}
+              showMultiDayTimes
+              defaultView={"day"}
+              views={["day"]}
+              components={{
+                event: CustomEventforModal,
+                eventWrapper: EventWrapper,
+              }}
+              min={minTime}
+              defaultDate={selectedDate}
+            />
+          </div>
+        </Box>
+      </Modal>
+    </div>
+  );
 }

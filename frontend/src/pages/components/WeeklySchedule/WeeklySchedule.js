@@ -17,14 +17,15 @@ const cx = classNames.bind(styles);
 
 function Schedules() {
   const moment = require("moment");
-  const { totalSchedule } = useSchedule();
+
+  const { checkSchedule } = useSchedule();
 
   const [totalEvents, setTotalEvents] = useState([]);
 
   useEffect(() => {
     const events = [];
 
-    for (let i = 0; i < totalSchedule.length; i++) {
+    for (let i = 0; i < checkSchedule.length; i++) {
       const {
         startDate,
         endDate,
@@ -35,7 +36,8 @@ function Schedules() {
         className,
         scheduleName,
         instructorName,
-      } = totalSchedule[i];
+        statusSemester,
+      } = checkSchedule[i];
       const start = moment(new Date(startDate));
       const end = moment(new Date(endDate));
 
@@ -56,6 +58,7 @@ function Schedules() {
         const currentStart = moment(startDateTime[j]);
         const currentEnd = moment(endDateTime[j]);
         if (
+          statusSemester &&
           currentStart.isSameOrAfter(start) &&
           currentEnd.isSameOrBefore(end)
         ) {
@@ -71,7 +74,7 @@ function Schedules() {
       }
     }
     setTotalEvents(events);
-  }, [totalSchedule, moment]);
+  }, [checkSchedule, moment]);
 
   return (
     <div>
@@ -94,7 +97,7 @@ function Schedules() {
           <hr className="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
         </div>
         <div>
-          <ScheduleInfo totalSchedule={totalSchedule} />
+          <ScheduleInfo totalSchedule={checkSchedule} />
         </div>
         <div className={cx("weekly-schedule")}>
           <Calendar
@@ -103,7 +106,7 @@ function Schedules() {
             step={15}
             showMultiDayTimes
             defaultView={"week"}
-            views={["day", "week"]}
+            views={["week"]}
             components={{
               event: CustomEvent,
               eventWrapper: EventWrapper,

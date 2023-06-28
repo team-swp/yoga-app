@@ -8,6 +8,8 @@ import { getMember } from "../../../helper/loginAPI";
 export default function useSchedule() {
   const [courseList, setCourseList] = useState([]);
   const [totalSchedule, setTotalSchedule] = useState([]);
+  const [checkSchedule, setCheckSchedule] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -130,8 +132,42 @@ export default function useSchedule() {
         });
       });
     });
+
     setTotalSchedule(newTotalSchedule);
   }, [courseList]);
 
-  return { courseList, totalSchedule };
+  useEffect(() => {
+    const checkedSchedule = [];
+
+    totalSchedule.forEach((schedule, index) => {
+      let foundDuplicate = false;
+
+      for (let i = 0; i < index; i++) {
+        const item = totalSchedule[i];
+
+        if (
+          item.scheduleName === schedule.scheduleName &&
+          arraysMatch(item.days, schedule.days)
+        ) {
+          foundDuplicate = true;
+          break;
+        }
+      }
+
+      if (!foundDuplicate) {
+        checkedSchedule.push(schedule);
+      }
+    });
+
+    function arraysMatch(arr1, arr2) {
+      return (
+        arr1.length === arr2.length &&
+        arr1.every((value, index) => value === arr2[index])
+      );
+    }
+
+    setCheckSchedule(checkedSchedule);
+  }, [totalSchedule]);
+
+  return { courseList, totalSchedule, checkSchedule };
 }
