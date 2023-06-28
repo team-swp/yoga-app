@@ -58,7 +58,6 @@ export const ProtectRouteCheckout = ({ children }) => {
   return children;
 };
 
-<<<<<<< HEAD
 export const ProtectRouteInstructor = ({ children }) => {
   const instructor = localStorage.getItem("role");
 
@@ -88,12 +87,3 @@ export const ProtectRouteAdmin = ({ children }) => {
 
   return children;
 };
-=======
-export const ProtectRouteAdmin = ({ children }) => {
-  const user = useSelector(userSelector);
-  if (!user.role==='admin') {
-    return <Navigate to={"/notFound"} replace={true}></Navigate>;
-  }
-  return children;
-};
->>>>>>> thienNH

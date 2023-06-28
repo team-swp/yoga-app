@@ -2,12 +2,9 @@ import { Link } from "react-router-dom";
 import logo from "../../../../Heartbeat.svg";
 import Sidebar from "../Sidebar/Sidebar";
 import { useEffect } from "react";
-<<<<<<< HEAD
-=======
 import { Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../../../redux/selectors";
->>>>>>> thienNH
 
 function Navigation() {
   const user = useSelector(userSelector)

@@ -18,13 +18,10 @@ import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
-<<<<<<< HEAD
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
 
-=======
 import { setDataLogin } from "../../../../redux/actions";
->>>>>>> thienNH
 const style = {
   position: "absolute",
   top: "50%",
@@ -124,16 +121,9 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-<<<<<<< HEAD
-            src={user.avatar}
-            className={` ${
-              checkMember ? styles.profile_img : styles.profile_img_normal
-            } object-cover h-44`}
-=======
             src={file||user.avatar}
             className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
               } object-cover h-44`}
->>>>>>> thienNH
             alt="avatar"
           />
           {checkMember ? (
