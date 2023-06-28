@@ -112,6 +112,7 @@ const {
   addPremiumOption,
 } = require("../controllers/Premium");
 const { checkIsMember } = require("../middleware/checkDateIsMember");
+const { getNews, addNews, getNewsById, updateNews } = require("../controllers/News");
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
@@ -254,6 +255,12 @@ router.get("/vnpay_ipn", vnpayIPN, haveDonePayment);
 router.get("/vnpay_return", vnpayReturn);
 
 router.post("/runUrlVnPAY", runUrl);
+//news
+
+router.post("/news/add", AuthStaff, addNews);
+router.get("/news/get", getNews);
+router.patch("/news/update", AuthStaff, getNewsById, updateNews);
+
 
 //pagingnation
 
