@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
 import useSchedule from "./ScheduleUtils";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import CloseIcon from "@mui/icons-material/Close";
 
 let lastParsedDayOfWeek = -1; // initialize to an impossible value
 const localizer = momentLocalizer(moment);
@@ -223,6 +224,18 @@ export default function KeepMountedModal({ onClose, selectedDate }) {
       >
         <Box sx={style}>
           <div style={{ height: "500px" }}>
+            <IconButton
+              aria-label="close"
+              onClick={onClose}
+              style={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: "gray", // Màu sắc bình thường
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
             <Calendar
               localizer={localizer}
               events={totalEvents}
