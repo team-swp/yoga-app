@@ -268,11 +268,15 @@ const routers = createBrowserRouter([
   },
   {
     path: "/dashboard",
+<<<<<<< HEAD
     element: (
       <ProtectRouteAdmin>
         <Dashboard />
       </ProtectRouteAdmin>
     ),
+=======
+    element: <ProtectRouteAdmin><Dashboard></Dashboard></ProtectRouteAdmin> ,
+>>>>>>> thienNH
   },
   {
     path: "/admin",
@@ -284,8 +288,13 @@ const routers = createBrowserRouter([
   },
   {
     path: "/weather",
+<<<<<<< HEAD
     element: <Weather />,
   },
+=======
+    element:  <Weather/>,
+  }
+>>>>>>> thienNH
 ]);
 
 export default routers;
