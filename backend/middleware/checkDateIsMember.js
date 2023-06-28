@@ -4,10 +4,17 @@ const Payment = require("../models/payments");
 const Premium = require("../models/premiums");
 module.exports.checkIsMember = async (req, res, next) => {
   try {
+    if (req.account.role !== "user") {
+      return res.status(400).send({
+        message: `Only User Can Booking!!!`,
+      });
+    }
     //check user trước nếu meta_data có isMember:true
-    if(req.body.isTry){
-      const bookingData = await Booking.findOne({member_id:req.account.userId})
-      if(bookingData){
+    if (req.body.isTry) {
+      const bookingData = await Booking.findOne({
+        member_id: req.account.userId,
+      });
+      if (bookingData) {
         return res.status(400).send({
           message: `Have Been Already Trial`,
         });
@@ -19,6 +26,17 @@ module.exports.checkIsMember = async (req, res, next) => {
       if (!member.meta_data) {
         next();
         return;
+      }else if(!JSON.parse(member.meta_data).isMember){
+        console.log(member);
+        next();
+        return;
+      }else{
+        const check = JSON.parse(member.meta_data)
+        if(!check.isMember){
+          return res.status(400).send({
+            message: `Your Premium Is Pending, Please Come To Yoga Center To Complete Your Payment`,
+          });
+        }
       }
       const memberMetaData = JSON.parse(member.meta_data);
       if (memberMetaData) {

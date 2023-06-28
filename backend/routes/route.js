@@ -242,7 +242,7 @@ router.post("/booking/check", Auth, checkIsMember, (req, res) =>
 ); // check book
 router.get("/booking/get", getBooking);
 router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
-//google
+//
 router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 ///-payyyment VNPAY
@@ -264,6 +264,8 @@ router.get("/paymentsPaging/get", getPaymentsPaging);
 router.get("/schedulesPaging/get", getSchedulesPaging);
 router.get("/semestersPaging/get", getSemestersPaging);
 router.get("/classesPaging/get", getClassesPaging);
+
+
 
 //IP
 // router.get("/ipUser",getUserIP)

@@ -53,12 +53,17 @@ try {
 
 //getImage for avatar
 module.exports.getImage = async(req,res)=>{
-  const { imageName } = req.query;
-  const getObjectParams = {
-    Bucket: bucketName,
-    Key: imageName,
-  };
-  const command = new GetObjectCommand(getObjectParams);
-  const url = await getSignedUrl(s3, command, { expiresIn: 60*60*24*6 });
-  res.send({ url });
+  try {
+    const { imageName } = req.query;
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: imageName,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 60*60*24*6});
+    console.log(url);
+    res.send({ url });
+  } catch (error) {
+    res.status(404).send({error:error})
+  }
 }
