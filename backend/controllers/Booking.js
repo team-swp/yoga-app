@@ -22,7 +22,6 @@ module.exports.addBooking = async (req, res) => {
       status,
       meta_data: meta_data || "",
     });
-    console.log(booking);
     // return save result as a response
     booking
       .save()

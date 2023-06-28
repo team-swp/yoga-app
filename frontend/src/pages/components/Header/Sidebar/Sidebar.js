@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { IconButton, Menu } from "@mui/material";
 import classNames from "classnames/bind";
 import styles from "./Sidebar.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Link } from "react-router-dom";
 import { UserAuth } from "../../../../context/AuthGoogleContext";
 import { userSelector } from "../../../../redux/selectors";
-import { getAvatarToAWS } from "../../../../helper/loginAPI";
+import { getAvatarToAWS, updateUser } from "../../../../helper/loginAPI";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
@@ -17,6 +17,7 @@ import NewspaperIcon from "@mui/icons-material/Newspaper";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
 import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
+import { setDataLogin } from "../../../../redux/actions";
 const style = {
   position: "absolute",
   top: "50%",
@@ -56,22 +57,46 @@ function Sidebar() {
   };
 
   const [open, setOpen] = useState(false);
+  const [file, setFile] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const user = useSelector(userSelector);
+  const dispatch = useDispatch()
   const loadImageAgain = async (e) => {
     if (user.avatar) {
       const { url } = await getAvatarToAWS({ imageName: user._id });
       e.target.src = url;
+      const result = updateUser({avatar:url})
+      result.then((data)=>{
+        dispatch(setDataLogin(data.data.data))
+      }).catch(()=>{
+        console.log('error');
+      })
     }
-  };
+  }
   useEffect(() => {
+   const test =async ()=>{
+    if (user.avatar) {
+      const { url } = await getAvatarToAWS({ imageName: user._id });
+      setFile(url)
+      console.log(url);
+      const result = updateUser({avatar:url})
+      result.then((data)=>{
+        dispatch(setDataLogin(data.data.data))
+      }).catch(()=>{
+        console.log('error');
+      })
+    }
+   }
+   test()
+  }, []);
+
+  useEffect(()=>{
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
     }
-  }, [user]);
+  },[user])
   return (
     <div>
       <IconButton
@@ -87,11 +112,10 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-            src={user.avatar}
+            src={file||user.avatar}
             className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
               } object-cover h-44`}
             alt="avatar"
-            onError={loadImageAgain}
           />
           {checkMember ? (
             <img

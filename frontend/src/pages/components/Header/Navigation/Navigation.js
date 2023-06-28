@@ -3,10 +3,15 @@ import logo from "../../../../Heartbeat.svg";
 import Sidebar from "../Sidebar/Sidebar";
 import { useEffect } from "react";
 import { Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../../../redux/selectors";
 
 function Navigation() {
+  const user = useSelector(userSelector)
   const token = localStorage.getItem("token");
-  useEffect(() => {}, []);
+  useEffect(() => {
+    
+  }, [user]);
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">
       <nav className="mx-20">

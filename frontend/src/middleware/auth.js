@@ -57,3 +57,11 @@ export const ProtectRouteCheckout = ({ children }) => {
   }
   return children;
 };
+
+export const ProtectRouteAdmin = ({ children }) => {
+  const user = useSelector(userSelector);
+  if (!user.role==='admin') {
+    return <Navigate to={"/notFound"} replace={true}></Navigate>;
+  }
+  return children;
+};

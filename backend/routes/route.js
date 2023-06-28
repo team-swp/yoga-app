@@ -105,7 +105,12 @@ const Semester = require("../models/semesters");
 const { log } = require("console");
 const { addRole, updateRole, getRoleById } = require("../controllers/Role");
 const { getUserIP } = require("../middleware/blockIP");
-const { updatePremium, getPremiumById, getPremiums, addPremiumOption } = require("../controllers/Premium");
+const {
+  updatePremium,
+  getPremiumById,
+  getPremiums,
+  addPremiumOption,
+} = require("../controllers/Premium");
 const { checkIsMember } = require("../middleware/checkDateIsMember");
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
@@ -236,7 +241,7 @@ router.post("/booking/check", Auth, checkIsMember, (req, res) =>
 ); // check book
 router.get("/booking/get", getBooking);
 router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
-//google
+//
 router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 ///-payyyment VNPAY
@@ -259,11 +264,13 @@ router.get("/schedulesPaging/get", getSchedulesPaging);
 router.get("/semestersPaging/get", getSemestersPaging);
 router.get("/classesPaging/get", getClassesPaging);
 
+
+
 //IP
 // router.get("/ipUser",getUserIP)
-//Chart 
-router.post('/chart/payments',charDataPayment)
-router.post('/chart/customer',charDataAccount)
-router.post('/chart/product',charDataPaymentPremium)
-router.post('/chart/members',charDataSparkLine)
-router.post('/chart/premium',charDataPaymentPremiumLineChart)
+//Chart
+router.post("/chart/payments", charDataPayment);
+router.post("/chart/customer", charDataAccount);
+router.post("/chart/product", charDataPaymentPremium);
+router.post("/chart/members", charDataSparkLine);
+router.post("/chart/premium", charDataPaymentPremiumLineChart);

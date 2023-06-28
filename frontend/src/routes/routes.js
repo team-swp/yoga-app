@@ -15,6 +15,7 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
+  ProtectRouteAdmin,
   ProtectRouteCheckout,
   ProtectRouteOTP,
 } from "../middleware/auth";
@@ -271,7 +272,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard></Dashboard>,
+    element: <ProtectRouteAdmin><Dashboard></Dashboard></ProtectRouteAdmin> ,
   },
   {
     path: "/admin",
@@ -279,7 +280,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/weather",
-    element: <Weather/>,
+    element:  <Weather/>,
   }
 ]);
 

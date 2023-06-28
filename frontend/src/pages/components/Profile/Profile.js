@@ -8,7 +8,7 @@ import convertToBase64 from "../../../helper/convert";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../redux/selectors";
 import { getPasswordCurr, updateUser } from "../../../helper/loginAPI";
-import { updateData } from "../../../redux/actions";
+import { setDataLogin, updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { UserAuth } from "../../../context/AuthGoogleContext";
 import { addBooking } from "../../../helper/bookingAPI";
@@ -142,6 +142,13 @@ function Profile() {
         if (status === 200) {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
+          const result = updateUser({avatar:url})
+          result.then((data)=>{
+            dispatch(setDataLogin(data.data.data))
+            toast.success('Update Avatar Successfully')
+          }).catch(()=>{
+            console.log('error');
+          })
           setFile(url);
           console.log(file);
         }
