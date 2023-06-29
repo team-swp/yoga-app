@@ -122,7 +122,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element:<ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>  ,
+    element: <ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>,
   },
   {
     path: "/premium",
@@ -279,7 +279,7 @@ const routers = createBrowserRouter([
   },
   {
     path: "/weather",
-    element: <Weather/>,
+    element: <Weather />,
   }
 ]);
 

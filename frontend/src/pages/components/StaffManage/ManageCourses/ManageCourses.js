@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import "./ManageCourses.css";
 import { Link } from "react-router-dom";
-
+import { getSemester } from "../../../../helper/semesterAPI";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import StatusButton from "./StatusButton2";
@@ -33,23 +33,37 @@ function ManageCourses() {
   const handleToggle = async (event, course) => {
     try {
       const updatedCourseData = { ...course, status: event.target.checked };
-      const response = await updateCourse(updatedCourseData);
-      if (response && response.data) {
-        console.log(response.data.data.coursename);
-        setUpdatedCourse(courses);
-        const updatedCourses = courses.map(
-          (courseItem) =>
-            courseItem._id === response.data._id ? response.data : courseItem,
-          toast.success(
-            `${response.data.data.coursename} status updated success`
-          )
-        );
-        setCourses(updatedCourses);
+
+      const semesterId = course.semester_id; // Lấy semester_id từ course
+
+      // Kiểm tra trạng thái của semester dựa trên semesterId
+      const semesterResponse = await getSemester();
+
+      if (semesterResponse && semesterResponse.data) {
+        const semester = semesterResponse.data.find(semester => semester._id === semesterId);
+
+        if (!semester || semester.status === true) {
+          const response = await updateCourse(updatedCourseData);
+          if (response && response.data) {
+            console.log(response.data.data.coursename);
+            setUpdatedCourse(courses);
+            const updatedCourses = courses.map(
+              (courseItem) =>
+                courseItem._id === response.data._id ? response.data : courseItem
+            );
+            setCourses(updatedCourses);
+
+            toast.success(`${response.data.data.coursename} status updated successfully`);
+          }
+        } else {
+          toast.error('Cannot update status. Semester status is false.');
+        }
       }
     } catch (error) {
       console.error(error);
     }
   };
+
   ////////////////////////////////////////////////
   //////// địt mẹ cấm sửa dùm nha////////////////
   useEffect(() => {
@@ -192,7 +206,7 @@ function ManageCourses() {
           <form onSubmit={handleSearch}>
             <div
               style={{
-                marginTop:'10px',
+                marginTop: '10px',
                 maxWidth: "800px",
                 display: "flex",
                 alignItems: "center",
@@ -200,8 +214,8 @@ function ManageCourses() {
               }}
             >
               <input
-              autoFocus
-              style={{marginLeft:'10px',marginRight:'10px'}}
+                autoFocus
+                style={{ marginLeft: '10px', marginRight: '10px' }}
                 type="text"
                 variant="outlined"
                 placeholder="Search by  name"
@@ -230,7 +244,7 @@ function ManageCourses() {
                   style={{
                     fontWeight: "normal",
                     fontSize: "13px",
-    
+
                   }}
                 >
                   Select Status :

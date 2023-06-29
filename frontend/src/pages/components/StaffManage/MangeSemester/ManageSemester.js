@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Link } from "react-router-dom";
 import { updateSemester } from "../../../../helper/semesterAPI";
+import { updateCourse } from "../../../../helper/courseAPI";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import StatusButton from "./StatusButtons";
@@ -24,6 +25,7 @@ import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 function ManageSemester() {
   const [semesters, setSemesters] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [manageUpdateSemester, setManageUpdateSemester] = useState({})
   const [value, setValue] = useState('')
   const [page, setPage] = useState(1)
@@ -34,18 +36,57 @@ function ManageSemester() {
   const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
+
   const handleToggle = async (event, semester) => {
     try {
       const updatedSemesterData = { ...semester, status: event.target.checked };
-      const response = await updateSemester(updatedSemesterData);
-      if (response && response.data) {
-        console.log(response.data.data.semestername);
+      const semesterResponse = await updateSemester(updatedSemesterData);
+
+      if (semesterResponse && semesterResponse.data) {
+        console.log(semesterResponse.data.data.semestername);
+
+        const courseResponse = await axios.get('http://localhost:3001/api/course/get');
+        const courseData = courseResponse.data;
+
+        if (Array.isArray(courseData) && courseData.length > 0) {
+          const coursesWithSemester = courseData.filter((course) =>
+            course.semester_id === semesterResponse.data.data._id
+          );
+
+          if (coursesWithSemester.length > 0) {
+            coursesWithSemester.forEach(async (course) => {
+              try {
+                const updatedCourseData = { ...course };
+                if (!event.target.checked === false) {
+                  updatedCourseData.status = false;
+                }
+                const response = await updateCourse(updatedCourseData);
+
+                if (response && response.data) {
+                  console.log(response.data.data.coursename);
+
+                  const updatedCourses = courses.map((courseItem) =>
+                    courseItem._id === response.data._id ? response.data : courseItem
+                  );
+                  setCourses(updatedCourses);
+
+                  if (!event.target.checked) {
+                    toast.success(`${response.data.data.coursename} status updated successfully`);
+                  }
+                }
+              } catch (error) {
+                console.error(error);
+              }
+            });
+          } else {
+            console.log('No courses found with the updated semester');
+          }
+        } else {
+          console.log('Course data is empty or invalid');
+        }
+        toast.success(`${semesterResponse.data.data.semestername} status updated successfully`);
         setManageUpdateSemester(semesters);
-        const manageUpdateSemester = semesters.map((semesterItem) =>
-          semesterItem._id === response.data._id ? response.data : semesterItem,
-          toast.success(`${response.data.data.semestername} status updated success`)
-        );
-        setSemesters(manageUpdateSemester);
+        setSemesters([...semesters]);
       }
     } catch (error) {
       console.error(error);
