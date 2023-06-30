@@ -53,7 +53,7 @@ function Premium() {
             premium_id: premiumStart._id,
             paymentAmount:
               premiumStart.priceDiscount || premiumStart.priceOriginal,
-            duration: premiumStart.durationByMonth,
+            duration: premiumStart.duration,
             premiumname: premiumStart.premiumname,
           })
         );
@@ -97,12 +97,20 @@ function Premium() {
             </Typography>
             <Typography className="font-bold" variant="subtitle1">
               ✓ You will only pay 1.690.000VND for this package instead of the
+<<<<<<< HEAD
               4.500.000VND.
+=======
+              3.700.000VND.
+>>>>>>> thienNH
             </Typography>
           </div>
           <div className="flex items-center gap-3 font-bold">
             <div onClick={handleSubmitStart} className={styles.startBtn}>
+<<<<<<< HEAD
               Enroll
+=======
+              Enroll now
+>>>>>>> thienNH
             </div>
             <a href="#premium_packet">
               <div className={styles.moreBtn}>Packages</div>
@@ -130,11 +138,16 @@ function Premium() {
             nowrap={true}
             variant="h4"
           >
+<<<<<<< HEAD
             MINI PREMIUM PACKAGES
+=======
+            Premium Mini
+>>>>>>> thienNH
           </Typography>
         </div>
         <div>
           <Typography className="font-bold" variant="h5">
+<<<<<<< HEAD
           Able to learn all yoga classes for just 0$
 
           </Typography>
@@ -147,6 +160,22 @@ function Premium() {
           <a href="#premium_packet">
             <div className={styles.tryByDay}>Spring Flower</div>
           </a>
+=======
+            Able to learn all yoga classes for just 10$
+          </Typography>
+        </div>
+        <div className="flex  justify-center justify-items-center items-center gap-2">
+          <div className={styles.tryByDay}>
+            <a href="#premium_packet">
+              <div>Free trial</div>
+            </a>
+          </div>
+          <div className={styles.tryByWeek}>
+            <a href="#premium_packet">
+              <div>Spring Flower</div>
+            </a>
+          </div>
+>>>>>>> thienNH
         </div>
         <div>
           {/* <a>
