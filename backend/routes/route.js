@@ -105,8 +105,14 @@ const Semester = require("../models/semesters");
 const { log } = require("console");
 const { addRole, updateRole, getRoleById } = require("../controllers/Role");
 const { getUserIP } = require("../middleware/blockIP");
-const { updatePremium, getPremiumById, getPremiums, addPremiumOption } = require("../controllers/Premium");
+const {
+  updatePremium,
+  getPremiumById,
+  getPremiums,
+  addPremiumOption,
+} = require("../controllers/Premium");
 const { checkIsMember } = require("../middleware/checkDateIsMember");
+const { getNews, addNews, getNewsById, updateNews } = require("../controllers/News");
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
@@ -209,6 +215,7 @@ router.patch(
 //Role
 router.post("/role/add", AuthAdmin, addRole);
 router.patch("/role/update", AuthAdmin, getRoleById, updateRole);
+router.patch("/admin/update", AuthAdmin, updateUserForAdmin);
 
 //premium
 router.post("/premium/add", AuthStaff, addPremiumOption);
@@ -236,7 +243,7 @@ router.post("/booking/check", Auth, checkIsMember, (req, res) =>
 ); // check book
 router.get("/booking/get", getBooking);
 router.patch("/booking/update", Auth, updateBooking); //người booking nếu đang duyệt thì đc sửa, chỉ ng book mới đc sửa, trong trạng thái duyệt
-//google
+//
 router.post("/google/verify", verifyTokenGoogle, CheckExistAccount);
 
 ///-payyyment VNPAY
@@ -248,6 +255,12 @@ router.get("/vnpay_ipn", vnpayIPN, haveDonePayment);
 router.get("/vnpay_return", vnpayReturn);
 
 router.post("/runUrlVnPAY", runUrl);
+//news
+
+router.post("/news/add", AuthStaff, addNews);
+router.get("/news/get", getNews);
+router.patch("/news/update", AuthStaff, getNewsById, updateNews);
+
 
 //pagingnation
 
@@ -259,11 +272,13 @@ router.get("/schedulesPaging/get", getSchedulesPaging);
 router.get("/semestersPaging/get", getSemestersPaging);
 router.get("/classesPaging/get", getClassesPaging);
 
+
+
 //IP
 // router.get("/ipUser",getUserIP)
-//Chart 
-router.post('/chart/payments',charDataPayment)
-router.post('/chart/customer',charDataAccount)
-router.post('/chart/product',charDataPaymentPremium)
-router.post('/chart/members',charDataSparkLine)
-router.post('/chart/premium',charDataPaymentPremiumLineChart)
+//Chart
+router.post("/chart/payments", charDataPayment);
+router.post("/chart/customer", charDataAccount);
+router.post("/chart/product", charDataPaymentPremium);
+router.post("/chart/members", charDataSparkLine);
+router.post("/chart/premium", charDataPaymentPremiumLineChart);

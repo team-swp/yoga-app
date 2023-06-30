@@ -41,8 +41,6 @@ function CourseDetail() {
 
   const handleSubmit = async () => {
     try {
-      // const response = await addBooking();
-      // console.log(response);
       navigate("/checkout");
     } catch (error) {
       console.error(error);
@@ -86,8 +84,7 @@ function CourseDetail() {
                 <div className={cx("course-image")}>
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
-                <p className={cx("course-price")}>{course.price}$</p>
-                <div className="flex justify-evenly align-center">
+                <div className="flex justify-evenly align-center mt-3">
                   <button
                     className={cx("course-button")}
                     onClick={() => {
@@ -108,14 +105,14 @@ function CourseDetail() {
                   />
                 </div>
                 <div className="my-3 text-center">
-                  30-Day Money-Back Guarantee
+                  7-Days Trial For Free Guarantee
                 </div>
                 <hr className="mb-3 border-t border-gray-500 mx-auto my-4 w-full" />
                 <div className={cx("course-policy")}>
                   <h6>This course include:</h6>
                   <p>
                     <CheckIcon fontSize="small" sx={{ marginRight: 1 }} />
-                    Lasts 4 to 8 weeks
+                    Lasts 4 to 10 weeks
                   </p>
                   <p>
                     <ScheduleIcon fontSize="small" sx={{ marginRight: 1 }} />

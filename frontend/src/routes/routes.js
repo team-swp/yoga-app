@@ -15,24 +15,22 @@ import {
   AuthorizeUser,
   ProtectRecover,
   ProtectRoute,
+  ProtectRouteAdmin,
   ProtectRouteCheckout,
   ProtectRouteOTP,
+  ProtectRouteStaff,
 } from "../middleware/auth";
 import PaymentStatus from "../pages/components/Checkout/PaymentStatus";
 import StaffManage from "../pages/components/StaffManage/StaffManage";
-import ManageClass from "../pages/components/StaffManage/ManageClass/ManageClass";
 import AddNewClass from "../pages/components/StaffManage/ManageClass/AddNewClass";
 import UpdateClass from "../pages/components/StaffManage/ManageClass/UpdateClass";
-import ManageSchedule from "../pages/components/StaffManage/ManageSchedule/ManageSchedule";
 import ManageAddSchedule from "../pages/components/StaffManage/ManageSchedule/ManageAddSchedule";
 import ManageEditSchedule from "../pages/components/StaffManage/ManageSchedule/ManageEditSchedule";
-import ManageCourses from "../pages/components/StaffManage/ManageCourses/ManageCourses";
 import AddNewCourse from "../pages/components/StaffManage/ManageCourses/AddNewCourse";
 import UpdateCourse from "../pages/components/StaffManage/ManageCourses/UpdateCourse";
-import ManageSemester from "../pages/components/StaffManage/MangeSemester/ManageSemester";
 import ManageAddSemester from "../pages/components/StaffManage/MangeSemester/ManageAddSemester";
 import ManageUpdateSemester from "../pages/components/StaffManage/MangeSemester/ManageUpdateSemester";
-import ManageMember from "../pages/components/StaffManage/ManageMember/ManageMember";
+import ManageUpdatePackage from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 
 import {
   Ecommerce,
@@ -63,6 +61,7 @@ import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
 import Premium from "../pages/components/MemberPacket/Premium";
 import Weather from "../pages/components/Weather/components/Weather";
+import InsctructorSchedule from "../pages/components/WeeklySchedule/InstructorSchedule";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -77,8 +76,12 @@ const routers = createBrowserRouter([
     element: <CourseDetail></CourseDetail>,
   },
   {
-    path: "/timetable",
+    path: "/schedule",
     element: <WeeklySchedule />,
+  },
+  {
+    path: "/teachschedule",
+    element: <InsctructorSchedule />,
   },
   {
     path: "/login",
@@ -122,7 +125,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element:<ProtectRouteCheckout><Checkout /></ProtectRouteCheckout>  ,
+    element: (
+      <ProtectRouteCheckout>
+        <Checkout />
+      </ProtectRouteCheckout>
+    ),
   },
   {
     path: "/premium",
@@ -138,13 +145,12 @@ const routers = createBrowserRouter([
   },
   {
     path: "/staffmanage",
-    element: <StaffManage></StaffManage>,
+    element: (
+      <ProtectRouteStaff>
+        <StaffManage />
+      </ProtectRouteStaff>
+    ),
   },
-  {
-    path: "/manageclass",
-    element: <ManageClass></ManageClass>,
-  },
-  { path: "/managemember", element: <ManageMember /> },
   {
     path: "/addnewclass",
     element: <AddNewClass></AddNewClass>,
@@ -154,10 +160,6 @@ const routers = createBrowserRouter([
     element: <UpdateClass></UpdateClass>,
   },
   {
-    path: "/manageschedule",
-    element: <ManageSchedule></ManageSchedule>,
-  },
-  {
     path: "/addnewschedule",
     element: <ManageAddSchedule></ManageAddSchedule>,
   },
@@ -165,10 +167,7 @@ const routers = createBrowserRouter([
     path: "/updateschedule/:id",
     element: <ManageEditSchedule></ManageEditSchedule>,
   },
-  {
-    path: "/managecourse",
-    element: <ManageCourses></ManageCourses>,
-  },
+
   {
     path: "/addnewcourse",
     element: <AddNewCourse></AddNewCourse>,
@@ -177,10 +176,7 @@ const routers = createBrowserRouter([
     path: "/updatecourse/:id",
     element: <UpdateCourse></UpdateCourse>,
   },
-  {
-    path: "/managesemester",
-    element: <ManageSemester></ManageSemester>,
-  },
+
   {
     path: "/addnewsemester",
     element: <ManageAddSemester></ManageAddSemester>,
@@ -189,6 +185,7 @@ const routers = createBrowserRouter([
     path: "/updatesemester/:id",
     element: <ManageUpdateSemester></ManageUpdateSemester>,
   },
+
   {
     path: "/ecommerce",
     element: <Ecommerce></Ecommerce>,
@@ -271,16 +268,24 @@ const routers = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard></Dashboard>,
+    element: (
+      <ProtectRouteAdmin>
+        <Dashboard />
+      </ProtectRouteAdmin>
+    ),
   },
   {
     path: "/admin",
-    element: <Admin></Admin>,
+    element: (
+      <ProtectRouteAdmin>
+        <Admin />
+      </ProtectRouteAdmin>
+    ),
   },
   {
     path: "/weather",
-    element: <Weather/>,
-  }
+    element: <Weather />,
+  },
 ]);
 
 export default routers;
