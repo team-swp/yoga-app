@@ -31,8 +31,10 @@ const rootReducer = (state = initState, action) => {
     case "login/setDataLogin": {
       const { _id, token, username, phone, avatar, email, meta_data, role } =
         action.payload;
-      if (!localStorage.getItem("token")) {
+
+      if (!localStorage.getItem("token") && !localStorage.getItem("role")) {
         localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
       }
 
       if (!sessionStorage.getItem("user.id")) {
@@ -72,6 +74,7 @@ const rootReducer = (state = initState, action) => {
     }
     case "logout": {
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
       return {
         ...state,
         user: {},

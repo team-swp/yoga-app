@@ -2,10 +2,16 @@ import { Link } from "react-router-dom";
 import logo from "../../../../Heartbeat.svg";
 import Sidebar from "../Sidebar/Sidebar";
 import { useEffect } from "react";
+import { Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import { userSelector } from "../../../../redux/selectors";
 
 function Navigation() {
+  const user = useSelector(userSelector)
   const token = localStorage.getItem("token");
-  useEffect(() => {}, []);
+  useEffect(() => {
+    
+  }, [user]);
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">
       <nav className="m-0 mx-20 flex justify-between items-center">
@@ -27,7 +33,7 @@ function Navigation() {
               </Link>
             </div>
             <div>
-              <Link to="/timetable">
+              <Link to="/schedule">
                 <p className="text-xs uppercase">Schedule</p>
               </Link>
             </div>
