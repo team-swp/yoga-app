@@ -137,7 +137,6 @@ function Profile() {
         const formData = new FormData();
         formData.append("avatar", avatar);
         formData.append("imageName", user._id);
-
         const { data, status } = await postAvatarToAWS(formData);
         if (status === 200) {
           data.imageName = user._id;

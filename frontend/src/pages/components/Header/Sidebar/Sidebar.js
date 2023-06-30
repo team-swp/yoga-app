@@ -9,7 +9,11 @@ import Modal from "@mui/material/Modal";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../../../context/AuthGoogleContext";
 import { userSelector } from "../../../../redux/selectors";
-import { getAvatarToAWS, updateUser } from "../../../../helper/loginAPI";
+import {
+  getAvatarToAWS,
+  postAvatarToAWS,
+  updateUser,
+} from "../../../../helper/loginAPI";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
@@ -70,42 +74,82 @@ function Sidebar() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector(userSelector);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const loadImageAgain = async (e) => {
     if (user.avatar) {
       const { url } = await getAvatarToAWS({ imageName: user._id });
       e.target.src = url;
-      const result = updateUser({avatar:url})
-      result.then((data)=>{
-        dispatch(setDataLogin(data.data.data))
-      }).catch(()=>{
-        console.log('error');
-      })
+      const result = updateUser({ avatar: url });
+      result
+        .then((data) => {
+          dispatch(setDataLogin(data.data.data));
+        })
+        .catch(() => {
+          console.log("error");
+        });
     }
-  }
+  };
+  const [checkUpdateAva, setCheckUpdateAva] = useState(false);
   useEffect(() => {
-   const test =async ()=>{
-    if (user.avatar) {
-      const { url } = await getAvatarToAWS({ imageName: user._id });
-      setFile(url)
-      console.log(url);
-      const result = updateUser({avatar:url})
-      result.then((data)=>{
-        dispatch(setDataLogin(data.data.data))
-      }).catch(()=>{
-        console.log('error');
-      })
-    }
-   }
-   test()
+    const test = async () => {
+      try {
+        if (user.avatar && user.avatar.includes("yoga-heartbeat.s3")) {
+          const { url } = await getAvatarToAWS({ imageName: user._id });
+          setFile(url);
+          const result = updateUser({ avatar: url });
+          result
+            .then((data) => {
+              dispatch(setDataLogin(data.data.data));
+            })
+            .catch(() => {
+              console.log("error");
+            });
+        } else {
+          const urlToObject = async () => {
+            try {
+              const response = await fetch(user.avatar);
+              // here image is url/location of image
+              const blob = await response.blob();
+              const file = new File([blob], "image.jpg", { type: blob.type });
+              const { data, status } = await postAvatarToAWS({
+                avatar: file,
+                imageName: user._id,
+              });
+              if (status === 200) {
+                data.imageName = user._id;
+                const { url } = await getAvatarToAWS(data);
+                const result = updateUser({ avatar: url });
+                result
+                  .then((data) => {
+                    dispatch(setDataLogin(data.data.data));
+                    console.log(data);
+                  })
+                  .catch(() => {
+                    console.log("error");
+                  });
+                setFile(url);
+                setCheckUpdateAva(true);
+              }
+            } catch (error) {
+              return error
+            }
+           
+          };
+            urlToObject()
+        }
+      } catch (error) {
+        return error
+      }
+    };
+    test();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
     }
-  },[user])
+  }, [user]);
   return (
     <div>
       <IconButton
@@ -121,9 +165,10 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-            src={file||user.avatar}
-            className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
-              } object-cover h-44`}
+            src={file || user.avatar}
+            className={` ${
+              checkMember ? styles.profile_img : styles.profile_img_normal
+            } object-cover h-44`}
             alt="avatar"
           />
           {checkMember ? (
