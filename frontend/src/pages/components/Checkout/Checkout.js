@@ -142,7 +142,7 @@ function Checkout() {
                     const date = new Date()
                   const dateString = date.toISOString();
                     const updateMember = updateUser({
-                      meta_data:`{"isMember":false}` ,
+                      meta_data:`{"isMember":false,"payment_id":"${urlID}","premium_id":"${premium.premium_id}","premiumname":"${premium.premiumname}","MemberDuration":${premium.duration},"paymentAmount":${premium.paymentAmount}}` ,
                       // meta_data:`{"isMember":true,"MemberDuration":"${premium.duration}","startDateMember":"${dateString}"}` ,
                     });
                     updateMember.then((result) => {

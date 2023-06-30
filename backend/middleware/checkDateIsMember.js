@@ -27,7 +27,11 @@ module.exports.checkIsMember = async (req, res, next) => {
         next();
         return;
       }else if(!JSON.parse(member.meta_data).isMember){
-        console.log(member);
+        if(JSON.parse(member.meta_data).payment_id){
+          return res.status(400).send({
+            message: `Your Premium Is Pending, Please Come To Yoga Center To Complete Your Payment`,
+          });
+        }
         next();
         return;
       }else{
