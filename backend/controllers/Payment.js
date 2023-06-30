@@ -936,6 +936,26 @@ module.exports.charDataPaymentPremiumLineChart = async (req, res) => {
   return combinedData;
 };
 
+module.exports.getPaymentById = async (req, res) => {
+  try {
+    const arrTemp = []
+    const account =req.account; //chuyển qa cho thg tiếp theo
+    const getBookingByUserID= await Booking.find({member_id:account.userId})
+    const length = getBookingByUserID.length
+    console.log(getBookingByUserID);
+    for(var i =0 ;i < length;i++){
+      const bookingID = getBookingByUserID[i]._id
+      const getPaymentByUserID= await Payment.find({booking_id:bookingID})
+      for(var index =0 ; index<getPaymentByUserID.length;index++){
+        arrTemp.push(getPaymentByUserID[index])
+      }
+    }
+    // console.log(getPaymentByUserID);
+    return res.status(201).send(arrTemp)
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 function removeDuplicateKeyValuePairs(arr) {
   const uniquePairs = {};
@@ -952,3 +972,4 @@ function removeDuplicateKeyValuePairs(arr) {
 
   return Object.values(uniquePairs);
 }
+

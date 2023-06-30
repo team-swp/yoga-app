@@ -10,6 +10,7 @@ module.exports.generateOTP = async (req, res) => {
     upperCaseAlphabets: false,
     specialChars: false,
   });
+  console.log(req.app.locals.OTP);
   setTimeout(() => {
     req.app.locals.OTP = null;
   }, 5 * 60 * 1000);
