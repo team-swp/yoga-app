@@ -38,15 +38,18 @@ function AddNewCourse() {
           "http://localhost:3001/api/semester/get"
         );
         const semesterData = response.data;
-        setSemesterList(semesterData);
+        // Lọc ra những semester có giá trị status là true
+        const filteredSemesters = semesterData.filter(
+          (semester) => semester.status === true
+        );
+        setSemesterList(filteredSemesters);
       } catch (error) {
         console.error(error);
       }
     }
-
+  
     fetchSemesters();
   }, []);
-
   const handleSubmit = async (values) => {
     try {
       const semesterId = selectedSemester ? selectedSemester._id : null;

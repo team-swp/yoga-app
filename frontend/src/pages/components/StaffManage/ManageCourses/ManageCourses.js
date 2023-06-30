@@ -1,4 +1,4 @@
-import { Select, MenuItem, TextField } from "@mui/material";
+import { Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -23,15 +23,24 @@ import { updateCourse } from "../../../../helper/courseAPI";
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
   const [updatedCourse, setUpdatedCourse] = useState({});
-  const [schedule, setSchedule] = useState([]);
+  const [semesteres, setSemesteres] = useState([]);
+  const [classes, setClasses] = useState([])
   const [value, setValue] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [semesterValue, setSemesterValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
-  /////// update done////////////
   const handleToggle = async (event, course) => {
     try {
+
+
+      const confirmed = window.confirm("Are you sure about that!!!");
+
+  if (confirmed) 
+  { const semester = semesteres.find((item2) => item2._id === course.semester_id);
+      
+    // Kiểm tra trạng thái của semester trước khi cập nhật
+    if (semester && semester.status === true) {
       const updatedCourseData = { ...course, status: event.target.checked };
       const response = await updateCourse(updatedCourseData);
       if (response && response.data) {
@@ -39,17 +48,44 @@ function ManageCourses() {
         setUpdatedCourse(courses);
         const updatedCourses = courses.map(
           (courseItem) =>
-            courseItem._id === response.data._id ? response.data : courseItem,
-          toast.success(
-            `${response.data.data.coursename} status updated success`
-          )
+            courseItem._id === response.data._id ? response.data : courseItem
         );
         setCourses(updatedCourses);
+        toast.success(`${response.data.data.coursename} status updated success`);
+      }
+    } 
+    else {
+      // Hiển thị thông báo hoặc xử lý khác khi semester không có trạng thái true
+      toast.error('Semester is disable so that can not update course status');
+    }}
+     else {
+        // Hiển thị thông báo hoặc xử lý khác khi semester không có trạng thái true
+       
       }
     } catch (error) {
       console.error(error);
     }
   };
+  
+
+
+
+  useEffect(() => {
+    async function fecthSemester() {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/api/classesPaging/get?limit=${1000}`
+        );
+        const coureseData = response.data.items;
+        console.log(coureseData);
+        setClasses(coureseData);
+      } catch (error) {
+        console.log("Failed");
+      }
+    }
+    fecthSemester();
+  }, []);
+  
   ////////////////////////////////////////////////
   //////// địt mẹ cấm sửa dùm nha////////////////
   useEffect(() => {
@@ -64,7 +100,7 @@ function ManageCourses() {
         );
         const coureseData = response.data.items;
         console.log();
-        setSchedule(coureseData);
+        setSemesteres(coureseData);
       } catch (error) {
         console.log("Failed");
       }
@@ -148,7 +184,7 @@ function ManageCourses() {
       setPageCount(response.data.pagination.pageCount);
       setCourses(semesterData);
     } catch (error) {
-      toast.error("Please try agian !!!");
+       fetchCourses()
     }
   };
   /////////////////// handle việc next và prev trong page/////////////////////////
@@ -169,7 +205,7 @@ function ManageCourses() {
     });
   }
   const startIndex = (page - 1) * 4;
-  const endIndex = startIndex + 4;
+
   //////////////////////////////////////////////////////////////////////////////////////
 
   return (
@@ -192,7 +228,7 @@ function ManageCourses() {
           <form onSubmit={handleSearch}>
             <div
               style={{
-                marginTop:'10px',
+                marginTop: "10px",
                 maxWidth: "800px",
                 display: "flex",
                 alignItems: "center",
@@ -200,54 +236,61 @@ function ManageCourses() {
               }}
             >
               <input
-              autoFocus
-              style={{marginLeft:'10px',marginRight:'10px'}}
+                autoFocus
+                style={{ marginLeft: "10px", marginRight: "10px" }}
                 type="text"
                 variant="outlined"
                 placeholder="Search by  name"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                className="border-solid border-2 border-black p-2"
+                className="border-solid border-2 border-black p-1"
               />
               <p style={{ fontWeight: "normal", fontSize: "13px" }}>
                 Select Semester :
               </p>
-              <Select
+              <select
                 value={semesterValue}
                 onChange={(e) => setSemesterValue(e.target.value)}
-                style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                style={{
+                  marginLeft: "1rem",
+                  marginRight: "1rem",
+                  border: "2px solid black",
+                  padding: "0.5rem",
+                  fontSize: "13px",
+                }}
               >
-                <MenuItem value="">All Semesters</MenuItem>
-                {schedule.map((semester, index) => (
-                  <MenuItem key={index} value={semester._id}>
+                <option value="">All Semesters</option>
+                {semesteres.map((semester, index) => (
+                  <option key={index} value={semester._id}>
                     {semester.semestername}
-                  </MenuItem>
+                  </option>
                 ))}
-              </Select>
+              </select>
 
               <>
                 <p
                   style={{
                     fontWeight: "normal",
                     fontSize: "13px",
-    
                   }}
                 >
                   Select Status :
                 </p>
               </>
-              <Select
+              <select
                 value={statusValue}
                 onChange={(e) => setStatusValue(e.target.value)}
                 style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                className="border-solid border-2 border-black p-1"
               >
-                <MenuItem value="">All Statuses</MenuItem>
-                <MenuItem value="true">Enabled</MenuItem>
-                <MenuItem value="false">Disabled</MenuItem>
-              </Select>
+                <option value="">All Statuses</option>
+                <option value="true">Enabled</option>
+                <option value="false">Disabled</option>
+              </select>
             </div>
             <div
               style={{
+                marginTop: "10px",
                 marginLeft: "10px",
                 marginBottom: "10px",
                 maxWidth: "500px",
@@ -281,12 +324,13 @@ function ManageCourses() {
                 <TableCell style={{ textAlign: "center" }}>
                   Course Name
                 </TableCell>
-                <TableCell style={{ textAlign: "center" }}>Price</TableCell>
+             
                 <TableCell style={{ textAlign: "center" }}>Semester</TableCell>
+                
+                <TableCell style={{ textAlign: "center" }}>Status </TableCell>
                 <TableCell style={{ textAlign: "center" }}>
                   Disable/Enable{" "}
                 </TableCell>
-                <TableCell style={{ textAlign: "center" }}>Status </TableCell>
                 <TableCell style={{ textAlign: "center" }}>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -303,7 +347,7 @@ function ManageCourses() {
                 </TableRow>
               ) : (
                 courses.map((courseItem, index) => {
-                  const semester = schedule.find(
+                  const semester = semesteres.find(
                     (item2) => item2._id === courseItem.semester_id
                   );
                   return (
@@ -314,21 +358,20 @@ function ManageCourses() {
                       <TableCell style={{ textAlign: "center" }}>
                         {courseItem.coursename}
                       </TableCell>
-                      <TableCell style={{ textAlign: "center" }}>
-                        {courseItem.price}
-                      </TableCell>
+                      
                       <TableCell style={{ textAlign: "center" }}>
                         {semester ? semester.semestername : "N/A"}
+                      </TableCell>
+                    
+                      <TableCell style={{ textAlign: "center" }}>
+                        <StatusButton status={courseItem.status} />
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
                         <Switch
                           checked={courseItem.status}
-                          onChange={(event) => handleToggle(event, courseItem)}
+                          onChange={(event) =>handleToggle(event, courseItem)}
                           color="primary"
                         />
-                      </TableCell>
-                      <TableCell style={{ textAlign: "center" }}>
-                        <StatusButton status={courseItem.status} />
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
                         <Button
@@ -378,6 +421,7 @@ function ManageCourses() {
             className="next-button border"
             onClick={handleNext}
             style={{
+              marginRight: "1rem",
               padding: "0.5rem 1rem",
               borderRadius: "4px",
               backgroundColor: "#ccc",
