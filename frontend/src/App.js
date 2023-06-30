@@ -10,21 +10,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUserLogin, setDataLogin } from "./redux/actions";
 import { userSelector } from "./redux/selectors";
 function App() {
-  const dispatch = useDispatch()
-  const user = useSelector(userSelector)
+  const dispatch = useDispatch();
+  const user = useSelector(userSelector);
   useEffect(() => {
     const checkToken = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token && token !== "undefined") {
-          const getUserToken = getUserByToken(); 
+          const getUserToken = getUserByToken();
           getUserToken
             .then((res) => {
-              console.log(res.data.data);
               res.data.data = Object.assign(res.data.data, { token });
-                dispatch(addUserLogin(res.data.data));
-                dispatch(setDataLogin(res.data.data));
-              
+              dispatch(addUserLogin(res.data.data));
+              dispatch(setDataLogin(res.data.data));
             })
             .catch((res) => {
               // localStorage.removeItem("token");

@@ -34,6 +34,10 @@ const rootReducer = (state = initState, action) => {
       if (!localStorage.getItem("token")) {
         localStorage.setItem("token", token);
       }
+
+      if (!sessionStorage.getItem("user.id")) {
+        sessionStorage.setItem("user.id", _id);
+      }
       return {
         ...state,
 
@@ -78,12 +82,10 @@ const rootReducer = (state = initState, action) => {
       localStorage.setItem("courseId", courseId);
       return { ...state, courseId };
     }
-    
+
     case "payment/premiumData": {
-      const {premium_id,paymentAmount,premiumname} = action.payload
-      return { ...state ,
-      premium:{premium_id,paymentAmount,premiumname}
-      };
+      const { premium_id, paymentAmount, premiumname } = action.payload;
+      return { ...state, premium: { premium_id, paymentAmount, premiumname } };
     }
     default:
       return state;

@@ -62,6 +62,7 @@ function ManageMember() {
 
       setPayments(updatedPayments);
       setSearchResults(updatedPayments);
+      console.log(updatedPayments);
     } catch (error) {
       console.log(error);
     }

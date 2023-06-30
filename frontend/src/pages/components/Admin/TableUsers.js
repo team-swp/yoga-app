@@ -11,6 +11,7 @@ import { getAvatarToAWS } from "../../../helper/loginAPI";
 
 import styles from "../../../styles/Username.module.css";
 import classNames from "classnames/bind";
+import { getBooking } from "../../../helper/bookingAPI";
 
 const cx = classNames.bind(styles);
 
