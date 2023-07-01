@@ -94,6 +94,7 @@ const {
   charDataPayment,
   charDataPaymentPremium,
   charDataPaymentPremiumLineChart,
+  getPaymentByIdUser,
 } = require("../controllers/Payment");
 const {
   addBooking,
@@ -261,7 +262,7 @@ router.post("/news/add", AuthStaff, addNews);
 router.get("/news/get", getNews);
 router.patch("/news/update", AuthStaff, getNewsById, updateNews);
 
-router.get("/getpayment/user",Auth,getPaymentById)
+router.get("/getpayment/user",Auth,getPaymentByIdUser)
 
 //pagingnation
 

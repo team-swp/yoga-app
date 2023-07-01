@@ -29,6 +29,7 @@ function Premium() {
     premiumPromise
       .then((result) => {
         result.data.map((item) => {
+          console.log(item);
           if (item.status) {
             arr.push(item);
             if (item.premiumname === "Half Love") {
@@ -37,6 +38,7 @@ function Premium() {
           }
         });
         setPremiums(arr);
+        console.log(premiums);
         window.scrollTo(0, 0);
       })
       .catch(() => {

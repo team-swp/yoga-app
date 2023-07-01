@@ -20,6 +20,7 @@ import Password from "./PasswordGoogle";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
 import Reset from "../Login/Reset";
+import { getPaymentByIDUser } from "../../../helper/paymentAPI";
 
 function Profile() {
   const { logOut } = UserAuth();
@@ -175,6 +176,7 @@ function Profile() {
       }
     };
     isPassword();
+    
   }, []);
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (
