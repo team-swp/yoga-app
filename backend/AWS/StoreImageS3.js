@@ -32,7 +32,7 @@ const s3 = new S3Client({
 //set image for avatar
 module.exports.postImage = async (req, res) => {
 try {
-  if(req.file.mimetype.startsWith('image/')){ 
+  // if(req.file.mimetype.startsWith('image/')){ 
   // const buffer = await sharp(req.file.buffer).resize({ height: 500, width: 500, fit: "contain" }).toBuffer();
   const buffer = req.file.buffer
   const imageName =req.body.imageName|| randomImageName();
@@ -45,7 +45,7 @@ try {
   const command = new PutObjectCommand(params);
   s3.send(command);
   res.send({ imageName }); 
-}
+// }
 } catch (error) {
   return res.status(404).send({ error: "Authentication Error"});
 }

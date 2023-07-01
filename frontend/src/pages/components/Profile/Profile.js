@@ -20,6 +20,7 @@ import Password from "./PasswordGoogle";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
 import Reset from "../Login/Reset";
+import { getPaymentByIDUser } from "../../../helper/paymentAPI";
 
 function Profile() {
   const { logOut } = UserAuth();
@@ -137,7 +138,6 @@ function Profile() {
         const formData = new FormData();
         formData.append("avatar", avatar);
         formData.append("imageName", user._id);
-
         const { data, status } = await postAvatarToAWS(formData);
         if (status === 200) {
           data.imageName = user._id;
@@ -176,6 +176,7 @@ function Profile() {
       }
     };
     isPassword();
+    
   }, []);
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (

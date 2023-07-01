@@ -33,7 +33,6 @@ const router = require("./routes/route");
 cron.schedule(
   "* * 1 * * *",
   () => {
-    console.log("Runing a job at 01:00 at Asia/Saigon timezone");
     const members = Account.find({
       meta_data: { $regex: `"isMember":true`, $options: "i" },
     })
@@ -48,7 +47,6 @@ cron.schedule(
             memDate.setMonth(memDate.getMonth() + metaData.MemberDuration);
           } else {
             memDate.setDate(memDate.getDate() + 7);
-            console.log(element);
           }
           if (memDate < date) {
             const expired = `{"isMember":false}`
