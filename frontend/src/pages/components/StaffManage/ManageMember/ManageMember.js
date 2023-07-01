@@ -225,11 +225,21 @@ function ManageMember() {
     if (status === 5) {
       setUpdatePendingId(memberId);
       setOpenModal(true);
+    } else {
+      toast.error("Only the user with status Pending can be update!");
     }
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleUpdateSuccess = async () => {
+    // Gọi fetchData() để tải lại dữ liệu mới
+    await fetchData();
+
+    // Đóng modal
+    handleCloseModal();
   };
 
   const displayedStatusValue = statusFilter === null ? "" : statusFilter;
@@ -316,7 +326,6 @@ function ManageMember() {
                             handleToggle(
                               event.target.checked,
                               payment.memberId,
-
                               payment.status
                             );
                           }}
@@ -364,6 +373,8 @@ function ManageMember() {
           open={openModal}
           handleClose={handleCloseModal}
           updatePendingId={updatePendingId}
+          setOpenModal={setOpenModal}
+          handleUpdateSuccess={handleUpdateSuccess}
         />
       </Container>
     </div>

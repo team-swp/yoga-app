@@ -2,7 +2,8 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { getPayment, updatePayment } from "../../../../helper/paymentAPI";
-import { getMember } from "../../../../helper/loginAPI";
+import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -14,7 +15,13 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-export default function ModalConfirm({ open, handleClose, updatePendingId }) {
+export default function ModalConfirm({
+  open,
+  handleClose,
+  updatePendingId,
+  setOpenModal,
+  handleUpdateSuccess,
+}) {
   const [memberPending, setMemberPending] = useState(null);
   const [memberPayment, setMemberPayemnt] = useState(null);
 
@@ -33,15 +40,9 @@ export default function ModalConfirm({ open, handleClose, updatePendingId }) {
 
       const memberData = JSON.parse(meta_data);
 
-      const newMemberData = paymentsResponse.data.find((payment) => {
-        if (payment._id === memberData.payment_id) {
-          return {
-            ...payment,
-            memberData: memberData,
-          };
-        }
-        return payment;
-      });
+      const newMemberData = paymentsResponse.data.find(
+        (payment) => payment._id === memberData.payment_id
+      );
 
       setMemberPending(memberData);
       setMemberPayemnt(newMemberData);
@@ -60,10 +61,27 @@ export default function ModalConfirm({ open, handleClose, updatePendingId }) {
 
   const handleUpdatePending = async () => {
     try {
-      const statusPayment = await updatePayment({
-        ...memberPayment,
-        status: 10,
-      });
+      const date = new Date();
+      const dateString = date.toISOString();
+      if (memberPending.isMember === false && memberPayment.status !== 10) {
+        const statusPayment = await updatePayment({
+          ...memberPayment,
+          status: 10,
+        });
+
+        const memberData = await updateUserForStaff({
+          _id: updatePendingId,
+          meta_data: `{"isMember":true,"MemberDuration":${memberPending.MemberDuration},"startDateMember":"${dateString}"} `,
+        });
+
+        if (memberData && statusPayment) {
+          toast.success("Update member successful!");
+          setOpenModal(false);
+          handleUpdateSuccess();
+        } else {
+          toast.error("Failed to update");
+        }
+      }
     } catch (error) {
       toast.error("Failed to update");
       console.error("Failed to update user:", error);
