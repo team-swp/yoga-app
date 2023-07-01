@@ -132,47 +132,34 @@ function ManageCourses() {
     setValue("");
     setStatusValue("");
   };
-  var url2 = null;
-  if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}`;
-  } else if (value === "" && semesterValue !== "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}`;
-  } else if (value === "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`;
-  }
+  var url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`;
 
-  var url = null;
-  if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}`;
-  } else if (value === "" && semesterValue !== "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}`;
-  } else if (value === "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
-  }
+if (value !== "") {
+  url2 += `&q=${value}`;
+}
+
+if (semesterValue !== "") {
+  url2 += `&semester_id=${semesterValue}`;
+}
+
+if (statusValue !== "") {
+  url2 += `&status=${statusValue}`;
+}
+
+ 
+  var url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}`;
+
+if (value !== "") {
+  url += `&q=${value}`;
+}
+
+if (semesterValue !== "") {
+  url += `&semester_id=${semesterValue}`;
+}
+
+if (statusValue !== "") {
+  url += `&status=${statusValue}`;
+}
   ///////////////////// đây là hàm search tìm kiếm///////////////////////////////////////////////
   const handleSearch = async (e) => {
     e.preventDefault();

@@ -20,8 +20,6 @@ import StatusButton from "./Statusbutton2";
 import {  Link } from "react-router-dom";
 
 function BasicExample() {
-  const moment = require("moment");
-
   const [listUser, setListUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
