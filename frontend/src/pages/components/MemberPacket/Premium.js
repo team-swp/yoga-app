@@ -29,7 +29,6 @@ function Premium() {
     premiumPromise
       .then((result) => {
         result.data.map((item) => {
-          console.log(item);
           if (item.status) {
             arr.push(item);
             if (item.premiumname === "Half Love") {
@@ -38,7 +37,6 @@ function Premium() {
           }
         });
         setPremiums(arr);
-        console.log(premiums);
         window.scrollTo(0, 0);
       })
       .catch(() => {
@@ -55,7 +53,7 @@ function Premium() {
             premium_id: premiumStart._id,
             paymentAmount:
               premiumStart.priceDiscount || premiumStart.priceOriginal,
-            duration: premiumStart.duration,
+            duration: premiumStart.durationByMonth,
             premiumname: premiumStart.premiumname,
           })
         );
@@ -104,7 +102,7 @@ function Premium() {
           </div>
           <div className="flex items-center gap-3 font-bold">
             <div onClick={handleSubmitStart} className={styles.startBtn}>
-              Enroll now
+              Enroll
             </div>
             <a href="#premium_packet">
               <div className={styles.moreBtn}>Packages</div>
@@ -132,7 +130,7 @@ function Premium() {
             nowrap={true}
             variant="h4"
           >
-            Premium Mini
+            MINI PREMIUM PACKAGES
           </Typography>
         </div>
         <div>

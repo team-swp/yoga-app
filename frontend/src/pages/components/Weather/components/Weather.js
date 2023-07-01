@@ -70,14 +70,14 @@ const Weather = () => {
   //     test()
   // },[])
 
-  useEffect(() => {
-    const test = async () => {
-      const data = await getPaymentByIDUser()
-      console.log(data,'123456789');
-    };
+//   useEffect(() => {
+//     const test = async () => {
+//       const data = await getPaymentByIDUser()
+//       console.log(data,'123456789');
+//     };
 
-    test();
-  }, []);
+//     test();
+//   }, []);
 
   if (!weather)
     return (

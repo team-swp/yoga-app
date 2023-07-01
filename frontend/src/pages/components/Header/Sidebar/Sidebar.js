@@ -75,20 +75,20 @@ function Sidebar() {
   const handleClose = () => setOpen(false);
   const user = useSelector(userSelector);
   const dispatch = useDispatch();
-  const loadImageAgain = async (e) => {
-    if (user.avatar) {
-      const { url } = await getAvatarToAWS({ imageName: user._id });
-      e.target.src = url;
-      const result = updateUser({ avatar: url });
-      result
-        .then((data) => {
-          dispatch(setDataLogin(data.data.data));
-        })
-        .catch(() => {
-          console.log("error");
-        });
-    }
-  };
+  // const loadImageAgain = async (e) => {
+  //   if (user.avatar) {
+  //     const { url } = await getAvatarToAWS({ imageName: user._id });
+  //     e.target.src = url;
+  //     const result = updateUser({ avatar: url });
+  //     result
+  //       .then((data) => {
+  //         dispatch(setDataLogin(data.data.data));
+  //       })
+  //       .catch(() => {
+  //         console.log("error");
+  //       });
+  //   }
+  // };
   const [checkUpdateAva, setCheckUpdateAva] = useState(false);
   useEffect(() => {
     const test = async () => {
@@ -248,7 +248,6 @@ function Sidebar() {
                             : styles.profile_img_details_normal
                         } object-cover h-44`}
                         alt="avatar"
-                        onError={loadImageAgain}
                       />
                       {checkMember ? (
                         <img

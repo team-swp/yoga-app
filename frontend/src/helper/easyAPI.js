@@ -6,7 +6,7 @@ export async function getApi({ apiPath, errorMessage }) {
   try {
     const token = localStorage.getItem("token");
 
-    const data = await axios.get(apiPath, {
+    const {data} = await axios.get(apiPath, {
       headers: { Authorization: `Bearer ${token}` },
     }); 
     return { data };
