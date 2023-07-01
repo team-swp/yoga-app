@@ -15,7 +15,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-export default function ModalConfirm({
+export function ModalConfirmPending({
   open,
   handleClose,
   updatePendingId,
@@ -50,8 +50,6 @@ export default function ModalConfirm({
       console.log(error);
     }
   }
-
-  console.log(memberPayment);
 
   useEffect(() => {
     if (open) {
@@ -102,7 +100,7 @@ export default function ModalConfirm({
             Confirm Update
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Are you sure you want to update this user ?
+            Are you sure you want to update the status of this user ?
           </Typography>
           <Box
             sx={{
@@ -113,6 +111,109 @@ export default function ModalConfirm({
             }}
           >
             <Button variant="contained" onClick={handleUpdatePending}>
+              Update
+            </Button>
+            <Button variant="text" onClick={handleClose}>
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
+export function ModalConfirmMember({
+  open,
+  handleClose,
+  isMember,
+  memberId,
+  statusPaymented,
+  payments,
+  searchResults,
+  setSearchResults,
+  setPayments,
+  setOpenModalMember,
+}) {
+  useEffect(() => {
+    if (open) {
+    }
+  }, [open]);
+
+  function handleToggle() {
+    if (statusPaymented !== 10 && statusPaymented !== 4) {
+      toast.error("Update failed");
+      return;
+    }
+    const paymentIndex = payments.findIndex(
+      (payment) => payment.member._id === memberId
+    );
+
+    const oldMetaData = JSON.parse(payments[paymentIndex].member.meta_data);
+    const newMetaData = { ...oldMetaData, isMember };
+
+    const response = { _id: memberId, meta_data: JSON.stringify(newMetaData) };
+    updateUserForStaff(response)
+      .then((res) => {
+        console.log(res.data);
+        toast.success("Update successfully");
+        setOpenModalMember(false);
+        const updatedPayments = payments.map((payment) => {
+          if (payment.member._id === memberId) {
+            return {
+              ...payment,
+              member: { ...payment.member, meta_data: response.meta_data },
+            };
+          }
+          return payment;
+        });
+
+        setPayments(updatedPayments);
+
+        const updatedSearchResults = searchResults.map((payment) => {
+          if (payment.member._id === memberId) {
+            return {
+              ...payment,
+              member: { ...payment.member, meta_data: response.meta_data },
+            };
+          }
+          return payment;
+        });
+
+        setSearchResults(updatedSearchResults);
+      })
+
+      .catch((error) => {
+        console.error(error);
+        toast.error("Update failed");
+      });
+  }
+
+  return (
+    <div>
+      <Toaster></Toaster>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Confirm Update
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Are you sure you want to update this user become a member ?
+          </Typography>
+          <Box
+            sx={{
+              mt: 2,
+              display: "flex",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <Button variant="contained" onClick={handleToggle}>
               Update
             </Button>
             <Button variant="text" onClick={handleClose}>
