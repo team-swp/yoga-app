@@ -8,7 +8,7 @@ import convertToBase64 from "../../../helper/convert";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../../../redux/selectors";
 import { getPasswordCurr, updateUser } from "../../../helper/loginAPI";
-import { updateData } from "../../../redux/actions";
+import { setDataLogin, updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
 import { UserAuth } from "../../../context/AuthGoogleContext";
 import { addBooking } from "../../../helper/bookingAPI";
@@ -20,6 +20,7 @@ import Password from "./PasswordGoogle";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
 import Reset from "../Login/Reset";
+import { getPaymentByIDUser } from "../../../helper/paymentAPI";
 
 function Profile() {
   const { logOut } = UserAuth();
@@ -137,11 +138,17 @@ function Profile() {
         const formData = new FormData();
         formData.append("avatar", avatar);
         formData.append("imageName", user._id);
-
         const { data, status } = await postAvatarToAWS(formData);
         if (status === 200) {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
+          const result = updateUser({avatar:url})
+          result.then((data)=>{
+            dispatch(setDataLogin(data.data.data))
+            toast.success('Update Avatar Successfully')
+          }).catch(()=>{
+            console.log('error');
+          })
           setFile(url);
           console.log(file);
         }
@@ -169,6 +176,7 @@ function Profile() {
       }
     };
     isPassword();
+    
   }, []);
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (

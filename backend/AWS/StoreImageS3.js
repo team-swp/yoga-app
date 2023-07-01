@@ -32,7 +32,7 @@ const s3 = new S3Client({
 //set image for avatar
 module.exports.postImage = async (req, res) => {
 try {
-  if(req.file.mimetype.startsWith('image/')){ 
+  // if(req.file.mimetype.startsWith('image/')){ 
   // const buffer = await sharp(req.file.buffer).resize({ height: 500, width: 500, fit: "contain" }).toBuffer();
   const buffer = req.file.buffer
   const imageName =req.body.imageName|| randomImageName();
@@ -45,7 +45,7 @@ try {
   const command = new PutObjectCommand(params);
   s3.send(command);
   res.send({ imageName }); 
-}
+// }
 } catch (error) {
   return res.status(404).send({ error: "Authentication Error"});
 }
@@ -53,12 +53,17 @@ try {
 
 //getImage for avatar
 module.exports.getImage = async(req,res)=>{
-  const { imageName } = req.query;
-  const getObjectParams = {
-    Bucket: bucketName,
-    Key: imageName,
-  };
-  const command = new GetObjectCommand(getObjectParams);
-  const url = await getSignedUrl(s3, command, { expiresIn: 60*60*24*6 });
-  res.send({ url });
+  try {
+    const { imageName } = req.query;
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: imageName,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 60*60*24*6});
+    console.log(url);
+    res.send({ url });
+  } catch (error) {
+    res.status(404).send({error:error})
+  }
 }

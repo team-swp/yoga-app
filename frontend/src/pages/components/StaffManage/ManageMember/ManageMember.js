@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
   InputLabel,
   Paper,
   Switch,
@@ -13,26 +14,21 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import _, { debounce } from "lodash";
 import { getBooking } from "../../../../helper/bookingAPI";
 import { getPaymentWithPaging } from "../../../../helper/paymentAPI";
 import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
-import StatusButton from "./CustomeStatus";
+import StatusButton, { statusOptions } from "./CustomeStatus";
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import { Toaster, toast } from "react-hot-toast";
 import classNames from "classnames/bind";
 import styles from "./ManageMember.module.css";
-import _, { debounce } from "lodash";
+import ModalConfirm from "./ModalConfirm";
+import DeleteModal from "./ModalConfirm";
 
 const cx = classNames.bind(styles);
 
 const moment = require("moment");
-
-const statusOptions = [
-  { value: "", label: "All" },
-  { value: "0", label: "Failed" },
-  { value: "4", label: "Trial" },
-  { value: "5", label: "Pending" },
-  { value: "10", label: "Completed" },
-];
 
 function ManageMember() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -84,7 +80,9 @@ function ManageMember() {
     }
   }, 500);
 
-  function handleToggle(isMember, memberId, expiredDate, statusPaymented) {
+  function handleToggle(isMember, memberId, statusPaymented) {
+    console.log(memberId);
+
     if (statusPaymented !== 10 && statusPaymented !== 4) {
       toast.error("Update failed");
       return;
@@ -145,7 +143,10 @@ function ManageMember() {
     })
     .map((payments) => {
       const metaData = JSON.parse(payments.member.meta_data);
+
       const isMember = metaData.isMember;
+      const { username, email } = payments.member;
+      const status = payments.status;
       const MemberDuration = metaData.MemberDuration;
       const startDateMember = moment(metaData.startDateMember).format(
         "DD/MM/YY"
@@ -153,22 +154,27 @@ function ManageMember() {
 
       let expiredDate;
 
-      if (
-        typeof MemberDuration !== "undefined" &&
-        typeof MemberDuration !== "string"
-      ) {
-        expiredDate = moment(startDateMember, "DD/MM/YY")
-          .add(MemberDuration, "months")
-          .format("DD/MM/YY");
+      if (typeof MemberDuration !== "undefined" && status !== 5) {
+        if (status === 4) {
+          const durationArray = MemberDuration.split(" ");
+          const durationValue = parseInt(durationArray[0]);
+
+          expiredDate = moment(startDateMember, "DD/MM/YY")
+            .add(durationValue, "days")
+            .format("DD/MM/YY");
+        } else {
+          expiredDate = moment(startDateMember, "DD/MM/YY")
+            .add(MemberDuration, "months")
+            .format("DD/MM/YY");
+        }
       } else {
         expiredDate = "Not Yet";
       }
+
       const memberId = payments.member._id;
       const bookingDate = moment(payments.bookings.booking_date).format(
         "DD/MM/YY"
       );
-      const status = payments.status;
-      const { username, email } = payments.member;
 
       return {
         username,
@@ -207,6 +213,25 @@ function ManageMember() {
     setStatusFilter(null);
   };
 
+  const handleResetSearch = () => {
+    setSearchResults(payments);
+    document.getElementById("searchInput").value = "";
+  };
+
+  const [updatePendingId, setUpdatePendingId] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = (status, memberId) => {
+    if (status === 5) {
+      setUpdatePendingId(memberId);
+      setOpenModal(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   const displayedStatusValue = statusFilter === null ? "" : statusFilter;
 
   const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
@@ -219,12 +244,16 @@ function ManageMember() {
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper} sx={{ my: 2 }}>
           <div className="flex justify-between mx-5">
-            <div className="py-4">
+            <div className="flex justify-between py-4">
               <input
+                id="searchInput"
                 placeholder="Search by username"
                 className="border-solid border-2 border-black p-2"
                 onChange={(event) => handleSearch(event)}
               />
+              <IconButton onClick={handleResetSearch} sx={{ ml: -5 }}>
+                <RestartAltOutlinedIcon />
+              </IconButton>
             </div>
             <Box sx={{ mt: 1 }}>
               <InputLabel htmlFor="status-filter">Filter status:</InputLabel>
@@ -272,7 +301,13 @@ function ManageMember() {
                       <TableCell>{payment.startDateMember}</TableCell>
                       <TableCell>{payment.expiredDate}</TableCell>
                       <TableCell>
-                        <StatusButton status={payment.status} />
+                        <button
+                          onClick={() =>
+                            handleOpenModal(payment.status, payment.memberId)
+                          }
+                        >
+                          <StatusButton status={payment.status} />
+                        </button>
                       </TableCell>
                       <TableCell>
                         <Switch
@@ -281,7 +316,7 @@ function ManageMember() {
                             handleToggle(
                               event.target.checked,
                               payment.memberId,
-                              payment.expiredDate,
+
                               payment.status
                             );
                           }}
@@ -324,6 +359,12 @@ function ManageMember() {
             Next
           </Button>
         </div>
+
+        <ModalConfirm
+          open={openModal}
+          handleClose={handleCloseModal}
+          updatePendingId={updatePendingId}
+        />
       </Container>
     </div>
   );

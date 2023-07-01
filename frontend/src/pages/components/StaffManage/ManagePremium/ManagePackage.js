@@ -20,8 +20,6 @@ import StatusButton from "./Statusbutton2";
 import {  Link } from "react-router-dom";
 
 function BasicExample() {
-  const moment = require("moment");
-
   const [listUser, setListUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -132,20 +130,23 @@ function BasicExample() {
                 listUser.length > 0 &&
                 listUser.slice(startIndex, endIndex).map((item, index) => {
                   const handleStatusToggle = async () => {
-                    const updatedList = [...listUser];
-                    updatedList[startIndex + index].status = !item.status;
-                    setListUsers(updatedList);
-                    try {
-                      await updatePremium({
-                        _id: item._id,
-                        status: updatedList[startIndex + index].status,
-                      });
-                      console.log("Status updated successfully.");
-                      toast.success(`${item.premiumname} ` + " status updated success")
-                      console.log(updatedList);
-                    } catch {
-                      console.log("error");
-                    }
+                    const confirmed = window.confirm("Are you sure about that!!!");
+
+                    if (confirmed) { const updatedList = [...listUser];
+                      updatedList[startIndex + index].status = !item.status;
+                      setListUsers(updatedList);
+                      try {
+                        await updatePremium({
+                          _id: item._id,
+                          status: updatedList[startIndex + index].status,
+                        });
+                        console.log("Status updated successfully.");
+                        toast.success(`${item.premiumname} ` + " status updated success")
+                        console.log(updatedList);
+                      } catch {
+                        console.log("error");
+                      }}
+                   
                   };
 
                   return (

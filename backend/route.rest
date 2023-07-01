@@ -7,8 +7,8 @@ POST  http://localhost:3001/api/accounts/login
 Content-Type: application/json
 
 {
-  "email":"tandm1510@gmail.com",
-  "password":"1234@"
+  "email":"nhnta777@gmail.com",
+  "password":"123@"
 }
 ###
 DELETE    http://localhost:3001/api/accounts/64650d6163615c5820904cf8
@@ -18,8 +18,8 @@ POST http://localhost:3001/api/accounts/register
 Content-Type: application/json
 
 {
-  "username": "Instructor Test",
-  "email":"1234@example",
+  "username": "Staff 5",
+  "email":"staff5@example",
   "password":"123@"
 }
 ###

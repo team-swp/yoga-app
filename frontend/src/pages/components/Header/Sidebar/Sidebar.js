@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import { IconButton, Menu } from "@mui/material";
 import classNames from "classnames/bind";
 import styles from "./Sidebar.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../../../context/AuthGoogleContext";
 import { userSelector } from "../../../../redux/selectors";
-import { getAvatarToAWS } from "../../../../helper/loginAPI";
+import {
+  getAvatarToAWS,
+  postAvatarToAWS,
+  updateUser,
+} from "../../../../helper/loginAPI";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
@@ -21,6 +25,7 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
 
+import { setDataLogin } from "../../../../redux/actions";
 const style = {
   position: "absolute",
   top: "50%",
@@ -65,16 +70,80 @@ function Sidebar() {
   };
 
   const [open, setOpen] = useState(false);
+  const [file, setFile] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const user = useSelector(userSelector);
-  const loadImageAgain = async (e) => {
-    if (user.avatar) {
-      const { url } = await getAvatarToAWS({ imageName: user._id });
-      e.target.src = url;
-    }
-  };
+  const dispatch = useDispatch();
+  // const loadImageAgain = async (e) => {
+  //   if (user.avatar) {
+  //     const { url } = await getAvatarToAWS({ imageName: user._id });
+  //     e.target.src = url;
+  //     const result = updateUser({ avatar: url });
+  //     result
+  //       .then((data) => {
+  //         dispatch(setDataLogin(data.data.data));
+  //       })
+  //       .catch(() => {
+  //         console.log("error");
+  //       });
+  //   }
+  // };
+  const [checkUpdateAva, setCheckUpdateAva] = useState(false);
+  useEffect(() => {
+    const test = async () => {
+      try {
+        if (user.avatar && user.avatar.includes("yoga-heartbeat.s3")) {
+          const { url } = await getAvatarToAWS({ imageName: user._id });
+          setFile(url);
+          const result = updateUser({ avatar: url });
+          result
+            .then((data) => {
+              dispatch(setDataLogin(data.data.data));
+            })
+            .catch(() => {
+              console.log("error");
+            });
+        } else {
+          const urlToObject = async () => {
+            try {
+              const response = await fetch(user.avatar);
+              // here image is url/location of image
+              const blob = await response.blob();
+              const file = new File([blob], "image.jpg", { type: blob.type });
+              const { data, status } = await postAvatarToAWS({
+                avatar: file,
+                imageName: user._id,
+              });
+              if (status === 200) {
+                data.imageName = user._id;
+                const { url } = await getAvatarToAWS(data);
+                const result = updateUser({ avatar: url });
+                result
+                  .then((data) => {
+                    dispatch(setDataLogin(data.data.data));
+                    console.log(data);
+                  })
+                  .catch(() => {
+                    console.log("error");
+                  });
+                setFile(url);
+                setCheckUpdateAva(true);
+              }
+            } catch (error) {
+              return error
+            }
+           
+          };
+            urlToObject()
+        }
+      } catch (error) {
+        return error
+      }
+    };
+    test();
+  }, []);
+
   useEffect(() => {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
@@ -96,12 +165,11 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-            src={user.avatar}
+            src={file || user.avatar}
             className={` ${
               checkMember ? styles.profile_img : styles.profile_img_normal
             } object-cover h-44`}
             alt="avatar"
-            onError={loadImageAgain}
           />
           {checkMember ? (
             <img
@@ -180,7 +248,6 @@ function Sidebar() {
                             : styles.profile_img_details_normal
                         } object-cover h-44`}
                         alt="avatar"
-                        onError={loadImageAgain}
                       />
                       {checkMember ? (
                         <img
