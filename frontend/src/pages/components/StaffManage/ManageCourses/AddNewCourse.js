@@ -20,6 +20,7 @@ const validationSchema = Yup.object().shape({
   .min(-1,"Price must be gretter than 0")
     .typeError("Price must be a number")
     .required("Price is required"),
+
   willLearn: Yup.string().required("Will Learn is required"),
   requirement: Yup.string().required("Requirement is required"),
   forWho: Yup.string().required("For Who is required"),
@@ -73,6 +74,7 @@ function AddNewCourse() {
         values.price = "";
         values.willLearn = "";
         values.requirement = "";
+        values.semester_id =""
         values.forWho = "";
         values.images = "";
         

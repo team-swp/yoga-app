@@ -20,6 +20,9 @@ function UpdateCourse() {
   const [price, setPrice] = useState(0);
   const [semesterList, setSemesterList] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
+  
+console.log(selectedSemester);
+
 
   const formik = useFormik({
     initialValues: {
@@ -45,7 +48,7 @@ function UpdateCourse() {
     onSubmit: async (values) => {
       try {
         // Lấy id của học kỳ từ selectedSemester
-        const semesterId = selectedSemester ? selectedSemester._id : null;
+        const semesterId = selectedSemester ? selectedSemester.semestername : null;
 
         const response = await updateCourse({
           _id: courseId.id,
@@ -98,9 +101,10 @@ function UpdateCourse() {
           requirement: course.requirement,
           forWho: course.forWho,
           images: course.images,
-     
+         semestername:course.semestername
         });
-        setSelectedSemester(combinedData.semester.semestername);
+        setSelectedSemester(course.semestername);
+        console.log(combinedData.course.semestername);
       } catch (error) {
         console.error(error);
       }
@@ -270,7 +274,8 @@ function UpdateCourse() {
             value={selectedSemester}
             onChange={(event, newValue) => setSelectedSemester(newValue)}
             options={semesterList}
-            getOptionLabel={(option) => option.semestername}
+            getOptionLabel={(option) => option.semestername || selectedSemester}
+
             renderInput={(params) => (
               <TextField
                 {...params}

@@ -943,6 +943,7 @@ module.exports.getPaymentByIdUser = async (req, res) => {
   try {
     const arrTemp = [];
     const account = req.account; //chuyển qa cho thg tiếp theo
+    console.log(account, "vvvvvvvvvvvvvvvvvvvvvv");
     const getBookingByUserID = await Booking.find({
       member_id: account.userId,
     });
@@ -955,7 +956,6 @@ module.exports.getPaymentByIdUser = async (req, res) => {
         arrTemp.push(getPaymentByUserID[index]);
       }
     }
-    // console.log(getPaymentByUserID);
     return res.status(201).send(arrTemp);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -25,3 +25,20 @@ export async function updatePremium(respone) {
     errorMessage: "Cannot Update Course",
   });
 }
+
+export async function updateNews(respone) {
+  //respone là object chứa attribute cần updat, update thì cần
+  return await updateApi(respone, {
+    apiPath: `/api/news/update`,
+    errorMessage: "Cannot Update Course",
+  });
+}
+
+export async function addNews(respone) {
+  //respone là object chứa attribute cần updat, update thì cần
+  return await addApi(respone, {
+    apiPath: `/api/news/add`,
+    errorMessage: "Cannot Update Course",
+  });
+}
+

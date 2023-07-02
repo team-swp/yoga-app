@@ -16,6 +16,9 @@ import DoneIcon from "@mui/icons-material/Done";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
 import PurchaseHistory from "./PurchaseHistory";
+import Reset from "../Login/Reset";
+import { getPaymentByIDUser } from "../../../helper/paymentAPI";
+
 function Profile() {
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
@@ -133,18 +136,19 @@ function Profile() {
         const formData = new FormData();
         formData.append("avatar", avatar);
         formData.append("imageName", user._id);
-
         const { data, status } = await postAvatarToAWS(formData);
         if (status === 200) {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
-          const result = updateUser({avatar:url})
-          result.then((data)=>{
-            dispatch(setDataLogin(data.data.data))
-            toast.success('Update Avatar Successfully')
-          }).catch(()=>{
-            console.log('error');
-          })
+          const result = updateUser({ avatar: url });
+          result
+            .then((data) => {
+              dispatch(setDataLogin(data.data.data));
+              toast.success("Update Avatar Successfully");
+            })
+            .catch(() => {
+              console.log("error");
+            });
           setFile(url);
           console.log(file);
         }
