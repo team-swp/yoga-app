@@ -126,7 +126,22 @@ function BasicExample() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {listUser &&
+              {
+              listUser.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={9}
+                    align="center"
+                    style={{ fontSize: "30px" }}
+                  >
+                    The result not  available !!!
+                  </TableCell>
+                </TableRow>
+              ) : 
+              
+              
+              
+              listUser &&
                 listUser.length > 0 &&
                 listUser.slice(startIndex, endIndex).map((item, index) => {
                   const handleStatusToggle = async () => {
