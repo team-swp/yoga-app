@@ -4,7 +4,14 @@ axios.defaults.baseURL = "http://localhost:3001";
 
 export async function getApi({ apiPath, errorMessage }) {
   try {
-    const { data } = await axios.get(apiPath);
+    const token = localStorage.getItem("token");
+    const { data } = await axios.get(
+      apiPath,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return { data };
   } catch (error) {
     return { error: errorMessage };
