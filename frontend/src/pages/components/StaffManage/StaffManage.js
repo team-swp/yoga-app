@@ -10,7 +10,7 @@ import ManageSemester from "./MangeSemester/ManageSemester";
 import ManageCourses from "./ManageCourses/ManageCourses";
 import ManageClass from "./ManageClass/ManageClass";
 import ManagePackage from "./ManagePremium/ManagePackage";
-
+import ManageNews from "./ManageNews/ManageNews"
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -82,12 +82,13 @@ function StaffManage() {
             aria-label="basic tabs example"
             centered
           >
-            <Tab label="Manage Semester" {...a11yProps(0)} />
-            <Tab label="Manage Course" {...a11yProps(1)} />
-            <Tab label="Manage Class" {...a11yProps(2)} />
-            <Tab label="Manage Schedule" {...a11yProps(3)} />
-            <Tab label="Manage Member" {...a11yProps(4)} />
-            <Tab label="Manage Package" {...a11yProps(5)} />
+            <Tab label="Manage Semesters" {...a11yProps(0)} />
+            <Tab label="Manage Courses" {...a11yProps(1)} />
+            <Tab label="Manage Classes" {...a11yProps(2)} />
+            <Tab label="Manage Schedules" {...a11yProps(3)} />
+            <Tab label="Manage Members" {...a11yProps(4)} />
+            <Tab label="Manage Packages" {...a11yProps(5)} />
+            <Tab label="Manage News" {...a11yProps(6)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -107,6 +108,9 @@ function StaffManage() {
         </TabPanel>
         <TabPanel value={value} index={5}>
           {<ManagePackage />}
+        </TabPanel>
+        <TabPanel value={value} index={6}>
+          {<ManageNews />}
         </TabPanel>
       </Box>
 

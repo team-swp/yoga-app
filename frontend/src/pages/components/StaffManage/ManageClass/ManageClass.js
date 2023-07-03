@@ -21,7 +21,8 @@ import { updateClass } from "../../../../helper/classAPI";
 import StatusButton from "./StatusButon";
 import classNames from "classnames/bind";
 import styles from "./ManageClass.css";
-import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
+
+import { Modal } from "@mui/material";
 
 const cx = classNames.bind(styles);
 
@@ -30,14 +31,24 @@ function ManageClass() {
   const [updatedClass, setUpdatedClass] = useState({});
   const [classList, setClassList] = useState([]);
   const [scheduleList, setScheduleList] = useState([]);
+  const dayList = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Sturday",
+    "Sunday",
+  ];
   const [courseList, setCourseList] = useState([]);
   const [instructorList, setInstructorList] = useState([]);
-  const [value, setValue] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
-  const [semesterValue, setSemesterValue] = useState("");
+  const [dayValue, setDayValue] = useState("");
+  const [slotValue, setSlotValue] = useState("");
+  const [instructorValue, setInstructorValue] = useState("");
+  const [courseValue, setCourseValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
-  const [price, setPrice] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleToggle = async (event, classs) => {
@@ -62,10 +73,6 @@ function ManageClass() {
   };
 
   useEffect(() => {
-    fetchClasses();
-  }, [updatedClass, page]);
-
-  useEffect(() => {
     async function fecthClassList() {
       try {
         const requestUrl = "http://localhost:3001/api/class/get";
@@ -77,7 +84,6 @@ function ManageClass() {
       }
     }
     fecthClassList();
-
     async function fetchScheduleList() {
       try {
         const requestUrl = "http://localhost:3001/api/schedule/get";
@@ -109,17 +115,47 @@ function ManageClass() {
         const requestUrl = "http://localhost:3001/api/accounts";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
-        setInstructorList(responseJSON);
+        console.log(responseJSON);
+        const FilterInstructor = responseJSON.filter((x) => x.role === "instructor")
+        setInstructorList(FilterInstructor);
+       
+        console.log(FilterInstructor);
       } catch (error) {
         console.log("Failed");
       }
     }
     fetchInstructorList();
   }, []);
+  //-------------------------------------------------------------------------------------------------------
 
-  async function fetchClasses2() {
+  useEffect(() => {
+    fetchClasses();
+  }, [updatedClass, page]);
+
+  //----------------------------------------------------------------------------------------------------------
+  var url2 = `http://localhost:3001/api/classesPaging/get?page=${page}&limit=${4}`;
+  if (searchQuery !== "") {
+    url2 += `&q=${searchQuery}`;
+  }
+  if (statusValue !== "") {
+    url2 += `&status=${statusValue}`;
+  }
+  if (instructorValue !== "") {
+    url2 += `&instructor_id=${instructorValue}`;
+  }
+  if (dayValue !== "") {
+    url2 += `&days=${dayValue}`;
+  }
+  if (slotValue !== "") {
+    url2 += `&schedule_id=${slotValue}`;
+  }
+  if (courseValue !== "") {
+    url2 += `&course_id=${courseValue}`;
+  }
+
+  async function fetchClasses3() {
     const response = await axios.get(
-      `http://localhost:3001/api/classesPaging/get?page=${1}&limit=${100}&q=${searchQuery}`
+      `http://localhost:3001/api/classesPaging/get?page=${page}&limit=${4}`
     );
     const classData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -128,22 +164,52 @@ function ManageClass() {
   }
 
   async function fetchClasses() {
-    const response = await axios.get(
-      `http://localhost:3001/api/classesPaging/get?page=${page}&limit=${3}`
-    );
+    const response = await axios.get(url2);
     const classData = response.data.items;
     setPage(response.data.pagination.pageNum);
     setPageCount(response.data.pagination.pageCount);
     setClasses(classData);
   }
 
-  const handleSearch = () => {
-    fetchClasses2();
-  };
+  var url = `http://localhost:3001/api/classesPaging/get?page=${1}&limit=${4}`;
 
+  if (searchQuery !== "") {
+    url += `&q=${searchQuery}`;
+  }
+  if (statusValue !== "") {
+    url += `&status=${statusValue}`;
+  }
+  if (instructorValue !== "") {
+    url += `&instructor_id=${instructorValue}`;
+  }
+  if (dayValue !== "") {
+    url += `&days=${dayValue}`;
+  }
+  if (slotValue !== "") {
+    url += `&schedule_id=${slotValue}`;
+  }
+  if (courseValue !== "") {
+    url += `&course_id=${courseValue}`;
+  }
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(url);
+      const classData = response.data.items;
+      setPage(response.data.pagination.pageNum);
+      setPageCount(response.data.pagination.pageCount);
+      setClasses(classData);
+    
+    } catch (error) {}
+  };
   const handleReset = () => {
-    fetchClasses();
+    fetchClasses3();
     setSearchQuery("");
+    setCourseValue("");
+    setInstructorValue("");
+    setSlotValue("");
+    setStatusValue("");
   };
 
   function handlePrevious() {
@@ -159,6 +225,15 @@ function ManageClass() {
       return parseInt(p) + 1;
     });
   }
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
 
   return (
     <div>
@@ -184,34 +259,153 @@ function ManageClass() {
           </div>
           <div
             style={{
-              margin: "auto",
-              padding: "15px",
-              maxWidth: "800px",
               display: "flex",
-              alignItems: "center",
+              marginTop: "15px",
+              marginBottom: "15px",
+              marginLeft: "10px",
             }}
           >
-            <TextField
-              label="Search"
-              value={searchQuery}
-              onChange={(event) =>
-                setSearchQuery(event.target.value.toLowerCase())
-              }
-              style={{ marginRight: "1rem" }}
-            />
-            <IconButton onClick={handleReset} sx={{ ml: -8 }}>
-              <RestartAltOutlinedIcon />
-            </IconButton>
+            {" "}
             <Button
-              onClick={handleSearch}
-              type="submit"
               variant="contained"
               color="primary"
-              sx={{ ml: 3 }}
+              style={{ display: "block" }}
+              onClick={handleOpenModal}
             >
               Search
             </Button>
+            <Button
+              style={{ marginLeft: "1rem" }}
+              variant="outlined"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
           </div>
+
+          <Modal
+            open={isOpen}
+            onClose={handleCloseModal}
+            sx={{
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 1200,
+              height: 150,
+              backgroundColor: "none",
+              boxShadow: "none",
+              p: 4,
+            }}
+          >
+            <form onSubmit={handleSearch}>
+            
+              <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginBottom: "1rem",
+                  }}
+              >
+                <input
+                  autoFocus
+                  type="text"
+                  variant="outlined"
+                  placeholder="Search by class name"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                />
+
+                <select
+                onClick={handleSearch}
+                  value={instructorValue}
+                  onChange={(e) => setInstructorValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All Instructor</option>
+                  {instructorList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user.username}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  onClick={handleSearch}
+                  value={slotValue}
+                  onChange={(e) => setSlotValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All Schedule</option>
+                  {scheduleList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user.schedulename}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  onClick={handleSearch}
+                  value={courseValue}
+                  onChange={(e) => setCourseValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All course</option>
+                  {courseList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user.coursename}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  onClick={handleSearch}
+                  value={dayValue}
+                  onChange={(e) => setDayValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">Day of the week</option>
+                  {dayList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  onClick={handleSearch}
+                  value={statusValue}
+                  onChange={(e) => setStatusValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All Statuses</option>
+                  <option value="true">Enabled</option>
+                  <option value="false">Disabled</option>
+                </select>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: 10 }}
+                >
+                  Filter
+                </Button>
+                <Button variant="contained" onClick={handleCloseModal}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </Modal>
+
           <Table sx={{ minWidth: 650 }} aria-label="class table">
             <TableHead>
               <TableRow>
@@ -227,7 +421,21 @@ function ManageClass() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {classes.map((classItem, index) => {
+              {
+                classes.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={9}
+                      align="center"
+                      style={{ fontSize: "30px" }}
+                    >
+                      The result not  available !!!
+                    </TableCell>
+                  </TableRow>
+                ) : 
+              
+              
+              classes.map((classItem, index) => {
                 const scheduleId = classItem.schedule_id;
                 const courseId = classItem.course_id;
                 const instructorId = classItem.instructor_id;
