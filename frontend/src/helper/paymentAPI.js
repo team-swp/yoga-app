@@ -64,7 +64,7 @@ export async function getPaymentByID({ id }) {
 
 export async function getPaymentByIDUser() {
   try {
-   const data =  await getApi({
+   const {data} =  await getApi({
       apiPath:`/api/getpayment/user`,
       errorMessage: "Cannot Get Booking",
     });

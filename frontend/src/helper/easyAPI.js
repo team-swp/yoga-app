@@ -5,7 +5,6 @@ axios.defaults.baseURL = "http://localhost:3001";
 export async function getApi({ apiPath, errorMessage }) {
   try {
     const token = localStorage.getItem("token");
-
     const {data} = await axios.get(apiPath, {
       headers: { Authorization: `Bearer ${token}` },
     }); 
