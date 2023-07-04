@@ -11,7 +11,6 @@ function Navigation() {
   const token = localStorage.getItem("token");
   useEffect(() => {
 
-    
   }, [user]);
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">

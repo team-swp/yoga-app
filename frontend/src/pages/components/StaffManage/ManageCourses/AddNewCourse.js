@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
   coursename: Yup.string().required("Course Name is required"),
   description: Yup.string().required("Description is required"),
   price: Yup.number()
-  .min(-1,"Price must be gretter than 0")
+    .min(-1, "Price must be gretter than 0")
     .typeError("Price must be a number")
     .required("Price is required"),
 
@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
   requirement: Yup.string().required("Requirement is required"),
   forWho: Yup.string().required("For Who is required"),
   images: Yup.string().required("Images is required"),
- 
+
 });
 
 function AddNewCourse() {
@@ -48,7 +48,7 @@ function AddNewCourse() {
         console.error(error);
       }
     }
-  
+
     fetchSemesters();
   }, []);
   const handleSubmit = async (values) => {
@@ -63,7 +63,7 @@ function AddNewCourse() {
         forWho: values.forWho,
         semester_id: semesterId,
         images: values.images,
-       
+
         status: values.status,
       });
 
@@ -74,10 +74,10 @@ function AddNewCourse() {
         values.price = "";
         values.willLearn = "";
         values.requirement = "";
-        values.semester_id =""
+        values.semester_id = ""
         values.forWho = "";
         values.images = "";
-        
+
         setSelectedSemester(null);
       } else {
         toast.error("Failed to add new class");
@@ -114,7 +114,7 @@ function AddNewCourse() {
             forWho: "",
             images: "",
             videos: "",
-           
+
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -214,8 +214,8 @@ function AddNewCourse() {
                 error={errors.images && touched.images}
                 helperText={errors.images && touched.images && errors.images}
               />
-             
-             
+
+
 
               <Button
                 color="success"

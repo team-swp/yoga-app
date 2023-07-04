@@ -36,7 +36,7 @@ cron.schedule(
     const members = Account.find({
       meta_data: { $regex: `"isMember":true`, $options: "i" },
     })
-      .then(async (result) => {
+      .then(async(result) => {
         const date = new Date();
         const length = result.length
         for (let i = 0; i < length; i++) {
@@ -50,10 +50,10 @@ cron.schedule(
           }
           if (memDate < date) {
             const expired = `{"isMember":false}`
-            await Account.findOneAndUpdate({ _id: element._id }, { meta_data: expired })
+            await  Account.findOneAndUpdate({_id:element._id},{meta_data:expired})
           }
         }
-
+        
       })
       .catch((error) => {
         return error;

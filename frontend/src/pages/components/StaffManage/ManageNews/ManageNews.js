@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Container, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Button, Container, Fade, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import { Modal, Box, Typography } from "@mui/material";
 import { Formik, Form, Field } from "formik";
@@ -167,25 +167,39 @@ function BasicExample() {
     }
   };
 //-----------------------------toggle---------------------------------------------////
+const handleToggleStatus = (itemId) => {
+  setSelectedItemId(itemId);
+  setShowConfirmModal(true);
+};
+const handleCancel = async () =>{
+  setShowConfirmModal(false)
+}
 
-  const handleStatusToggle = async (item, index) => {
-    const confirmed = window.confirm("Are you sure about that?");
-    if (confirmed) {
+
+  const handleStatusToggleConfirm = async () => {
+    setShowConfirmModal(false);
       const updatedList = [...listNews];
-      updatedList[startIndex + index].status = !item.status;
+      const selectedItem = updatedList.find((item) => item._id === selectedItemId);
+      console.log(selectedItem);
+    selectedItem.status = !selectedItem.status;
+
       setListNews(updatedList);
       try {
         await updateNews({
-          _id: item._id,
-          status: updatedList[startIndex + index].status
+          _id: selectedItem._id,
+          status: selectedItem.status
         });
         console.log("Status updated successfully.");
-        toast.success(`${item.subject} status updated successfully`);
+        toast.success(`${selectedItem.subject} status updated successfully`);
       } catch {
         console.log("Error");
       }
-    }
+    
   };
+
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState(null);
 //---------------------------------------------------------------------------------------///
   return (
     <>
@@ -347,7 +361,7 @@ function BasicExample() {
                       <TableCell>
                         <Switch
                           checked={item.status}
-                          onChange={() => handleStatusToggle(item, index)}
+                          onChange={() => handleToggleStatus(item._id)}
                           color="primary"
                         />
                       </TableCell>
@@ -400,6 +414,33 @@ function BasicExample() {
           </Button>
         </div>
       </Container>
+
+
+
+      <Modal
+        open={showConfirmModal}
+        onClose={handleCancel}
+        closeAfterTransition
+      >
+        <Fade in={showConfirmModal}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+            <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
+              <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+                Confirmation
+              </h3>
+              <p>Are you sure you want to change the status of this Course?</p>
+              <div style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}>
+                <Button variant="contained" onClick={handleStatusToggleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                  Confirm
+                </Button>
+                <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                  Cancel
+                </Button>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
     </>
   );
 }

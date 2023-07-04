@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, List, ListItem, ListItemText, Paper } from '@mui/material';
 
 const articles = [
@@ -18,6 +18,11 @@ const articles = [
     content: 'Content of Article 3',
   },
 ];
+
+
+
+
+
 
 const NewsPage = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
