@@ -95,7 +95,6 @@ const {
   charDataPayment,
   charDataPaymentPremium,
   charDataPaymentPremiumLineChart,
-  getPaymentByIdUser,
 } = require("../controllers/Payment");
 const {
   addBooking,

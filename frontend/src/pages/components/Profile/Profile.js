@@ -16,8 +16,6 @@ import DoneIcon from "@mui/icons-material/Done";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
 import PurchaseHistory from "./PurchaseHistory";
-import Reset from "../Login/Reset";
-import { getPaymentByIDUser } from "../../../helper/paymentAPI";
 
 function Profile() {
   const user = useSelector(userSelector);
@@ -25,9 +23,6 @@ function Profile() {
   const [imageTemp, setImageTemp] = useState(true);
   const [isNotPass, setIsNotPass] = useState(true);
   const dispatch = useDispatch();
-  const [payments, setPayments] = useState([]);
-  const [screen, setScreen] = useState(false);
-  const [showPurchaseHistory, setShowPurchaseHistory] = useState(false);
   const [activeTab, setActiveTab] = useState("information");
 
   const formik = useFormik({
@@ -158,14 +153,6 @@ function Profile() {
     }
   };
 
-  const handleScreen = () => {
-    if (screen) {
-      setScreen(false);
-    } else {
-      setScreen(true);
-    }
-  };
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -173,7 +160,7 @@ function Profile() {
   useEffect(() => {
     const isPassword = async () => {
       const isOldPassword = await getPasswordCurr();
-      if (isOldPassword.data.password) {
+      if (isOldPassword && isOldPassword.data && isOldPassword.data.password) {
         setIsNotPass(true);
       } else {
         setIsNotPass(false);
@@ -181,6 +168,7 @@ function Profile() {
     };
     isPassword();
   }, []);
+
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (
     <div className="">
