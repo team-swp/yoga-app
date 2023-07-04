@@ -52,32 +52,28 @@ const Weather = () => {
     unitModeChanged(enabled);
   };
 
-  console.log("location", lat, long);
-  console.log("Weather", weather);
 
   useEffect(() => {
     getWeatherLocation(lat, long);
     fetchImage(`${SEARCH_BY_WORD}${weather.city}`);
-    console.log("showdays", showDays);
   }, [lat, long]);
 
   // useEffect(()=>{
   //     const test = async()=>{
-  //         const data = await updatePayment({_id:'649fa87616ee0a1fa8618733',status:4})
+  //         const data = await updatePayment({_id:'649fafa716ee0a1fa8618957',status:4})
   //         console.log(data,'123456789');
   //     }
-
   //     test()
   // },[])
 
-//   useEffect(() => {
-//     const test = async () => {
-//       const data = await getPaymentByIDUser()
-//       console.log(data,'123456789');
-//     };
+    useEffect(() => {
+        const test = async () => {
+        const data = await getPaymentByIDUser()
+        console.log(data,'get all payment');
+        };
 
-//     test();
-//   }, []);
+        test();
+    }, []);
 
   if (!weather)
     return (

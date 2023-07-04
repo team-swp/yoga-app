@@ -115,7 +115,11 @@ function ManageClass() {
         const requestUrl = "http://localhost:3001/api/accounts";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
-        setInstructorList(responseJSON);
+        console.log(responseJSON);
+        const FilterInstructor = responseJSON.filter((x) => x.role === "instructor")
+        setInstructorList(FilterInstructor);
+       
+        console.log(FilterInstructor);
       } catch (error) {
         console.log("Failed");
       }
@@ -196,7 +200,7 @@ function ManageClass() {
       setPage(response.data.pagination.pageNum);
       setPageCount(response.data.pagination.pageCount);
       setClasses(classData);
-      handleCloseModal();
+    
     } catch (error) {}
   };
   const handleReset = () => {
@@ -253,127 +257,154 @@ function ManageClass() {
               Add new Class
             </Button>
           </div>
-      <div style={{display:'flex', marginTop: "15px",
+          <div
+            style={{
+              display: "flex",
+              marginTop: "15px",
               marginBottom: "15px",
-              marginLeft: "10px",}}> <Button
-            variant="contained"
-            color="primary"
-            style={{ display: "block" }}
-            onClick={handleOpenModal}
+              marginLeft: "10px",
+            }}
           >
-            Search
-          </Button>
-          <Button
-            style={{ marginLeft: "1rem" }}
-            variant="outlined"
-            onClick={handleReset}
-          >
-            Reset
-          </Button></div>
-         
+            {" "}
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ display: "block" }}
+              onClick={handleOpenModal}
+            >
+              Search
+            </Button>
+            <Button
+              style={{ marginLeft: "1rem" }}
+              variant="outlined"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+          </div>
 
           <Modal
-  open={isOpen}
-  onClose={handleCloseModal}
-  sx={{
-    position: "absolute",
-    top: "40%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 1200,
-    height:150,
-  backgroundColor:"none",
-    boxShadow: "none",
-    p: 4
-  }}
->
-  <form onSubmit={handleSearch}>
-    <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
-      <Button type="submit" variant="contained" color="primary" style={{marginRight:10}}>
-        Filter
-      </Button>
-      <Button variant="contained" onClick={handleCloseModal}>
-        Cancel
-      </Button>
-    </div>
-    <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-      <input
-        autoFocus
-        style={{ marginRight: "1rem" }}
-        type="text"
-        variant="outlined"
-        placeholder="Search by class name"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="border-solid border-2 border-black p-1"
-      />
+            open={isOpen}
+            onClose={handleCloseModal}
+            sx={{
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 1200,
+              height: 150,
+              backgroundColor: "none",
+              boxShadow: "none",
+              p: 4,
+            }}
+          >
+            <form onSubmit={handleSearch}>
+            
+              <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginBottom: "1rem",
+                  }}
+              >
+                <input
+                  autoFocus
+                  type="text"
+                  variant="outlined"
+                  placeholder="Search by class name"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                />
 
-      <select
-        value={instructorValue}
-        onChange={(e) => setInstructorValue(e.target.value)}
-        className="border-solid border-2 border-black p-1"
-      >
-        <option value="">All Instructor</option>
-        {instructorList.map((user, index) => (
-          <option key={index} value={user._id}>
-            {user.username}
-          </option>
-        ))}
-      </select>
+                <select
+                onClick={handleSearch}
+                  value={instructorValue}
+                  onChange={(e) => setInstructorValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All Instructor</option>
+                  {instructorList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user.username}
+                    </option>
+                  ))}
+                </select>
 
-      <select
-        value={slotValue}
-        onChange={(e) => setSlotValue(e.target.value)}
-        className="border-solid border-2 border-black p-1"
-      >
-        <option value="">All Schedule</option>
-        {scheduleList.map((user, index) => (
-          <option key={index} value={user._id}>
-            {user.schedulename}
-          </option>
-        ))}
-      </select>
+                <select
+                  onClick={handleSearch}
+                  value={slotValue}
+                  onChange={(e) => setSlotValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All Schedule</option>
+                  {scheduleList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user.schedulename}
+                    </option>
+                  ))}
+                </select>
 
-      <select
-        value={courseValue}
-        onChange={(e) => setCourseValue(e.target.value)}
-        className="border-solid border-2 border-black p-1"
-      >
-        <option value="">All course</option>
-        {courseList.map((user, index) => (
-          <option key={index} value={user._id}>
-            {user.coursename}
-          </option>
-        ))}
-      </select>
+                <select
+                  onClick={handleSearch}
+                  value={courseValue}
+                  onChange={(e) => setCourseValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All course</option>
+                  {courseList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user.coursename}
+                    </option>
+                  ))}
+                </select>
 
-      <select
-        value={dayValue}
-        onChange={(e) => setDayValue(e.target.value)}
-        className="border-solid border-2 border-black p-1"
-      >
-        <option value="">All course</option>
-        {dayList.map((user, index) => (
-          <option key={index} value={user._id}>
-            {user}
-          </option>
-        ))}
-      </select>
+                <select
+                  onClick={handleSearch}
+                  value={dayValue}
+                  onChange={(e) => setDayValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">Day of the week</option>
+                  {dayList.map((user, index) => (
+                    <option key={index} value={user._id}>
+                      {user}
+                    </option>
+                  ))}
+                </select>
 
-      <select
-        value={statusValue}
-        onChange={(e) => setStatusValue(e.target.value)}
-        
-        className="border-solid border-2 border-black p-1"
-      >
-        <option value="">All Statuses</option>
-        <option value="true">Enabled</option>
-        <option value="false">Disabled</option>
-      </select>
-    </div>
-  </form>
-</Modal>
-
+                <select
+                  onClick={handleSearch}
+                  value={statusValue}
+                  onChange={(e) => setStatusValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All Statuses</option>
+                  <option value="true">Enabled</option>
+                  <option value="false">Disabled</option>
+                </select>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: 10 }}
+                >
+                  Filter
+                </Button>
+                <Button variant="contained" onClick={handleCloseModal}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </Modal>
 
           <Table sx={{ minWidth: 650 }} aria-label="class table">
             <TableHead>
@@ -390,7 +421,21 @@ function ManageClass() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {classes.map((classItem, index) => {
+              {
+                classes.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={9}
+                      align="center"
+                      style={{ fontSize: "30px" }}
+                    >
+                      The result not  available !!!
+                    </TableCell>
+                  </TableRow>
+                ) : 
+              
+              
+              classes.map((classItem, index) => {
                 const scheduleId = classItem.schedule_id;
                 const courseId = classItem.course_id;
                 const instructorId = classItem.instructor_id;

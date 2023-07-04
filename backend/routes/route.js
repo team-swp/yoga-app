@@ -32,6 +32,7 @@ const {
   updateUserForAdmin,
   charDataAccount,
   charDataSparkLine,
+  updateHolidayMember,
 } = require("../controllers/Account");
 
 const crypto = require("crypto");
@@ -284,3 +285,7 @@ router.post("/chart/customer", charDataAccount);
 router.post("/chart/product", charDataPaymentPremium);
 router.post("/chart/members", charDataSparkLine);
 router.post("/chart/premium", charDataPaymentPremiumLineChart);
+
+
+//update holidat
+router.post("/update/holiday", AuthStaff,updateHolidayMember);

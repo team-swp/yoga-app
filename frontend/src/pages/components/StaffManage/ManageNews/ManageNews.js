@@ -315,7 +315,21 @@ function BasicExample() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {listNews &&
+              {
+              listNews.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    align="center"
+                    style={{ fontSize: "30px" }}
+                  >
+                    The result not available !!!
+                  </TableCell>
+                </TableRow>
+              ) : 
+              
+              
+              listNews &&
                 listNews.length > 0 &&
                 listNews.slice(startIndex, endIndex).map((item, index) => {
                   const staff = listOfStaff.find((x) => x._id === item.staff_id);

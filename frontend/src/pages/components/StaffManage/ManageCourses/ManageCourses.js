@@ -1,4 +1,4 @@
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -193,6 +193,16 @@ if (statusValue !== "") {
   }
   const startIndex = (page - 1) * 4;
 
+
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
   //////////////////////////////////////////////////////////////////////////////////////
 
   return (
@@ -201,7 +211,10 @@ if (statusValue !== "") {
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper}>
           <div
-            style={{ float: "right", marginTop: "40px", marginRight: "10px" }}
+            style={{ float: "right", 
+            marginTop: "15px",
+            marginBottom: "15px",
+            marginRight: "10px", }}
           >
             <Button
               variant="contained"
@@ -212,39 +225,68 @@ if (statusValue !== "") {
               Add new course
             </Button>
           </div>
+
+          <div
+            style={{
+              display: "flex",
+              marginTop: "15px",
+              marginBottom: "15px",
+              marginLeft: "10px",
+            }}
+          >
+            {" "}
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ display: "block" }}
+              onClick={handleOpenModal}
+            >
+              Search
+            </Button>
+            <Button
+              style={{ marginLeft: "1rem" }}
+              variant="outlined"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+          </div>
+          <Modal   open={isOpen}
+            onClose={handleCloseModal}
+            sx={{
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 1200,
+              height: 150,
+              backgroundColor: "none",
+              boxShadow: "none",
+              p: 4,
+            }}>
           <form onSubmit={handleSearch}>
             <div
               style={{
-                marginTop: "10px",
-                maxWidth: "800px",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
+                justifyContent: "center",
+                marginBottom: "1rem",
               }}
             >
               <input
                 autoFocus
-                style={{ marginLeft: "10px", marginRight: "10px" }}
                 type="text"
                 variant="outlined"
-                placeholder="Search by  name"
+                placeholder="Search by course name"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 className="border-solid border-2 border-black p-1"
               />
-              <p style={{ fontWeight: "normal", fontSize: "13px" }}>
-                Select Semester :
-              </p>
+            
               <select
+              onClick={handleSearch}
                 value={semesterValue}
                 onChange={(e) => setSemesterValue(e.target.value)}
-                style={{
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
-                  border: "2px solid black",
-                  padding: "0.5rem",
-                  fontSize: "13px",
-                }}
+                className="border-solid border-2 border-black p-1"
               >
                 <option value="">All Semesters</option>
                 {semesteres.map((semester, index) => (
@@ -254,20 +296,10 @@ if (statusValue !== "") {
                 ))}
               </select>
 
-              <>
-                <p
-                  style={{
-                    fontWeight: "normal",
-                    fontSize: "13px",
-                  }}
-                >
-                  Select Status :
-                </p>
-              </>
               <select
                 value={statusValue}
                 onChange={(e) => setStatusValue(e.target.value)}
-                style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                onClick={handleSearch}
                 className="border-solid border-2 border-black p-1"
               >
                 <option value="">All Statuses</option>
@@ -276,37 +308,31 @@ if (statusValue !== "") {
               </select>
             </div>
             <div
-              style={{
-                marginTop: "10px",
-                marginLeft: "10px",
-                marginBottom: "10px",
-                maxWidth: "500px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
-              }}
-            >
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={{ display: "block" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "1rem",
+                }}
               >
-                Search
-              </Button>
-              <Button
-                style={{ marginLeft: "1rem" }}
-                variant="outlined"
-                onClick={handleReset}
-              >
-                Reset
-              </Button>
-            </div>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: 10 }}
+                >
+                  Filter
+                </Button>
+                <Button variant="contained" onClick={handleCloseModal}>
+                  Cancel
+                </Button>
+              </div>
           </form>
+          </Modal>
+         
 
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow >
                 <TableCell style={{ textAlign: "center" }}>ID</TableCell>
                 <TableCell style={{ textAlign: "center" }}>
                   Course Name
@@ -406,6 +432,7 @@ if (statusValue !== "") {
           )}
           <Button
             className="next-button border"
+            disabled={page ===pageCount}
             onClick={handleNext}
             style={{
               marginRight: "1rem",
