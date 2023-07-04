@@ -356,7 +356,7 @@ function BasicExample() {
                           variant="contained"
                           color="warning"
                           component={Link}
-                          to={`/updatenew/${item._id}`}
+                          to={`/updatesenews/${item._id}`}
                           style={{ fontSize: "10px" }}
                         >
                           Update & Detail

@@ -273,12 +273,13 @@ if (statusValue !== "") {
               }}
             >
               <input
+              
                 autoFocus
                 type="text"
                 variant="outlined"
                 placeholder="Search by course name"
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => setValue(e.target.value) }
                 className="border-solid border-2 border-black p-1"
               />
             
@@ -355,7 +356,7 @@ if (statusValue !== "") {
                     align="center"
                     style={{ fontSize: "30px" }}
                   >
-                    No courses available !!!
+                    The result not  available !!!
                   </TableCell>
                 </TableRow>
               ) : (

@@ -155,7 +155,8 @@ console.log(selectedSemester);
             type="text"
             name="coursename"
             value={formik.values.coursename}
-            onChange={(event) => setCoursename(event.target.value)}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             required
             sx={styles.textField}
             error={
