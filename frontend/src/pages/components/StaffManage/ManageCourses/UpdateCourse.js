@@ -21,6 +21,9 @@ function UpdateCourse() {
   const [semesterList, setSemesterList] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
 
+  console.log(selectedSemester);
+
+
   const formik = useFormik({
     initialValues: {
       coursename: "",
@@ -30,7 +33,7 @@ function UpdateCourse() {
       requirement: "",
       forWho: "",
       images: "",
-     
+
     },
     validationSchema: Yup.object({
       coursename: Yup.string().required("Course Name is required"),
@@ -40,12 +43,12 @@ function UpdateCourse() {
       requirement: Yup.string().required("Requirements are required"),
       forWho: Yup.string().required("Target audience is required"),
       images: Yup.mixed().required("Images are required"),
-  
+
     }),
     onSubmit: async (values) => {
       try {
         // Lấy id của học kỳ từ selectedSemester
-        const semesterId = selectedSemester ? selectedSemester._id : null;
+        const semesterId = selectedSemester ? selectedSemester.semestername : null;
 
         const response = await updateCourse({
           _id: courseId.id,
@@ -98,9 +101,10 @@ function UpdateCourse() {
           requirement: course.requirement,
           forWho: course.forWho,
           images: course.images,
-     
+
         });
-        setSelectedSemester(combinedData.semester.semestername);
+        setSelectedSemester(course.semestername);
+        console.log(combinedData.course.semestername);
       } catch (error) {
         console.error(error);
       }
@@ -116,7 +120,11 @@ function UpdateCourse() {
           "http://localhost:3001/api/semester/get"
         );
         const semesterData = response.data;
-        setSemesterList(semesterData);
+        // Lọc ra những semester có giá trị status là true
+        const filteredSemesters = semesterData.filter(
+          (semester) => semester.status === true
+        );
+        setSemesterList(filteredSemesters);
       } catch (error) {
         console.error(error);
       }
@@ -124,7 +132,6 @@ function UpdateCourse() {
 
     fetchSemesters();
   }, []);
-
   return (
     <>
       <Header />
@@ -267,7 +274,8 @@ function UpdateCourse() {
             value={selectedSemester}
             onChange={(event, newValue) => setSelectedSemester(newValue)}
             options={semesterList}
-            getOptionLabel={(option) => option.semestername}
+            getOptionLabel={(option) => option.semestername || selectedSemester}
+
             renderInput={(params) => (
               <TextField
                 {...params}

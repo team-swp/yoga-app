@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
   InputLabel,
   Paper,
   Switch,
@@ -13,33 +14,36 @@ import {
   TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import _, { debounce } from "lodash";
 import { getBooking } from "../../../../helper/bookingAPI";
 import { getPaymentWithPaging } from "../../../../helper/paymentAPI";
 import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
-import StatusButton from "./CustomeStatus";
+import StatusButton, { statusOptions } from "./CustomeStatus";
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import { Toaster, toast } from "react-hot-toast";
 import classNames from "classnames/bind";
 import styles from "./ManageMember.module.css";
-import _, { debounce } from "lodash";
+import { ModalConfirmMember, ModalConfirmPending } from "./ModalConfirm";
 
 const cx = classNames.bind(styles);
 
 const moment = require("moment");
 
-const statusOptions = [
-  { value: "", label: "All" },
-  { value: "0", label: "Failed" },
-  { value: "4", label: "Trial" },
-  { value: "5", label: "Pending" },
-  { value: "10", label: "Completed" },
-];
-
 function ManageMember() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  const [updatePendingId, setUpdatePendingId] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalMember, setOpenModalMember] = useState(false);
+
   const [statusFilter, setStatusFilter] = useState(null);
   const [payments, setPayments] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+
+  const [isMember, setIsMember] = useState(null);
+  const [memberId, setMemberId] = useState(null);
+  const [statusPaymented, setStatusPaymented] = useState(null);
 
   async function fetchData() {
     try {
@@ -84,54 +88,6 @@ function ManageMember() {
     }
   }, 500);
 
-  function handleToggle(isMember, memberId, expiredDate, statusPaymented) {
-    if (statusPaymented !== 10 && statusPaymented !== 4) {
-      toast.error("Update failed");
-      return;
-    }
-    const paymentIndex = payments.findIndex(
-      (payment) => payment.member._id === memberId
-    );
-
-    const oldMetaData = JSON.parse(payments[paymentIndex].member.meta_data);
-    const newMetaData = { ...oldMetaData, isMember };
-
-    const response = { _id: memberId, meta_data: JSON.stringify(newMetaData) };
-    updateUserForStaff(response)
-      .then((res) => {
-        console.log(res.data);
-        toast.success("Update successfully");
-        const updatedPayments = payments.map((payment) => {
-          if (payment.member._id === memberId) {
-            return {
-              ...payment,
-              member: { ...payment.member, meta_data: response.meta_data },
-            };
-          }
-          return payment;
-        });
-
-        setPayments(updatedPayments);
-
-        const updatedSearchResults = searchResults.map((payment) => {
-          if (payment.member._id === memberId) {
-            return {
-              ...payment,
-              member: { ...payment.member, meta_data: response.meta_data },
-            };
-          }
-          return payment;
-        });
-
-        setSearchResults(updatedSearchResults);
-      })
-
-      .catch((error) => {
-        console.error(error);
-        toast.error("Update failed");
-      });
-  }
-
   const filteredPayments = searchResults
     .filter((payment) => {
       if (statusFilter === null || statusFilter === "") {
@@ -145,30 +101,43 @@ function ManageMember() {
     })
     .map((payments) => {
       const metaData = JSON.parse(payments.member.meta_data);
+
       const isMember = metaData.isMember;
+      const { username, email } = payments.member;
+      const status = payments.status;
       const MemberDuration = metaData.MemberDuration;
-      const startDateMember = moment(metaData.startDateMember).format(
-        "DD/MM/YY"
-      );
+
+      let startDateMember;
+
+      if (status === 5) {
+        startDateMember = "Not Yet";
+      } else {
+        startDateMember = moment(metaData.startDateMember).format("DD/MM/YY");
+      }
 
       let expiredDate;
 
-      if (
-        typeof MemberDuration !== "undefined" &&
-        typeof MemberDuration !== "string"
-      ) {
-        expiredDate = moment(startDateMember, "DD/MM/YY")
-          .add(MemberDuration, "months")
-          .format("DD/MM/YY");
+      if (typeof MemberDuration !== "undefined" && status !== 5) {
+        if (status === 4) {
+          const durationArray = MemberDuration.split(" ");
+          const durationValue = parseInt(durationArray[0]);
+
+          expiredDate = moment(startDateMember, "DD/MM/YY")
+            .add(durationValue, "days")
+            .format("DD/MM/YY");
+        } else {
+          expiredDate = moment(startDateMember, "DD/MM/YY")
+            .add(MemberDuration, "months")
+            .format("DD/MM/YY");
+        }
       } else {
         expiredDate = "Not Yet";
       }
+
       const memberId = payments.member._id;
       const bookingDate = moment(payments.bookings.booking_date).format(
         "DD/MM/YY"
       );
-      const status = payments.status;
-      const { username, email } = payments.member;
 
       return {
         username,
@@ -205,6 +174,46 @@ function ManageMember() {
 
   const handleResetStatusFilter = () => {
     setStatusFilter(null);
+  };
+
+  const handleResetSearch = () => {
+    setSearchResults(payments);
+    document.getElementById("searchInput").value = "";
+  };
+
+  const handleOpenModal = (status, memberId) => {
+    if (status === 5) {
+      setUpdatePendingId(memberId);
+      setOpenModal(true);
+    } else {
+      toast.error(
+        "Update failed! Only the user with the Pending status could be updated!"
+      );
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setOpenModalMember(false);
+  };
+
+  const handleOpenModalWithToggle = (isMember, memberId, statusPaymented) => {
+    if (statusPaymented !== 10 && statusPaymented !== 4) {
+      toast.error(
+        "Update failed! Only the user with Completed status and Trial status could be updated"
+      );
+      return;
+    } else {
+      setOpenModalMember(true);
+      setIsMember(isMember);
+      setMemberId(memberId);
+      setStatusPaymented(statusPaymented);
+    }
+  };
+
+  const handleUpdateSuccess = async () => {
+    await fetchData();
+    handleCloseModal();
   };
 
   const displayedStatusValue = statusFilter === null ? "" : statusFilter;
@@ -272,16 +281,21 @@ function ManageMember() {
                       <TableCell>{payment.startDateMember}</TableCell>
                       <TableCell>{payment.expiredDate}</TableCell>
                       <TableCell>
-                        <StatusButton status={payment.status} />
+                        <button
+                          onClick={() =>
+                            handleOpenModal(payment.status, payment.memberId)
+                          }
+                        >
+                          <StatusButton status={payment.status} />
+                        </button>
                       </TableCell>
                       <TableCell>
                         <Switch
                           checked={payment.isMember}
                           onChange={(event) => {
-                            handleToggle(
+                            handleOpenModalWithToggle(
                               event.target.checked,
                               payment.memberId,
-                              payment.expiredDate,
                               payment.status
                             );
                           }}
@@ -323,6 +337,26 @@ function ManageMember() {
             Next
           </Button>
         </div>
+
+        <ModalConfirmPending
+          open={openModal}
+          handleClose={handleCloseModal}
+          updatePendingId={updatePendingId}
+          setOpenModal={setOpenModal}
+          handleUpdateSuccess={handleUpdateSuccess}
+        />
+        <ModalConfirmMember
+          open={openModalMember}
+          handleClose={handleCloseModal}
+          isMember={isMember}
+          memberId={memberId}
+          statusPaymented={statusPaymented}
+          payments={payments}
+          searchResults={searchResults}
+          setSearchResults={setSearchResults}
+          setPayments={setPayments}
+          setOpenModalMember={setOpenModalMember}
+        />
       </Container>
     </div>
   );

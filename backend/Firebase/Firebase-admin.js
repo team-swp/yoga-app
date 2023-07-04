@@ -66,7 +66,6 @@ module.exports.CheckExistAccount = async (req, res) => {
             avatar: picture || null,
             meta_data: meta_data, //base 64
           });
-          console.log('1');
           account
             .save()
             .then((result) => {
@@ -79,7 +78,7 @@ module.exports.CheckExistAccount = async (req, res) => {
                 process.env.JWT_SECRET,
                 { expiresIn: "24h" }
               );
-              console.log('2');
+  
               return res.status(201).send({
                 email: result.email,
                 token,

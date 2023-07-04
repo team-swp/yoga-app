@@ -61,3 +61,15 @@ export async function getPaymentByID({ id }) {
     return Promise.reject({ error: "Payment cannot Found...!" });
   }
 }
+
+export async function getPaymentByIDUser() {
+  try {
+   const {data} =  await getApi({
+      apiPath:`/api/getpayment/user`,
+      errorMessage: "Cannot Get Booking",
+    });
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject({ error: "Payment cannot Found...!" });
+  }
+}

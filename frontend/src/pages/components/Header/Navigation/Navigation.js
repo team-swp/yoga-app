@@ -10,7 +10,7 @@ function Navigation() {
   const user = useSelector(userSelector)
   const token = localStorage.getItem("token");
   useEffect(() => {
-    
+
   }, [user]);
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg">
@@ -35,6 +35,11 @@ function Navigation() {
             <div>
               <Link to="/schedule">
                 <p className="text-xs uppercase">Schedule</p>
+              </Link>
+            </div>
+            <div>
+              <Link to="/weather">
+                <p className="text-xs uppercase">Weather</p>
               </Link>
             </div>
           </div>

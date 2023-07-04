@@ -1,4 +1,3 @@
-import { Select, MenuItem, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -12,21 +11,22 @@ import {
   Button,
   Switch,
   Modal,
-  Fade,
+  Fade
 } from "@mui/material";
 import "./ManageCourses.css";
 import { Link } from "react-router-dom";
-import { getSemester } from "../../../../helper/semesterAPI";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import StatusButton from "./StatusButton2";
+import { getSemester } from "../../../../helper/semesterAPI";
 import { updateCourse } from "../../../../helper/courseAPI";
 import { updateClass } from "../../../../helper/classAPI";
+
 function ManageCourses() {
-  const [classes, setClasses] = useState([]);
   const [courses, setCourses] = useState([]);
   const [updatedCourse, setUpdatedCourse] = useState({});
-  const [schedule, setSchedule] = useState([]);
+  const [semesteres, setSemesteres] = useState([]);
+  const [classes, setClasses] = useState([])
   const [value, setValue] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
@@ -35,7 +35,6 @@ function ManageCourses() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
 
-  /////// update done////////////
   const handleToggle = async (event, course) => {
     setSelectedCourse(course);
     setConfirmModalOpen(true);
@@ -103,6 +102,22 @@ function ManageCourses() {
     setConfirmModalOpen(false);
   };
 
+  useEffect(() => {
+    async function fecthSemester() {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/api/classesPaging/get?limit=${1000}`
+        );
+        const coureseData = response.data.items;
+        console.log(coureseData);
+        setClasses(coureseData);
+      } catch (error) {
+        console.log("Failed");
+      }
+    }
+    fecthSemester();
+  }, []);
+
   ////////////////////////////////////////////////
   //////// địt mẹ cấm sửa dùm nha////////////////
   useEffect(() => {
@@ -117,7 +132,7 @@ function ManageCourses() {
         );
         const coureseData = response.data.items;
         console.log();
-        setSchedule(coureseData);
+        setSemesteres(coureseData);
       } catch (error) {
         console.log("Failed");
       }
@@ -149,46 +164,33 @@ function ManageCourses() {
     setValue("");
     setStatusValue("");
   };
-  var url2 = null;
-  if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}`;
-  } else if (value === "" && semesterValue !== "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}`;
-  } else if (value === "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&semester_id=${semesterValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else {
-    url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`;
+  var url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`;
+
+  if (value !== "") {
+    url2 += `&q=${value}`;
   }
 
-  var url = null;
-  if (value !== "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}`;
-  } else if (value === "" && semesterValue !== "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}`;
-  } else if (value === "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue !== "" && statusValue === "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value !== "" && semesterValue === "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&status=${statusValue}`;
-  } else if (value === "" && semesterValue !== "" && statusValue !== "") {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&semester_id=${semesterValue}&status=${statusValue}`;
-  } else {
-    url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}&q=${value}&semester_id=${semesterValue}&status=${statusValue}`;
+  if (semesterValue !== "") {
+    url2 += `&semester_id=${semesterValue}`;
+  }
+
+  if (statusValue !== "") {
+    url2 += `&status=${statusValue}`;
+  }
+
+
+  var url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}`;
+
+  if (value !== "") {
+    url += `&q=${value}`;
+  }
+
+  if (semesterValue !== "") {
+    url += `&semester_id=${semesterValue}`;
+  }
+
+  if (statusValue !== "") {
+    url += `&status=${statusValue}`;
   }
   ///////////////////// đây là hàm search tìm kiếm///////////////////////////////////////////////
   const handleSearch = async (e) => {
@@ -201,7 +203,7 @@ function ManageCourses() {
       setPageCount(response.data.pagination.pageCount);
       setCourses(semesterData);
     } catch (error) {
-      toast.error("Please try agian !!!");
+      fetchCourses()
     }
   };
   /////////////////// handle việc next và prev trong page/////////////////////////
@@ -222,7 +224,17 @@ function ManageCourses() {
     });
   }
   const startIndex = (page - 1) * 4;
-  const endIndex = startIndex + 4;
+
+
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
   //////////////////////////////////////////////////////////////////////////////////////
 
   return (
@@ -231,7 +243,12 @@ function ManageCourses() {
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper}>
           <div
-            style={{ float: "right", marginTop: "40px", marginRight: "10px" }}
+            style={{
+              float: "right",
+              marginTop: "15px",
+              marginBottom: "15px",
+              marginRight: "10px",
+            }}
           >
             <Button
               variant="contained"
@@ -242,104 +259,125 @@ function ManageCourses() {
               Add new course
             </Button>
           </div>
-          <form onSubmit={handleSearch}>
-            <div
-              style={{
-                marginTop: '10px',
-                maxWidth: "800px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
-              }}
+
+          <div
+            style={{
+              display: "flex",
+              marginTop: "15px",
+              marginBottom: "15px",
+              marginLeft: "10px",
+            }}
+          >
+            {" "}
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ display: "block" }}
+              onClick={handleOpenModal}
             >
-              <input
-                autoFocus
-                style={{ marginLeft: '10px', marginRight: '10px' }}
-                type="text"
-                variant="outlined"
-                placeholder="Search by  name"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                className="border-solid border-2 border-black p-2"
-              />
-              <p style={{ fontWeight: "normal", fontSize: "13px" }}>
-                Select Semester :
-              </p>
-              <Select
-                value={semesterValue}
-                onChange={(e) => setSemesterValue(e.target.value)}
-                style={{ marginLeft: "1rem", marginRight: "1rem" }}
+              Search
+            </Button>
+            <Button
+              style={{ marginLeft: "1rem" }}
+              variant="outlined"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+          </div>
+          <Modal open={isOpen}
+            onClose={handleCloseModal}
+            sx={{
+              position: "absolute",
+              top: "40%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 1200,
+              height: 150,
+              backgroundColor: "none",
+              boxShadow: "none",
+              p: 4,
+            }}>
+            <form onSubmit={handleSearch}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "1rem",
+                }}
               >
-                <MenuItem value="">All Semesters</MenuItem>
-                {schedule.map((semester, index) => (
-                  <MenuItem key={index} value={semester._id}>
-                    {semester.semestername}
-                  </MenuItem>
-                ))}
-              </Select>
+                <input
+                  autoFocus
+                  type="text"
+                  variant="outlined"
+                  placeholder="Search by course name"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                />
 
-              <>
-                <p
-                  style={{
-                    fontWeight: "normal",
-                    fontSize: "13px",
-
-                  }}
+                <select
+                  onClick={handleSearch}
+                  value={semesterValue}
+                  onChange={(e) => setSemesterValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
                 >
-                  Select Status :
-                </p>
-              </>
-              <Select
-                value={statusValue}
-                onChange={(e) => setStatusValue(e.target.value)}
-                style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                  <option value="">All Semesters</option>
+                  {semesteres.map((semester, index) => (
+                    <option key={index} value={semester._id}>
+                      {semester.semestername}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={statusValue}
+                  onChange={(e) => setStatusValue(e.target.value)}
+                  onClick={handleSearch}
+                  className="border-solid border-2 border-black p-1"
+                >
+                  <option value="">All Statuses</option>
+                  <option value="true">Enabled</option>
+                  <option value="false">Disabled</option>
+                </select>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "1rem",
+                }}
               >
-                <MenuItem value="">All Statuses</MenuItem>
-                <MenuItem value="true">Enabled</MenuItem>
-                <MenuItem value="false">Disabled</MenuItem>
-              </Select>
-            </div>
-            <div
-              style={{
-                marginLeft: "10px",
-                marginBottom: "10px",
-                maxWidth: "500px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "left",
-              }}
-            >
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={{ display: "block" }}
-              >
-                Search
-              </Button>
-              <Button
-                style={{ marginLeft: "1rem" }}
-                variant="outlined"
-                onClick={handleReset}
-              >
-                Reset
-              </Button>
-            </div>
-          </form>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: 10 }}
+                >
+                  Filter
+                </Button>
+                <Button variant="contained" onClick={handleCloseModal}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </Modal>
+
 
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow >
                 <TableCell style={{ textAlign: "center" }}>ID</TableCell>
                 <TableCell style={{ textAlign: "center" }}>
                   Course Name
                 </TableCell>
-                <TableCell style={{ textAlign: "center" }}>Price</TableCell>
+
                 <TableCell style={{ textAlign: "center" }}>Semester</TableCell>
+
+                <TableCell style={{ textAlign: "center" }}>Status </TableCell>
                 <TableCell style={{ textAlign: "center" }}>
                   Disable/Enable{" "}
                 </TableCell>
-                <TableCell style={{ textAlign: "center" }}>Status </TableCell>
                 <TableCell style={{ textAlign: "center" }}>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -356,7 +394,7 @@ function ManageCourses() {
                 </TableRow>
               ) : (
                 courses.map((courseItem, index) => {
-                  const semester = schedule.find(
+                  const semester = semesteres.find(
                     (item2) => item2._id === courseItem.semester_id
                   );
                   return (
@@ -367,11 +405,13 @@ function ManageCourses() {
                       <TableCell style={{ textAlign: "center" }}>
                         {courseItem.coursename}
                       </TableCell>
-                      <TableCell style={{ textAlign: "center" }}>
-                        {courseItem.price}
-                      </TableCell>
+
                       <TableCell style={{ textAlign: "center" }}>
                         {semester ? semester.semestername : "N/A"}
+                      </TableCell>
+
+                      <TableCell style={{ textAlign: "center" }}>
+                        <StatusButton status={courseItem.status} />
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
                         <Switch
@@ -379,9 +419,6 @@ function ManageCourses() {
                           onChange={(event) => handleToggle(event, courseItem)}
                           color="primary"
                         />
-                      </TableCell>
-                      <TableCell style={{ textAlign: "center" }}>
-                        <StatusButton status={courseItem.status} />
                       </TableCell>
                       <TableCell style={{ textAlign: "center" }}>
                         <Button
@@ -401,30 +438,6 @@ function ManageCourses() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Modal
-          open={confirmModalOpen}
-          onClose={handleCancel}
-          closeAfterTransition
-        >
-          <Fade in={confirmModalOpen}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
-                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
-                  Confirmation
-                </h3>
-                <p>Are you sure you want to change the status of this Course?</p>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
-                  <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
-                    Confirm
-                  </Button>
-                  <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
-                    Cancel
-                  </Button>
-                </div>
-              </Paper>
-            </div>
-          </Fade>
-        </Modal>
         <div className="pagination gap-7" style={{ marginTop: "10px" }}>
           <Button
             disabled={page === 1}
@@ -453,8 +466,10 @@ function ManageCourses() {
           )}
           <Button
             className="next-button border"
+            disabled={page === pageCount}
             onClick={handleNext}
             style={{
+              marginRight: "1rem",
               padding: "0.5rem 1rem",
               borderRadius: "4px",
               backgroundColor: "#ccc",
@@ -465,6 +480,30 @@ function ManageCourses() {
           </Button>
         </div>
       </Container>
+      <Modal
+        open={confirmModalOpen}
+        onClose={handleCancel}
+        closeAfterTransition
+      >
+        <Fade in={confirmModalOpen}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+            <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
+              <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+                Confirmation
+              </h3>
+              <p>Are you sure you want to change the status of this Course?</p>
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
+                <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                  Confirm
+                </Button>
+                <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                  Cancel
+                </Button>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 }

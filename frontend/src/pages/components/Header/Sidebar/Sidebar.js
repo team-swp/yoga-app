@@ -75,37 +75,37 @@ function Sidebar() {
     if (user.avatar) {
       const { url } = await getAvatarToAWS({ imageName: user._id });
       e.target.src = url;
-      const result = updateUser({avatar:url})
-      result.then((data)=>{
+      const result = updateUser({ avatar: url })
+      result.then((data) => {
         dispatch(setDataLogin(data.data.data))
-      }).catch(()=>{
+      }).catch(() => {
         console.log('error');
       })
     }
   }
   useEffect(() => {
-   const test =async ()=>{
-    if (user.avatar) {
-      const { url } = await getAvatarToAWS({ imageName: user._id });
-      setFile(url)
-      console.log(url);
-      const result = updateUser({avatar:url})
-      result.then((data)=>{
-        dispatch(setDataLogin(data.data.data))
-      }).catch(()=>{
-        console.log('error');
-      })
+    const test = async () => {
+      if (user.avatar) {
+        const { url } = await getAvatarToAWS({ imageName: user._id });
+        setFile(url)
+        console.log(url);
+        const result = updateUser({ avatar: url })
+        result.then((data) => {
+          dispatch(setDataLogin(data.data.data))
+        }).catch(() => {
+          console.log('error');
+        })
+      }
     }
-   }
-   test()
+    test()
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
     }
-  },[user])
+  }, [user])
   return (
     <div>
       <IconButton
@@ -121,7 +121,7 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-            src={file||user.avatar}
+            src={file || user.avatar}
             className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
               } object-cover h-44`}
             alt="avatar"
@@ -197,13 +197,11 @@ function Sidebar() {
                     >
                       <img
                         src={user.avatar}
-                        className={` ${
-                          checkMember
+                        className={` ${checkMember
                             ? styles.profile_img_details
                             : styles.profile_img_details_normal
-                        } object-cover h-44`}
+                          } object-cover h-44`}
                         alt="avatar"
-                        onError={loadImageAgain}
                       />
                       {checkMember ? (
                         <img

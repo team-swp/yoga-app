@@ -56,3 +56,11 @@ function StatusButton(props) {
 }
 
 export default StatusButton;
+
+export const statusOptions = [
+  { value: "", label: "All" },
+  { value: "0", label: "Failed" },
+  { value: "4", label: "Trial" },
+  { value: "5", label: "Pending" },
+  { value: "10", label: "Completed" },
+];
