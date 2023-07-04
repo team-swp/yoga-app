@@ -81,9 +81,9 @@ function Home() {
                 variant="h4"
                 sx={{ letterSpacing: "1px", fontWeight: "bold" }}
               >
-                OUR FAVORITE CLASS
+                OUR FAVORITE COURSE
                 <Typography variant="body1" sx={{ mt: 3 }}>
-                  Inspired by the core principles of Pilates and the love of
+                  Inspired by the core principles of Yoga and the love of
                   movement, our classes are designed to shift your energy and
                   create long-lasting strength from within.
                 </Typography>

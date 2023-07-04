@@ -10,51 +10,71 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { CustomEvent, EventWrapper, minTime, parseTime } from "./TimeUtils";
 import ScheduleInfo from "./ScheduleInfo";
 import useSchedule from "./ScheduleUtils";
+import { useEffect, useState } from "react";
 
 const localizer = momentLocalizer(moment);
 const cx = classNames.bind(styles);
 
 function Schedules() {
   const moment = require("moment");
-  const { totalSchedule } = useSchedule();
 
-  const events = [];
-  for (let i = 0; i < totalSchedule.length; i++) {
-    const {
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      days,
-      courseName,
-      className,
-      scheduleName,
-    } = totalSchedule[i];
-    const start = moment(new Date(startDate));
-    const end = moment(new Date(endDate));
+  const { checkSchedule } = useSchedule();
 
-    const startDateTime = parseTime(
-      startTime,
-      days,
-      start.toDate(),
-      end.toDate()
-    );
-    const endDateTime = parseTime(endTime, days, start.toDate(), end.toDate());
+  const [totalEvents, setTotalEvents] = useState([]);
 
-    for (let j = 0; j < startDateTime.length && j < endDateTime.length; j++) {
-      const currentStart = moment(startDateTime[j]);
-      const currentEnd = moment(endDateTime[j]);
-      if (currentStart.isSameOrAfter(start) && currentEnd.isSameOrBefore(end)) {
-        events.push({
-          title: courseName,
-          description: scheduleName,
-          room: className,
-          start: startDateTime[j],
-          end: endDateTime[j],
-        });
+  useEffect(() => {
+    const events = [];
+
+    for (let i = 0; i < checkSchedule.length; i++) {
+      const {
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        days,
+        courseName,
+        className,
+        scheduleName,
+        instructorName,
+        statusSemester,
+      } = checkSchedule[i];
+      const start = moment(new Date(startDate));
+      const end = moment(new Date(endDate));
+
+      const startDateTime = parseTime(
+        startTime,
+        days,
+        start.toDate(),
+        end.toDate()
+      );
+      const endDateTime = parseTime(
+        endTime,
+        days,
+        start.toDate(),
+        end.toDate()
+      );
+
+      for (let j = 0; j < startDateTime.length && j < endDateTime.length; j++) {
+        const currentStart = moment(startDateTime[j]);
+        const currentEnd = moment(endDateTime[j]);
+        if (
+          statusSemester &&
+          currentStart.isSameOrAfter(start) &&
+          currentEnd.isSameOrBefore(end)
+        ) {
+          events.push({
+            title: courseName,
+            description: scheduleName,
+            instructor: instructorName,
+            room: className,
+            start: startDateTime[j],
+            end: endDateTime[j],
+          });
+        }
       }
     }
-  }
+    setTotalEvents(events);
+  }, [checkSchedule, moment]);
 
   return (
     <div>
@@ -77,16 +97,16 @@ function Schedules() {
           <hr className="mb-10 border-t border-gray-500 mx-auto my-4 w-full" />
         </div>
         <div>
-          <ScheduleInfo totalSchedule={totalSchedule} />
+          <ScheduleInfo totalSchedule={checkSchedule} />
         </div>
         <div className={cx("weekly-schedule")}>
           <Calendar
             localizer={localizer}
-            events={events}
+            events={totalEvents}
             step={15}
             showMultiDayTimes
             defaultView={"week"}
-            views={["day", "week"]}
+            views={["week"]}
             components={{
               event: CustomEvent,
               eventWrapper: EventWrapper,

@@ -67,6 +67,7 @@
   margin-top: 10px;
   margin-left: 10px;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .courses-title:hover {

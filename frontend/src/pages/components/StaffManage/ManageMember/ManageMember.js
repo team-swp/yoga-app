@@ -216,35 +216,35 @@ function ManageMember() {
   return (
     <div>
       <Container>
-        <div className="flex justify-between">
-          <div className="py-4">
-            <input
-              placeholder="Search by username"
-              className="border-solid border-2 border-black p-2"
-              onChange={(event) => handleSearch(event)}
-            />
-          </div>
-          <Box>
-            <InputLabel htmlFor="status-filter">Filter status:</InputLabel>
-            <select
-              id="status-filter"
-              onChange={handleStatusFilterChange}
-              value={displayedStatusValue}
-              className={cx("select-status")}
-            >
-              {statusOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <Button variant="outlined" onClick={handleResetStatusFilter}>
-              Reset
-            </Button>
-          </Box>
-        </div>
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper} sx={{ my: 2 }}>
+          <div className="flex justify-between mx-5">
+            <div className="py-4">
+              <input
+                placeholder="Search by username"
+                className="border-solid border-2 border-black p-2"
+                onChange={(event) => handleSearch(event)}
+              />
+            </div>
+            <Box sx={{ mt: 1 }}>
+              <InputLabel htmlFor="status-filter">Filter status:</InputLabel>
+              <select
+                id="status-filter"
+                onChange={handleStatusFilterChange}
+                value={displayedStatusValue}
+                className={cx("select-status")}
+              >
+                {statusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <Button variant="outlined" onClick={handleResetStatusFilter}>
+                Reset
+              </Button>
+            </Box>
+          </div>
           <Table>
             <TableHead>
               <TableRow>
@@ -307,9 +307,8 @@ function ManageMember() {
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`page-button ${
-                  currentPage === page ? "active" : ""
-                }`}
+                className={`page-button ${currentPage === page ? "active" : ""
+                  }`}
               >
                 {page}
               </button>

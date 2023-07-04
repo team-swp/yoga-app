@@ -11,68 +11,99 @@ import {
   Button,
   Switch,
   TextField,
-  Select,
-  MenuItem,
-  IconButton
+  IconButton,
+  Modal,
+  Fade,
 } from '@mui/material';
 import { Link } from "react-router-dom";
 import { updateSemester } from "../../../../helper/semesterAPI";
 import { updateCourse } from "../../../../helper/courseAPI";
+import { updateClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import StatusButton from "./StatusButtons";
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 function ManageSemester() {
+  const [classes, setClasses] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [updatedCourse, setUpdatedCourse] = useState({});
   const [manageUpdateSemester, setManageUpdateSemester] = useState({})
-  const [value, setValue] = useState('')
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
-  const [semesterValue, setSemesterValue] = useState('');
-  const [statusValue, setStatusValue] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState(null);
 
   const handleToggle = async (event, semester) => {
-    try {
-      const updatedSemesterData = { ...semester, status: event.target.checked };
-      const semesterResponse = await updateSemester(updatedSemesterData);
+    setSelectedSemester(semester);
+    setConfirmModalOpen(true);
+  };
 
+  const handleCancel = () => {
+    setConfirmModalOpen(false);
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const updatedSemesterData = { ...selectedSemester, status: !selectedSemester.status };
+      const semesterResponse = await updateSemester(updatedSemesterData);
       if (semesterResponse && semesterResponse.data) {
         console.log(semesterResponse.data.data.semestername);
 
         const courseResponse = await axios.get('http://localhost:3001/api/course/get');
         const courseData = courseResponse.data;
-
         if (Array.isArray(courseData) && courseData.length > 0) {
           const coursesWithSemester = courseData.filter((course) =>
             course.semester_id === semesterResponse.data.data._id
           );
-
           if (coursesWithSemester.length > 0) {
             coursesWithSemester.forEach(async (course) => {
               try {
                 const updatedCourseData = { ...course };
-                if (!event.target.checked === false) {
+                if (!selectedSemester.status === false) {
                   updatedCourseData.status = false;
                 }
-                const response = await updateCourse(updatedCourseData);
 
+                const response = await updateCourse(updatedCourseData);
                 if (response && response.data) {
                   console.log(response.data.data.coursename);
 
-                  const updatedCourses = courses.map((courseItem) =>
-                    courseItem._id === response.data._id ? response.data : courseItem
-                  );
-                  setCourses(updatedCourses);
-
-                  if (!event.target.checked) {
-                    toast.success(`${response.data.data.coursename} status updated successfully`);
+                  const classResponse = await axios.get('http://localhost:3001/api/class/get');
+                  const classData = classResponse.data;
+                  if (Array.isArray(classData) && classData.length > 0) {
+                    const classWithCourse = classData.filter((classs) =>
+                      classs.course_id === response.data.data._id
+                    );
+                    if (classWithCourse.length > 0) {
+                      classWithCourse.forEach(async (classs) => {
+                        try {
+                          const updatedClassData = { ...classs };
+                          console.log(course.status, 123)
+                          if (!selectedSemester.status === false) {
+                            updatedClassData.status = false;
+                          }
+                          const classResponse = await updateClass(updatedClassData);
+                          if (classResponse && classResponse.data) {
+                            console.log(classResponse.data.data.classname);
+                            const updatedClasss = classes.map((classItem) =>
+                              classItem._id === classResponse.data._id ? classResponse.data : classItem
+                            );
+                            setClasses(updatedClasss);
+                          }
+                        } catch (error) {
+                          console.error(error);
+                        }
+                      });
+                    } else {
+                      console.log('No class found with the updated course');
+                    }
+                  } else {
+                    console.log('Class data is empty or invalid');
                   }
+                  setUpdatedCourse(courses);
+                  setCourses([...courses]);
                 }
               } catch (error) {
                 console.error(error);
@@ -87,6 +118,7 @@ function ManageSemester() {
         toast.success(`${semesterResponse.data.data.semestername} status updated successfully`);
         setManageUpdateSemester(semesters);
         setSemesters([...semesters]);
+        setConfirmModalOpen(false);
       }
     } catch (error) {
       console.error(error);
@@ -228,6 +260,30 @@ function ManageSemester() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Modal
+          open={confirmModalOpen}
+          onClose={handleCancel}
+          closeAfterTransition
+        >
+          <Fade in={confirmModalOpen}>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
+                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+                  Confirmation
+                </h3>
+                <p>Are you sure you want to change the status of this Semester?</p>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
+                  <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                    Confirm
+                  </Button>
+                  <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                    Cancel
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
         <footer
           style={{
             margin: "auto",
