@@ -359,10 +359,6 @@ export function ModalAddDayOff({ open, handleClose, handleUpdateSuccess }) {
     setIsValue(e.target.value);
   };
 
-  const submit = (e) => {
-    e.preventDefault();
-  };
-
   const resetForm = () => {
     setStartDate(null);
     setEndDate(null);
