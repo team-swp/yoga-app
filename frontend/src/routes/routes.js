@@ -62,6 +62,8 @@ import Admin from "../pages/components/Admin/AdminHome";
 import Premium from "../pages/components/MemberPacket/Premium";
 import Weather from "../pages/components/Weather/components/Weather";
 import InsctructorSchedule from "../pages/components/WeeklySchedule/InstructorSchedule";
+import UpdateNews from "../pages/components/StaffManage/ManageNews/UpdateNews";
+import NewsPage from "../pages/components/NotificationNew/News";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -187,6 +189,10 @@ const routers = createBrowserRouter([
   },
 
   {
+    path: "/updatesenews/:id",
+    element: <UpdateNews></UpdateNews>,
+  },
+  {
     path: "/ecommerce",
     element: <Ecommerce></Ecommerce>,
   },
@@ -286,6 +292,11 @@ const routers = createBrowserRouter([
     path: "/weather",
     element: <Weather />,
   },
+  {
+    path: "/news",
+    element: <NewsPage />,
+  },
+
 ]);
 
 export default routers;

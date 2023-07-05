@@ -33,10 +33,11 @@ const router = require("./routes/route");
 cron.schedule(
   "* * 1 * * *",
   () => {
+    console.log("Runing a job at 01:00 at Asia/Saigon timezone");
     const members = Account.find({
       meta_data: { $regex: `"isMember":true`, $options: "i" },
     })
-      .then(async (result) => {
+      .then(async(result) => {
         const date = new Date();
         const length = result.length
         for (let i = 0; i < length; i++) {
@@ -47,13 +48,14 @@ cron.schedule(
             memDate.setMonth(memDate.getMonth() + metaData.MemberDuration);
           } else {
             memDate.setDate(memDate.getDate() + 7);
+            console.log(element);
           }
           if (memDate < date) {
             const expired = `{"isMember":false}`
-            await Account.findOneAndUpdate({ _id: element._id }, { meta_data: expired })
+            await  Account.findOneAndUpdate({_id:element._id},{meta_data:expired})
           }
         }
-
+        
       })
       .catch((error) => {
         return error;
