@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { getPayment, updatePayment } from "../../../../helper/paymentAPI";
-import { getMember, updateUserForStaff } from "../../../../helper/loginAPI";
+import {
+  getMember,
+  updateHoliday,
+  updateUserForStaff,
+} from "../../../../helper/loginAPI";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -233,82 +237,127 @@ export function ModalConfirmMember({
   );
 }
 
-export function ModalAddDayOff({ open, handleClose, metaData }) {
-  // const [metaData, setMetaData] = useState(null);
+export function ModalAddDayOff({ open, handleClose, handleUpdateSuccess }) {
+  // // Hàm sinh ra khoảng ngày
+  // function generateDateRange(startDate, endDate) {
+  //   const dateRange = [];
+  //   let currentDate = new Date(startDate);
+  //   currentDate.setHours(0, 0, 0, 0);
+
+  //   while (currentDate <= endDate) {
+  //     dateRange.push(new Date(currentDate));
+  //     currentDate.setDate(currentDate.getDate() + 1);
+  //   }
+
+  //   return dateRange;
+  // }
+
+  // const dateRangeArray = [];
+
+  // metaData.forEach((member) => {
+  //   const memberId = member._id;
+  //   const meta_data = JSON.parse(member.meta_data);
+  //   const startDateMember = moment(meta_data.startDateMember).format(
+  //     "MM/DD/YYYY"
+  //   );
+
+  //   const MemberDuration = meta_data.MemberDuration;
+  //   let expiredDate;
+
+  //   if (meta_data.isTry) {
+  //     const durationArray = MemberDuration.split(" ");
+  //     const durationValue = parseInt(durationArray[0]);
+
+  //     expiredDate = moment(startDateMember)
+  //       .add(durationValue, "days")
+  //       .format("MM/DD/YYYY");
+  //   } else {
+  //     expiredDate = moment(startDateMember)
+  //       .add(MemberDuration, "months")
+  //       .format("MM/DD/YYYY");
+  //   }
+  //
+  //   const formatedStartDate = new Date(startDateMember);
+  //   const formatedExpiredDate = new Date(expiredDate);
+
+  //   const dateRange = generateDateRange(formatedStartDate, formatedExpiredDate);
+  //   dateRange.memberId = memberId;
+  //   dateRangeArray.push(dateRange);
+  // });
+
+  // const dayOffArray = [];
+  // const formatStartDate = new Date(startDate);
+  // const formatEndDate = new Date(endDate);
+
+  // const dateRange = generateDateRange(formatStartDate, formatEndDate);
+
+  // dayOffArray.push(dateRange);
+
+  // const resultArray = [];
+
+  // dateRangeArray.forEach((dateRange) => {
+  //   const memberId = dateRange.memberId;
+  //   const isMemberOnLeave = dateRange.some((date) =>
+  //     dayOffArray[0].some((offDate) => offDate.getTime() === date.getTime())
+  //   );
+
+  //   if (isMemberOnLeave) {
+  //     resultArray.push(memberId);
+  //   }
+  // });
+
+  // const newDataMember = metaData.filter((data) =>
+  //   resultArray.includes(data._id)
+  // );
+
   const [isValue, setIsValue] = useState(null);
-  const [dayName, setDayName] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
   const adapter = new AdapterDayjs();
   const currentDate = adapter.date(new Date());
 
-  // Hàm sinh ra khoảng ngày
-  function generateDateRange(startDate, endDate) {
-    const dateRange = [];
-    let currentDate = new Date(startDate);
-    currentDate.setHours(0, 0, 0, 0);
+  const formik = useFormik({
+    initialValues: {},
+    validateOnBlur: false,
+    validateOnChange: false,
 
-    while (currentDate <= endDate) {
-      dateRange.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
+    onSubmit: async (values) => {
+      const currentDate = new Date();
+      const selectedStartDate = new Date(startDate);
 
-    return dateRange;
-  }
+      if (selectedStartDate.toDateString() !== currentDate.toDateString()) {
+        toast.error("Start date must be equal to the current date");
+        return;
+      }
 
-  const dateRangeArray = [];
+      if (startDate && endDate) {
+        if (new Date(endDate) < new Date(startDate)) {
+          toast.error("The end date must be greater the start date");
+          return;
+        }
+      }
 
-  metaData.forEach((member) => {
-    const memberId = member._id;
-    const meta_data = JSON.parse(member.meta_data);
-    const startDateMember = moment(meta_data.startDateMember).format(
-      "MM/DD/YYYY"
-    );
+      const timeDiff =
+        new Date(endDate).getTime() - new Date(startDate).getTime();
+      const holiday = Math.ceil(timeDiff / (1000 * 3600 * 24) + 1);
 
-    const MemberDuration = meta_data.MemberDuration;
-    let expiredDate;
-
-    if (meta_data.isTry) {
-      const durationArray = MemberDuration.split(" ");
-      const durationValue = parseInt(durationArray[0]);
-
-      expiredDate = moment(startDateMember)
-        .add(durationValue, "days")
-        .format("MM/DD/YYYY");
-    } else {
-      expiredDate = moment(startDateMember)
-        .add(MemberDuration, "months")
-        .format("MM/DD/YYYY");
-    }
-
-    const formatedStartDate = new Date(startDateMember);
-    const formatedExpiredDate = new Date(expiredDate);
-
-    const dateRange = generateDateRange(formatedStartDate, formatedExpiredDate);
-    dateRange.memberId = memberId;
-    dateRangeArray.push(dateRange);
+      try {
+        await updateHoliday(holiday);
+        if (holiday) {
+          toast.success("Add new holiday successful!");
+          handleUpdateSuccess();
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Add failed!");
+      }
+    },
   });
 
-  const dayOffArray = [];
-  const formatStartDate = new Date(startDate);
-  const formatEndDate = new Date(endDate);
-
-  const dateRange = generateDateRange(formatStartDate, formatEndDate);
-
-  dayOffArray.push(dateRange);
-  const resultArray = [];
-
-  dateRangeArray.forEach((dateRange) => {
-    const memberId = dateRange.memberId;
-    const isMemberOnLeave = dateRange.some((date) =>
-      dayOffArray[0].some((offDate) => offDate.getTime() === date.getTime())
-    );
-
-    if (isMemberOnLeave) {
-      resultArray.push(memberId);
-    }
-  });
+  const handleChange = (e) => {
+    setIsValue(e.target.value);
+  };
 
   const submit = (e) => {
     e.preventDefault();
@@ -324,34 +373,6 @@ export function ModalAddDayOff({ open, handleClose, metaData }) {
     handleClose();
   };
 
-  const formik = useFormik({
-    initialValues: {},
-    validateOnBlur: false,
-    validateOnChange: false,
-
-    onSubmit: async (values) => {
-      if (startDate && endDate) {
-        if (new Date(endDate) < new Date(startDate)) {
-          toast.error("The end date must be greater the start date");
-          return;
-        }
-
-        if (new Date(startDate).getTime() === new Date(endDate).getTime()) {
-          toast.error("The end date must no equal with the start date");
-          return;
-        }
-      }
-
-      const timeDiff =
-        new Date(endDate).getTime() - new Date(startDate).getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    },
-  });
-
-  const handleChange = (e) => {
-    setIsValue(e.target.value);
-  };
-
   return (
     <div>
       <Toaster></Toaster>
@@ -363,23 +384,9 @@ export function ModalAddDayOff({ open, handleClose, metaData }) {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Add new day off
+            Add Holiday
           </Typography>
           <form onChange={handleChange} onSubmit={formik.handleSubmit}>
-            <TextField
-              {...formik.getFieldProps("Day off name")}
-              label="Day off name"
-              type="text"
-              fullWidth
-              required
-              style={{ marginTop: "1em", width: "245px" }}
-              error={
-                formik.touched["Day off name"] && formik.errors["Day off name"]
-              }
-              helperText={
-                formik.touched["Day off name"] && formik.errors["Day off name"]
-              }
-            />
             <div style={{ marginTop: "1em" }}>
               <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
                 <DatePicker

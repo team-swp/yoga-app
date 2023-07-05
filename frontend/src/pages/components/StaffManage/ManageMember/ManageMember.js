@@ -82,6 +82,7 @@ function ManageMember() {
       setSearchResults(updatedPayments);
 
       setMetaData(filteredData);
+
       sessionStorage.setItem("metaData", JSON.stringify(filteredData));
     } catch (error) {
       console.log(error);
@@ -290,7 +291,7 @@ function ManageMember() {
                 variant="contained"
                 onClick={handleOpenModalAdd}
               >
-                Add Day Off
+                Add Holiday
               </Button>
             </Box>
           </div>
@@ -402,7 +403,7 @@ function ManageMember() {
         <ModalAddDayOff
           open={openModalAdd}
           handleClose={handleCloseModal}
-          metaData={metaData}
+          handleUpdateSuccess={handleUpdateSuccess}
         />
       </Container>
     </div>
