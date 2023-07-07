@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 //connect database
 mongoose.connect(MONGO_URI);
 const db = mongoose.connection;
-db.on("error", () => console.error(error));
+db.on("error", (error) => console.error(error.message));
 db.once("open", () => console.log("Connected database successfull..."));
 const router = require("./routes/route");
 //auto function

@@ -120,6 +120,22 @@ export async function updateUserForStaff(response) {
   }
 }
 
+export async function updateHoliday(response) {
+  try {
+    const token = localStorage.getItem("token");
+    const data = await axios.post(
+      "/api/update/holiday",
+      { holiday: response },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return Promise.resolve({ data });
+  } catch (error) {
+    return Promise.reject(new Error("Couldn't update holiday: " + error));
+  }
+}
+
 /** generate OTP */
 export async function generateOTP(email) {
   try {
