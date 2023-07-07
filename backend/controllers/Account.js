@@ -297,7 +297,8 @@ module.exports.updateHolidayMember = async (req, res, next) => {
   session.startTransaction();
   try {
     const arrUpdateMem = [];
-    const { holiday } = req.body;
+    const { holiday,startDate } = req.body;
+    //them ngày để bắt đầu chạy function
     const members = await Account.find({
       meta_data: { $regex: `"isMember":true`, $options: "i" },
     }).session(session);

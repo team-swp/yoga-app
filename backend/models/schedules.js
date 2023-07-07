@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const moment = require("moment");
 const scheduleSchema = new mongoose.Schema(
   {
     schedulename: {
@@ -74,13 +74,15 @@ scheduleSchema.pre("save", async function (next) {
   const existingSchedule = await this.constructor.findOne({
     $or: [
       { startTime: this.startTime, _id: { $ne: this._id } }, // Check for duplicate startTime
-      { endTime: this.endTime, _id: { $ne: this._id } }, // Check for duplicate endTime
+      { endTime: this.endTime, _id: { $ne: this._id } },
+      { startTime: this.endTime, _id: { $ne: this._id } },
+      { endTime: this.startTime, _id: { $ne: this._id } }, // Check for duplicate endTime
     ],
   });
 
   if (existingSchedule) {
     const error = new Error(
-      "Schedule with the same startTime or endTime already exists."
+      `Schedule with the same startTime or endTime already exists (${existingSchedule.schedulename}).`
     );
     return next(error);
   }
@@ -98,5 +100,58 @@ function convertTo24Hour(hour, period) {
   }
   return parseInt(hour);
 }
+
+function convertToDateTime(timeString) {
+  const [time, period] = timeString.split(' ');
+  const [hours, minutes] = time.split(':');
+  
+  let hoursValue = parseInt(hours);
+  if (period === 'PM' && hoursValue !== 12) {
+    hoursValue += 12;
+  } else if (period === 'AM' && hoursValue === 12) {
+    hoursValue = 0;
+  }
+
+  const currentDate = new Date();
+  return new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    hoursValue,
+    parseInt(minutes)
+  );
+}
+
+scheduleSchema.pre("save", async function (next) {
+  const newSchedule = this;
+  const arrCheck = []
+  try {
+    const newScheduleStartTime = convertToDateTime(newSchedule.startTime)
+    const newScheduleEndTime = convertToDateTime(newSchedule.endTime)
+
+    const existingSchedules = await this.constructor.find()
+
+    existingSchedules.forEach(schedule=>{
+      const startTime = convertToDateTime(schedule.startTime)
+      const endTime = convertToDateTime(schedule.endTime)
+      if(newScheduleStartTime>=startTime&&newScheduleStartTime<=endTime||newScheduleEndTime>=startTime&&newScheduleEndTime<=endTime){
+        arrCheck.push(schedule.schedulename)
+      }
+      if(startTime>=newScheduleStartTime&&startTime<=newScheduleEndTime||endTime>=newScheduleStartTime&&endTime<=newScheduleEndTime){
+        arrCheck.push(schedule.schedulename)
+
+      }
+    })
+    if (arrCheck.length > 0) {
+      return next(
+        new Error(`The new schedule conflicts with an existing schedule (${arrCheck.join(", ")})`)
+      );
+    }
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = mongoose.model("Schedule", scheduleSchema);
