@@ -13,9 +13,13 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import _, { debounce } from "lodash";
 import { getNews } from "../../../helper/premiumAPI";
-import { Search as SearchIcon, ExpandMore as ExpandMoreIcon, Close as CloseIcon } from "@mui/icons-material";
+import {
+  Search as SearchIcon,
+  ExpandMore as ExpandMoreIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
+import moment from "moment";
 const NewsPage = () => {
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -102,14 +106,13 @@ const NewsPage = () => {
 
   return (
     <div
-    style={{
-      backgroundImage: "url('https://assets.entrepreneur.com/content/3x2/2000/20200429211042-GettyImages-1164615296.jpeg')",
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-    }}>
-
-
-      
+      style={{
+        backgroundImage:
+          "url('https://assets.entrepreneur.com/content/3x2/2000/20200429211042-GettyImages-1164615296.jpeg')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+    >
       <Header />
 
       <div
@@ -128,78 +131,87 @@ const NewsPage = () => {
           News
         </Typography>
       </div>
-
-      <Paper
-       style={{
-        maxHeight: "400px",
-        overflow: "auto",
-        marginBottom: "20px",
-        backgroundColor: "rgba(255, 255, 255, 0.5)", // Adjust the alpha value as needed
-      }}
+      <div
+        style={{
+          marginBottom: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
-        <form
-          style={{
-            padding: "15px",
-            maxWidth: "800px",
-            display: "flex",
-            alignItems: "end",
-            justifyContent: "left",
-          }}
-          onSubmit={handleSearch}
-        >
+        {" "}
+        <form onSubmit={handleSearch}>
           <input
             placeholder="Search by title"
-            className="border-solid border-2 border-black p-2"
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              borderRadius: "5px  ",
+              border: " 1px solid black",
+              width: "500px",
+              height: "35px",
+            }}
             onChange={(event) => handleSearch(event)}
           />
+          <SearchIcon />
         </form>
+      </div>
+
+      <Paper
+        style={{
+          height: "282px",
+          marginBottom: "20px",
+          backgroundColor: "rgba(255, 255, 255, 0.5)", // Adjust the alpha value as needed
+        }}
+      >
         <List component="nav">
           {listNews &&
             listNews.length > 0 &&
             listNews.slice(startIndex, endIndex).map((article) => (
               <ListItem
-                key={article._id}
-                onClick={() => handleArticleClick(article._id)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "10px",
-                  cursor: "pointer",
-                  borderTop: '1px solid black'
-                }}
-              >
-                <ListItemText
-                   
-                   style={{
-                    marginLeft: "100px",
-                    fontFamily: "SangBleu Sunrise",
-        
-                    fontWeight: "bolder",
-                    color: "black", // Adjust the color as needed
-                  }}
-                  primary={article.subject}
-                />
-                <Button
-                  onClick={handleModalOpen}
+              key={article._id}
+              onClick={() => handleArticleClick(article._id)}
+              style={{
+                display: "flex",
+                borderBottom: "1px solid black",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ marginRight: "10px", fontSize: "14px" }}>
+                  {moment(article.createdAt).format("DD/MM/YY")}
+                </div>
+                <div
                   style={{
-                 
-                    border: '1px solid black',
-                    outline: "none",
-                    cursor: "pointer",
-                    marginRight: "60px",
+                    fontSize: "20px",
+                    fontFamily: "SangBleu Sunrise",
+                    fontWeight: "bolder",
+                    color: "black",
+                    marginLeft:'300px'
                   }}
                 >
-                  see more
-                </Button>
-              </ListItem>
+                  {article.subject}
+                </div>
+              </div>
+              <Button
+                onClick={handleModalOpen}
+                style={{
+                  border: "1px solid black",
+                  outline: "none",
+                  cursor: "pointer",
+                  marginRight: "60px",
+                }}
+              >
+                see more
+              </Button>
+            </ListItem>
             ))}
         </List>
       </Paper>
 
       {selectedArticle && (
         <div>
-          <Modal open={openModal} >
-            
+          <Modal open={openModal}>
             <div
               style={{
                 position: "absolute",
@@ -207,28 +219,28 @@ const NewsPage = () => {
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width: "60%",
-          
+
                 padding: "20px",
-                backgroundColor: "rgba(300, 300, 300, 1)"
+                backgroundColor: "rgba(300, 300, 300, 1)",
               }}
             >
+              <div onClick={handleModalClose}>
+                <CloseIcon />
+              </div>
 
-             <div onClick={handleModalClose}>
-             <CloseIcon />
-             </div>
-             
-                  <Typography
-                variant="h6"
+              <Typography
+                variant="h4"
                 gutterBottom
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom:'20px',
-                  fontFamily: "SangBleu Sunrise"
+                  marginBottom: "20px",
+                  fontFamily: "SangBleu Sunrise",
+                  fontWeight: "bolder",
                 }}
               >
-               Trung tâm yoga xin thông báo 
+                Trung tâm yoga xin thông báo
               </Typography>
               <Typography
                 variant="h6"
@@ -237,7 +249,7 @@ const NewsPage = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom:'20px'
+                  marginBottom: "20px",
                 }}
               >
                 {selectedArticle.subject}
