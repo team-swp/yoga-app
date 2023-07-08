@@ -11,9 +11,12 @@ import { Toaster, toast } from "react-hot-toast";
 const validationSchema = Yup.object().shape({
   premiumName: Yup.string().required("Premium Name is required"),
   priceOriginal: Yup.number()
+  .min(-1,"Price Origin must be euqal or better than 0")
     .typeError("Price Origin must be a number")
     .required("Price Origin is required"),
   priceDiscount: Yup.number()
+  .min(-1,"Must be equal 0 or better than 0")
+  .min(-1,"Price Origin must be euqal or better than 0")
     .typeError("Price Discount must be a number")
     .required("Price Discount is required"),
   benefit: Yup.string().required("Benefit is required"),
