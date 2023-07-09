@@ -48,13 +48,15 @@ function UpdateCourse() {
     onSubmit: async (values) => {
       try {
         // Lấy id của học kỳ từ selectedSemester
-        const semesterId = selectedSemester ? selectedSemester.semestername : null;
+        const semesterId = selectedSemester ? selectedSemester._id : null;
 
         const response = await updateCourse({
           _id: courseId.id,
           ...values,
           semester_id: semesterId, // Sử dụng id học kỳ
-        });
+      
+        })
+        console.log(semesterId);;
 
         if (response) {
           toast.success("Updated course success");
@@ -101,7 +103,7 @@ function UpdateCourse() {
           requirement: course.requirement,
           forWho: course.forWho,
           images: course.images,
-
+          
         });
         setSelectedSemester(course.semestername);
         console.log(combinedData.course.semestername);
