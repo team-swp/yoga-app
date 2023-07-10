@@ -36,6 +36,10 @@ const rootReducer = (state = initState, action) => {
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
       }
+
+      if (!sessionStorage.getItem("user.id")) {
+        sessionStorage.setItem("user.id", _id);
+      }
       return {
         ...state,
 

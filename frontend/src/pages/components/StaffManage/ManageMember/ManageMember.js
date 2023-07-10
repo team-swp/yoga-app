@@ -80,6 +80,7 @@ function ManageMember() {
 
       setPayments(updatedPayments);
       setSearchResults(updatedPayments);
+      console.log(updatedPayments);
 
       setMetaData(filteredData);
 
