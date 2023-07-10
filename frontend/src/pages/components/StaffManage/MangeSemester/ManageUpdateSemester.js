@@ -22,6 +22,7 @@ function ManageUpdateSemester() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [status, setStatus] = useState("");
+    const apdapter = new AdapterDayjs();
     const navigate = useNavigate()
 
     const handleBack = () => {
@@ -36,13 +37,17 @@ function ManageUpdateSemester() {
         try {
             const response = await getSemester();
             const semester = response.data.find((obj) => obj._id === semesterId.id);
-
-
+            console.log(semester);
             setSemester(semester);
+
+            const adapStartDate = apdapter.date(new Date(semester.startDate));
+            const adapEndDate = apdapter.date(new Date(semester.endDate));
+
             // Set initial values for the input fields
             setSemestername(semester.semestername);
-            // setStartDate(semester.startDate);
-            // setEndDate(semester.endDate);
+
+            setStartDate(adapStartDate);
+            setEndDate(adapEndDate);
             setStatus(semester.status);
         } catch (error) {
             console.error(error);

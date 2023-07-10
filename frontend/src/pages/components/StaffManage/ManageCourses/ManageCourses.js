@@ -43,56 +43,45 @@ function ManageCourses() {
   const handleConfirm = async () => {
     try {
       const updatedCourseData = { ...selectedCourse, status: !selectedCourse.status };
-      const semesterId = selectedCourse.semester_id; // Lấy semester_id từ course
-      // Kiểm tra trạng thái của semester dựa trên semesterId
-      const semesterResponse = await getSemester();
-      if (semesterResponse && semesterResponse.data) {
-        const semester = semesterResponse.data.find((semester) => semester._id === semesterId);
-        if (!semester || semester.status === true) {
-          const response = await updateCourse(updatedCourseData);
-          if (response && response.data) {
-            console.log(response.data.data.coursename);
+      const response = await updateCourse(updatedCourseData);
+      if (response && response.data) {
+        console.log(response.data.data.coursename);
 
-            const classResponse = await axios.get('http://localhost:3001/api/class/get');
-            const classData = classResponse.data;
-            if (Array.isArray(classData) && classData.length > 0) {
-              const classWithCourse = classData.filter((classs) => classs.course_id === response.data.data._id);
-              if (classWithCourse.length > 0) {
-                classWithCourse.forEach(async (classs) => {
-                  try {
-                    const updatedClassData = { ...classs };
-                    if (selectedCourse.status === true) {
-                      updatedClassData.status = false;
-                    }
-                    const classResponse = await updateClass(updatedClassData);
-                    if (classResponse && classResponse.data) {
-                      console.log(classResponse.data.data.classname);
-                      const updatedClasss = classes.map((classItem) =>
-                        classItem._id === classResponse.data._id ? classResponse.data : classItem
-                      );
-                      setClasses(updatedClasss);
-                    }
-                  } catch (error) {
-                    console.error(error);
-                  }
-                });
-              } else {
-                console.log('No class found with the updated course');
+        const classResponse = await axios.get('http://localhost:3001/api/class/get');
+        const classData = classResponse.data;
+        if (Array.isArray(classData) && classData.length > 0) {
+          const classWithCourse = classData.filter((classs) => classs.course_id === response.data.data._id);
+          if (classWithCourse.length > 0) {
+            classWithCourse.forEach(async (classs) => {
+              try {
+                const updatedClassData = { ...classs };
+                if (selectedCourse.status === true) {
+                  updatedClassData.status = false;
+                }
+                const classResponse = await updateClass(updatedClassData);
+                if (classResponse && classResponse.data) {
+                  console.log(classResponse.data.data.classname);
+                  const updatedClasss = classes.map((classItem) =>
+                    classItem._id === classResponse.data._id ? classResponse.data : classItem
+                  );
+                  setClasses(updatedClasss);
+                }
+              } catch (error) {
+                console.error(error);
               }
-            } else {
-              console.log('Class data is empty or invalid');
-            }
-
-            toast.success(`${response.data.data.coursename} status updated successfully`);
-            setUpdatedCourse(courses);
-            setCourses([...courses]);
-
+            });
+          } else {
+            console.log('No class found with the updated course');
           }
         } else {
-          toast.error('Cannot update status. Semester status is false.');
+          console.log('Class data is empty or invalid');
         }
-        setConfirmModalOpen(false);
+
+        toast.success(`${response.data.data.coursename} status updated successfully`);
+        setUpdatedCourse(courses);
+        setCourses([...courses]);
       }
+      setConfirmModalOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -109,7 +98,6 @@ function ManageCourses() {
           `http://localhost:3001/api/classesPaging/get?limit=${1000}`
         );
         const coureseData = response.data.items;
-        console.log(coureseData);
         setClasses(coureseData);
       } catch (error) {
         console.log("Failed");

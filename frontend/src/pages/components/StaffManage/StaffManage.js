@@ -82,7 +82,7 @@ function StaffManage() {
             aria-label="basic tabs example"
             centered
           >
-            <Tab label="Manage Semesters" {...a11yProps(0)} />
+            {/* <Tab label="Manage Semesters" {...a11yProps(0)} /> */}
             <Tab label="Manage Courses" {...a11yProps(1)} />
             <Tab label="Manage Classes" {...a11yProps(2)} />
             <Tab label="Manage Schedules" {...a11yProps(3)} />
@@ -91,25 +91,23 @@ function StaffManage() {
             <Tab label="Manage News" {...a11yProps(6)} />
           </Tabs>
         </Box>
+
         <TabPanel value={value} index={0}>
-          {<ManageSemester />}
-        </TabPanel>
-        <TabPanel value={value} index={1}>
           {<ManageCourses />}
         </TabPanel>
-        <TabPanel value={value} index={2}>
+        <TabPanel value={value} index={1}>
           {<ManageClass />}
         </TabPanel>
-        <TabPanel value={value} index={3}>
+        <TabPanel value={value} index={2}>
           {<ManageSchedule />}
         </TabPanel>
-        <TabPanel value={value} index={4}>
+        <TabPanel value={value} index={3}>
           {<ManageMember />}
         </TabPanel>
-        <TabPanel value={value} index={5}>
+        <TabPanel value={value} index={4}>
           {<ManagePackage />}
         </TabPanel>
-        <TabPanel value={value} index={6}>
+        <TabPanel value={value} index={5}>
           {<ManageNews />}
         </TabPanel>
       </Box>

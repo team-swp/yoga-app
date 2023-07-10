@@ -116,9 +116,7 @@ function ManageClass() {
         const requestUrl = "http://localhost:3001/api/schedule/get";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
-        console.log(responseJSON);
         setScheduleList(responseJSON);
-        console.log(scheduleList);
       } catch (error) {
         console.log("Failed");
       }
@@ -142,11 +140,8 @@ function ManageClass() {
         const requestUrl = "http://localhost:3001/api/accounts";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
-        console.log(responseJSON);
         const FilterInstructor = responseJSON.filter((x) => x.role === "instructor")
         setInstructorList(FilterInstructor);
-
-        console.log(FilterInstructor);
       } catch (error) {
         console.log("Failed");
       }
