@@ -98,16 +98,16 @@ function ManageMember() {
   }, []);
 
   const handleSearch = debounce((event) => {
-    let term = event.target.value;
-    if (term) {
-      let cloneListPayment = _.cloneDeep(payments);
-      cloneListPayment = cloneListPayment.filter((item) =>
-        item.member.username.toLowerCase().includes(term.toLowerCase())
-      );
-      setSearchResults(cloneListPayment);
-    } else {
-      setSearchResults(payments);
-    }
+    // let term = event.target.value;
+    // if (term) {
+    //   let cloneListPayment = _.cloneDeep(payments);
+    //   cloneListPayment = cloneListPayment.filter((item) =>
+    //     item.member.username.toLowerCase().includes(term.toLowerCase())
+    //   );
+    //   setSearchResults(cloneListPayment);
+    // } else {
+    //   setSearchResults(payments);
+    // }
   }, 500);
 
   const filteredPayments = searchResults
