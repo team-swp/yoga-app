@@ -48,7 +48,6 @@ const PurchaseHistory = () => {
         <thead>
           <tr>
             <th className=" text-left">Number</th>
-            <th className="text-left fixed-column">Booking Id</th>
             <th className="text-left fixed-column">Payment Amount</th>
             <th className="text-left">Date of payment</th>
           </tr>
@@ -60,7 +59,7 @@ const PurchaseHistory = () => {
               return (
                 <tr key={`users=${index}`}>
                   <td className="text-left">{startIndex + index + 1}</td>
-                  <td className="text-left fixed-column">{item.booking_id}</td>
+
                   <td className="text-left">{item.paymentAmount + ""}</td>
                   <td className="text-left">
                     {moment(item.createdAt).format("DD/MM/YY")}

@@ -9,11 +9,7 @@ import Modal from "@mui/material/Modal";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../../../context/AuthGoogleContext";
 import { userSelector } from "../../../../redux/selectors";
-import {
-  getAvatarToAWS,
-  postAvatarToAWS,
-  updateUser,
-} from "../../../../helper/loginAPI";
+import { getAvatarToAWS, updateUser } from "../../../../helper/loginAPI";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
@@ -24,7 +20,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
-
+import {FcApproval, FcLike, FcLink} from 'react-icons/fc'
 import { setDataLogin } from "../../../../redux/actions";
 const style = {
   position: "absolute",
@@ -45,7 +41,7 @@ function Sidebar() {
   const [checkMember, setCheckMember] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
-
+  const [memberDate, setMemberDate] = useState(null);
   const handleOpenUserMenu = (event) => {
     if (showMenu === false) {
       setAnchorElUser(event.currentTarget);
@@ -74,82 +70,49 @@ function Sidebar() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector(userSelector);
-  const dispatch = useDispatch();
-  // const loadImageAgain = async (e) => {
-  //   if (user.avatar) {
-  //     const { url } = await getAvatarToAWS({ imageName: user._id });
-  //     e.target.src = url;
-  //     const result = updateUser({ avatar: url });
-  //     result
-  //       .then((data) => {
-  //         dispatch(setDataLogin(data.data.data));
-  //       })
-  //       .catch(() => {
-  //         console.log("error");
-  //       });
-  //   }
-  // };
-  const [checkUpdateAva, setCheckUpdateAva] = useState(false);
+  const dispatch = useDispatch()
+  const loadImageAgain = async (e) => {
+    if (user.avatar) {
+      const { url } = await getAvatarToAWS({ imageName: user._id });
+      e.target.src = url;
+      const result = updateUser({ avatar: url })
+      result.then((data) => {
+        dispatch(setDataLogin(data.data.data))
+      }).catch(() => {
+        console.log('error');
+      })
+    }
+  }
   useEffect(() => {
     const test = async () => {
-      try {
-        if (user.avatar && user.avatar.includes("yoga-heartbeat.s3")) {
-          const { url } = await getAvatarToAWS({ imageName: user._id });
-          setFile(url);
-          const result = updateUser({ avatar: url });
-          result
-            .then((data) => {
-              dispatch(setDataLogin(data.data.data));
-            })
-            .catch(() => {
-              console.log("error");
-            });
-        } else {
-          const urlToObject = async () => {
-            try {
-              const response = await fetch(user.avatar);
-              // here image is url/location of image
-              const blob = await response.blob();
-              const file = new File([blob], "image.jpg", { type: blob.type });
-              const { data, status } = await postAvatarToAWS({
-                avatar: file,
-                imageName: user._id,
-              });
-              if (status === 200) {
-                data.imageName = user._id;
-                const { url } = await getAvatarToAWS(data);
-                const result = updateUser({ avatar: url });
-                result
-                  .then((data) => {
-                    dispatch(setDataLogin(data.data.data));
-                    console.log(data);
-                  })
-                  .catch(() => {
-                    console.log("error");
-                  });
-                setFile(url);
-                setCheckUpdateAva(true);
-              }
-            } catch (error) {
-              return error
-            }
-           
-          };
-            urlToObject()
-        }
-      } catch (error) {
-        return error
+      if (user.avatar) {
+        const { url } = await getAvatarToAWS({ imageName: user._id });
+        setFile(url)
+        console.log(url);
+        const result = updateUser({ avatar: url })
+        result.then((data) => {
+          dispatch(setDataLogin(data.data.data))
+        }).catch(() => {
+          console.log('error');
+        })
       }
-    };
-    test();
+    }
+    test()
   }, []);
 
   useEffect(() => {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
+      const duration = checkMem.MemberDuration;
+      const dateOld = new Date(checkMem.startDateMember);
+      dateOld.setMonth(dateOld.getMonth() + parseInt(duration));
+      const day = dateOld.getDate();
+      const month = dateOld.getMonth() + 1;
+      const year = dateOld.getFullYear();
+      setMemberDate(`${day}/${month}/${year}`);
     }
-  }, [user]);
+  }, [user])
   return (
     <div>
       <IconButton
@@ -166,9 +129,8 @@ function Sidebar() {
         >
           <img
             src={file || user.avatar}
-            className={` ${
-              checkMember ? styles.profile_img : styles.profile_img_normal
-            } object-cover h-44`}
+            className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
+              } object-cover h-44`}
             alt="avatar"
           />
           {checkMember ? (
@@ -242,11 +204,10 @@ function Sidebar() {
                     >
                       <img
                         src={user.avatar}
-                        className={` ${
-                          checkMember
+                        className={` ${checkMember
                             ? styles.profile_img_details
                             : styles.profile_img_details_normal
-                        } object-cover h-44`}
+                          } object-cover h-44`}
                         alt="avatar"
                       />
                       {checkMember ? (
@@ -285,8 +246,10 @@ function Sidebar() {
                     className={styles.profile}
                     onClick={handleBecomeMember}
                   >
-                    <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                      {checkMember ? "Your are a member" : "Become a member"}
+                    <div style={{ margin: "auto 0", marginLeft: "20px",color:'#E97777' }}>
+                      {checkMember
+                        ?<div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography fontSize={'17px'}  align="center">Membership Expires: {memberDate}</Typography><FcApproval style={{fontSize:'20px'}}/></div>
+                        : <div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography color={'#98A8F8'} fontSize={'20px'} align="center">Become A Part Of Us</Typography><FcLike style={{fontSize:'24px'}}/></div>}
                     </div>
                   </div>
                 )}

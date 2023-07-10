@@ -5,11 +5,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Auth = require("../middleware/auth");
 const { pagingnation } = require("./Pagingnation");
+const { startSession } = require("mongoose");
 require("dotenv").config();
 
 module.exports.getAllAccount = async (req, res) => {
   try {
-    const accounts = await Account.find({ role: { $ne: 'admin' } });
+    const accounts = await Account.find({ role: { $ne: "admin" } });
     const temp = [];
     accounts.filter((acc, index) => {
       const { password, ...rest } = Object.assign({}, acc.toJSON());
@@ -291,6 +292,45 @@ module.exports.updateRoleAccount = async (req, res) => {
   }
 };
 
+module.exports.updateHolidayMember = async (req, res, next) => {
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    const arrUpdateMem = [];
+    const { holiday,startDate } = req.body;
+    //them ngày để bắt đầu chạy function
+    const members = await Account.find({
+      meta_data: { $regex: `"isMember":true`, $options: "i" },
+    }).session(session);
+    const lengthMem = members.length;
+    if (lengthMem > 0) {
+      //[]
+      members.forEach((member) => {
+        let metaData = JSON.parse(member.meta_data);
+        console.log(metaData.startDateMember);
+        const startDateMember = metaData.startDateMember
+          ? new Date(metaData.startDateMember)
+          : new Date();
+        startDateMember.setDate(startDateMember.getDate() + parseInt(holiday));
+        Object.assign(metaData, { startDateMember });
+        Object.assign(member, { meta_data: JSON.stringify(metaData) });
+        arrUpdateMem.push(member);
+      });
+
+      for(let i =0 ; i<lengthMem;i++){
+        await arrUpdateMem[i].save();
+      }
+    await session.commitTransaction();
+     return res.status(200).send(arrUpdateMem);
+    }
+  } catch (error) {
+    await session.abortTransaction();
+    res.status(400).send({ error: error.message });
+  } finally {
+    session.endSession(); // End the session
+  }
+};
+
 module.exports.updateAccountForStaff = async (req, res) => {
   const { _id } = req.body;
 
@@ -542,7 +582,7 @@ module.exports.charDataSparkLine = async (req, res) => {
       arrNov,
       arrDec,
     ];
-    res.status(201).send({data:chartData,total:membersByYear.length});
+    res.status(201).send({ data: chartData, total: membersByYear.length });
   } catch (error) {
     return res.status(404).send({ error });
   }

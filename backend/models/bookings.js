@@ -94,8 +94,7 @@ bookingSchema.pre("save", async function (next) {
         course_id: courseID,
         _id: { $ne: classCheck },
       }); // trả ra 1 mảng những cái lớp chứa course đó trừ cái class vừa nhâp
-      console.log("1111111111111");
-      console.log(classHaveCourse);
+
       for (let classes of classHaveCourse) {
         const existingBookings = await this.constructor.find({
           member_id: this.member_id,

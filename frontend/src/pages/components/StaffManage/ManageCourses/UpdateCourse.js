@@ -20,8 +20,8 @@ function UpdateCourse() {
   const [price, setPrice] = useState(0);
   const [semesterList, setSemesterList] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
-  
-console.log(selectedSemester);
+
+  console.log(selectedSemester);
 
 
   const formik = useFormik({
@@ -33,7 +33,7 @@ console.log(selectedSemester);
       requirement: "",
       forWho: "",
       images: "",
-     
+
     },
     validationSchema: Yup.object({
       coursename: Yup.string().required("Course Name is required"),
@@ -43,18 +43,20 @@ console.log(selectedSemester);
       requirement: Yup.string().required("Requirements are required"),
       forWho: Yup.string().required("Target audience is required"),
       images: Yup.mixed().required("Images are required"),
-  
+
     }),
     onSubmit: async (values) => {
       try {
         // Lấy id của học kỳ từ selectedSemester
-        const semesterId = selectedSemester ? selectedSemester.semestername : null;
+        const semesterId = selectedSemester ? selectedSemester._id : null;
 
         const response = await updateCourse({
           _id: courseId.id,
           ...values,
           semester_id: semesterId, // Sử dụng id học kỳ
-        });
+      
+        })
+        console.log(semesterId);;
 
         if (response) {
           toast.success("Updated course success");
@@ -101,7 +103,7 @@ console.log(selectedSemester);
           requirement: course.requirement,
           forWho: course.forWho,
           images: course.images,
-         semestername:course.semestername
+          
         });
         setSelectedSemester(course.semestername);
         console.log(combinedData.course.semestername);
@@ -129,7 +131,7 @@ console.log(selectedSemester);
         console.error(error);
       }
     }
-  
+
     fetchSemesters();
   }, []);
   return (
@@ -155,7 +157,8 @@ console.log(selectedSemester);
             type="text"
             name="coursename"
             value={formik.values.coursename}
-            onChange={(event) => setCoursename(event.target.value)}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             required
             sx={styles.textField}
             error={

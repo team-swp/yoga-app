@@ -32,6 +32,7 @@ const {
   updateUserForAdmin,
   charDataAccount,
   charDataSparkLine,
+  updateHolidayMember,
 } = require("../controllers/Account");
 
 const crypto = require("crypto");
@@ -266,7 +267,6 @@ router.post("/runUrlVnPAY", runUrl);
 router.post("/news/add", AuthStaff, addNews);
 router.get("/news/get", getNews);
 router.patch("/news/update", AuthStaff, getNewsById, updateNews);
-
 router.get("/getpayment/user", Auth, getPaymentByIdUser);
 
 //pagingnation
@@ -289,3 +289,6 @@ router.post("/chart/members", charDataSparkLine);
 router.post("/chart/premium", charDataPaymentPremiumLineChart);
 
 router.patch("/admin/update", AuthAdmin, updateUserForAdmin);
+
+//update holidat
+router.post("/update/holiday", AuthStaff, updateHolidayMember);

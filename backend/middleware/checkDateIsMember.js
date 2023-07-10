@@ -26,17 +26,17 @@ module.exports.checkIsMember = async (req, res, next) => {
       if (!member.meta_data) {
         next();
         return;
-      }else if(!JSON.parse(member.meta_data).isMember){
-        if(JSON.parse(member.meta_data).payment_id){
+      } else if (!JSON.parse(member.meta_data).isMember) {
+        if (JSON.parse(member.meta_data).payment_id) {
           return res.status(400).send({
             message: `Your Premium Is Pending, Please Come To Yoga Center To Complete Your Payment`,
           });
         }
         next();
         return;
-      }else{
+      } else {
         const check = JSON.parse(member.meta_data)
-        if(!check.isMember){
+        if (!check.isMember) {
           return res.status(400).send({
             message: `Your Premium Is Pending, Please Come To Yoga Center To Complete Your Payment`,
           });
