@@ -27,10 +27,11 @@ const UpdatePremiumPack = () => {
   const validationSchema = Yup.object().shape({
     premiumname: Yup.string().required("Premium Name is required"),
     priceOriginal: Yup.number()
+    .min(-1,"Price Origin must be euqal or better than 0")
       .required("Price Origin is required")
       .positive("Price Origin must be a positive number"),
     priceDiscount: Yup.number()
-      
+    .min(-1,"Price Origin must be euqal or better than 0")
       .positive("Price Discount must be a positive number"),
     benefit: Yup.string().required("Benefit is required"),
     rules: Yup.string().required("Rules is required"),

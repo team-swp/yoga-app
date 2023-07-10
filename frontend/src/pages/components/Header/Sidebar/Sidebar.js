@@ -20,7 +20,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
-
+import {FcApproval, FcLike, FcLink} from 'react-icons/fc'
 import { setDataLogin } from "../../../../redux/actions";
 const style = {
   position: "absolute",
@@ -41,7 +41,7 @@ function Sidebar() {
   const [checkMember, setCheckMember] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
-
+  const [memberDate, setMemberDate] = useState(null);
   const handleOpenUserMenu = (event) => {
     if (showMenu === false) {
       setAnchorElUser(event.currentTarget);
@@ -108,6 +108,13 @@ function Sidebar() {
     if (user.meta_data) {
       const checkMem = JSON.parse(user.meta_data);
       setCheckMember(checkMem.isMember);
+      const duration = checkMem.MemberDuration;
+      const dateOld = new Date(checkMem.startDateMember);
+      dateOld.setMonth(dateOld.getMonth() + parseInt(duration));
+      const day = dateOld.getDate();
+      const month = dateOld.getMonth() + 1;
+      const year = dateOld.getFullYear();
+      setMemberDate(`${day}/${month}/${year}`);
     }
   }, [user]);
   return (
@@ -245,8 +252,10 @@ function Sidebar() {
                     className={styles.profile}
                     onClick={handleBecomeMember}
                   >
-                    <div style={{ margin: "auto 0", marginLeft: "20px" }}>
-                      {checkMember ? "Your are a member" : "Become a member"}
+                    <div style={{ margin: "auto 0", marginLeft: "20px",color:'#E97777' }}>
+                      {checkMember
+                        ?<div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography fontSize={'17px'}  align="center">Membership Expires: {memberDate}</Typography><FcApproval style={{fontSize:'20px'}}/></div>
+                        : <div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography color={'#98A8F8'} fontSize={'20px'} align="center">Become A Part Of Us</Typography><FcLike style={{fontSize:'24px'}}/></div>}
                     </div>
                   </div>
                 )}
