@@ -109,7 +109,6 @@ function ManageCourses() {
           `http://localhost:3001/api/classesPaging/get?limit=${1000}`
         );
         const coureseData = response.data.items;
-        console.log(coureseData);
         setClasses(coureseData);
       } catch (error) {
         console.log("Failed");
@@ -119,7 +118,7 @@ function ManageCourses() {
   }, []);
 
   ////////////////////////////////////////////////
- 
+  //////// địt mẹ cấm sửa dùm nha////////////////
   useEffect(() => {
     fetchCourses();
   }, [updatedCourse, page]);
@@ -389,7 +388,7 @@ function ManageCourses() {
                     align="center"
                     style={{ fontSize: "30px" }}
                   >
-                    The result not  available !!!
+                    No courses available !!!
                   </TableCell>
                 </TableRow>
               ) : (
@@ -492,7 +491,7 @@ function ManageCourses() {
                 Confirmation
               </h3>
               <p>Are you sure you want to change the status of this Course?</p>
-              <div style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}>
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
                 <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
                   Confirm
                 </Button>

@@ -127,7 +127,7 @@ function UpdateClass() {
                 setScheduleId(schedulename.schedulename);
             }
             if (classes.course_id) {
-                const response = await getCourse(); console.log(response, 123);
+                const response = await getCourse();
                 const coursename = response.data.find((obj) => obj._id === classes.course_id);
                 setCourseId(coursename.coursename);
             }
@@ -136,6 +136,7 @@ function UpdateClass() {
                 const response = await getUser({ id }); console.log(response.data);
                 setInstructorId(response.data.username);
             }
+            setDays(classes.days);
         } catch (error) {
             console.error(error);
         }
@@ -197,10 +198,10 @@ function UpdateClass() {
                         sx={{ marginBottom: "10px" }}
                     />
                     <Autocomplete
-                        value={selectedSchedule}
+                        value={selectedSchedule || scheduleId}
                         onChange={(event, newValue) => setSelectedSchedule(newValue)}
                         options={scheduleList}
-                        getOptionLabel={(option) => option.schedulename}
+                        getOptionLabel={(option) => option.schedulename || scheduleId}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -213,10 +214,10 @@ function UpdateClass() {
                         )}
                     />
                     <Autocomplete
-                        value={selectedCourse}
+                        value={selectedCourse || courseId}
                         onChange={(event, newValue) => setSelectedCourse(newValue)}
                         options={courseList}
-                        getOptionLabel={(option) => option.coursename}
+                        getOptionLabel={(option) => option.coursename || courseId}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -229,10 +230,10 @@ function UpdateClass() {
                         )}
                     />
                     <Autocomplete
-                        value={selectedInstructor}
+                        value={selectedInstructor || instructorId}
                         onChange={(event, newValue) => setSelectedInstructor(newValue)}
                         options={instructorList}
-                        getOptionLabel={(option) => option.username}
+                        getOptionLabel={(option) => option.username || instructorId}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
