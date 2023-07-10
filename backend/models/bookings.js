@@ -21,7 +21,6 @@ const bookingSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
       required: true,
- 
     },
     meta_data: {
       type: String,
@@ -89,14 +88,13 @@ bookingSchema.pre("save", async function (next) {
     if (this.class_id) {
       // Retrieve the class associated with the booking
       const classDoc = await Class.findById(this.class_id); //lấy thg classID hiện tạia
-      const courseID =  classDoc.course_id; // lấy đc course thg này cb học
-      const classCheck = this.class_id
+      const courseID = classDoc.course_id; // lấy đc course thg này cb học
+      const classCheck = this.class_id;
       const classHaveCourse = Class.find({
         course_id: courseID,
         _id: { $ne: classCheck },
       }); // trả ra 1 mảng những cái lớp chứa course đó trừ cái class vừa nhâp
-      console.log('1111111111111');
-      console.log(classHaveCourse);
+
       for (let classes of classHaveCourse) {
         const existingBookings = await this.constructor.find({
           member_id: this.member_id,

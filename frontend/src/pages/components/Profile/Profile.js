@@ -10,29 +10,21 @@ import { userSelector } from "../../../redux/selectors";
 import { getPasswordCurr, updateUser } from "../../../helper/loginAPI";
 import { setDataLogin, updateData } from "../../../redux/actions";
 import { getAvatarToAWS, postAvatarToAWS } from "../../../helper/loginAPI";
-import { UserAuth } from "../../../context/AuthGoogleContext";
-import { addBooking } from "../../../helper/bookingAPI";
-import Navigation from "../Header/Navigation/Navigation";
+
 import Header from "../Header/Header";
-import { Container } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import Password from "./PasswordGoogle";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
-import Reset from "../Login/Reset";
-import { getPaymentByIDUser } from "../../../helper/paymentAPI";
+import PurchaseHistory from "./PurchaseHistory";
 
 function Profile() {
-  const { logOut } = UserAuth();
   const user = useSelector(userSelector);
   const [file, setFile] = useState(user.avatar || "");
   const [imageTemp, setImageTemp] = useState(true);
   const [isNotPass, setIsNotPass] = useState(true);
   const dispatch = useDispatch();
-  const userCurr = {
-    username: user,
-  };
-  const [screen, setScreen] = useState(false);
+  const [activeTab, setActiveTab] = useState("information");
+
   const formik = useFormik({
     initialValues: {
       email: user.email,
@@ -96,6 +88,7 @@ function Profile() {
       };
     });
   };
+
   // const onUpload = async (e) => {
   //   const file = e.target.files[0];
   //   const base64 = await convertToBase64(file);
@@ -142,13 +135,15 @@ function Profile() {
         if (status === 200) {
           data.imageName = user._id;
           const { url } = await getAvatarToAWS(data);
-          const result = updateUser({avatar:url})
-          result.then((data)=>{
-            dispatch(setDataLogin(data.data.data))
-            toast.success('Update Avatar Successfully')
-          }).catch(()=>{
-            console.log('error');
-          })
+          const result = updateUser({ avatar: url });
+          result
+            .then((data) => {
+              dispatch(setDataLogin(data.data.data));
+              toast.success("Update Avatar Successfully");
+            })
+            .catch(() => {
+              console.log("error");
+            });
           setFile(url);
           console.log(file);
         }
@@ -158,26 +153,22 @@ function Profile() {
     }
   };
 
-  const handleScreen = () => {
-    if (screen) {
-      setScreen(false);
-    } else {
-      setScreen(true);
-    }
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
   };
 
   useEffect(() => {
     const isPassword = async () => {
       const isOldPassword = await getPasswordCurr();
-      if (isOldPassword.data.password) {
+      if (isOldPassword && isOldPassword.data && isOldPassword.data.password) {
         setIsNotPass(true);
       } else {
         setIsNotPass(false);
       }
     };
     isPassword();
-    
   }, []);
+
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
   return (
     <div className="">
@@ -203,11 +194,23 @@ function Profile() {
             </div>
 
             <div className="flex flex-col items-center py-24 gap-24 font-bold">
-              <button onClick={handleScreen} className=" uppercase">
+              <button
+                onClick={() => handleTabChange("information")}
+                className=" uppercase"
+              >
                 Update Information
               </button>
-              <button onClick={handleScreen} className=" uppercase pr-6">
+              <button
+                onClick={() => handleTabChange("password")}
+                className=" uppercase pr-6"
+              >
                 Update Password
+              </button>
+              <button
+                onClick={() => handleTabChange("purchase")}
+                className=" uppercase pr-6"
+              >
+                Purchase History
               </button>
             </div>
           </div>
@@ -215,13 +218,7 @@ function Profile() {
             <div className="border-b-2 border-black flex justify-center py-12">
               <div className=" font-semibold text-3xl">PROFILE</div>
             </div>
-            {screen ? (
-              isNotPass ? (
-                <PasswordReset />
-              ) : (
-                <Recovery />
-              )
-            ) : (
+            {activeTab === "information" && (
               <form className="py-1" onSubmit={formik.handleSubmit}>
                 <div
                   style={{ width: 150, height: "auto", margin: "auto" }}
@@ -313,6 +310,9 @@ function Profile() {
                 </div>
               </form>
             )}
+            {activeTab === "password" &&
+              (isNotPass ? <PasswordReset /> : <Recovery />)}
+            {activeTab === "purchase" && <PurchaseHistory />}
           </div>
         </div>
       </div>

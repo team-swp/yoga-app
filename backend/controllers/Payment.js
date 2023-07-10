@@ -10,7 +10,7 @@ const Mailgen = require("mailgen");
 const { pagingnation } = require("./Pagingnation");
 const Booking = require("../models/bookings");
 const Account = require("../models/accounts");
-const Premium = require('../models/premiums')
+const Premium = require("../models/premiums");
 //payment medthod
 module.exports.addPaymentMethod = async (req, res) => {
   const { paymentname } = req.body;
@@ -879,52 +879,55 @@ module.exports.charDataPaymentPremiumLineChart = async (req, res) => {
 
     const today = new Date();
     const yearNow = today.getFullYear();
-    const arrNameData = []
-    const arrData = []
+    const arrNameData = [];
+    const arrData = [];
     for (let i = 0; i < lengthData; i++) {
-      const startDate = new Date(`${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-01`);
-      const endDate = new Date(`${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-31`);
+      const startDate = new Date(
+        `${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-01`
+      );
+      const endDate = new Date(
+        `${yearNow}-${uniqueData[i][Object.keys(uniqueData[i])[0]]}-31`
+      );
 
       endDate.setHours(23, 59, 59, 999);
       const premiumName = Object.keys(uniqueData[i])[0];
       const premium = await Premium.findOne({ premiumname: premiumName });
-      const idPremium = premium._id
-      arrNameData.push({[idPremium]:premiumName})
+      const idPremium = premium._id;
+      arrNameData.push({ [idPremium]: premiumName });
       const dataSourceTemp = await Payment.find({
         createdAt: { $gte: startDate, $lt: endDate },
-        premium_id: premium._id
+        premium_id: premium._id,
       });
-      arrData.push(dataSourceTemp)
+      arrData.push(dataSourceTemp);
     }
     //{name:Free Trial, dataSource : [{x:date,y:value},{}]}
     //
-    const arrDataSource =[]
-    const arrDataResult =[]
-    const total = arrData.length
-    for(let index = 0 ; index < total;index++){
-      let obj = {}
-      let objname = {}
-      const month = arrData[index][0].createdAt.getMonth()
-      const newDate = new Date(yearNow,month,1)
-      const premium_name = Object.values(arrNameData[index])[0]
-      let value = arrData[index].length
-      Object.assign(obj,{x:newDate,y:value/total*100})
-      arrDataSource.push({name:premium_name,dataSource:[obj]})
+    const arrDataSource = [];
+    const arrDataResult = [];
+    const total = arrData.length;
+    for (let index = 0; index < total; index++) {
+      let obj = {};
+      let objname = {};
+      const month = arrData[index][0].createdAt.getMonth();
+      const newDate = new Date(yearNow, month, 1);
+      const premium_name = Object.values(arrNameData[index])[0];
+      let value = arrData[index].length;
+      Object.assign(obj, { x: newDate, y: (value / total) * 100 });
+      arrDataSource.push({ name: premium_name, dataSource: [obj] });
     }
 
- 
-    const data = combineDataSourceByName(arrDataSource)
+    const data = combineDataSourceByName(arrDataSource);
     res.status(201).send(data);
   } catch (error) {
-    return res.status(404).send({ error:error.message });
+    return res.status(404).send({ error: error.message });
   }
 };
 
- const combineDataSourceByName = (data) => {
+const combineDataSourceByName = (data) => {
   const combinedData = [];
 
-  data.forEach(item => {
-    const existingItem = combinedData.find(entry => entry.name === item.name);
+  data.forEach((item) => {
+    const existingItem = combinedData.find((entry) => entry.name === item.name);
 
     if (existingItem) {
       existingItem.dataSource.push(...item.dataSource);
@@ -938,20 +941,22 @@ module.exports.charDataPaymentPremiumLineChart = async (req, res) => {
 
 module.exports.getPaymentByIdUser = async (req, res) => {
   try {
-    const arrTemp = []
-    const account =req.account; //chuyển qa cho thg tiếp theo
-    console.log(account,'vvvvvvvvvvvvvvvvvvvvvv');
-    const getBookingByUserID= await Booking.find({member_id:account.userId})
-    const length = getBookingByUserID.length
+    const arrTemp = [];
+    const account = req.account; //chuyển qa cho thg tiếp theo
+    console.log(account, "vvvvvvvvvvvvvvvvvvvvvv");
+    const getBookingByUserID = await Booking.find({
+      member_id: account.userId,
+    });
+    const length = getBookingByUserID.length;
     console.log(getBookingByUserID);
-    for(var i =0 ;i < length;i++){
-      const bookingID = getBookingByUserID[i]._id
-      const getPaymentByUserID= await Payment.find({booking_id:bookingID})
-      for(var index =0 ; index<getPaymentByUserID.length;index++){
-        arrTemp.push(getPaymentByUserID[index])
+    for (var i = 0; i < length; i++) {
+      const bookingID = getBookingByUserID[i]._id;
+      const getPaymentByUserID = await Payment.find({ booking_id: bookingID });
+      for (var index = 0; index < getPaymentByUserID.length; index++) {
+        arrTemp.push(getPaymentByUserID[index]);
       }
     }
-    return res.status(201).send(arrTemp)
+    return res.status(201).send(arrTemp);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -972,4 +977,3 @@ function removeDuplicateKeyValuePairs(arr) {
 
   return Object.values(uniquePairs);
 }
-

@@ -42,3 +42,9 @@ export async function addNews(respone) {
   });
 }
 
+export async function getNews() {
+  return await getApi({
+    apiPath: `/api/news/get`,
+    errorMessage: "Cannot Get Course",
+  });
+}

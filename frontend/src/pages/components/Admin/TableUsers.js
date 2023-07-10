@@ -33,6 +33,8 @@ function BasicExample() {
     async function fetchUsers() {
       try {
         const response = await getMember();
+        // const response = await getMember();
+        // const response = await fetch("https://api.example.com/users");
         setListUsers(response.data);
         setOriginalListUsers(response.data);
         const avatarURLList = await Promise.all(
@@ -80,6 +82,7 @@ function BasicExample() {
     }
 
     setSearchTerm(term);
+    // undefinedVariable.someMethod();
   }, 500);
 
   const totalPages = Math.ceil(listUser.length / itemsPerPage);
@@ -168,6 +171,7 @@ function BasicExample() {
               listUser.slice(startIndex, endIndex).map((item, index) => {
                 const handleStatusToggle = async () => {
                   const updatedList = [...listUser];
+
                   updatedList[startIndex + index].status = !item.status;
                   setListUsers(updatedList);
                   try {

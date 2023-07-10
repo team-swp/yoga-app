@@ -84,6 +84,7 @@ const {
   addPayment,
   getPayment,
   getPaymentById,
+  getPaymentByIdUser,
   updatePayment,
   createPayment,
   vnpayIPN,
@@ -95,7 +96,6 @@ const {
   charDataPayment,
   charDataPaymentPremium,
   charDataPaymentPremiumLineChart,
-  getPaymentByIdUser,
 } = require("../controllers/Payment");
 const {
   addBooking,
@@ -114,7 +114,12 @@ const {
   addPremiumOption,
 } = require("../controllers/Premium");
 const { checkIsMember } = require("../middleware/checkDateIsMember");
-const { getNews, addNews, getNewsById, updateNews } = require("../controllers/News");
+const {
+  getNews,
+  addNews,
+  getNewsById,
+  updateNews,
+} = require("../controllers/News");
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
@@ -262,8 +267,7 @@ router.post("/runUrlVnPAY", runUrl);
 router.post("/news/add", AuthStaff, addNews);
 router.get("/news/get", getNews);
 router.patch("/news/update", AuthStaff, getNewsById, updateNews);
-
-router.get("/getpayment/user", Auth, getPaymentByIdUser)
+router.get("/getpayment/user", Auth, getPaymentByIdUser);
 
 //pagingnation
 
@@ -275,8 +279,6 @@ router.get("/schedulesPaging/get", getSchedulesPaging);
 router.get("/semestersPaging/get", getSemestersPaging);
 router.get("/classesPaging/get", getClassesPaging);
 
-
-
 //IP
 // router.get("/ipUser",getUserIP)
 //Chart
@@ -286,6 +288,7 @@ router.post("/chart/product", charDataPaymentPremium);
 router.post("/chart/members", charDataSparkLine);
 router.post("/chart/premium", charDataPaymentPremiumLineChart);
 
+router.patch("/admin/update", AuthAdmin, updateUserForAdmin);
 
 //update holidat
 router.post("/update/holiday", AuthStaff, updateHolidayMember);

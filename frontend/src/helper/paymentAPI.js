@@ -10,6 +10,12 @@ export async function getPayment() {
     errorMessage: "Cannot Get Payment",
   });
 }
+export async function getPaymentUserByID() {
+  return await getApi({
+    apiPath: `/api/getpayment/user`,
+    errorMessage: "Cannot Get Payment",
+  });
+}
 
 export async function addPayment(respone) {
   //respone là 1 object nhận giá trị cần để add, add thì ko cần id

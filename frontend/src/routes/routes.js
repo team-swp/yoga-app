@@ -11,6 +11,7 @@ import Courses from "../pages/components/Courses/Courses";
 import CourseDetail from "../pages/components/CourseDetail/CourseDetail";
 import Checkout from "../pages/components/Checkout/Checkout";
 import WeeklySchedule from "../pages/components/WeeklySchedule/WeeklySchedule";
+import InsctructorSchedule from "../pages/components/WeeklySchedule/InstructorSchedule";
 import {
   AuthorizeUser,
   ProtectRecover,
@@ -61,7 +62,10 @@ import Dashboard from "../pages/components/DashBoard/Dashboard";
 import Admin from "../pages/components/Admin/AdminHome";
 import Premium from "../pages/components/MemberPacket/Premium";
 import Weather from "../pages/components/Weather/components/Weather";
-import InsctructorSchedule from "../pages/components/WeeklySchedule/InstructorSchedule";
+import UpdateNews from "../pages/components/StaffManage/ManageNews/UpdateNews";
+import NewsPage from "../pages/components/NotificationNew/News";
+import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
+import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -185,7 +189,18 @@ const routers = createBrowserRouter([
     path: "/updatesemester/:id",
     element: <ManageUpdateSemester></ManageUpdateSemester>,
   },
-
+  {
+    path: "/addnewpremium",
+    element: <AddNewPremium />,
+  },
+  {
+    path: "/updatepremiumpack/:id",
+    element: <UpdatePremiumPack />,
+  },
+  {
+    path: "/updatesenews/:id",
+    element: <UpdateNews></UpdateNews>,
+  },
   {
     path: "/ecommerce",
     element: <Ecommerce></Ecommerce>,
@@ -286,6 +301,15 @@ const routers = createBrowserRouter([
     path: "/weather",
     element: <Weather />,
   },
+  {
+    path: "/addnewpremium",
+    element: <AddNewPremium />,
+  },
+  {
+    path: "/updatepremiumpack/:id",
+    element: <UpdatePremiumPack />,
+  },
+  { path: "/news", element: <NewsPage /> },
 ]);
 
 export default routers;

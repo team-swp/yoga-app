@@ -23,7 +23,11 @@ import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import { Toaster, toast } from "react-hot-toast";
 import classNames from "classnames/bind";
 import styles from "./ManageMember.module.css";
-import { ModalConfirmMember, ModalConfirmPending } from "./ModalConfirm";
+import {
+  ModalAddDayOff,
+  ModalConfirmMember,
+  ModalConfirmPending,
+} from "./ModalConfirm";
 
 const cx = classNames.bind(styles);
 
@@ -36,10 +40,12 @@ function ManageMember() {
   const [updatePendingId, setUpdatePendingId] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openModalMember, setOpenModalMember] = useState(false);
+  const [openModalAdd, setOpenModalAdd] = useState(false);
 
   const [statusFilter, setStatusFilter] = useState(null);
   const [payments, setPayments] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [metaData, setMetaData] = useState(null);
 
   const [isMember, setIsMember] = useState(null);
   const [memberId, setMemberId] = useState(null);
@@ -64,8 +70,21 @@ function ManageMember() {
         return payment;
       });
 
+      const filteredData = membersResponse.data.filter((member) => {
+        if (member.meta_data) {
+          const meta_data = JSON.parse(member.meta_data);
+          return meta_data.isMember === true;
+        }
+        return false;
+      });
+
       setPayments(updatedPayments);
       setSearchResults(updatedPayments);
+      console.log(updatedPayments);
+
+      setMetaData(filteredData);
+
+      sessionStorage.setItem("metaData", JSON.stringify(filteredData));
     } catch (error) {
       console.log(error);
     }
@@ -73,6 +92,10 @@ function ManageMember() {
 
   useEffect(() => {
     fetchData();
+    const storedMetaData = sessionStorage.getItem("metaData");
+    if (storedMetaData) {
+      setMetaData(JSON.parse(storedMetaData));
+    }
   }, []);
 
   const handleSearch = debounce((event) => {
@@ -192,15 +215,10 @@ function ManageMember() {
     }
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setOpenModalMember(false);
-  };
-
   const handleOpenModalWithToggle = (isMember, memberId, statusPaymented) => {
     if (statusPaymented !== 10 && statusPaymented !== 4) {
       toast.error(
-        "Update failed! Only the user with Completed status and Trial status could be updated"
+        "Update failed! Only the user with Completed status or Trial status could be updated!"
       );
       return;
     } else {
@@ -209,6 +227,16 @@ function ManageMember() {
       setMemberId(memberId);
       setStatusPaymented(statusPaymented);
     }
+  };
+
+  const handleOpenModalAdd = () => {
+    setOpenModalAdd(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setOpenModalMember(false);
+    setOpenModalAdd(false);
   };
 
   const handleUpdateSuccess = async () => {
@@ -251,6 +279,16 @@ function ManageMember() {
               </select>
               <Button variant="outlined" onClick={handleResetStatusFilter}>
                 Reset
+              </Button>
+            </Box>
+
+            <Box sx={{ mt: 4 }}>
+              <Button
+                color="success"
+                variant="contained"
+                onClick={handleOpenModalAdd}
+              >
+                Add Holiday
               </Button>
             </Box>
           </div>
@@ -321,8 +359,9 @@ function ManageMember() {
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`page-button ${currentPage === page ? "active" : ""
-                  }`}
+                className={`page-button ${
+                  currentPage === page ? "active" : ""
+                }`}
               >
                 {page}
               </button>
@@ -356,6 +395,12 @@ function ManageMember() {
           setSearchResults={setSearchResults}
           setPayments={setPayments}
           setOpenModalMember={setOpenModalMember}
+        />
+
+        <ModalAddDayOff
+          open={openModalAdd}
+          handleClose={handleCloseModal}
+          handleUpdateSuccess={handleUpdateSuccess}
         />
       </Container>
     </div>
