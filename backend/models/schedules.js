@@ -129,7 +129,7 @@ scheduleSchema.pre("save", async function (next) {
     const newScheduleStartTime = convertToDateTime(newSchedule.startTime)
     const newScheduleEndTime = convertToDateTime(newSchedule.endTime)
 
-    const existingSchedules = await this.constructor.find()
+    const existingSchedules = await this.constructor.find({ _id: { $ne: this._id } })
 
     existingSchedules.forEach(schedule=>{
       const startTime = convertToDateTime(schedule.startTime)

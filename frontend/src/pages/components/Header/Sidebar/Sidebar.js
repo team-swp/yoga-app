@@ -22,6 +22,7 @@ import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
 import {FcApproval, FcLike, FcLink} from 'react-icons/fc'
 import { setDataLogin } from "../../../../redux/actions";
+import profileDefault from '../../../../assets/profile.png'
 const style = {
   position: "absolute",
   top: "50%",
@@ -128,7 +129,7 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-            src={file || user.avatar}
+            src={file || user.avatar||profileDefault}
             className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
               } object-cover h-44`}
             alt="avatar"
@@ -203,7 +204,7 @@ function Sidebar() {
                       className={checkMember ? styles.bgImage : ""}
                     >
                       <img
-                        src={user.avatar}
+                        src={user.avatar||profileDefault}
                         className={` ${checkMember
                             ? styles.profile_img_details
                             : styles.profile_img_details_normal
