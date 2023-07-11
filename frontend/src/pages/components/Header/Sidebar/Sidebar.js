@@ -60,7 +60,6 @@ function Sidebar() {
 
   const handleLogout = () => {
     logOut();
-    navigate("/");
   };
 
   const handleBecomeMember = () => {
@@ -134,7 +133,7 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-            src={file || user.avatar}
+            src={file || user.avatar || profileDefault}
             className={` ${
               checkMember ? styles.profile_img : styles.profile_img_normal
             } object-cover h-44`}
@@ -210,7 +209,7 @@ function Sidebar() {
                       className={checkMember ? styles.bgImage : ""}
                     >
                       <img
-                        src={user.avatar}
+                        src={user.avatar || profileDefault}
                         className={` ${
                           checkMember
                             ? styles.profile_img_details
@@ -398,12 +397,14 @@ function Sidebar() {
                       Are you sure you want to Log Out ?
                     </Typography>
                     <div className={cx("modal-modal-button")}>
-                      <button
-                        className={cx("modal-modal-button-yes")}
-                        onClick={handleLogout}
-                      >
-                        Yes, Log Out
-                      </button>
+                      <a href="/">
+                        <button
+                          className={cx("modal-modal-button-yes")}
+                          onClick={handleLogout}
+                        >
+                          Yes, Log Out
+                        </button>
+                      </a>
 
                       <div onClick={handleClose}>
                         <button className={cx("modal-modal-button-no")}>
