@@ -20,7 +20,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
-import {FcApproval, FcLike, FcLink} from 'react-icons/fc'
+import { FcApproval, FcLike, FcLink } from "react-icons/fc";
 import { setDataLogin } from "../../../../redux/actions";
 const style = {
   position: "absolute",
@@ -59,6 +59,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     logOut();
+    navigate("/");
   };
 
   const handleBecomeMember = () => {
@@ -252,10 +253,44 @@ function Sidebar() {
                     className={styles.profile}
                     onClick={handleBecomeMember}
                   >
-                    <div style={{ margin: "auto 0", marginLeft: "20px",color:'#E97777' }}>
-                      {checkMember
-                        ?<div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography fontSize={'17px'}  align="center">Membership Expires: {memberDate}</Typography><FcApproval style={{fontSize:'20px'}}/></div>
-                        : <div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography color={'#98A8F8'} fontSize={'20px'} align="center">Become A Part Of Us</Typography><FcLike style={{fontSize:'24px'}}/></div>}
+                    <div
+                      style={{
+                        margin: "auto 0",
+                        marginLeft: "20px",
+                        color: "#E97777",
+                      }}
+                    >
+                      {checkMember ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                          }}
+                        >
+                          <Typography fontSize={"17px"} align="center">
+                            Membership Expires: {memberDate}
+                          </Typography>
+                          <FcApproval style={{ fontSize: "20px" }} />
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                          }}
+                        >
+                          <Typography
+                            color={"#98A8F8"}
+                            fontSize={"20px"}
+                            align="center"
+                          >
+                            Become A Part Of Us
+                          </Typography>
+                          <FcLike style={{ fontSize: "24px" }} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -362,14 +397,12 @@ function Sidebar() {
                       Are you sure you want to Log Out ?
                     </Typography>
                     <div className={cx("modal-modal-button")}>
-                      <a href="/">
-                        <button
-                          className={cx("modal-modal-button-yes")}
-                          onClick={handleLogout}
-                        >
-                          Yes, Log Out
-                        </button>
-                      </a>
+                      <button
+                        className={cx("modal-modal-button-yes")}
+                        onClick={handleLogout}
+                      >
+                        Yes, Log Out
+                      </button>
 
                       <div onClick={handleClose}>
                         <button className={cx("modal-modal-button-no")}>

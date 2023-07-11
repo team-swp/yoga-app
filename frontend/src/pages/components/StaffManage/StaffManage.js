@@ -10,7 +10,7 @@ import ManageSemester from "./MangeSemester/ManageSemester";
 import ManageCourses from "./ManageCourses/ManageCourses";
 import ManageClass from "./ManageClass/ManageClass";
 import ManagePackage from "./ManagePremium/ManagePackage";
-import ManageNews from "./ManageNews/ManageNews"
+import ManageNews from "./ManageNews/ManageNews";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -85,7 +85,7 @@ function StaffManage() {
             <Tab label="Manage Semesters" {...a11yProps(0)} />
             <Tab label="Manage Courses" {...a11yProps(1)} />
             <Tab label="Manage Classes" {...a11yProps(2)} />
-            <Tab label="Manage Slot" {...a11yProps(3)} />
+            <Tab label="Manage Slots" {...a11yProps(3)} />
             <Tab label="Manage Members" {...a11yProps(4)} />
             <Tab label="Manage Packages" {...a11yProps(5)} />
             <Tab label="Manage News" {...a11yProps(6)} />

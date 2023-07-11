@@ -169,5 +169,7 @@ export default function useSchedule() {
     setCheckSchedule(checkedSchedule);
   }, [totalSchedule]);
 
+  console.log(checkSchedule);
+
   return { courseList, totalSchedule, checkSchedule };
 }

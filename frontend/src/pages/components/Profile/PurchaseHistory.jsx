@@ -25,12 +25,12 @@ const PurchaseHistory = () => {
           const filteredPackageItems = packageRespone.data.filter(
             (packageItem) => paymentItem.premium_id === packageItem._id
           );
-
           return {
             ...paymentItem,
             packageItems: filteredPackageItems,
           };
         });
+
         setListPayment(PaymentUserByID);
       } catch {
         console.log("fail");
