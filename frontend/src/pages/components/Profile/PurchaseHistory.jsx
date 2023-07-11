@@ -20,17 +20,20 @@ const PurchaseHistory = () => {
           getPaymentUserByID(),
           getPremium(),
         ]);
-
-        const PaymentUserByID = respone.data.map((paymentItem) => {
-          const filteredPackageItems = packageRespone.data.filter(
-            (packageItem) => paymentItem.premium_id === packageItem._id
-          );
-
-          return {
-            ...paymentItem,
-            packageItems: filteredPackageItems,
-          };
-        });
+        const PaymentUserByID = respone.data
+          .filter(
+            (paymentItem) =>
+              paymentItem.status === 10 || paymentItem.status === 4
+          )
+          .map((paymentItem) => {
+            const filteredPackageItems = packageRespone.data.filter(
+              (packageItem) => paymentItem.premium_id === packageItem._id
+            );
+            return {
+              ...paymentItem,
+              packageItems: filteredPackageItems,
+            };
+          });
         setListPayment(PaymentUserByID);
       } catch {
         console.log("fail");
