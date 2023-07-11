@@ -15,16 +15,21 @@ import {
   Modal,
   Fade,
 } from '@mui/material';
-import { Link } from "react-router-dom";
-import { updateSemester } from "../../../../helper/semesterAPI";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { addSemester, getSemester, updateSemester } from "../../../../helper/semesterAPI";
 import { updateCourse } from "../../../../helper/courseAPI";
 import { updateClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from "axios";
 import StatusButton from "./StatusButtons";
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 function ManageSemester() {
+
+  //Manage Semester
   const [classes, setClasses] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -36,6 +41,24 @@ function ManageSemester() {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [selectedSemester, setSelectedSemester] = useState(null);
 
+  //Add Semester
+  const [semesternames, setSemesternames] = useState("");
+  const [startDates, setStartDates] = useState("");
+  const [endDates, setEndDates] = useState("");
+  const [openModals, setOpenModals] = useState(false);
+
+  //Update Semester
+  const [semester, setSemester] = useState({});
+  const semesterId = useParams();
+  const [semestername, setSemestername] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [status, setStatus] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedSemesters, setSelectedSemesters] = useState(null);
+  const apdapter = new AdapterDayjs();
+
+  //Manage Semester
   const handleToggle = async (event, semester) => {
     setSelectedSemester(semester);
     setConfirmModalOpen(true);
@@ -169,6 +192,105 @@ function ManageSemester() {
     });
   }
 
+  //Add Semester
+  const handleOpens = (event) => {
+    setOpenModals(true);
+  }
+
+  const handleSubmits = async (event) => {
+    event.preventDefault();
+    try {
+      console.log(startDates);
+      const response = await addSemester({
+        semestername: semesternames,
+        startDate: startDates,
+        endDate: endDates
+      })
+
+      if (response) {
+        toast.success("Add New Semester Succesfully!")
+      } else {
+        toast.error("Fail to add new Semester...")
+      }
+      setOpenModals(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Fail to add new Semester...")
+    }
+  }
+
+  const handleCloses = () => {
+    setOpenModals(false);
+  }
+
+  const handleStartDateChanges = (date) => {
+    setStartDates(date.toISOString());
+  };
+
+  const handleEndtDateChanges = (date) => {
+    setEndDates(date.toISOString());
+  };
+
+  //Update Semester
+
+  const handleOpen = (event, semester) => {
+    setSelectedSemesters(semester);
+    setSemester(semester);
+
+    const adapStartDate = apdapter.date(new Date(semester.startDate));
+    const adapEndDate = apdapter.date(new Date(semester.endDate));
+
+    setSemestername(semester.semestername);
+    setStartDate(adapStartDate);
+    setEndDate(adapEndDate);
+
+    setOpenModal(true);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const updateSemesterData = {
+        ...selectedSemesters,
+        _id: selectedSemesters._id,
+        semestername: semestername,
+        startDate: startDate,
+        endDate: endDate,
+      };
+      const semestersResponse = await updateSemester(updateSemesterData);
+      if (semestersResponse && semestersResponse.data) {
+        console.log(semestersResponse.data.data.semestername);
+        setManageUpdateSemester(selectedSemesters);
+        const updatedSemesters = semesters.map((semesterItem) =>
+          semesterItem._id === semestersResponse.data._id
+            ? semestersResponse.data
+            : semesterItem
+        );
+        setSemesters(updatedSemesters);
+        toast.success(
+          `${semestersResponse.data.data.semestername} updated successfully`
+        );
+      } else {
+        toast.error("Fail to  update Semester...")
+      }
+      setOpenModal(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Fail to update Semester...")
+    }
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  const handleEndtDateChange = (date) => {
+    setEndDate(date);
+  };
+
   return (
     <div>
       <Container>
@@ -181,8 +303,7 @@ function ManageSemester() {
             <Button
               variant="contained"
               color="success"
-              component={Link}
-              to="/addnewsemester"
+              onClick={(event) => handleOpens(event)}
             >
               Add new Semester
             </Button>
@@ -246,11 +367,8 @@ function ManageSemester() {
                   </TableCell>
                   <TableCell style={{ textAlign: "center" }}>
                     <Button
-                      variant="contained"
-                      color="secondary"
-                      component={Link}
-                      to={`/updatesemester/${semesterItem._id}`}
-                      style={{ fontSize: "10px", backgroundColor: 'orange' }}
+                      onClick={(event) => handleOpen(event, semesterItem)}
+                      style={{ fontSize: "10px", backgroundColor: "orange", color: "#fff" }}
                     >
                       Update
                     </Button>
@@ -277,6 +395,124 @@ function ManageSemester() {
                     Confirm
                   </Button>
                   <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                    Cancel
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
+        <Modal
+          open={openModals}
+          onClose={handleCloses}
+          closeAfterTransition
+        >
+          <Fade in={openModals}>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
+                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+                  Add Semester
+                </h3>
+                <Toaster position="top-center"></Toaster>
+                <TextField
+                  label="Semester Name"
+                  type="text"
+                  value={semesternames}
+                  onChange={(e) => setSemesternames(e.target.value)}
+                  fullWidth
+                  required
+                  style={{ width: '250px' }}
+                />
+                <div style={{ marginTop: '1em' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
+                    <DatePicker
+                      label="Start Date"
+                      value={startDates}
+                      onChange={handleStartDateChanges}
+                      inputFormat="MM/DD/YYYY"
+                      animateYearScrolling
+                      fullWidth
+                      required
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div style={{ marginTop: '1em' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en" >
+                    <DatePicker
+                      label="End Date"
+                      value={endDates}
+                      onChange={handleEndtDateChanges}
+                      inputFormat="MM/DD/YYYY"
+                      animateYearScrolling
+                      fullWidth
+                      required
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
+                  <Button variant="contained" onClick={handleSubmits} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                    Confirm
+                  </Button>
+                  <Button variant="outlined" onClick={handleCloses} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                    Cancel
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
+        <Modal
+          open={openModal}
+          onClose={handleClose}
+          closeAfterTransition
+        >
+          <Fade in={openModal}>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
+                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+                  Update Semester
+                </h3>
+                <Toaster position="top-center"></Toaster>
+                <TextField
+                  label="Semester Name"
+                  type="text"
+                  name="semester"
+                  value={semestername}
+                  onChange={(event) => setSemestername(event.target.value)}
+                  required
+                  style={{ width: 250 }}
+                />
+                <div style={{ marginTop: '1em' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
+                    <DatePicker
+                      label="Start Date"
+                      value={startDate}
+                      onChange={handleStartDateChange}
+                      inputFormat="MM/DD/YYYY"
+                      animateYearScrolling
+                      fullWidth
+                      required
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div style={{ marginTop: '1em' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en" >
+                    <DatePicker
+                      label="End Date"
+                      value={endDate}
+                      onChange={handleEndtDateChange}
+                      inputFormat="MM/DD/YYYY"
+                      animateYearScrolling
+                      fullWidth
+                      required
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
+                  <Button variant="contained" onClick={handleSubmit} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                    Confirm
+                  </Button>
+                  <Button variant="outlined" onClick={handleClose} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
                     Cancel
                   </Button>
                 </div>

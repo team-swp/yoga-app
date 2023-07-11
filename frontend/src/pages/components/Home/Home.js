@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Home.module.css";
 import classNames from "classnames/bind";
 import { Container, Box, Button, Typography, Grid } from "@mui/material";
@@ -40,6 +40,9 @@ function Home() {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleJoinUs = () => navigate("/premium");
 
   const handleCourseClick = (courseId) => {
     dispatch(setCourseId(courseId));
@@ -55,12 +58,14 @@ function Home() {
         <div className={cx("text-in-video")}>
           <h1 className={cx("text-in-video_header")}>IN STUDIO</h1>
           <p>
-            Transform your body, mind and heart with Reformer Pilates & Mat
-            classes at one of our seven London studios.
+            "Your heartbeat is the soundtrack of your life, and at Heartbeat
+            System, we use the power of yoga to help you find harmony in every
+            beat."
           </p>
           <Button
             color="inherit"
             variant="outlined"
+            onClick={handleJoinUs}
             sx={{ borderRadius: "50px", mt: "50px" }}
           >
             JOIN US NOW
@@ -142,6 +147,7 @@ function Home() {
           <Button
             color="inherit"
             variant="outlined"
+            onClick={handleJoinUs}
             sx={{ borderRadius: "50px" }}
           >
             JOIN US NOW
@@ -170,13 +176,15 @@ function Home() {
                 Every time you step on to the mat, or the Coreformer, we’ll take
                 you there. One move, one breath, one heartbeat at a time.
               </p>
-              <Button
-                color="inherit"
-                variant="outlined"
-                sx={{ borderRadius: "50px" }}
-              >
-                OUR STORY
-              </Button>
+              <Link to="/*">
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  sx={{ borderRadius: "50px" }}
+                >
+                  OUR STORY
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

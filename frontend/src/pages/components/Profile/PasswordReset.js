@@ -3,22 +3,11 @@ import styles from "../../../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { resetPasswordValidation } from "../../../helper/validate";
-import {
-  resetPassword,
-  authenticatePassword,
-  getPasswordCurr,
-  updateUser,
-} from "../../../helper/loginAPI";
-import { userSelector } from "../../../redux/selectors";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setActionOTP } from "../../../redux/actions";
+import { getPasswordCurr, updateUser } from "../../../helper/loginAPI";
+
 var bcrypt = require("bcryptjs");
 
 function Reset() {
-  const user = useSelector(userSelector);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const formik = useFormik({
@@ -32,7 +21,6 @@ function Reset() {
     validateOnChange: false,
     onSubmit: async (values) => {
       setIsAuthenticating(true);
-      const email = user.email || JSON.parse(localStorage.getItem("email"));
       console.log(values.password);
       // Xác thực mật khẩu cũ
       const isOldPassword = await getPasswordCurr();

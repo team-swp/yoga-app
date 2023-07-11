@@ -84,7 +84,7 @@ function CourseDetail() {
                 <div className={cx("course-image")}>
                   <img src={course.images[0]} alt={course.coursename} />
                 </div>
-                <div className="flex justify-evenly align-center mt-3">
+                <div className="flex justify-evenly align-center my-3">
                   <button
                     className={cx("course-button")}
                     onClick={() => {

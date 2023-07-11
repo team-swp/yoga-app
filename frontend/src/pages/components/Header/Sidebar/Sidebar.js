@@ -71,34 +71,38 @@ function Sidebar() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector(userSelector);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const loadImageAgain = async (e) => {
     if (user.avatar) {
       const { url } = await getAvatarToAWS({ imageName: user._id });
       e.target.src = url;
-      const result = updateUser({ avatar: url })
-      result.then((data) => {
-        dispatch(setDataLogin(data.data.data))
-      }).catch(() => {
-        console.log('error');
-      })
+      const result = updateUser({ avatar: url });
+      result
+        .then((data) => {
+          dispatch(setDataLogin(data.data.data));
+        })
+        .catch(() => {
+          console.log("error");
+        });
     }
-  }
+  };
   useEffect(() => {
     const test = async () => {
       if (user.avatar) {
         const { url } = await getAvatarToAWS({ imageName: user._id });
-        setFile(url)
+        setFile(url);
         console.log(url);
-        const result = updateUser({ avatar: url })
-        result.then((data) => {
-          dispatch(setDataLogin(data.data.data))
-        }).catch(() => {
-          console.log('error');
-        })
+        const result = updateUser({ avatar: url });
+        result
+          .then((data) => {
+            dispatch(setDataLogin(data.data.data));
+          })
+          .catch(() => {
+            console.log("error");
+          });
       }
-    }
-    test()
+    };
+    test();
   }, []);
 
   useEffect(() => {
@@ -113,7 +117,7 @@ function Sidebar() {
       const year = dateOld.getFullYear();
       setMemberDate(`${day}/${month}/${year}`);
     }
-  }, [user])
+  }, [user]);
   return (
     <div>
       <IconButton
@@ -129,9 +133,16 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
+<<<<<<< HEAD
             src={file || user.avatar||profileDefault}
             className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
               } object-cover h-44`}
+=======
+            src={file || user.avatar}
+            className={` ${
+              checkMember ? styles.profile_img : styles.profile_img_normal
+            } object-cover h-44`}
+>>>>>>> 7cda3d2a1f4b13b59ae9749fc7f4d50e6a4bccdb
             alt="avatar"
           />
           {checkMember ? (
@@ -204,11 +215,17 @@ function Sidebar() {
                       className={checkMember ? styles.bgImage : ""}
                     >
                       <img
+<<<<<<< HEAD
                         src={user.avatar||profileDefault}
                         className={` ${checkMember
+=======
+                        src={user.avatar}
+                        className={` ${
+                          checkMember
+>>>>>>> 7cda3d2a1f4b13b59ae9749fc7f4d50e6a4bccdb
                             ? styles.profile_img_details
                             : styles.profile_img_details_normal
-                          } object-cover h-44`}
+                        } object-cover h-44`}
                         alt="avatar"
                       />
                       {checkMember ? (
@@ -233,7 +250,7 @@ function Sidebar() {
                     margin: "5px 20px",
                   }}
                 ></div>
-                {(user.role === "user" || user.role === "instructor") && (
+                {user.role === "user" && (
                   <div
                     style={{
                       flexBasis: "100%",
@@ -335,17 +352,6 @@ function Sidebar() {
                 </div>
               )}
 
-              {/* <Link to="/*">
-                <div className={styles.sidebar_details}>
-                  <HomeRepairServiceIcon
-                    className={styles.sidebar_details_icon}
-                  />
-                  <div>Service</div>
-                  <ArrowForwardIosOutlinedIcon
-                    className={styles.sidebar_details_arrow}
-                  />
-                </div>
-              </Link> */}
               <div>
                 <div className={styles.sidebar_details} onClick={handleOpen}>
                   <LogoutIcon className={styles.sidebar_details_icon} />

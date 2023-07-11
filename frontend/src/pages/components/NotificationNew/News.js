@@ -46,7 +46,7 @@ const NewsPage = () => {
     }
     fetchNews();
   }, []);
-  console.log(listNews);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -168,43 +168,43 @@ const NewsPage = () => {
             listNews.length > 0 &&
             listNews.slice(startIndex, endIndex).map((article) => (
               <ListItem
-              key={article._id}
-              onClick={() => handleArticleClick(article._id)}
-              style={{
-                display: "flex",
-                borderBottom: "1px solid black",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ marginRight: "10px", fontSize: "14px" }}>
-                  {moment(article.createdAt).format("DD/MM/YY")}
-                </div>
-                <div
-                  style={{
-                    fontSize: "20px",
-                    fontFamily: "SangBleu Sunrise",
-                    fontWeight: "bolder",
-                    color: "black",
-                    marginLeft:'300px'
-                  }}
-                >
-                  {article.subject}
-                </div>
-              </div>
-              <Button
-                onClick={handleModalOpen}
+                key={article._id}
+                onClick={() => handleArticleClick(article._id)}
                 style={{
-                  border: "1px solid black",
-                  outline: "none",
-                  cursor: "pointer",
-                  marginRight: "60px",
+                  display: "flex",
+                  borderBottom: "1px solid black",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                see more
-              </Button>
-            </ListItem>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div style={{ marginRight: "10px", fontSize: "14px" }}>
+                    {moment(article.createdAt).format("DD/MM/YY")}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "SangBleu Sunrise",
+                      fontWeight: "bolder",
+                      color: "black",
+                      marginLeft: "300px",
+                    }}
+                  >
+                    {article.subject}
+                  </div>
+                </div>
+                <Button
+                  onClick={handleModalOpen}
+                  style={{
+                    border: "1px solid black",
+                    outline: "none",
+                    cursor: "pointer",
+                    marginRight: "60px",
+                  }}
+                >
+                  see more
+                </Button>
+              </ListItem>
             ))}
         </List>
       </Paper>
