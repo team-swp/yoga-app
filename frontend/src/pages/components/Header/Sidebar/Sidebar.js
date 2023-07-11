@@ -60,6 +60,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     logOut();
+    navigate("/");
   };
 
   const handleBecomeMember = () => {
@@ -397,14 +398,12 @@ function Sidebar() {
                       Are you sure you want to Log Out ?
                     </Typography>
                     <div className={cx("modal-modal-button")}>
-                      <a href="/">
-                        <button
-                          className={cx("modal-modal-button-yes")}
-                          onClick={handleLogout}
-                        >
-                          Yes, Log Out
-                        </button>
-                      </a>
+                      <button
+                        className={cx("modal-modal-button-yes")}
+                        onClick={handleLogout}
+                      >
+                        Yes, Log Out
+                      </button>
 
                       <div onClick={handleClose}>
                         <button className={cx("modal-modal-button-no")}>
