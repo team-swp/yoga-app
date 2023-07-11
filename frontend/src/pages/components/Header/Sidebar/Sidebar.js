@@ -22,6 +22,7 @@ import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
 import { FcApproval, FcLike, FcLink } from "react-icons/fc";
 import { setDataLogin } from "../../../../redux/actions";
+import profileDefault from '../../../../assets/profile.png'
 const style = {
   position: "absolute",
   top: "50%",
@@ -133,10 +134,16 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
+<<<<<<< HEAD
+            src={file || user.avatar||profileDefault}
+            className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
+              } object-cover h-44`}
+=======
             src={file || user.avatar}
             className={` ${
               checkMember ? styles.profile_img : styles.profile_img_normal
             } object-cover h-44`}
+>>>>>>> 7cda3d2a1f4b13b59ae9749fc7f4d50e6a4bccdb
             alt="avatar"
           />
           {checkMember ? (
@@ -209,9 +216,14 @@ function Sidebar() {
                       className={checkMember ? styles.bgImage : ""}
                     >
                       <img
+<<<<<<< HEAD
+                        src={user.avatar||profileDefault}
+                        className={` ${checkMember
+=======
                         src={user.avatar}
                         className={` ${
                           checkMember
+>>>>>>> 7cda3d2a1f4b13b59ae9749fc7f4d50e6a4bccdb
                             ? styles.profile_img_details
                             : styles.profile_img_details_normal
                         } object-cover h-44`}

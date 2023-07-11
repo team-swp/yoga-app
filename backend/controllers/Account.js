@@ -197,6 +197,7 @@ module.exports.updatePassword = async (req, res) => {
 module.exports.register = async (req, res) => {
   try {
     const { username, email, password, phone, avatar, meta_data } = req.body;
+    
     if (password) {
       bcrypt.hash(password, 10).then((hashedPassword) => {
         const account = new Account({

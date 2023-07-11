@@ -15,12 +15,18 @@ import Header from "../Header/Header";
 import DoneIcon from "@mui/icons-material/Done";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
+<<<<<<< HEAD
+import Reset from "../Login/Reset";
+import { getPaymentByIDUser } from "../../../helper/paymentAPI";
+import profileDefault from '../../../assets/profile.png'
+=======
 import PurchaseHistory from "./PurchaseHistory";
+>>>>>>> 7cda3d2a1f4b13b59ae9749fc7f4d50e6a4bccdb
 
 function Profile() {
   const user = useSelector(userSelector);
-  const [file, setFile] = useState(user.avatar || "");
-  const [imageTemp, setImageTemp] = useState(true);
+  const [file, setFile] = useState(user.avatar!=""?user.avatar:profileDefault||user.avatar );
+  const [imageTemp, setImageTemp] = useState(false);
   const [isNotPass, setIsNotPass] = useState(true);
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("information");
@@ -182,7 +188,7 @@ function Profile() {
             <div className=" border-b-2 border-black">
               <div className="flex justify-center pt-14">
                 <img
-                  src={imageTemp || user.avatar || avatar}
+                  src={imageTemp || user.avatar||profileDefault}
                   className={imgStyle}
                   alt="avatar"
                   onError={loadImageAgain}
@@ -286,7 +292,7 @@ function Profile() {
                     <div className="flex gap-5 items-center">
                       <label htmlFor="profile">
                         <img
-                          src={imageTemp || user.avatar || avatar}
+                          src={imageTemp || user.avatar || avatar||profileDefault }
                           className={imgStyle}
                           alt="avatar"
                           onError={loadImageAgain}
