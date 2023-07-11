@@ -15,13 +15,10 @@ import Header from "../Header/Header";
 import DoneIcon from "@mui/icons-material/Done";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
-<<<<<<< HEAD
 import Reset from "../Login/Reset";
 import { getPaymentByIDUser } from "../../../helper/paymentAPI";
 import profileDefault from '../../../assets/profile.png'
-=======
 import PurchaseHistory from "./PurchaseHistory";
->>>>>>> 7cda3d2a1f4b13b59ae9749fc7f4d50e6a4bccdb
 
 function Profile() {
   const user = useSelector(userSelector);
