@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getPaymentUserByID } from "../../../helper/paymentAPI";
 import Table from "react-bootstrap/esm/Table";
 import { Button } from "@mui/material";
+import { getPremium } from "../../../helper/premiumAPI";
 
 const PurchaseHistory = () => {
-  const [listPayment, setListPayment] = useState([]);
   const moment = require("moment");
+  const [listPayment, setListPayment] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(listPayment.length / itemsPerPage);
@@ -15,9 +16,22 @@ const PurchaseHistory = () => {
   useEffect(() => {
     async function fetchPaymentUser() {
       try {
-        const respone = await getPaymentUserByID();
-        setListPayment(respone.data);
-        console.log("check", listPayment);
+        const [respone, packageRespone] = await Promise.all([
+          getPaymentUserByID(),
+          getPremium(),
+        ]);
+
+        const PaymentUserByID = respone.data.map((paymentItem) => {
+          const filteredPackageItems = packageRespone.data.filter(
+            (packageItem) => paymentItem.premium_id === packageItem._id
+          );
+
+          return {
+            ...paymentItem,
+            packageItems: filteredPackageItems,
+          };
+        });
+        setListPayment(PaymentUserByID);
       } catch {
         console.log("fail");
       }
@@ -50,6 +64,8 @@ const PurchaseHistory = () => {
             <th className=" text-left">Number</th>
             <th className="text-left fixed-column">Payment Amount</th>
             <th className="text-left">Date of payment</th>
+            <th className="text-left">Premium Name</th>
+            <th className="text-left">Payment Method</th>
           </tr>
         </thead>
         <tbody>
@@ -64,6 +80,10 @@ const PurchaseHistory = () => {
                   <td className="text-left">
                     {moment(item.createdAt).format("DD/MM/YY")}
                   </td>
+                  <td className="text-left">
+                    {item.packageItems.map((o) => o.premiumname)}
+                  </td>
+                  <td className="text-left">{item.meta_data}</td>
                 </tr>
               );
             })}
