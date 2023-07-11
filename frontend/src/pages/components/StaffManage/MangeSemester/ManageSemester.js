@@ -16,7 +16,7 @@ import {
   Fade,
 } from '@mui/material';
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { getSemester, updateSemester } from "../../../../helper/semesterAPI";
+import { addSemester, getSemester, updateSemester } from "../../../../helper/semesterAPI";
 import { updateCourse } from "../../../../helper/courseAPI";
 import { updateClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
@@ -41,6 +41,12 @@ function ManageSemester() {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [selectedSemester, setSelectedSemester] = useState(null);
 
+  //Add Semester
+  const [semesternames, setSemesternames] = useState("");
+  const [startDates, setStartDates] = useState("");
+  const [endDates, setEndDates] = useState("");
+  const [openModals, setOpenModals] = useState(false);
+
   //Update Semester
   const [semester, setSemester] = useState({});
   const semesterId = useParams();
@@ -51,7 +57,6 @@ function ManageSemester() {
   const [openModal, setOpenModal] = useState(false);
   const [selectedSemesters, setSelectedSemesters] = useState(null);
   const apdapter = new AdapterDayjs();
-  const navigate = useNavigate()
 
   //Manage Semester
   const handleToggle = async (event, semester) => {
@@ -187,6 +192,45 @@ function ManageSemester() {
     });
   }
 
+  //Add Semester
+  const handleOpens = (event) => {
+    setOpenModals(true);
+  }
+
+  const handleSubmits = async (event) => {
+    event.preventDefault();
+    try {
+      console.log(startDates);
+      const response = await addSemester({
+        semestername: semesternames,
+        startDate: startDates,
+        endDate: endDates
+      })
+
+      if (response) {
+        toast.success("Add New Semester Succesfully!")
+      } else {
+        toast.error("Fail to add new Semester...")
+      }
+      setOpenModals(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Fail to add new Semester...")
+    }
+  }
+
+  const handleCloses = () => {
+    setOpenModals(false);
+  }
+
+  const handleStartDateChanges = (date) => {
+    setStartDates(date.toISOString());
+  };
+
+  const handleEndtDateChanges = (date) => {
+    setEndDates(date.toISOString());
+  };
+
   //Update Semester
 
   const handleOpen = (event, semester) => {
@@ -256,14 +300,13 @@ function ManageSemester() {
           <div
             style={{ float: "right", marginTop: "15px", marginBottom: '15px', marginRight: "10px" }}
           >
-            {/* <Button
+            <Button
               variant="contained"
               color="success"
-              component={Link}
-              to="/addnewsemester"
+              onClick={(event) => handleOpens(event)}
             >
               Add new Semester
-            </Button> */}
+            </Button>
           </div>
           <div style={{
             margin: "auto",
@@ -352,6 +395,65 @@ function ManageSemester() {
                     Confirm
                   </Button>
                   <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                    Cancel
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
+        <Modal
+          open={openModals}
+          onClose={handleCloses}
+          closeAfterTransition
+        >
+          <Fade in={openModals}>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
+                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+                  Add Semester
+                </h3>
+                <Toaster position="top-center"></Toaster>
+                <TextField
+                  label="Semester Name"
+                  type="text"
+                  value={semesternames}
+                  onChange={(e) => setSemesternames(e.target.value)}
+                  fullWidth
+                  required
+                  style={{ width: '250px' }}
+                />
+                <div style={{ marginTop: '1em' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
+                    <DatePicker
+                      label="Start Date"
+                      value={startDates}
+                      onChange={handleStartDateChanges}
+                      inputFormat="MM/DD/YYYY"
+                      animateYearScrolling
+                      fullWidth
+                      required
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div style={{ marginTop: '1em' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en" >
+                    <DatePicker
+                      label="End Date"
+                      value={endDates}
+                      onChange={handleEndtDateChanges}
+                      inputFormat="MM/DD/YYYY"
+                      animateYearScrolling
+                      fullWidth
+                      required
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
+                  <Button variant="contained" onClick={handleSubmits} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                    Confirm
+                  </Button>
+                  <Button variant="outlined" onClick={handleCloses} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
                     Cancel
                   </Button>
                 </div>

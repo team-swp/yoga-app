@@ -99,7 +99,7 @@ function ManageSchedule() {
               }
             });
           } else {
-            console.log('No class found with the updated schedule');
+            console.log('No class found with the updated slot');
           }
         } else {
           console.log('Class data is emty or invalid');
@@ -185,14 +185,14 @@ function ManageSchedule() {
     try {
       const response = await addSchedule({ schedulename, startTime, endTime })
       if (response) {
-        toast.success("Add New Schedule Succesfully!")
+        toast.success("Add New Slot Succesfully!")
       } else {
-        toast.error("Fail to add new Schedule...")
+        toast.error("Fail to add new Slot...")
       }
       setOpenModal(false);
     } catch (error) {
       console.log(error);
-      toast.error("Fail to add new Schedule...")
+      toast.error("Fail to add new Slot...")
     }
   }
 
@@ -247,12 +247,12 @@ function ManageSchedule() {
         setSchedule(updatedSchedules);
         toast.success(`${scheduleResponse.data.data.schedulename} update successful`);
       } else {
-        toast.error("Fail to update Schedule...")
+        toast.error("Fail to update Slot...")
       }
       setOpenModals(false);
     } catch (error) {
       console.log(error);
-      toast.error("Fail to update Schedule...")
+      toast.error("Fail to update Slot...")
     }
   }
 
@@ -282,7 +282,7 @@ function ManageSchedule() {
               color="success"
               onClick={(event) => handleOpen(event)}
             >
-              Add new Schedule
+              Add new Slot
             </Button>
           </div>
           <div style={{
@@ -309,7 +309,7 @@ function ManageSchedule() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ textAlign: "center" }}>Schedule Name</TableCell>
+                <TableCell style={{ textAlign: "center" }}>Slot Name</TableCell>
                 <TableCell style={{ textAlign: "center" }}>Start Time</TableCell>
                 <TableCell style={{ textAlign: "center" }}>End Time</TableCell>
                 <TableCell style={{ textAlign: "center" }}>Status</TableCell>
@@ -363,7 +363,7 @@ function ManageSchedule() {
                 <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
                   Confirmation
                 </h3>
-                <p>Are you sure you want to change the status of this Schedule?</p>
+                <p>Are you sure you want to change the status of this Slot?</p>
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
                   <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
                     Confirm
@@ -385,11 +385,11 @@ function ManageSchedule() {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
               <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
                 <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
-                  Add Schedule
+                  Add Slot
                 </h3>
                 <Toaster position="top-center"></Toaster>
                 <TextField
-                  label="Schedule Name"
+                  label="Slot Name"
                   type="text"
                   name="schedule"
                   value={schedulename}
@@ -447,11 +447,11 @@ function ManageSchedule() {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
               <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
                 <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
-                  Update Schedule
+                  Update Slot
                 </h3>
                 <Toaster position="top-center"></Toaster>
                 <TextField
-                  label="Schedule Name"
+                  label="Slot Name"
                   type="text"
                   name="schedule"
                   value={schedulenames}

@@ -84,7 +84,7 @@ function ManageClass() {
 
           }
         } else {
-          toast.error('Cannot update status. Course or Schedule status is false.');
+          toast.error('Cannot update status. Course or Slot status is false.');
         }
         setConfirmModalOpen(false);
       }
