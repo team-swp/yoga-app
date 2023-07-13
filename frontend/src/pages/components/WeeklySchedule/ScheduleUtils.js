@@ -132,19 +132,19 @@ export default function useSchedule() {
         });
       });
     });
-
     setTotalSchedule(newTotalSchedule);
   }, [courseList]);
 
   useEffect(() => {
+    const sortedSchedule = totalSchedule.sort(
+      (a, b) => b.days.length - a.days.length
+    );
+
     const checkedSchedule = [];
-
-    totalSchedule.forEach((schedule, index) => {
+    sortedSchedule.forEach((schedule, index) => {
       let foundDuplicate = false;
-
       for (let i = 0; i < index; i++) {
-        const item = totalSchedule[i];
-
+        const item = sortedSchedule[i];
         if (
           item.scheduleName === schedule.scheduleName &&
           arraysMatch(item.days, schedule.days)
@@ -153,7 +153,6 @@ export default function useSchedule() {
           break;
         }
       }
-
       if (!foundDuplicate) {
         checkedSchedule.push(schedule);
       }
@@ -161,15 +160,13 @@ export default function useSchedule() {
 
     function arraysMatch(arr1, arr2) {
       return (
-        arr1.length === arr2.length &&
-        arr1.every((value, index) => value === arr2[index])
+        arr1.every((value) => arr2.includes(value)) &&
+        arr2.every((value) => arr1.includes(value))
       );
     }
-
+    console.log(checkedSchedule);
     setCheckSchedule(checkedSchedule);
   }, [totalSchedule]);
-
-  console.log(checkSchedule);
 
   return { courseList, totalSchedule, checkSchedule };
 }

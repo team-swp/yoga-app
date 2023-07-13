@@ -14,10 +14,12 @@ import {
 } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
-import axios from "axios";
-import { addClass } from "../../../../helper/classAPI";
+import { addClass, getClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { getMember } from "../../../../helper/loginAPI";
+import { getCourse } from "../../../../helper/courseAPI";
+import { getSchedule } from "../../../../helper/scheduleAPI";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -43,15 +45,90 @@ const daysOfWeek = [
 ];
 
 function AddNewClass() {
+  const navigate = useNavigate();
+
   const [classname, setClassname] = useState("");
   const [scheduleList, setScheduleList] = useState("");
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [courseList, setCourseList] = useState("");
+  const [classList, setClassList] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [instructorList, setInstructorList] = useState("");
+  const [filteredInstructor, setFilteredInstructor] = useState([]);
+
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [days, setDays] = useState([]);
-  const navigate = useNavigate();
+
+  async function fetchData() {
+    try {
+      const [
+        scheduleResponse,
+        courseResponse,
+        instructorResponse,
+        classResponse,
+      ] = await Promise.all([
+        getSchedule(),
+        getCourse(),
+        getMember(),
+        getClass(),
+      ]);
+
+      const instructorList = instructorResponse.data.filter(
+        (ins) => ins.role === "instructor"
+      );
+
+      setInstructorList(instructorList);
+
+      setScheduleList(scheduleResponse.data);
+      setCourseList(courseResponse.data);
+      setClassList(classResponse.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (classList && selectedSchedule) {
+      const filteredClassResponse = classList.filter(
+        (obj) => obj.schedule_id === selectedSchedule._id
+      );
+
+      const filteredInstructorList = instructorList.filter(
+        (ins) =>
+          !filteredClassResponse.some((obj) => obj.instructor_id === ins._id)
+      );
+
+      setFilteredInstructor(filteredInstructorList);
+    }
+  }, [classList, selectedSchedule, instructorList]);
+
+  console.log(filteredInstructor);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    const selectedDays = typeof value === "string" ? value.split(",") : value;
+
+    const sortedDays = selectedDays.sort((a, b) => {
+      const daysOfWeekOrder = {
+        Monday: 1,
+        Tuesday: 2,
+        Wednesday: 3,
+        Thursday: 4,
+        Friday: 5,
+        Saturday: 6,
+        Sunday: 7,
+      };
+      return daysOfWeekOrder[a] - daysOfWeekOrder[b];
+    });
+
+    setDays(sortedDays);
+  };
 
   const handleBack = () => {
     navigate("/staffmanage");
@@ -75,83 +152,15 @@ function AddNewClass() {
         days: days,
       });
       if (response) {
-        // Lớp học được thêm thành công
-        // Chuyển hướng người dùng đến trang quản lý lớp học
         toast.success("Add New Class Succesfully!");
+        navigate("/staffmanage");
       } else {
-        // Xử lý lỗi khi không thêm được lớp học
         toast.error("Fail to add new Class...");
       }
     } catch (error) {
       console.log(error);
       toast.error("Fail to add new Class...");
     }
-  };
-
-  useEffect(() => {
-    async function fetchSchedule() {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/api/schedule/get"
-        );
-        const scheduleData = response.data;
-        setScheduleList(scheduleData);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchSchedule();
-
-    async function fetchCourse() {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/api/course/get"
-        );
-        const courseData = response.data;
-        setCourseList(courseData);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchCourse();
-
-    async function fetchInstructor() {
-      try {
-        const response = await axios.get("http://localhost:3001/api/accounts");
-        setInstructorList(
-          response.data.filter((ins) => ins.role === "instructor")
-        );
-        console.log(setInstructorList);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchInstructor();
-  }, []);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    const selectedDays = typeof value === "string" ? value.split(",") : value;
-
-    const sortedDays = selectedDays.sort((a, b) => {
-      const daysOfWeekOrder = {
-        Monday: 1,
-        Tuesday: 2,
-        Wednesday: 3,
-        Thursday: 4,
-        Friday: 5,
-        Saturday: 6,
-        Sunday: 7,
-      };
-      return daysOfWeekOrder[a] - daysOfWeekOrder[b];
-    });
-
-    setDays(sortedDays);
   };
 
   return (
@@ -189,7 +198,7 @@ function AddNewClass() {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Schedule"
+                  label="Slot"
                   type="text"
                   name="schedule_id"
                   required
@@ -216,7 +225,7 @@ function AddNewClass() {
             <Autocomplete
               value={selectedInstructor}
               onChange={(event, newValue) => setSelectedInstructor(newValue)}
-              options={instructorList}
+              options={filteredInstructor}
               getOptionLabel={(option) => option.username}
               renderInput={(params) => (
                 <TextField

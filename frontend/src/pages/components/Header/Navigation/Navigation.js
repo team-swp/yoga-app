@@ -84,6 +84,13 @@ function Navigation(props) {
             </ListItemButton>
           </ListItem>
         </Link>
+        <Link to="/contact">
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="Contact" />
+            </ListItemButton>
+          </ListItem>
+        </Link>
       </List>
     </Box>
   );
@@ -133,6 +140,11 @@ function Navigation(props) {
             <div>
               <Link to="/news">
                 <p className="text-xs uppercase">News</p>
+              </Link>
+            </div>
+            <div>
+              <Link to="/contact">
+                <p className="text-xs uppercase">Contact</p>
               </Link>
             </div>
           </div>

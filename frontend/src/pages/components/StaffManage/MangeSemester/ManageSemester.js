@@ -14,30 +14,33 @@ import {
   IconButton,
   Modal,
   Fade,
-} from '@mui/material';
+} from "@mui/material";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { addSemester, getSemester, updateSemester } from "../../../../helper/semesterAPI";
+import {
+  addSemester,
+  getSemester,
+  updateSemester,
+} from "../../../../helper/semesterAPI";
 import { updateCourse } from "../../../../helper/courseAPI";
 import { updateClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "axios";
 import StatusButton from "./StatusButtons";
-import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 
 function ManageSemester() {
-
   //Manage Semester
   const [classes, setClasses] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [courses, setCourses] = useState([]);
   const [updatedCourse, setUpdatedCourse] = useState({});
-  const [manageUpdateSemester, setManageUpdateSemester] = useState({})
-  const [page, setPage] = useState(1)
-  const [pageCount, setPageCount] = useState(0)
-  const [searchQuery, setSearchQuery] = useState('');
+  const [manageUpdateSemester, setManageUpdateSemester] = useState({});
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [selectedSemester, setSelectedSemester] = useState(null);
 
@@ -70,16 +73,21 @@ function ManageSemester() {
 
   const handleConfirm = async () => {
     try {
-      const updatedSemesterData = { ...selectedSemester, status: !selectedSemester.status };
+      const updatedSemesterData = {
+        ...selectedSemester,
+        status: !selectedSemester.status,
+      };
       const semesterResponse = await updateSemester(updatedSemesterData);
       if (semesterResponse && semesterResponse.data) {
         console.log(semesterResponse.data.data.semestername);
 
-        const courseResponse = await axios.get('http://localhost:3001/api/course/get');
+        const courseResponse = await axios.get(
+          "http://localhost:3001/api/course/get"
+        );
         const courseData = courseResponse.data;
         if (Array.isArray(courseData) && courseData.length > 0) {
-          const coursesWithSemester = courseData.filter((course) =>
-            course.semester_id === semesterResponse.data.data._id
+          const coursesWithSemester = courseData.filter(
+            (course) => course.semester_id === semesterResponse.data.data._id
           );
           if (coursesWithSemester.length > 0) {
             coursesWithSemester.forEach(async (course) => {
@@ -93,25 +101,31 @@ function ManageSemester() {
                 if (response && response.data) {
                   console.log(response.data.data.coursename);
 
-                  const classResponse = await axios.get('http://localhost:3001/api/class/get');
+                  const classResponse = await axios.get(
+                    "http://localhost:3001/api/class/get"
+                  );
                   const classData = classResponse.data;
                   if (Array.isArray(classData) && classData.length > 0) {
-                    const classWithCourse = classData.filter((classs) =>
-                      classs.course_id === response.data.data._id
+                    const classWithCourse = classData.filter(
+                      (classs) => classs.course_id === response.data.data._id
                     );
                     if (classWithCourse.length > 0) {
                       classWithCourse.forEach(async (classs) => {
                         try {
                           const updatedClassData = { ...classs };
-                          console.log(course.status, 123)
+                          console.log(course.status, 123);
                           if (!selectedSemester.status === false) {
                             updatedClassData.status = false;
                           }
-                          const classResponse = await updateClass(updatedClassData);
+                          const classResponse = await updateClass(
+                            updatedClassData
+                          );
                           if (classResponse && classResponse.data) {
                             console.log(classResponse.data.data.classname);
                             const updatedClasss = classes.map((classItem) =>
-                              classItem._id === classResponse.data._id ? classResponse.data : classItem
+                              classItem._id === classResponse.data._id
+                                ? classResponse.data
+                                : classItem
                             );
                             setClasses(updatedClasss);
                           }
@@ -120,10 +134,10 @@ function ManageSemester() {
                         }
                       });
                     } else {
-                      console.log('No class found with the updated course');
+                      console.log("No class found with the updated course");
                     }
                   } else {
-                    console.log('Class data is empty or invalid');
+                    console.log("Class data is empty or invalid");
                   }
                   setUpdatedCourse(courses);
                   setCourses([...courses]);
@@ -133,12 +147,14 @@ function ManageSemester() {
               }
             });
           } else {
-            console.log('No courses found with the updated semester');
+            console.log("No courses found with the updated semester");
           }
         } else {
-          console.log('Course data is empty or invalid');
+          console.log("Course data is empty or invalid");
         }
-        toast.success(`${semesterResponse.data.data.semestername} status updated successfully`);
+        toast.success(
+          `${semesterResponse.data.data.semestername} status updated successfully`
+        );
         setManageUpdateSemester(semesters);
         setSemesters([...semesters]);
         setConfirmModalOpen(false);
@@ -154,7 +170,7 @@ function ManageSemester() {
 
   const handleReset = () => {
     fetchSemesters();
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   async function fetchSemester2() {
@@ -167,7 +183,9 @@ function ManageSemester() {
   }
 
   async function fetchSemesters() {
-    const response = await axios.get(`http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`);
+    const response = await axios.get(
+      `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`
+    );
     const semestersData = response.data.items;
     setPage(response.data.pagination.pageNum);
     setPageCount(response.data.pagination.pageCount);
@@ -195,33 +213,38 @@ function ManageSemester() {
   //Add Semester
   const handleOpens = (event) => {
     setOpenModals(true);
-  }
+  };
 
   const handleSubmits = async (event) => {
     event.preventDefault();
     try {
-      console.log(startDates);
       const response = await addSemester({
         semestername: semesternames,
         startDate: startDates,
-        endDate: endDates
-      })
+        endDate: endDates,
+      });
 
       if (response) {
-        toast.success("Add New Semester Succesfully!")
+        toast.success("Add New Semester Succesfully!");
+        handleResetData();
       } else {
-        toast.error("Fail to add new Semester...")
+        toast.error("Fail to add new Semester...");
       }
       setOpenModals(false);
     } catch (error) {
       console.log(error);
-      toast.error("Fail to add new Semester...")
+      toast.error("Fail to add new Semester...");
     }
-  }
+  };
 
   const handleCloses = () => {
     setOpenModals(false);
-  }
+  };
+
+  const handleResetData = () => {
+    fetchSemesters();
+    fetchSemester2();
+  };
 
   const handleStartDateChanges = (date) => {
     setStartDates(date.toISOString());
@@ -269,13 +292,14 @@ function ManageSemester() {
         toast.success(
           `${semestersResponse.data.data.semestername} updated successfully`
         );
+        handleResetData();
       } else {
-        toast.error("Fail to  update Semester...")
+        toast.error("Fail to  update Semester...");
       }
       setOpenModal(false);
     } catch (error) {
       console.error(error);
-      toast.error("Fail to update Semester...")
+      toast.error("Fail to update Semester...");
     }
   };
 
@@ -298,7 +322,12 @@ function ManageSemester() {
 
         <TableContainer component={Paper}>
           <div
-            style={{ float: "right", marginTop: "15px", marginBottom: '15px', marginRight: "10px" }}
+            style={{
+              float: "right",
+              marginTop: "15px",
+              marginBottom: "15px",
+              marginRight: "10px",
+            }}
           >
             <Button
               variant="contained"
@@ -308,58 +337,76 @@ function ManageSemester() {
               Add new Semester
             </Button>
           </div>
-          <div style={{
-            margin: "auto",
-            padding: "15px",
-            maxWidth: "800px",
-            display: "flex",
-            alignItems: "center",
-          }}>
+          <div
+            style={{
+              margin: "auto",
+              padding: "15px",
+              maxWidth: "800px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <TextField
               label="Search"
               value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value.toLowerCase())}
+              onChange={(event) =>
+                setSearchQuery(event.target.value.toLowerCase())
+              }
               style={{ marginRight: "1rem" }}
             />
             <IconButton onClick={handleReset} sx={{ ml: -8 }}>
               <RestartAltOutlinedIcon />
             </IconButton>
-            <Button onClick={handleSearch} type="submit" variant="contained" color="primary" sx={{ ml: 3 }}>
+            <Button
+              onClick={handleSearch}
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ ml: 3 }}
+            >
               Search
             </Button>
           </div>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ textAlign: "center" }} >Semester ID</TableCell>
-                <TableCell style={{ textAlign: "center" }} >Semester Name</TableCell>
-                <TableCell style={{ textAlign: "center" }} >Start Date</TableCell>
-                <TableCell style={{ textAlign: "center" }} >End Date</TableCell>
-                <TableCell style={{ textAlign: "center" }} >Disable-Enable</TableCell>
-                <TableCell style={{ textAlign: "center" }} >Status</TableCell>
-                <TableCell style={{ textAlign: "center" }} >Action</TableCell>
+                <TableCell style={{ textAlign: "center" }}>
+                  Semester ID
+                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>
+                  Semester Name
+                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>
+                  Start Date
+                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>End Date</TableCell>
+                <TableCell style={{ textAlign: "center" }}>
+                  Disable-Enable
+                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>Status</TableCell>
+                <TableCell style={{ textAlign: "center" }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {semesters.map((semesterItem, index) => (
                 <TableRow key={index}>
-                  <TableCell style={{ textAlign: "center" }} >
+                  <TableCell style={{ textAlign: "center" }}>
                     {index + 1}
                   </TableCell>
-                  <TableCell style={{ textAlign: "center" }} >
+                  <TableCell style={{ textAlign: "center" }}>
                     {semesterItem.semestername}
                   </TableCell>
-                  <TableCell style={{ textAlign: "center" }} >
+                  <TableCell style={{ textAlign: "center" }}>
                     {new Date(semesterItem.startDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell style={{ textAlign: "center" }} >
+                  <TableCell style={{ textAlign: "center" }}>
                     {new Date(semesterItem.endDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ textAlign: "center" }}>
                     <Switch
                       checked={semesterItem.status}
                       onChange={(event) => handleToggle(event, semesterItem)}
-                      color={semesterItem.status ? 'success' : 'error'}
+                      color={semesterItem.status ? "success" : "error"}
                     />
                   </TableCell>
                   <TableCell style={{ textAlign: "center" }}>
@@ -368,7 +415,11 @@ function ManageSemester() {
                   <TableCell style={{ textAlign: "center" }}>
                     <Button
                       onClick={(event) => handleOpen(event, semesterItem)}
-                      style={{ fontSize: "10px", backgroundColor: "orange", color: "#fff" }}
+                      style={{
+                        fontSize: "10px",
+                        backgroundColor: "orange",
+                        color: "#fff",
+                      }}
                     >
                       Update
                     </Button>
@@ -384,17 +435,60 @@ function ManageSemester() {
           closeAfterTransition
         >
           <Fade in={confirmModalOpen}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
-                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Paper
+                style={{
+                  width: "400px",
+                  padding: "2em",
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                  textAlign: "center",
+                }}
+                elevation={3}
+              >
+                <h3
+                  style={{
+                    marginBottom: "1em",
+                    fontSize: "1.5em",
+                    fontWeight: "bold",
+                  }}
+                >
                   Confirmation
                 </h3>
-                <p>Are you sure you want to change the status of this Semester?</p>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
-                  <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                <p>
+                  Are you sure you want to change the status of this Semester?
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    onClick={handleConfirm}
+                    style={{ marginRight: "1rem", backgroundColor: "black" }}
+                  >
                     Confirm
                   </Button>
-                  <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleCancel}
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "2px solid #000",
+                    }}
+                  >
                     Cancel
                   </Button>
                 </div>
@@ -402,15 +496,34 @@ function ManageSemester() {
             </div>
           </Fade>
         </Modal>
-        <Modal
-          open={openModals}
-          onClose={handleCloses}
-          closeAfterTransition
-        >
+        <Modal open={openModals} onClose={handleCloses} closeAfterTransition>
           <Fade in={openModals}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
-                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Paper
+                style={{
+                  width: "400px",
+                  padding: "2em",
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                  textAlign: "center",
+                }}
+                elevation={3}
+              >
+                <h3
+                  style={{
+                    marginBottom: "1em",
+                    fontSize: "1.5em",
+                    fontWeight: "bold",
+                  }}
+                >
                   Add Semester
                 </h3>
                 <Toaster position="top-center"></Toaster>
@@ -421,9 +534,9 @@ function ManageSemester() {
                   onChange={(e) => setSemesternames(e.target.value)}
                   fullWidth
                   required
-                  style={{ width: '250px' }}
+                  style={{ width: "250px" }}
                 />
-                <div style={{ marginTop: '1em' }}>
+                <div style={{ marginTop: "1em" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
                     <DatePicker
                       label="Start Date"
@@ -436,8 +549,8 @@ function ManageSemester() {
                     />
                   </LocalizationProvider>
                 </div>
-                <div style={{ marginTop: '1em' }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en" >
+                <div style={{ marginTop: "1em" }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
                     <DatePicker
                       label="End Date"
                       value={endDates}
@@ -449,11 +562,29 @@ function ManageSemester() {
                     />
                   </LocalizationProvider>
                 </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
-                  <Button variant="contained" onClick={handleSubmits} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmits}
+                    style={{ marginRight: "1rem", backgroundColor: "black" }}
+                  >
                     Confirm
                   </Button>
-                  <Button variant="outlined" onClick={handleCloses} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleCloses}
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "2px solid #000",
+                    }}
+                  >
                     Cancel
                   </Button>
                 </div>
@@ -461,15 +592,34 @@ function ManageSemester() {
             </div>
           </Fade>
         </Modal>
-        <Modal
-          open={openModal}
-          onClose={handleClose}
-          closeAfterTransition
-        >
+        <Modal open={openModal} onClose={handleClose} closeAfterTransition>
           <Fade in={openModal}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-              <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
-                <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Paper
+                style={{
+                  width: "400px",
+                  padding: "2em",
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                  textAlign: "center",
+                }}
+                elevation={3}
+              >
+                <h3
+                  style={{
+                    marginBottom: "1em",
+                    fontSize: "1.5em",
+                    fontWeight: "bold",
+                  }}
+                >
                   Update Semester
                 </h3>
                 <Toaster position="top-center"></Toaster>
@@ -482,7 +632,7 @@ function ManageSemester() {
                   required
                   style={{ width: 250 }}
                 />
-                <div style={{ marginTop: '1em' }}>
+                <div style={{ marginTop: "1em" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
                     <DatePicker
                       label="Start Date"
@@ -495,8 +645,8 @@ function ManageSemester() {
                     />
                   </LocalizationProvider>
                 </div>
-                <div style={{ marginTop: '1em' }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en" >
+                <div style={{ marginTop: "1em" }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} locale="en">
                     <DatePicker
                       label="End Date"
                       value={endDate}
@@ -508,11 +658,29 @@ function ManageSemester() {
                     />
                   </LocalizationProvider>
                 </div>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
-                  <Button variant="contained" onClick={handleSubmit} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmit}
+                    style={{ marginRight: "1rem", backgroundColor: "black" }}
+                  >
                     Confirm
                   </Button>
-                  <Button variant="outlined" onClick={handleClose} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleClose}
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "2px solid #000",
+                    }}
+                  >
                     Cancel
                   </Button>
                 </div>
@@ -565,9 +733,7 @@ function ManageSemester() {
           </Button>
         </footer>
       </Container>
-
-
-    </div >
+    </div>
   );
 }
 
