@@ -13,8 +13,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
-const moment = require("moment");
-
 const style = {
   position: "absolute",
   top: "50%",

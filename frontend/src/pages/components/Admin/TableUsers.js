@@ -82,7 +82,6 @@ function BasicExample() {
     }
 
     setSearchTerm(term);
-    // undefinedVariable.someMethod();
   }, 500);
 
   const totalPages = Math.ceil(listUser.length / itemsPerPage);
