@@ -158,7 +158,7 @@ const NewsPage = () => {
 
       <Paper
         style={{
-          height: "282px",
+          height: "278px",
           marginBottom: "20px",
           backgroundColor: "rgba(255, 255, 255, 0.5)", // Adjust the alpha value as needed
         }}
