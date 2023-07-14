@@ -15,7 +15,7 @@ import {
   Modal,
   Fade,
 } from '@mui/material';
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { addSemester, getSemester, updateSemester } from "../../../../helper/semesterAPI";
 import { updateCourse } from "../../../../helper/courseAPI";
 import { updateClass } from "../../../../helper/classAPI";
@@ -45,6 +45,7 @@ function ManageSemester() {
   const [semesternames, setSemesternames] = useState("");
   const [startDates, setStartDates] = useState("");
   const [endDates, setEndDates] = useState("");
+  const [reset, setReset] = useState({});
   const [openModals, setOpenModals] = useState(false);
 
   //Update Semester
@@ -152,6 +153,8 @@ function ManageSemester() {
     fetchSemesters();
   }, [manageUpdateSemester, page]);
 
+
+
   const handleReset = () => {
     fetchSemesters();
     setSearchQuery('');
@@ -198,9 +201,8 @@ function ManageSemester() {
   }
 
   const handleSubmits = async (event) => {
-    event.preventDefault();
+
     try {
-      console.log(startDates);
       const response = await addSemester({
         semestername: semesternames,
         startDate: startDates,
@@ -209,6 +211,7 @@ function ManageSemester() {
 
       if (response) {
         toast.success("Add New Semester Succesfully!")
+        setReset();
       } else {
         toast.error("Fail to add new Semester...")
       }
@@ -230,6 +233,10 @@ function ManageSemester() {
   const handleEndtDateChanges = (date) => {
     setEndDates(date.toISOString());
   };
+
+  useEffect(() => {
+    fetchSemesters()
+  }, [reset, page])
 
   //Update Semester
 

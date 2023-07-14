@@ -85,7 +85,7 @@ function StaffManage() {
             <Tab label="Manage Semesters" {...a11yProps(0)} />
             <Tab label="Manage Courses" {...a11yProps(1)} />
             <Tab label="Manage Classes" {...a11yProps(2)} />
-            <Tab label="Manage Slot" {...a11yProps(3)} />
+            <Tab label="Manage Slots" {...a11yProps(3)} />
             <Tab label="Manage Members" {...a11yProps(4)} />
             <Tab label="Manage Packages" {...a11yProps(5)} />
             <Tab label="Manage News" {...a11yProps(6)} />

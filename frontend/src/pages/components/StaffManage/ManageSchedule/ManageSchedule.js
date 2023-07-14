@@ -15,7 +15,7 @@ import {
   Modal,
   Fade,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { getSchedule, addSchedule, updateSchedule } from "../../../../helper/scheduleAPI";
 import { getClass, updateClass } from "../../../../helper/classAPI";
@@ -46,6 +46,7 @@ function ManageSchedule() {
   const [schedulename, setSchedulename] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [reset, setReset] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate()
 
@@ -186,6 +187,7 @@ function ManageSchedule() {
       const response = await addSchedule({ schedulename, startTime, endTime })
       if (response) {
         toast.success("Add New Slot Succesfully!")
+        setReset();
       } else {
         toast.error("Fail to add new Slot...")
       }
@@ -199,6 +201,10 @@ function ManageSchedule() {
   const handleClose = () => {
     setOpenModal(false);
   }
+
+  useEffect(() => {
+    fetchSchedules();
+  }, [reset, page])
 
   const handleStartTimeChange = (moment) => {
     setStartTime(moment.format('hh:mm A'));
@@ -282,7 +288,7 @@ function ManageSchedule() {
               color="success"
               onClick={(event) => handleOpen(event)}
             >
-              Add new Slot
+              Add new Slots
             </Button>
           </div>
           <div style={{
@@ -309,7 +315,7 @@ function ManageSchedule() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ textAlign: "center" }}>Slot Name</TableCell>
+                <TableCell style={{ textAlign: "center" }}>Slots Name</TableCell>
                 <TableCell style={{ textAlign: "center" }}>Start Time</TableCell>
                 <TableCell style={{ textAlign: "center" }}>End Time</TableCell>
                 <TableCell style={{ textAlign: "center" }}>Status</TableCell>
@@ -363,7 +369,7 @@ function ManageSchedule() {
                 <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
                   Confirmation
                 </h3>
-                <p>Are you sure you want to change the status of this Slot?</p>
+                <p>Are you sure you want to change the status of this Slots?</p>
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
                   <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
                     Confirm
@@ -385,11 +391,11 @@ function ManageSchedule() {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
               <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
                 <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
-                  Add Slot
+                  Add Slots
                 </h3>
                 <Toaster position="top-center"></Toaster>
                 <TextField
-                  label="Slot Name"
+                  label="Slots Name"
                   type="text"
                   name="schedule"
                   value={schedulename}
@@ -447,11 +453,11 @@ function ManageSchedule() {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
               <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
                 <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
-                  Update Slot
+                  Update Slots
                 </h3>
                 <Toaster position="top-center"></Toaster>
                 <TextField
-                  label="Slot Name"
+                  label="Slots Name"
                   type="text"
                   name="schedule"
                   value={schedulenames}

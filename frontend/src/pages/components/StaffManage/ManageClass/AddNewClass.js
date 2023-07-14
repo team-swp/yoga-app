@@ -43,6 +43,7 @@ const daysOfWeek = [
 ];
 
 function AddNewClass() {
+    const [classList, setClassList] = useState("");
     const [classname, setClassname] = useState("");
     const [scheduleList, setScheduleList] = useState("");
     const [selectedSchedule, setSelectedSchedule] = useState(null);
@@ -51,17 +52,16 @@ function AddNewClass() {
     const [instructorList, setInstructorList] = useState("");
     const [selectedInstructor, setSelectedInstructor] = useState(null);
     const [days, setDays] = useState([]);
+    const [filteredInstructorList, setFilteredInstructorList] = useState([]);
     const navigate = useNavigate()
 
     const handleBack = () => {
         navigate("/staffmanage")
     }
-    // Thêm các trạng thái khác nếu cần thiết
-
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         // Gửi yêu cầu POST để thêm lớp học mới
         try {
             const temp = [days]
@@ -73,13 +73,14 @@ function AddNewClass() {
                 classname,
                 schedule_id: scheduleId,
                 course_id: courseId,
-                instructor_id: instructorId,
-                days: days
+                days: days,
+                instructor_id: instructorId
             })
             if (response) {
                 // Lớp học được thêm thành công
                 // Chuyển hướng người dùng đến trang quản lý lớp học
                 toast.success("Add New Class Succesfully!")
+                navigate("/staffmanage");
             } else {
                 // Xử lý lỗi khi không thêm được lớp học
                 toast.error("Fail to add new Class...")
@@ -91,6 +92,18 @@ function AddNewClass() {
     };
 
     useEffect(() => {
+        async function fecthClassList() {
+            try {
+                const requestUrl = "http://localhost:3001/api/class/get";
+                const response = await fetch(requestUrl);
+                const responseJSON = await response.json();
+                setClassList(responseJSON);
+            } catch (error) {
+                console.log("Failed");
+            }
+        }
+        fecthClassList();
+
         async function fetchSchedule() {
             try {
                 const response = await axios.get(
@@ -102,7 +115,6 @@ function AddNewClass() {
                 console.error(error);
             }
         }
-
         fetchSchedule();
 
         async function fetchCourse() {
@@ -116,7 +128,6 @@ function AddNewClass() {
                 console.error(error);
             }
         }
-
         fetchCourse();
 
         async function fetchInstructor() {
@@ -124,13 +135,15 @@ function AddNewClass() {
                 const response = await axios.get(
                     "http://localhost:3001/api/accounts"
                 );
+                const allInstructors = response.data.filter(
+                    (ins) => ins.role === "instructor"
+                );
                 setInstructorList(response.data.filter((ins) => ins.role === "instructor"));
-                console.log(setInstructorList);
+                setFilteredInstructorList(response.data);
             } catch (error) {
                 console.error(error);
             }
         }
-
         fetchInstructor();
     }, []);
 
@@ -144,6 +157,29 @@ function AddNewClass() {
         );
     };
 
+    useEffect(() => {
+        if (selectedSchedule && days.length > 0) {
+            const filteredInstructors = instructorList.filter((instructor) => {
+                // Tìm tất cả các lịch trình và ngày trùng nhau
+                const conflictingSchedules = classList.filter((classItem) => {
+                    const hasScheduleConflict = classItem.schedule_id === selectedSchedule._id;
+                    const hasDaysConflict = classItem.days.some((day) => days.includes(day));
+                    return hasScheduleConflict && hasDaysConflict;
+                });
+
+                // Lọc ra các instructor không nằm trong danh sách lịch trình và ngày trùng nhau
+                const isConflictingInstructor = conflictingSchedules.some((classItem) =>
+                    classItem.instructor_id === instructor._id
+                );
+
+                return !isConflictingInstructor;
+            });
+
+            setFilteredInstructorList(filteredInstructors);
+        } else {
+            setFilteredInstructorList(instructorList);
+        }
+    }, [selectedSchedule, days, instructorList, classList]);
     return (
         <div>
             <Header />
@@ -193,22 +229,6 @@ function AddNewClass() {
                                 />
                             )}
                         />
-                        <Autocomplete
-                            value={selectedInstructor}
-                            onChange={(event, newValue) => setSelectedInstructor(newValue)}
-                            options={instructorList}
-                            getOptionLabel={(option) => option.username}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Instructor"
-                                    type="text"
-                                    name="instructor_id"
-                                    required
-                                    sx={styles.textField}
-                                />
-                            )}
-                        />
                         <FormControl sx={{ width: 400 }}>
                             <InputLabel id="demo-multiple-checkbox-label">Day</InputLabel>
                             <Select
@@ -229,7 +249,22 @@ function AddNewClass() {
                                 ))}
                             </Select>
                         </FormControl>
-
+                        <Autocomplete
+                            value={selectedInstructor}
+                            onChange={(event, newValue) => setSelectedInstructor(newValue)}
+                            options={filteredInstructorList}
+                            getOptionLabel={(option) => option.username}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Instructor"
+                                    type="text"
+                                    name="instructor_id"
+                                    required
+                                    sx={styles.textField}
+                                />
+                            )}
+                        />
                         <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em' }}>Add Class</button>
                         <Button
                             onClick={handleBack}
@@ -273,6 +308,7 @@ const styles = {
     textField: {
         marginBottom: "1rem",
         width: "100%",
+        marginTop: "1em"
     },
     button: {
         marginTop: "1rem",
