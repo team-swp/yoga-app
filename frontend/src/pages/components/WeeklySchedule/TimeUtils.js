@@ -109,8 +109,8 @@ export function CustomEvent({ event }) {
 
   return (
     <div>
-      <strong style={{ fontSize: "15px" }}>{event.title}</strong>
-      <p style={{ marginTop: "5px", fontSize: "16px" }}>{event.room}</p>
+      <strong style={{ fontSize: "12px" }}>{event.title}</strong>
+      <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.room}</p>
       <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.description}</p>
       <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.instructor}</p>
       <button

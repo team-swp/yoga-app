@@ -15,7 +15,7 @@ import {
 import { GoogleButton } from "react-google-button";
 import { UserAuth } from "../../../context/AuthGoogleContext";
 import { addBooking } from "../../../helper/bookingAPI";
-
+import {PiEyeSlashLight,PiEyeLight} from 'react-icons/pi'
 function Username() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -138,18 +138,21 @@ function Username() {
                 {/* <GoogleButton onClick={handleGoogleSignIn} /> */}
               </div>
 
-              <div className="textbox flex flex-col items-center gap-6">
+              <div className="textbox flex flex-col items-center gap-6 mb-2">
                 <input
                   {...formik.getFieldProps("password")}
                   className={styles.textbox}
                   type="password"
                   placeholder="Password..."
                 />
-                <button className={styles.btn} type="submit">
+                
+              </div>
+              <div className="textbox flex flex-col items-center gap-6">
+              <button className={styles.btn} type="submit">
                   Log In
                 </button>
               </div>
-
+              
               <div className={styleLine}>
                 <div className={styles.line_divided}> </div>
                 <div className={styles.orText}>OR</div>

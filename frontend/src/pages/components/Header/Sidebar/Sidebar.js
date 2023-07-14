@@ -20,8 +20,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import BadgeIcon from "@mui/icons-material/Badge";
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
-import {FcApproval, FcLike, FcLink} from 'react-icons/fc'
+import { FcApproval, FcLike, FcLink } from "react-icons/fc";
 import { setDataLogin } from "../../../../redux/actions";
+import profileDefault from "../../../../assets/profile.png";
 const style = {
   position: "absolute",
   top: "50%",
@@ -59,6 +60,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     logOut();
+    navigate("/");
   };
 
   const handleBecomeMember = () => {
@@ -132,10 +134,9 @@ function Sidebar() {
           style={{ cursor: "pointer" }}
         >
           <img
-            src={file || user.avatar}
-            className={` ${
-              checkMember ? styles.profile_img : styles.profile_img_normal
-            } object-cover h-44`}
+            src={file || user.avatar || profileDefault}
+            className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
+              } object-cover h-44`}
             alt="avatar"
           />
           {checkMember ? (
@@ -208,12 +209,11 @@ function Sidebar() {
                       className={checkMember ? styles.bgImage : ""}
                     >
                       <img
-                        src={user.avatar}
-                        className={` ${
-                          checkMember
-                            ? styles.profile_img_details
-                            : styles.profile_img_details_normal
-                        } object-cover h-44`}
+                        src={user.avatar || profileDefault}
+                        className={` ${checkMember
+                          ? styles.profile_img_details
+                          : styles.profile_img_details_normal
+                          } object-cover h-44`}
                         alt="avatar"
                       />
                       {checkMember ? (
@@ -252,10 +252,44 @@ function Sidebar() {
                     className={styles.profile}
                     onClick={handleBecomeMember}
                   >
-                    <div style={{ margin: "auto 0", marginLeft: "20px",color:'#E97777' }}>
-                      {checkMember
-                        ?<div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography fontSize={'17px'}  align="center">Membership Expires: {memberDate}</Typography><FcApproval style={{fontSize:'20px'}}/></div>
-                        : <div style={{display:'flex' ,alignItems:'center' , gap:5}}><Typography color={'#98A8F8'} fontSize={'20px'} align="center">Become A Part Of Us</Typography><FcLike style={{fontSize:'24px'}}/></div>}
+                    <div
+                      style={{
+                        margin: "auto 0",
+                        marginLeft: "20px",
+                        color: "#E97777",
+                      }}
+                    >
+                      {checkMember ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                          }}
+                        >
+                          <Typography fontSize={"17px"} align="center">
+                            Membership Expires: {memberDate}
+                          </Typography>
+                          <FcApproval style={{ fontSize: "20px" }} />
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                          }}
+                        >
+                          <Typography
+                            color={"#98A8F8"}
+                            fontSize={"20px"}
+                            align="center"
+                          >
+                            Become A Part Of Us
+                          </Typography>
+                          <FcLike style={{ fontSize: "24px" }} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -362,14 +396,12 @@ function Sidebar() {
                       Are you sure you want to Log Out ?
                     </Typography>
                     <div className={cx("modal-modal-button")}>
-                      <a href="/">
-                        <button
-                          className={cx("modal-modal-button-yes")}
-                          onClick={handleLogout}
-                        >
-                          Yes, Log Out
-                        </button>
-                      </a>
+                      <button
+                        className={cx("modal-modal-button-yes")}
+                        onClick={handleLogout}
+                      >
+                        Yes, Log Out
+                      </button>
 
                       <div onClick={handleClose}>
                         <button className={cx("modal-modal-button-no")}>

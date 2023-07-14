@@ -122,7 +122,7 @@ export function ModalConfirmPending({
             }}
           >
             <Button variant="contained" onClick={handleUpdatePending}>
-              Update
+              Confirm
             </Button>
             <Button variant="text" onClick={handleClose}>
               Cancel
@@ -225,7 +225,7 @@ export function ModalConfirmMember({
             }}
           >
             <Button variant="contained" onClick={handleToggle}>
-              Update
+              Confirm
             </Button>
             <Button variant="text" onClick={handleClose}>
               Cancel

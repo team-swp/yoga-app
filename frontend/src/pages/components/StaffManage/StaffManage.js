@@ -10,7 +10,7 @@ import ManageSemester from "./MangeSemester/ManageSemester";
 import ManageCourses from "./ManageCourses/ManageCourses";
 import ManageClass from "./ManageClass/ManageClass";
 import ManagePackage from "./ManagePremium/ManagePackage";
-import ManageNews from "./ManageNews/ManageNews"
+import ManageNews from "./ManageNews/ManageNews";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
