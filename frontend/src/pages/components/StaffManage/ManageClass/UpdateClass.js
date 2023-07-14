@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 function UpdateClass() {
   const [classes, setClasses] = useState({});
+  const [classList, setClassList] = useState("");
   const classesId = useParams();
   const [classname, setClassname] = useState("");
   const [scheduleId, setScheduleId] = useState("");
@@ -36,6 +37,7 @@ function UpdateClass() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [instructorList, setInstructorList] = useState("");
   const [selectedInstructor, setSelectedInstructor] = useState(null);
+  const [filteredInstructorList, setFilteredInstructorList] = useState([]);
   const [days, setDays] = useState([]);
   const navigate = useNavigate();
 
@@ -71,6 +73,18 @@ function UpdateClass() {
   }, []);
 
   useEffect(() => {
+    async function fecthClassList() {
+      try {
+        const requestUrl = "http://localhost:3001/api/class/get";
+        const response = await fetch(requestUrl);
+        const responseJSON = await response.json();
+        setClassList(responseJSON);
+      } catch (error) {
+        console.log("Failed");
+      }
+    }
+    fecthClassList();
+
     async function fetchSchedule() {
       try {
         const response = await axios.get(
@@ -101,16 +115,18 @@ function UpdateClass() {
 
     async function fetchInstructor() {
       try {
-        const response = await axios.get("http://localhost:3001/api/accounts");
-        setInstructorList(
-          response.data.filter((ins) => ins.role === "instructor")
+        const response = await axios.get(
+          "http://localhost:3001/api/accounts"
         );
-        console.log(setInstructorList);
+        const allInstructors = response.data.filter(
+          (ins) => ins.role === "instructor"
+        );
+        setInstructorList(response.data.filter((ins) => ins.role === "instructor"));
+        setFilteredInstructorList(response.data);
       } catch (error) {
         console.error(error);
       }
     }
-
     fetchInstructor();
   }, []);
 
@@ -196,6 +212,34 @@ function UpdateClass() {
     setDays(sortedDays);
   };
 
+  useEffect(() => {
+    if (selectedSchedule && days.length > 0) {
+      const filteredInstructors = instructorList.filter((instructor) => {
+        // Tìm tất cả các lịch trình và ngày trùng nhau
+        const conflictingSchedules = classList.filter((classItem) => {
+          const hasScheduleConflict = classItem.schedule_id === selectedSchedule._id;
+          const hasDaysConflict = classItem.days.some((day) => days.includes(day));
+          return hasScheduleConflict && hasDaysConflict;
+        });
+
+        // Lọc ra các instructor không nằm trong danh sách lịch trình và ngày trùng nhau
+        const isConflictingInstructor = conflictingSchedules.some((classItem) =>
+          classItem.instructor_id === instructor._id
+        );
+
+        return !isConflictingInstructor;
+      });
+
+      if (!filteredInstructors.includes(selectedInstructor)) {
+        setSelectedInstructor(null);
+      }
+
+      setFilteredInstructorList(filteredInstructors);
+    } else {
+      setFilteredInstructorList(instructorList);
+    }
+  }, [selectedSchedule, days, instructorList, classList]);
+
   return (
     <>
       <Header />
@@ -259,7 +303,7 @@ function UpdateClass() {
           <Autocomplete
             value={selectedInstructor || instructorId}
             onChange={(event, newValue) => setSelectedInstructor(newValue)}
-            options={instructorList}
+            options={filteredInstructorList}
             getOptionLabel={(option) => option.username || instructorId}
             renderInput={(params) => (
               <TextField

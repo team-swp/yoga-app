@@ -175,6 +175,10 @@ function AddNewClass() {
                 return !isConflictingInstructor;
             });
 
+            if (!filteredInstructors.includes(selectedInstructor)) {
+                setSelectedInstructor(null);
+            }
+
             setFilteredInstructorList(filteredInstructors);
         } else {
             setFilteredInstructorList(instructorList);
