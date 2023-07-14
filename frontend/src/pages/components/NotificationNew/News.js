@@ -185,7 +185,7 @@ const NewsPage = () => {
                   style={{
                     fontSize: "20px",
                     fontFamily: "SangBleu Sunrise",
-                    fontWeight: "bolder",
+                
                     color: "black",
                     marginLeft:'300px'
                   }}

@@ -7,11 +7,13 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../Header/Header";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { addCourse } from "../../../../helper/courseAPI";
+
+
 
 const validationSchema = Yup.object().shape({
   coursename: Yup.string().required("Course Name is required"),
@@ -31,7 +33,7 @@ const validationSchema = Yup.object().shape({
 function AddNewCourse() {
   const [semesterList, setSemesterList] = React.useState([]);
   const [selectedSemester, setSelectedSemester] = React.useState(null);
-
+  const navigate = useNavigate()
   useEffect(() => {
     async function fetchSemesters() {
       try {
@@ -77,7 +79,7 @@ function AddNewCourse() {
         values.semester_id = ""
         values.forWho = "";
         values.images = "";
-
+        navigate("/staffmanage")
         setSelectedSemester(null);
       } else {
         toast.error("Failed to add new class");
