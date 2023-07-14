@@ -23,11 +23,9 @@ const validationSchema = Yup.object().shape({
 });
 
 function AddNewCourse() {
-  const navigate = useNavigate();
-
   const [semesterList, setSemesterList] = React.useState([]);
   const [selectedSemester, setSelectedSemester] = React.useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchSemesters() {
       try {
@@ -73,7 +71,7 @@ function AddNewCourse() {
         values.semester_id = "";
         values.forWho = "";
         values.images = "";
-
+        navigate("/staffmanage");
         setSelectedSemester(null);
         navigate("/staffmanage");
       } else {
