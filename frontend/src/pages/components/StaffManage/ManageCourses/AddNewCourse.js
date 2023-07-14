@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Container, TextField, Button, Autocomplete } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../Header/Header";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
 function AddNewCourse() {
   const [semesterList, setSemesterList] = React.useState([]);
   const [selectedSemester, setSelectedSemester] = React.useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchSemesters() {
       try {
@@ -71,8 +71,9 @@ function AddNewCourse() {
         values.semester_id = "";
         values.forWho = "";
         values.images = "";
-
+        navigate("/staffmanage");
         setSelectedSemester(null);
+        navigate("/staffmanage");
       } else {
         toast.error("Failed to add new class");
       }

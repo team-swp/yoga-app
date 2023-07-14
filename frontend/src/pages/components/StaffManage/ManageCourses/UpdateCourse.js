@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Container,
-  TextField,
-  Button,
-  Autocomplete,
-} from "@mui/material";
+import { Container, TextField, Button, Autocomplete } from "@mui/material";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Header from "../../Header/Header";
@@ -14,15 +9,14 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { updateCourse } from "../../../../helper/courseAPI";
 function UpdateCourse() {
+  const navigate = useNavigate();
+
   const [course, setCourse] = useState({});
   const courseId = useParams();
   const [coursename, setCoursename] = useState("");
   const [price, setPrice] = useState(0);
   const [semesterList, setSemesterList] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState(null);
-
-  console.log(selectedSemester);
-
 
   const formik = useFormik({
     initialValues: {
@@ -33,7 +27,6 @@ function UpdateCourse() {
       requirement: "",
       forWho: "",
       images: "",
-
     },
     validationSchema: Yup.object({
       coursename: Yup.string().required("Course Name is required"),
@@ -43,7 +36,6 @@ function UpdateCourse() {
       requirement: Yup.string().required("Requirements are required"),
       forWho: Yup.string().required("Target audience is required"),
       images: Yup.mixed().required("Images are required"),
-
     }),
     onSubmit: async (values) => {
       try {
@@ -54,12 +46,11 @@ function UpdateCourse() {
           _id: courseId.id,
           ...values,
           semester_id: semesterId, // Sử dụng id học kỳ
-      
-        })
-        console.log(semesterId);;
+        });
 
         if (response) {
           toast.success("Updated course success");
+          navigate("/staffmanage");
         } else {
           toast.error("Failed to update");
         }
@@ -103,7 +94,6 @@ function UpdateCourse() {
           requirement: course.requirement,
           forWho: course.forWho,
           images: course.images,
-          
         });
         setSelectedSemester(course.semestername);
         console.log(combinedData.course.semestername);
@@ -202,9 +192,7 @@ function UpdateCourse() {
             onChange={(event) => setPrice(event.target.value)}
             required
             sx={styles.textField}
-            error={
-              formik.touched.price && formik.errors.price ? true : false
-            }
+            error={formik.touched.price && formik.errors.price ? true : false}
             helperText={
               formik.touched.price && formik.errors.price
                 ? formik.errors.price
@@ -223,9 +211,7 @@ function UpdateCourse() {
             rows={4}
             sx={styles.textField}
             error={
-              formik.touched.willLearn && formik.errors.willLearn
-                ? true
-                : false
+              formik.touched.willLearn && formik.errors.willLearn ? true : false
             }
             helperText={
               formik.touched.willLearn && formik.errors.willLearn
@@ -278,7 +264,6 @@ function UpdateCourse() {
             onChange={(event, newValue) => setSelectedSemester(newValue)}
             options={semesterList}
             getOptionLabel={(option) => option.semestername || selectedSemester}
-
             renderInput={(params) => (
               <TextField
                 {...params}

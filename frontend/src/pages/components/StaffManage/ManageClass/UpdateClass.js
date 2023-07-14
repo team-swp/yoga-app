@@ -19,7 +19,7 @@ import Footer from "../../Footer/Footer";
 import axios from "axios";
 import { getSchedule } from "../../../../helper/scheduleAPI";
 import { getCourse } from "../../../../helper/courseAPI";
-import { getUser } from "../../../../helper/loginAPI";
+import { getMember, getUser } from "../../../../helper/loginAPI";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -166,8 +166,6 @@ function UpdateClass() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const temp = [days];
-      console.log(temp);
       const scheduleId = selectedSchedule ? selectedSchedule._id : null;
       const courseId = selectedCourse ? selectedCourse._id : null;
       const instructorId = selectedInstructor ? selectedInstructor._id : null;
@@ -276,7 +274,7 @@ function UpdateClass() {
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Schedule"
+                label="Slot"
                 type="text"
                 name="schedule_id"
                 required

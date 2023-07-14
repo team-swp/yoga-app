@@ -31,15 +31,15 @@ const MenuDay = {
 };
 
 const daysOfWeek = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday'
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
 ];
 
 function AddNewClass() {
@@ -53,18 +53,18 @@ function AddNewClass() {
     const [selectedInstructor, setSelectedInstructor] = useState(null);
     const [days, setDays] = useState([]);
     const [filteredInstructorList, setFilteredInstructorList] = useState([]);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate("/staffmanage")
-    }
+        navigate("/staffmanage");
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         // Gửi yêu cầu POST để thêm lớp học mới
         try {
-            const temp = [days]
+            const temp = [days];
             console.log(temp);
             const scheduleId = selectedSchedule ? selectedSchedule._id : null;
             const courseId = selectedCourse ? selectedCourse._id : null;
@@ -74,20 +74,20 @@ function AddNewClass() {
                 schedule_id: scheduleId,
                 course_id: courseId,
                 days: days,
-                instructor_id: instructorId
-            })
+                instructor_id: instructorId,
+            });
             if (response) {
                 // Lớp học được thêm thành công
                 // Chuyển hướng người dùng đến trang quản lý lớp học
-                toast.success("Add New Class Succesfully!")
+                toast.success("Add New Class Succesfully!");
                 navigate("/staffmanage");
             } else {
                 // Xử lý lỗi khi không thêm được lớp học
-                toast.error("Fail to add new Class...")
+                toast.error("Fail to add new Class...");
             }
         } catch (error) {
             console.log(error);
-            toast.error("Fail to add new Class...")
+            toast.error("Fail to add new Class...");
         }
     };
 
@@ -132,13 +132,13 @@ function AddNewClass() {
 
         async function fetchInstructor() {
             try {
-                const response = await axios.get(
-                    "http://localhost:3001/api/accounts"
-                );
+                const response = await axios.get("http://localhost:3001/api/accounts");
                 const allInstructors = response.data.filter(
                     (ins) => ins.role === "instructor"
                 );
-                setInstructorList(response.data.filter((ins) => ins.role === "instructor"));
+                setInstructorList(
+                    response.data.filter((ins) => ins.role === "instructor")
+                );
                 setFilteredInstructorList(response.data);
             } catch (error) {
                 console.error(error);
@@ -151,10 +151,22 @@ function AddNewClass() {
         const {
             target: { value },
         } = event;
-        setDays(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
+        const selectedDays = typeof value === "string" ? value.split(",") : value;
+
+        const sortedDays = selectedDays.sort((a, b) => {
+            const daysOfWeekOrder = {
+                Monday: 1,
+                Tuesday: 2,
+                Wednesday: 3,
+                Thursday: 4,
+                Friday: 5,
+                Saturday: 6,
+                Sunday: 7,
+            };
+            return daysOfWeekOrder[a] - daysOfWeekOrder[b];
+        });
+
+        setDays(sortedDays);
     };
 
     useEffect(() => {
@@ -162,14 +174,17 @@ function AddNewClass() {
             const filteredInstructors = instructorList.filter((instructor) => {
                 // Tìm tất cả các lịch trình và ngày trùng nhau
                 const conflictingSchedules = classList.filter((classItem) => {
-                    const hasScheduleConflict = classItem.schedule_id === selectedSchedule._id;
-                    const hasDaysConflict = classItem.days.some((day) => days.includes(day));
+                    const hasScheduleConflict =
+                        classItem.schedule_id === selectedSchedule._id;
+                    const hasDaysConflict = classItem.days.some((day) =>
+                        days.includes(day)
+                    );
                     return hasScheduleConflict && hasDaysConflict;
                 });
 
                 // Lọc ra các instructor không nằm trong danh sách lịch trình và ngày trùng nhau
-                const isConflictingInstructor = conflictingSchedules.some((classItem) =>
-                    classItem.instructor_id === instructor._id
+                const isConflictingInstructor = conflictingSchedules.some(
+                    (classItem) => classItem.instructor_id === instructor._id
                 );
 
                 return !isConflictingInstructor;
@@ -189,8 +204,18 @@ function AddNewClass() {
             <Header />
             <Container>
                 <Toaster position="top-center"></Toaster>
-                <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                    <h1 style={{ textAlign: 'center', color: '#333', fontSize: '24px', marginBottom: '20px', marginTop: '20px' }}>Add New Class</h1>
+                <div style={{ maxWidth: "400px", margin: "0 auto" }}>
+                    <h1
+                        style={{
+                            textAlign: "center",
+                            color: "#333",
+                            fontSize: "24px",
+                            marginBottom: "20px",
+                            marginTop: "20px",
+                        }}
+                    >
+                        Add New Class
+                    </h1>
                     <form onSubmit={handleSubmit}>
                         <TextField
                             label="Class Name"
@@ -209,7 +234,7 @@ function AddNewClass() {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Schedule"
+                                    label="Slot"
                                     type="text"
                                     name="schedule_id"
                                     required
@@ -234,7 +259,7 @@ function AddNewClass() {
                             )}
                         />
                         <FormControl sx={{ width: 400 }}>
-                            <InputLabel id="demo-multiple-checkbox-label">Day</InputLabel>
+                            <InputLabel id="demo-multiple-checkbox-label">Days</InputLabel>
                             <Select
                                 labelId="demo-multiple-checkbox-label"
                                 id="demo-multiple-checkbox"
@@ -242,12 +267,12 @@ function AddNewClass() {
                                 value={days}
                                 onChange={handleChange}
                                 input={<OutlinedInput label="Tag" />}
-                                renderValue={(selected) => selected.join(', ')}
+                                renderValue={(selected) => selected.join(", ")}
                                 MenuProps={MenuDay}
                             >
                                 {daysOfWeek.map((name) => (
                                     <MenuItem key={name} value={name}>
-                                        <Checkbox checked={days.indexOf(daysOfWeek) > -1} />
+                                        <Checkbox checked={days.indexOf(name) > -1} />
                                         <ListItemText primary={name} />
                                     </MenuItem>
                                 ))}
@@ -269,7 +294,20 @@ function AddNewClass() {
                                 />
                             )}
                         />
-                        <button type="submit" style={{ backgroundColor: '#007bff', color: '#fff', border: 'none', padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer', marginTop: '1em' }}>Add Class</button>
+                        <button
+                            type="submit"
+                            style={{
+                                backgroundColor: "#007bff",
+                                color: "#fff",
+                                border: "none",
+                                padding: "10px 20px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                marginTop: "1em",
+                            }}
+                        >
+                            Add Class
+                        </button>
                         <Button
                             onClick={handleBack}
                             style={{
@@ -294,7 +332,6 @@ function AddNewClass() {
 
             <Footer />
         </div>
-
     );
 }
 
@@ -312,7 +349,7 @@ const styles = {
     textField: {
         marginBottom: "1rem",
         width: "100%",
-        marginTop: "1em"
+        marginTop: "1em",
     },
     button: {
         marginTop: "1rem",

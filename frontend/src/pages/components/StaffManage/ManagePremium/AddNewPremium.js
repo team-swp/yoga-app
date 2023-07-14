@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Container, TextField, Button, FormControl } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../Header/Header";
 
 import { addPremium } from "../../../../helper/premiumAPI";
@@ -11,12 +11,12 @@ import { Toaster, toast } from "react-hot-toast";
 const validationSchema = Yup.object().shape({
   premiumName: Yup.string().required("Premium Name is required"),
   priceOriginal: Yup.number()
-  .min(-1,"Price Origin must be euqal or better than 0")
+    .min(-1, "Price Origin must be euqal or better than 0")
     .typeError("Price Origin must be a number")
     .required("Price Origin is required"),
   priceDiscount: Yup.number()
-  .min(-1,"Must be equal 0 or better than 0")
-  .min(-1,"Price Origin must be euqal or better than 0")
+    .min(-1, "Must be equal 0 or better than 0")
+    .min(-1, "Price Origin must be euqal or better than 0")
     .typeError("Price Discount must be a number")
     .required("Price Discount is required"),
   benefit: Yup.string().required("Benefit is required"),
@@ -28,6 +28,8 @@ const validationSchema = Yup.object().shape({
 });
 
 function AddNewPremium() {
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       premiumName: "",
@@ -53,6 +55,7 @@ function AddNewPremium() {
         });
 
         if (response) {
+          navigate("/staffmanage");
           toast.success("Premium package added successfully");
           formik.resetForm();
         } else {
