@@ -256,12 +256,16 @@ function ManageMember() {
         <Toaster position="top-center" reverseOrder={false} />
         <TableContainer component={Paper} sx={{ my: 2 }}>
           <div className="flex justify-between mx-5">
-            <div className="py-4">
+            <div className="flex justify-between py-4">
               <input
+                id="searchInput"
                 placeholder="Search by username"
                 className="border-solid border-2 border-black p-2"
                 onChange={(event) => handleSearch(event)}
               />
+              <IconButton onClick={handleResetSearch} sx={{ ml: -5 }}>
+                <RestartAltOutlinedIcon />
+              </IconButton>
             </div>
             <Box sx={{ mt: 1 }}>
               <InputLabel htmlFor="status-filter">Filter status:</InputLabel>

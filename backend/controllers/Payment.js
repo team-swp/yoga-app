@@ -943,7 +943,6 @@ module.exports.getPaymentByIdUser = async (req, res) => {
   try {
     const arrTemp = [];
     const account = req.account; //chuyển qa cho thg tiếp theo
-    console.log(account, "vvvvvvvvvvvvvvvvvvvvvv");
     const getBookingByUserID = await Booking.find({
       member_id: account.userId,
     });

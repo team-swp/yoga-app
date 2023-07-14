@@ -104,7 +104,7 @@ function convertTo24Hour(hour, period) {
 function convertToDateTime(timeString) {
   const [time, period] = timeString.split(' ');
   const [hours, minutes] = time.split(':');
-  
+
   let hoursValue = parseInt(hours);
   if (period === 'PM' && hoursValue !== 12) {
     hoursValue += 12;
@@ -129,15 +129,15 @@ scheduleSchema.pre("save", async function (next) {
     const newScheduleStartTime = convertToDateTime(newSchedule.startTime)
     const newScheduleEndTime = convertToDateTime(newSchedule.endTime)
 
-    const existingSchedules = await this.constructor.find()
+    const existingSchedules = await this.constructor.find({ _id: { $ne: this._id } })
 
-    existingSchedules.forEach(schedule=>{
+    existingSchedules.forEach(schedule => {
       const startTime = convertToDateTime(schedule.startTime)
       const endTime = convertToDateTime(schedule.endTime)
-      if(newScheduleStartTime>=startTime&&newScheduleStartTime<=endTime||newScheduleEndTime>=startTime&&newScheduleEndTime<=endTime){
+      if (newScheduleStartTime >= startTime && newScheduleStartTime <= endTime || newScheduleEndTime >= startTime && newScheduleEndTime <= endTime) {
         arrCheck.push(schedule.schedulename)
       }
-      if(startTime>=newScheduleStartTime&&startTime<=newScheduleEndTime||endTime>=newScheduleStartTime&&endTime<=newScheduleEndTime){
+      if (startTime >= newScheduleStartTime && startTime <= newScheduleEndTime || endTime >= newScheduleStartTime && endTime <= newScheduleEndTime) {
         arrCheck.push(schedule.schedulename)
 
       }

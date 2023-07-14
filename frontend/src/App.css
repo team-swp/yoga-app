@@ -10,6 +10,17 @@ body {
   font-family: "SangBleu Sunrise";
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Works for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 main {
   position: relative;
   z-index: 1;

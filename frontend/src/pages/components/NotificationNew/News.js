@@ -46,7 +46,7 @@ const NewsPage = () => {
     }
     fetchNews();
   }, []);
-  console.log(listNews);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -196,15 +196,16 @@ const NewsPage = () => {
               <Button
                 onClick={handleModalOpen}
                 style={{
-                  border: "1px solid black",
-                  outline: "none",
-                  cursor: "pointer",
-                  marginRight: "60px",
+                  display: "flex",
+                  borderBottom: "1px solid black",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                see more
-              </Button>
-            </ListItem>
+                
+                  see more
+                </Button>
+              </ListItem>
             ))}
         </List>
       </Paper>

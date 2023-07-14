@@ -64,7 +64,6 @@ module.exports.getAccountById = async (req, res, next) => {
 module.exports.verifyUser = async function (req, res, next) {
   try {
     const { email } = req.method == "GET" ? req.query : req.body;
-    console.log(email);
 
     // check the user existance
     let exist = await Account.findOne({ email });
@@ -197,6 +196,7 @@ module.exports.updatePassword = async (req, res) => {
 module.exports.register = async (req, res) => {
   try {
     const { username, email, password, phone, avatar, meta_data } = req.body;
+    
     if (password) {
       bcrypt.hash(password, 10).then((hashedPassword) => {
         const account = new Account({

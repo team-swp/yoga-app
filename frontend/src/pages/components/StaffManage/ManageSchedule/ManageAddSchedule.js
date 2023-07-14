@@ -33,7 +33,6 @@ function ManageAddSchedule() {
         event.preventDefault();
         // Gửi yêu cầu POST để thêm lớp học mới
         try {
-            console.log(startTime);
             const response = await addSchedule({ schedulename, startTime, endTime })
             if (response) {
                 // Lớp học được thêm thành công
