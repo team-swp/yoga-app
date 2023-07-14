@@ -136,15 +136,11 @@ export default function useSchedule() {
   }, [courseList]);
 
   useEffect(() => {
-    const sortedSchedule = totalSchedule.sort(
-      (a, b) => b.days.length - a.days.length
-    );
-
     const checkedSchedule = [];
-    sortedSchedule.forEach((schedule, index) => {
+    totalSchedule.forEach((schedule, index) => {
       let foundDuplicate = false;
       for (let i = 0; i < index; i++) {
-        const item = sortedSchedule[i];
+        const item = totalSchedule[i];
         if (
           item.scheduleName === schedule.scheduleName &&
           arraysMatch(item.days, schedule.days)

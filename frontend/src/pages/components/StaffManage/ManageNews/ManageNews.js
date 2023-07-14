@@ -1,5 +1,18 @@
 import { useState, useEffect } from "react";
-import { Button, Container, Fade, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import {
+  Button,
+  Container,
+  Fade,
+  Paper,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import { Modal, Box, Typography } from "@mui/material";
 import { Formik, Form, Field } from "formik";
@@ -15,8 +28,12 @@ import StatusButton from "./Statusbutton2";
 
 function BasicExample() {
   const validationSchema = Yup.object().shape({
-    subject: Yup.string().required("Title of the news is required").min(6, "Must be at least 6 characters"),
-    content: Yup.string().required("Content of the news is required").min(6, "Must be at least 6 characters")
+    subject: Yup.string()
+      .required("Title of the news is required")
+      .min(6, "Must be at least 6 characters"),
+    content: Yup.string()
+      .required("Content of the news is required")
+      .min(6, "Must be at least 6 characters"),
   });
 
   const [listNews, setListNews] = useState([]);
@@ -29,10 +46,11 @@ function BasicExample() {
     async function fetchUsers() {
       try {
         const response = await getMember();
-       const user = response.data
-       const staff = user.filter((listOfStaff) =>listOfStaff.status=== true && listOfStaff.role ==='staff' )
-
-
+        const user = response.data;
+        const staff = user.filter(
+          (listOfStaff) =>
+            listOfStaff.status === true && listOfStaff.role === "staff"
+        );
 
         setListOfStaff(staff);
       } catch {
@@ -44,15 +62,14 @@ function BasicExample() {
   }, []);
 
   useEffect(() => {
-
-    function compare (a,b){
-      if(a.createdAt>b.createdAt){
-        return -1
+    function compare(a, b) {
+      if (a.createdAt > b.createdAt) {
+        return -1;
       }
-      if(a.createdAt<b.createdAt){
-        return 1
+      if (a.createdAt < b.createdAt) {
+        return 1;
       }
-      return 0
+      return 0;
     }
     async function fetchNews() {
       try {
@@ -81,28 +98,31 @@ function BasicExample() {
       setCurrentPage(currentPage + 1);
     }
   };
-//----------------------- search----------------------//
+  //----------------------- search----------------------//
   const handleSearch = _.debounce((event) => {
     let term = event.target.value.toLowerCase();
     if (term) {
-      let filteredNews = listNews.filter((item) => item.subject.toLowerCase().includes(term));
+      let filteredNews = listNews.filter((item) =>
+        item.subject.toLowerCase().includes(term)
+      );
       setCurrentPage(1);
       setListNews(filteredNews);
     } else {
-      function compare (a,b){
-        if(a.createdAt>b.createdAt){
-          return -1
+      function compare(a, b) {
+        if (a.createdAt > b.createdAt) {
+          return -1;
         }
-        if(a.createdAt<b.createdAt){
-          return 1
+        if (a.createdAt < b.createdAt) {
+          return 1;
         }
-        return 0
+        return 0;
       }
       async function fetchNews() {
         try {
-          const response = await axios.get("http://localhost:3001/api/news/get");
+          const response = await axios.get(
+            "http://localhost:3001/api/news/get"
+          );
           setListNews(response.data.sort(compare));
-        
         } catch (error) {
           console.log("Failed to fetch news");
         }
@@ -114,7 +134,7 @@ function BasicExample() {
   const totalPages = Math.ceil(listNews.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-//---------------------------- form -----------------------------//
+  //---------------------------- form -----------------------------//
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
   const handleOpenModal = () => {
@@ -123,14 +143,14 @@ function BasicExample() {
   const handleCloseModal = () => {
     setIsOpen(false);
   };
-//---------------------------- form ------------------------- //
+  //---------------------------- form ------------------------- //
   const handleAddNews = async (values) => {
     try {
       const staffID = selectedStaff ? selectedStaff._id : null;
       const response = await addNews({
         subject: values.subject,
         content: values.content,
-        staff_id: staffID
+        staff_id: staffID,
       });
 
       if (response) {
@@ -139,21 +159,22 @@ function BasicExample() {
         values.content = "";
         values.staff_id = "";
         setSelectedStaff(null);
-        handleCloseModal()
-        function compare (a,b){
-          if(a.createdAt>b.createdAt){
-            return -1
+        handleCloseModal();
+        function compare(a, b) {
+          if (a.createdAt > b.createdAt) {
+            return -1;
           }
-          if(a.createdAt<b.createdAt){
-            return 1
+          if (a.createdAt < b.createdAt) {
+            return 1;
           }
-          return 0
+          return 0;
         }
         async function fetchNews() {
           try {
-            const response = await axios.get("http://localhost:3001/api/news/get");
+            const response = await axios.get(
+              "http://localhost:3001/api/news/get"
+            );
             setListNews(response.data.sort(compare));
-          
           } catch (error) {
             console.log("Failed to fetch news");
           }
@@ -166,41 +187,39 @@ function BasicExample() {
       toast.error("Failed to add new class");
     }
   };
-//-----------------------------toggle---------------------------------------------////
-const handleToggleStatus = (itemId) => {
-  setSelectedItemId(itemId);
-  setShowConfirmModal(true);
-};
-const handleCancel = async () =>{
-  setShowConfirmModal(false)
-}
-
+  //-----------------------------toggle---------------------------------------------////
+  const handleToggleStatus = (itemId) => {
+    setSelectedItemId(itemId);
+    setShowConfirmModal(true);
+  };
+  const handleCancel = async () => {
+    setShowConfirmModal(false);
+  };
 
   const handleStatusToggleConfirm = async () => {
     setShowConfirmModal(false);
-      const updatedList = [...listNews];
-      const selectedItem = updatedList.find((item) => item._id === selectedItemId);
-      console.log(selectedItem);
+    const updatedList = [...listNews];
+    const selectedItem = updatedList.find(
+      (item) => item._id === selectedItemId
+    );
+    console.log(selectedItem);
     selectedItem.status = !selectedItem.status;
 
-      setListNews(updatedList);
-      try {
-        await updateNews({
-          _id: selectedItem._id,
-          status: selectedItem.status
-        });
-        console.log("Status updated successfully.");
-        toast.success(`${selectedItem.subject} status updated successfully`);
-      } catch {
-        console.log("Error");
-      }
-    
+    setListNews(updatedList);
+    try {
+      await updateNews({
+        _id: selectedItem._id,
+        status: selectedItem.status,
+      });
+      toast.success(`${selectedItem.subject} status updated successfully`);
+    } catch {
+      console.log("Error");
+    }
   };
-
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
-//---------------------------------------------------------------------------------------///
+  //---------------------------------------------------------------------------------------///
   return (
     <>
       <Modal open={isOpen} onClose={handleCloseModal}>
@@ -213,7 +232,7 @@ const handleCancel = async () =>{
             width: 400,
             bgcolor: "background.paper",
             boxShadow: 24,
-            p: 4
+            p: 4,
           }}
         >
           <Typography variant="h6" component="h2" mb={2}>
@@ -223,7 +242,7 @@ const handleCancel = async () =>{
           <Formik
             initialValues={{
               subject: "",
-              content: ""
+              content: "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleAddNews}
@@ -243,7 +262,9 @@ const handleCancel = async () =>{
                       required
                       sx={{ marginBottom: "10px" }}
                       error={errors.staff_id && touched.staff_id}
-                      helperText={errors.staff_id && touched.staff_id && errors.staff_id}
+                      helperText={
+                        errors.staff_id && touched.staff_id && errors.staff_id
+                      }
                     />
                   )}
                 />
@@ -257,7 +278,9 @@ const handleCancel = async () =>{
                   rows={4}
                   sx={{ marginBottom: "10px" }}
                   error={errors.subject && touched.subject}
-                  helperText={errors.subject && touched.subject && errors.subject}
+                  helperText={
+                    errors.subject && touched.subject && errors.subject
+                  }
                 />
                 <Field
                   name="content"
@@ -267,12 +290,18 @@ const handleCancel = async () =>{
                   required
                   sx={{ marginBottom: "10px" }}
                   error={errors.content && touched.content}
-                  helperText={errors.content && touched.content && errors.content}
+                  helperText={
+                    errors.content && touched.content && errors.content
+                  }
                 />
-                <Button type="submit" variant="contained" color="primary" >
+                <Button type="submit" variant="contained" color="primary">
                   Add
                 </Button>
-                <Button variant="contained" onClick={handleCloseModal} style={{marginLeft:'10px'}}>
+                <Button
+                  variant="contained"
+                  onClick={handleCloseModal}
+                  style={{ marginLeft: "10px" }}
+                >
                   Cancel
                 </Button>
               </Form>
@@ -281,15 +310,16 @@ const handleCancel = async () =>{
         </Box>
       </Modal>
 
-
-
-
-
       <Container key={endIndex}>
         <Toaster></Toaster>
         <TableContainer component={Paper}>
-        <div
-            style={{ float: "right", marginTop: "15px", marginRight: "10px" ,marginBottom:'10px'}}
+          <div
+            style={{
+              float: "right",
+              marginTop: "15px",
+              marginRight: "10px",
+              marginBottom: "10px",
+            }}
           >
             <Button
               variant="contained"
@@ -306,7 +336,7 @@ const handleCancel = async () =>{
               maxWidth: "800px",
               display: "flex",
               alignItems: "end",
-              justifyContent: "left"
+              justifyContent: "left",
             }}
             onSubmit={handleSearch}
           >
@@ -329,8 +359,7 @@ const handleCancel = async () =>{
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-              listNews.length === 0 ? (
+              {listNews.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={7}
@@ -340,13 +369,13 @@ const handleCancel = async () =>{
                     The result not available !!!
                   </TableCell>
                 </TableRow>
-              ) : 
-              
-              
-              listNews &&
+              ) : (
+                listNews &&
                 listNews.length > 0 &&
                 listNews.slice(startIndex, endIndex).map((item, index) => {
-                  const staff = listOfStaff.find((x) => x._id === item.staff_id);
+                  const staff = listOfStaff.find(
+                    (x) => x._id === item.staff_id
+                  );
                   return (
                     <TableRow key={item._id}>
                       <TableCell>
@@ -378,7 +407,8 @@ const handleCancel = async () =>{
                       </TableCell>
                     </TableRow>
                   );
-                })}
+                })
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -415,25 +445,64 @@ const handleCancel = async () =>{
         </div>
       </Container>
 
-
-
       <Modal
         open={showConfirmModal}
         onClose={handleCancel}
         closeAfterTransition
       >
         <Fade in={showConfirmModal}>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-            <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
-              <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Paper
+              style={{
+                width: "400px",
+                padding: "2em",
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                textAlign: "center",
+              }}
+              elevation={3}
+            >
+              <h3
+                style={{
+                  marginBottom: "1em",
+                  fontSize: "1.5em",
+                  fontWeight: "bold",
+                }}
+              >
                 Confirmation
               </h3>
               <p>Are you sure you want to change the status of this Course?</p>
-              <div style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}>
-                <Button variant="contained" onClick={handleStatusToggleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "2rem",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  onClick={handleStatusToggleConfirm}
+                  style={{ marginRight: "1rem", backgroundColor: "black" }}
+                >
                   Confirm
                 </Button>
-                <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleCancel}
+                  style={{
+                    backgroundColor: "#fff",
+                    color: "#000",
+                    border: "2px solid #000",
+                  }}
+                >
                   Cancel
                 </Button>
               </div>

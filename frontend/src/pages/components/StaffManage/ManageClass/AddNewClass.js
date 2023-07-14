@@ -255,7 +255,7 @@ function AddNewClass() {
               )}
             />
             <FormControl sx={{ width: 400 }}>
-              <InputLabel id="demo-multiple-checkbox-label">Day</InputLabel>
+              <InputLabel id="demo-multiple-checkbox-label">Days</InputLabel>
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"

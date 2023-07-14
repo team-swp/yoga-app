@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Container,
-  TextField,
-  Button,
-  Autocomplete,
-} from "@mui/material";
+import { Container, TextField, Button, Autocomplete } from "@mui/material";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Header from "../../Header/Header";
@@ -16,34 +11,39 @@ import { updateNews } from "../../../../helper/premiumAPI";
 import { getMember } from "../../../../helper/loginAPI";
 
 function UpdateNews() {
+  const navigate = useNavigate();
+
   const [news, setNews] = useState({});
   const newsId = useParams();
   const [staffList, setStaffList] = useState([]);
   const [selectedStaff, setSelectedStaff] = useState(null);
-  
+
   const newsFormik = useFormik({
     initialValues: {
       subject: "",
       content: "",
-      
     },
     validationSchema: Yup.object({
-      subject: Yup.string().required("Title of the news is required").min(6, "Must be at least 6 characters"),
-      content: Yup.string().required("Content of the news is required").min(6, "Must be at least 6 characters"),
-      
+      subject: Yup.string()
+        .required("Title of the news is required")
+        .min(6, "Must be at least 6 characters"),
+      content: Yup.string()
+        .required("Content of the news is required")
+        .min(6, "Must be at least 6 characters"),
     }),
     onSubmit: async (values) => {
-        const staffId = selectedStaff ? selectedStaff._id : null;
+      const staffId = selectedStaff ? selectedStaff._id : null;
 
       try {
         const response = await updateNews({
           _id: newsId.id,
           ...values,
-          staff_id:staffId
+          staff_id: staffId,
         });
 
         if (response) {
           toast.success("Updated news success");
+          navigate("/staffmanage");
         } else {
           toast.error("Failed to update");
         }
@@ -58,16 +58,14 @@ function UpdateNews() {
       try {
         const [newsResponse, userResponse] = await Promise.all([
           axios.get("http://localhost:3001/api/news/get"),
-          getMember()
+          getMember(),
         ]);
 
         const newsData = newsResponse.data;
         const userData = userResponse.data;
 
         const combinedData = newsData.map((news) => {
-          const user = userData.find(
-            (user) => user._id === news.staff_id
-          );
+          const user = userData.find((user) => user._id === news.staff_id);
           const userName = user ? user.username : "";
           return {
             ...news,
@@ -80,10 +78,8 @@ function UpdateNews() {
         newsFormik.setValues({
           subject: news.subject,
           content: news.content,
-        
         });
         setSelectedStaff(news.username);
-      
       } catch (error) {
         console.error(error);
       }
@@ -97,16 +93,14 @@ function UpdateNews() {
       try {
         const response = await getMember();
         const userData = response.data;
-        const filteredStaffs = userData.filter(
-          (user) => user.role === "staff"
-        );
+        const filteredStaffs = userData.filter((user) => user.role === "staff");
         setStaffList(filteredStaffs);
         console.log(filteredStaffs);
       } catch (error) {
         console.error(error);
       }
     }
-  
+
     fetchStaffs();
   }, []);
 
@@ -137,9 +131,7 @@ function UpdateNews() {
             onBlur={newsFormik.handleBlur}
             required
             sx={styles.textField}
-            error={
-              newsFormik.touched.subject && newsFormik.errors.subject
-            }
+            error={newsFormik.touched.subject && newsFormik.errors.subject}
             helperText={
               newsFormik.touched.subject && newsFormik.errors.subject
                 ? newsFormik.errors.subject
@@ -157,30 +149,27 @@ function UpdateNews() {
             multiline
             rows={4}
             sx={styles.textField}
-            error={
-              newsFormik.touched.content && newsFormik.errors.content
-            }
+            error={newsFormik.touched.content && newsFormik.errors.content}
             helperText={
               newsFormik.touched.content && newsFormik.errors.content
                 ? newsFormik.errors.content
                 : ""
             }
           />
-         
+
           <Autocomplete
             value={selectedStaff}
             onChange={(event, newValue) => setSelectedStaff(newValue)}
             options={staffList}
-           key={staffList._id}
+            key={staffList._id}
             getOptionLabel={(option) => option.username || selectedStaff}
             renderInput={(params) => (
-                <TextField
+              <TextField
                 {...params}
                 label="Staff"
                 name="staff_id"
                 required
                 sx={{ marginBottom: "10px" }}
-               
               />
             )}
           />
