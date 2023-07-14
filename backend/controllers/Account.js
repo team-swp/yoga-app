@@ -64,7 +64,6 @@ module.exports.getAccountById = async (req, res, next) => {
 module.exports.verifyUser = async function (req, res, next) {
   try {
     const { email } = req.method == "GET" ? req.query : req.body;
-    console.log(email);
 
     // check the user existance
     let exist = await Account.findOne({ email });

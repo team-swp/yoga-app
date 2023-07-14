@@ -17,7 +17,7 @@ import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
 import Reset from "../Login/Reset";
 import { getPaymentByIDUser } from "../../../helper/paymentAPI";
-import profileDefault from "../../../assets/profile.png";
+import profileDefault from '../../../assets/profile.png'
 import PurchaseHistory from "./PurchaseHistory";
 
 function Profile() {

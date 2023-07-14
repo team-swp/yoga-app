@@ -47,15 +47,19 @@ const db = mongoose.connection;
 db.on("error", (error) => console.error(error.message));
 db.once("open", () => console.log("Connected database successfull..."));
 const router = require("./routes/route");
+const { MailExpire3DaysBefore, MailExpired } = require("./controllers/Mailer");
 //auto function
 cron.schedule(
-  "* * 1 * * *",
-  () => {
+  "* 0 0 * * *",
+  async () => {
     const members = Account.find({
       meta_data: { $regex: `"isMember":true`, $options: "i" },
     })
       .then(async (result) => {
         const date = new Date();
+        const datePrevious3Days = new Date(date)
+        datePrevious3Days.setDate(date.getDate() - 3);
+  
         const length = result.length
         for (let i = 0; i < length; i++) {
           let element = result[i];
@@ -66,12 +70,16 @@ cron.schedule(
           } else {
             memDate.setDate(memDate.getDate() + 7);
           }
-          if (memDate < date) {
+          if (date.getDate()>memDate.getDate() && date.getDate() - memDate.getDate() >=3 ) {//lấy ngày hôm nay trừ đi hạn sử dụng nếu lớn hơn 3 set về người thường
             const expired = `{"isMember":false}`
             await Account.findOneAndUpdate({ _id: element._id }, { meta_data: expired })
+            await MailExpired(element.username,element.email)
+          }
+          if(memDate.getDate()>date.getDate() && memDate.getDate()- date.getDate() <=3 ){//lấy memdate - ngày hôm nay nếu còn hạn nhỏ hơn 3 thì zô  
+            await MailExpire3DaysBefore(element.username,element.email)
           }
         }
-
+  
       })
       .catch((error) => {
         return error;
@@ -82,6 +90,15 @@ cron.schedule(
     timezone: "Asia/Saigon",
   }
 );
+
+
+
+// Helper function to generate email body using MailGenerator library
+const generateEmailBody = (email) => {
+  // Implementation of generating email body using MailGenerator library
+  // Replace this with your actual implementation
+  return "Generated email body";
+};
 
 app.get("/", (req, res) => {
   res.status(201).json("Home GET Request");

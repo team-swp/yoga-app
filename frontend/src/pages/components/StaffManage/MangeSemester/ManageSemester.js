@@ -15,7 +15,7 @@ import {
   Modal,
   Fade,
 } from "@mui/material";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   addSemester,
   getSemester,
@@ -48,6 +48,7 @@ function ManageSemester() {
   const [semesternames, setSemesternames] = useState("");
   const [startDates, setStartDates] = useState("");
   const [endDates, setEndDates] = useState("");
+  const [reset, setReset] = useState({});
   const [openModals, setOpenModals] = useState(false);
 
   //Update Semester
@@ -216,7 +217,6 @@ function ManageSemester() {
   };
 
   const handleSubmits = async (event) => {
-    event.preventDefault();
     try {
       const response = await addSemester({
         semestername: semesternames,
@@ -226,7 +226,7 @@ function ManageSemester() {
 
       if (response) {
         toast.success("Add New Semester Succesfully!");
-        handleResetData();
+        setReset();
       } else {
         toast.error("Fail to add new Semester...");
       }
@@ -241,11 +241,6 @@ function ManageSemester() {
     setOpenModals(false);
   };
 
-  const handleResetData = () => {
-    fetchSemesters();
-    fetchSemester2();
-  };
-
   const handleStartDateChanges = (date) => {
     setStartDates(date.toISOString());
   };
@@ -253,6 +248,10 @@ function ManageSemester() {
   const handleEndtDateChanges = (date) => {
     setEndDates(date.toISOString());
   };
+
+  useEffect(() => {
+    fetchSemesters();
+  }, [reset, page]);
 
   //Update Semester
 
@@ -292,7 +291,6 @@ function ManageSemester() {
         toast.success(
           `${semestersResponse.data.data.semestername} updated successfully`
         );
-        handleResetData();
       } else {
         toast.error("Fail to  update Semester...");
       }
@@ -402,7 +400,7 @@ function ManageSemester() {
                   <TableCell style={{ textAlign: "center" }}>
                     {new Date(semesterItem.endDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>
+                  <TableCell>
                     <Switch
                       checked={semesterItem.status}
                       onChange={(event) => handleToggle(event, semesterItem)}

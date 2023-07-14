@@ -135,9 +135,8 @@ function Sidebar() {
         >
           <img
             src={file || user.avatar || profileDefault}
-            className={` ${
-              checkMember ? styles.profile_img : styles.profile_img_normal
-            } object-cover h-44`}
+            className={` ${checkMember ? styles.profile_img : styles.profile_img_normal
+              } object-cover h-44`}
             alt="avatar"
           />
           {checkMember ? (
@@ -211,11 +210,10 @@ function Sidebar() {
                     >
                       <img
                         src={user.avatar || profileDefault}
-                        className={` ${
-                          checkMember
-                            ? styles.profile_img_details
-                            : styles.profile_img_details_normal
-                        } object-cover h-44`}
+                        className={` ${checkMember
+                          ? styles.profile_img_details
+                          : styles.profile_img_details_normal
+                          } object-cover h-44`}
                         alt="avatar"
                       />
                       {checkMember ? (

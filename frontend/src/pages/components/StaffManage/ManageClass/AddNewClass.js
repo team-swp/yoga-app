@@ -14,12 +14,10 @@ import {
 } from "@mui/material";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
-import { addClass, getClass } from "../../../../helper/classAPI";
+import axios from "axios";
+import { addClass } from "../../../../helper/classAPI";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { getMember } from "../../../../helper/loginAPI";
-import { getCourse } from "../../../../helper/courseAPI";
-import { getSchedule } from "../../../../helper/scheduleAPI";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -45,68 +43,109 @@ const daysOfWeek = [
 ];
 
 function AddNewClass() {
-  const navigate = useNavigate();
-
+  const [classList, setClassList] = useState("");
   const [classname, setClassname] = useState("");
   const [scheduleList, setScheduleList] = useState("");
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [courseList, setCourseList] = useState("");
-  const [classList, setClassList] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [instructorList, setInstructorList] = useState("");
-  const [filteredInstructor, setFilteredInstructor] = useState([]);
-
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [days, setDays] = useState([]);
+  const [filteredInstructorList, setFilteredInstructorList] = useState([]);
+  const navigate = useNavigate();
 
-  async function fetchData() {
+  const handleBack = () => {
+    navigate("/staffmanage");
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Gửi yêu cầu POST để thêm lớp học mới
     try {
-      const [
-        scheduleResponse,
-        courseResponse,
-        instructorResponse,
-        classResponse,
-      ] = await Promise.all([
-        getSchedule(),
-        getCourse(),
-        getMember(),
-        getClass(),
-      ]);
-
-      const instructorList = instructorResponse.data.filter(
-        (ins) => ins.role === "instructor"
-      );
-
-      setInstructorList(instructorList);
-
-      setScheduleList(scheduleResponse.data);
-      setCourseList(courseResponse.data);
-      setClassList(classResponse.data);
+      const temp = [days];
+      console.log(temp);
+      const scheduleId = selectedSchedule ? selectedSchedule._id : null;
+      const courseId = selectedCourse ? selectedCourse._id : null;
+      const instructorId = selectedInstructor ? selectedInstructor._id : null;
+      const response = await addClass({
+        classname,
+        schedule_id: scheduleId,
+        course_id: courseId,
+        days: days,
+        instructor_id: instructorId,
+      });
+      if (response) {
+        // Lớp học được thêm thành công
+        // Chuyển hướng người dùng đến trang quản lý lớp học
+        toast.success("Add New Class Succesfully!");
+        navigate("/staffmanage");
+      } else {
+        // Xử lý lỗi khi không thêm được lớp học
+        toast.error("Fail to add new Class...");
+      }
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      toast.error("Fail to add new Class...");
     }
-  }
+  };
 
   useEffect(() => {
-    fetchData();
+    async function fecthClassList() {
+      try {
+        const requestUrl = "http://localhost:3001/api/class/get";
+        const response = await fetch(requestUrl);
+        const responseJSON = await response.json();
+        setClassList(responseJSON);
+      } catch (error) {
+        console.log("Failed");
+      }
+    }
+    fecthClassList();
+
+    async function fetchSchedule() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/api/schedule/get"
+        );
+        const scheduleData = response.data;
+        setScheduleList(scheduleData);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchSchedule();
+
+    async function fetchCourse() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/api/course/get"
+        );
+        const courseData = response.data;
+        setCourseList(courseData);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchCourse();
+
+    async function fetchInstructor() {
+      try {
+        const response = await axios.get("http://localhost:3001/api/accounts");
+        const allInstructors = response.data.filter(
+          (ins) => ins.role === "instructor"
+        );
+        setInstructorList(
+          response.data.filter((ins) => ins.role === "instructor")
+        );
+        setFilteredInstructorList(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchInstructor();
   }, []);
-
-  useEffect(() => {
-    if (classList && selectedSchedule) {
-      const filteredClassResponse = classList.filter(
-        (obj) => obj.schedule_id === selectedSchedule._id
-      );
-
-      const filteredInstructorList = instructorList.filter(
-        (ins) =>
-          !filteredClassResponse.some((obj) => obj.instructor_id === ins._id)
-      );
-
-      setFilteredInstructor(filteredInstructorList);
-    }
-  }, [classList, selectedSchedule, instructorList]);
-
-  console.log(filteredInstructor);
 
   const handleChange = (event) => {
     const {
@@ -130,39 +169,32 @@ function AddNewClass() {
     setDays(sortedDays);
   };
 
-  const handleBack = () => {
-    navigate("/staffmanage");
-  };
-  // Thêm các trạng thái khác nếu cần thiết
+  useEffect(() => {
+    if (selectedSchedule && days.length > 0) {
+      const filteredInstructors = instructorList.filter((instructor) => {
+        // Tìm tất cả các lịch trình và ngày trùng nhau
+        const conflictingSchedules = classList.filter((classItem) => {
+          const hasScheduleConflict =
+            classItem.schedule_id === selectedSchedule._id;
+          const hasDaysConflict = classItem.days.some((day) =>
+            days.includes(day)
+          );
+          return hasScheduleConflict && hasDaysConflict;
+        });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // Gửi yêu cầu POST để thêm lớp học mới
-    try {
-      const temp = [days];
-      console.log(temp);
-      const scheduleId = selectedSchedule ? selectedSchedule._id : null;
-      const courseId = selectedCourse ? selectedCourse._id : null;
-      const instructorId = selectedInstructor ? selectedInstructor._id : null;
-      const response = await addClass({
-        classname,
-        schedule_id: scheduleId,
-        course_id: courseId,
-        instructor_id: instructorId,
-        days: days,
+        // Lọc ra các instructor không nằm trong danh sách lịch trình và ngày trùng nhau
+        const isConflictingInstructor = conflictingSchedules.some(
+          (classItem) => classItem.instructor_id === instructor._id
+        );
+
+        return !isConflictingInstructor;
       });
-      if (response) {
-        toast.success("Add New Class Succesfully!");
-        navigate("/staffmanage");
-      } else {
-        toast.error("Fail to add new Class...");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Fail to add new Class...");
-    }
-  };
 
+      setFilteredInstructorList(filteredInstructors);
+    } else {
+      setFilteredInstructorList(instructorList);
+    }
+  }, [selectedSchedule, days, instructorList, classList]);
   return (
     <div>
       <Header />
@@ -222,24 +254,8 @@ function AddNewClass() {
                 />
               )}
             />
-            <Autocomplete
-              value={selectedInstructor}
-              onChange={(event, newValue) => setSelectedInstructor(newValue)}
-              options={filteredInstructor}
-              getOptionLabel={(option) => option.username}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Instructor"
-                  type="text"
-                  name="instructor_id"
-                  required
-                  sx={styles.textField}
-                />
-              )}
-            />
             <FormControl sx={{ width: 400 }}>
-              <InputLabel id="demo-multiple-checkbox-label">Days</InputLabel>
+              <InputLabel id="demo-multiple-checkbox-label">Day</InputLabel>
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
@@ -258,6 +274,22 @@ function AddNewClass() {
                 ))}
               </Select>
             </FormControl>
+            <Autocomplete
+              value={selectedInstructor}
+              onChange={(event, newValue) => setSelectedInstructor(newValue)}
+              options={filteredInstructorList}
+              getOptionLabel={(option) => option.username}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Instructor"
+                  type="text"
+                  name="instructor_id"
+                  required
+                  sx={styles.textField}
+                />
+              )}
+            />
             <button
               type="submit"
               style={{
@@ -313,6 +345,7 @@ const styles = {
   textField: {
     marginBottom: "1rem",
     width: "100%",
+    marginTop: "1em",
   },
   button: {
     marginTop: "1rem",
