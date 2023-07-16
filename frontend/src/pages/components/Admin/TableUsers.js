@@ -1,22 +1,23 @@
 import Table from "react-bootstrap/Table";
 import { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
-import { getMember } from "../../../helper/loginAPI";
+import { getMember, getRoles } from "../../../helper/loginAPI";
 import { updateUserForAdmin } from "../../../helper/adminAPI";
-
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import _, { debounce } from "lodash";
 import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
 import { getAvatarToAWS } from "../../../helper/loginAPI";
-
 import styles from "../../../styles/Username.module.css";
 import classNames from "classnames/bind";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
 function BasicExample() {
   const moment = require("moment");
-
+  const [roles, setRoles] = useState([]);
   const [listUser, setListUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -24,8 +25,21 @@ function BasicExample() {
   const [sortField, setSortField] = useState("id");
   const [originalListUsers, setOriginalListUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [number, setNumber] = useState(0);
+  const [idActive, setIdActive] = useState("");
 
   const [avatarURLs, setAvatarURLs] = useState([]);
+  const [selectedRole, setSelectedRole] = useState("");
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [userIdToUpdate, setUserIdToUpdate] = useState("");
+
+  const handleRoleChange = (event, item) => {
+    setSelectedRole(event.target.value);
+    Object.assign(item, { role: event.target.value });
+    setIdActive(item._id);
+  };
+
   const defaultAvatarURL =
     "https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-1.jpg";
 
@@ -33,8 +47,6 @@ function BasicExample() {
     async function fetchUsers() {
       try {
         const response = await getMember();
-        // const response = await getMember();
-        // const response = await fetch("https://api.example.com/users");
         setListUsers(response.data);
         setOriginalListUsers(response.data);
         const avatarURLList = await Promise.all(
@@ -45,10 +57,21 @@ function BasicExample() {
         );
         setAvatarURLs(avatarURLList);
       } catch {
-        console.log("fail");
+        console.log("Failed to fetch users");
       }
     }
 
+    async function fetchRoles() {
+      try {
+        const response = await getRoles();
+        const data = response.data.filter((obj) => obj.rolename !== "admin");
+        setRoles(data);
+      } catch {
+        console.log("Failed to fetch roles");
+      }
+    }
+
+    fetchRoles();
     fetchUsers();
   }, []);
 
@@ -99,7 +122,6 @@ function BasicExample() {
       [sortBy]
     );
     setListUsers(cloneListUsers);
-    console.log(cloneListUsers);
   };
 
   const loadImageAgain = async (e, avatar) => {
@@ -116,17 +138,50 @@ function BasicExample() {
     }
   };
 
-  const imgStyle = `${styles.profile_img} object-cover h-12 w-12 rounded-full`; // Thêm lớp CSS "rounded-full" để tạo hình tròn
+  const handleUpdateRole = (userId) => {
+    setUserIdToUpdate(userId);
+    setShowConfirmModal(true);
+  };
+
+  const confirmUpdateRole = async () => {
+    try {
+      await updateUserForAdmin({
+        _id: userIdToUpdate,
+        role: selectedRole,
+      });
+      setNumber((preNum) => preNum + 1);
+      const updatedUsers = listUser.map((user) => {
+        if (user._id === userIdToUpdate) {
+          return { ...user, role: selectedRole };
+        }
+        return user;
+      });
+      setListUsers(updatedUsers);
+      setIdActive("");
+      setSelectedRole("");
+      setShowConfirmModal(false);
+
+      toast.success("Role updated successfully!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {}, [number]);
+
+  const imgStyle = `${styles.profile_img} object-cover h-12 w-12 rounded-full`;
   const imageContainerStyle = "flex items-center justify-center h-12 w-12";
   const idColumnStyle = { width: "50px" };
   const emailColumnStyle = { width: "300px" };
-  const avatarColumnStyle = { width: "80px" }; // Dùng để căn giữa nội dung trong hình tròn
+  const avatarColumnStyle = { width: "80px" };
 
   return (
     <div className={cx("table-container")}>
+      <ToastContainer />
       <div className="table-responsive ">
-        {" "}
-        <div className=" py-7 col w">
+        <div className="py-7 col w">
           <input
             placeholder="Search by email"
             className="border-solid border-2 border-black p-2"
@@ -162,6 +217,7 @@ function BasicExample() {
               <th className="text-left">Role</th>
               <th className="text-left">Status</th>
               <th className="text-left">Create At</th>
+              <th className="text-left">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -179,9 +235,8 @@ function BasicExample() {
                       status: updatedList[startIndex + index].status,
                     });
                     console.log("Status updated successfully.");
-                    console.log(updatedList);
                   } catch {
-                    console.log("error");
+                    console.log("Failed to update status.");
                   }
                 };
                 const avatarURL = item.avatar || defaultAvatarURL;
@@ -197,7 +252,7 @@ function BasicExample() {
                             src={avatarURL}
                             className={imgStyle}
                             alt="avatar"
-                            onError={loadImageAgain}
+                            onError={(e) => loadImageAgain(e, item.avatar)}
                           />
                         </div>
                       ) : (
@@ -213,7 +268,19 @@ function BasicExample() {
                     <td className="text-left fixed-column">{item.email}</td>
                     <td className="text-left ">{item.username}</td>
                     <td className="text-left">{item.phone}</td>
-                    <td className="text-left">{item.role}</td>
+                    <td className="text-left">
+                      <select
+                        value={item.role}
+                        onChange={(event) => handleRoleChange(event, item)}
+                      >
+                        {roles.length > 0 &&
+                          roles.map((role) => (
+                            <option key={role} value={role.rolename}>
+                              {role.rolename}
+                            </option>
+                          ))}
+                      </select>
+                    </td>
                     <td className="text-left">
                       <Switch
                         checked={item.status}
@@ -223,6 +290,15 @@ function BasicExample() {
                     </td>
                     <td className="text-left">
                       {moment(item.createdAt).format("DD/MM/YY")}
+                    </td>
+                    <td className="text-left">
+                      <Button
+                        disabled={idActive === item._id ? false : true}
+                        onClick={() => handleUpdateRole(item._id)}
+                        variant="warning"
+                      >
+                        Update
+                      </Button>
                     </td>
                   </tr>
                 );
@@ -262,6 +338,24 @@ function BasicExample() {
           </Button>
         </div>
       </div>
+
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Update</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to update the role?</Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={confirmUpdateRole}>
+            Update
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

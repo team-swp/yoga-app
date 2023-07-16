@@ -1,11 +1,7 @@
 const Role = require("../models/roles");
 
 module.exports.addRole = async (req, res) => {
-  const {
-    rolename,
-    description,
-    meta_data,
-  } = req.body;
+  const { rolename, description, meta_data } = req.body;
   try {
     const newRole = new Role({
       rolename: rolename,
@@ -22,8 +18,6 @@ module.exports.addRole = async (req, res) => {
   }
 };
 
-
-
 module.exports.getRoleById = async (req, res, next) => {
   let role;
   try {
@@ -39,12 +33,7 @@ module.exports.getRoleById = async (req, res, next) => {
 };
 
 module.exports.updateRole = async (req, res) => {
-  const fieldsToUpdate = [
-    "rolename",
-    "description",
-    "meta_data",
-    "status"
-  ];
+  const fieldsToUpdate = ["rolename", "description", "meta_data", "status"];
 
   for (const field of fieldsToUpdate) {
     if (req.body[field] != null) {
@@ -54,6 +43,15 @@ module.exports.updateRole = async (req, res) => {
   try {
     const updateRole = await res.role.save();
     res.json(updateRole);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports.getRoles = async (req, res) => {
+  try {
+    const role = await Role.find();
+    res.send(role);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
