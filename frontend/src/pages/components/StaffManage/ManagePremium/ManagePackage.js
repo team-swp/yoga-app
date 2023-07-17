@@ -28,8 +28,17 @@ function BasicExample() {
   useEffect(() => {
     async function fetchUsers() {
       try {
+        function compare(a, b) {
+          if (a.createdAt > b.createdAt) {
+            return -1;
+          }
+          if (a.createdAt < b.createdAt) {
+            return 1;
+          }
+          return 0;
+        }
         const response = await getPremium();
-        setListUsers(response.data);
+        setListUsers(response.data.sort(compare));
       } catch {
         console.log("fail");
       }
@@ -84,15 +93,17 @@ function BasicExample() {
     setSelectedItemId(itemId);
     setShowConfirmModal(true);
   };
-  const handleCancel = async () =>{
-    setShowConfirmModal(false)
-  }
+  const handleCancel = async () => {
+    setShowConfirmModal(false);
+  };
 
   const handleStatusToggleConfirm = async () => {
     setShowConfirmModal(false);
 
     const updatedList = [...listUser];
-    const selectedItem = updatedList.find((item) => item._id === selectedItemId);
+    const selectedItem = updatedList.find(
+      (item) => item._id === selectedItemId
+    );
     selectedItem.status = !selectedItem.status;
 
     setListUsers(updatedList);
@@ -117,7 +128,12 @@ function BasicExample() {
         <Toaster></Toaster>
         <TableContainer component={Paper}>
           <div
-            style={{ float: "right", marginTop: "15px", marginRight: "10px", marginBottom: "10px" }}
+            style={{
+              float: "right",
+              marginTop: "15px",
+              marginRight: "10px",
+              marginBottom: "10px",
+            }}
           >
             <Button
               variant="contained"
@@ -240,29 +256,72 @@ function BasicExample() {
           </Button>
         </div>
         <Modal
-        open={showConfirmModal}
-        onClose={handleCancel}
-        closeAfterTransition
-      >
-        <Fade in={showConfirmModal}>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-            <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
-              <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
-                Confirmation
-              </h3>
-              <p>Are you sure you want to change the status of this Course?</p>
-              <div style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}>
-                <Button variant="contained" onClick={handleStatusToggleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
-                  Confirm
-                </Button>
-                <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
-                  Cancel
-                </Button>
-              </div>
-            </Paper>
-          </div>
-        </Fade>
-      </Modal>
+          open={showConfirmModal}
+          onClose={handleCancel}
+          closeAfterTransition
+        >
+          <Fade in={showConfirmModal}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Paper
+                style={{
+                  width: "400px",
+                  padding: "2em",
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                  textAlign: "center",
+                }}
+                elevation={3}
+              >
+                <h3
+                  style={{
+                    marginBottom: "1em",
+                    fontSize: "1.5em",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Confirmation
+                </h3>
+                <p>
+                  Are you sure you want to change the status of this Course?
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    onClick={handleStatusToggleConfirm}
+                    style={{ marginRight: "1rem", backgroundColor: "black" }}
+                  >
+                    Confirm
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={handleCancel}
+                    style={{
+                      backgroundColor: "#fff",
+                      color: "#000",
+                      border: "2px solid #000",
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
       </Container>
     </div>
   );

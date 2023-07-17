@@ -66,6 +66,7 @@ import UpdateNews from "../pages/components/StaffManage/ManageNews/UpdateNews";
 import NewsPage from "../pages/components/NotificationNew/News";
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
+import Contact from "../pages/components/Contact/Contact";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -310,6 +311,7 @@ const routers = createBrowserRouter([
     element: <UpdatePremiumPack />,
   },
   { path: "/news", element: <NewsPage /> },
+  { path: "/contact", element: <Contact /> },
 ]);
 
 export default routers;
