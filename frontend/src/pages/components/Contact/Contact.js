@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Card, Container, Typography } from "@mui/material";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import toast, { Toaster } from "react-hot-toast";
 
 function Contact() {
   const form = useRef();
@@ -21,7 +22,7 @@ function Contact() {
       .then(
         (result) => {
           console.log(result.text);
-          console.log("message sent");
+          toast.success("Message sent!");
         },
         (error) => {
           console.log(error.text);
@@ -31,6 +32,7 @@ function Contact() {
 
   return (
     <div>
+      <Toaster />
       <Header />
       <Container
         sx={{
@@ -43,7 +45,7 @@ function Contact() {
         <Card raised sx={{ p: 5 }}>
           <StyledContactForm>
             <Typography variant="h4" align="center">
-              Contact From
+              Contact Us
             </Typography>
             <form ref={form} onSubmit={sendEmail}>
               <label>Name</label>
@@ -111,7 +113,7 @@ const StyledContactForm = styled.div`
     input[type="submit"] {
       margin-top: 2rem;
       cursor: pointer;
-      background: rgb(249, 105, 14);
+      background: rgb(45, 85, 255);
       color: white;
       border: none;
     }
