@@ -27,18 +27,34 @@ function BasicExample() {
   const [searchTerm, setSearchTerm] = useState("");
   const [number, setNumber] = useState(0);
   const [idActive, setIdActive] = useState("");
+  const [currentRole, setCurrentRole] = useState("");
 
   const [avatarURLs, setAvatarURLs] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [userIdToUpdate, setUserIdToUpdate] = useState("");
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [statusUserIdToUpdate, setStatusUserIdToUpdate] = useState("");
+
+  const [previousRole, setPreviousRole] = useState("");
 
   const handleRoleChange = (event, item) => {
-    setSelectedRole(event.target.value);
-    Object.assign(item, { role: event.target.value });
-    setIdActive(item._id);
+    const targetRole = event.target.value;
+    setSelectedRole(targetRole);
+
+    // Kiểm tra giá trị mới và giá trị trước đó
+    if (targetRole !== previousRole) {
+      Object.assign(item, { role: targetRole });
+      setIdActive(item._id);
+      setCurrentRole(targetRole);
+    }
   };
+
+  useEffect(() => {
+    // Cập nhật giá trị trước đó sau khi đã cập nhật selectedRole
+    setPreviousRole(selectedRole);
+  }, [selectedRole]);
 
   const defaultAvatarURL =
     "https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-1.jpg";
@@ -73,7 +89,7 @@ function BasicExample() {
 
     fetchRoles();
     fetchUsers();
-  }, []);
+  }, [selectedRole]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -143,6 +159,11 @@ function BasicExample() {
     setShowConfirmModal(true);
   };
 
+  const handleStatusToggle = (userId) => {
+    setStatusUserIdToUpdate(userId);
+    setShowStatusModal(true);
+  };
+
   const confirmUpdateRole = async () => {
     try {
       await updateUserForAdmin({
@@ -166,6 +187,32 @@ function BasicExample() {
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const confirmUpdateStatus = async () => {
+    try {
+      const updatedList = [...listUser];
+      const userIndex = updatedList.findIndex(
+        (user) => user._id === statusUserIdToUpdate
+      );
+      if (userIndex > -1) {
+        updatedList[userIndex].status = !updatedList[userIndex].status;
+        setListUsers(updatedList);
+
+        await updateUserForAdmin({
+          _id: statusUserIdToUpdate,
+          status: updatedList[userIndex].status,
+        });
+
+        toast.success("Status updated successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setShowStatusModal(false);
     }
   };
 
@@ -224,21 +271,6 @@ function BasicExample() {
             {listUser &&
               listUser.length > 0 &&
               listUser.slice(startIndex, endIndex).map((item, index) => {
-                const handleStatusToggle = async () => {
-                  const updatedList = [...listUser];
-
-                  updatedList[startIndex + index].status = !item.status;
-                  setListUsers(updatedList);
-                  try {
-                    await updateUserForAdmin({
-                      _id: item._id,
-                      status: updatedList[startIndex + index].status,
-                    });
-                    console.log("Status updated successfully.");
-                  } catch {
-                    console.log("Failed to update status.");
-                  }
-                };
                 const avatarURL = item.avatar || defaultAvatarURL;
                 return (
                   <tr key={`users=${index}`}>
@@ -284,7 +316,7 @@ function BasicExample() {
                     <td className="text-left">
                       <Switch
                         checked={item.status}
-                        onChange={handleStatusToggle}
+                        onChange={() => handleStatusToggle(item._id)}
                         color="primary"
                       />
                     </td>
@@ -341,7 +373,7 @@ function BasicExample() {
 
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Update</Modal.Title>
+          <Modal.Title>Confirm Update Role</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to update the role?</Modal.Body>
         <Modal.Footer>
@@ -352,6 +384,21 @@ function BasicExample() {
             Cancel
           </Button>
           <Button variant="primary" onClick={confirmUpdateRole}>
+            Update
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showStatusModal} onHide={() => setShowStatusModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Update Status</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to update the status?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowStatusModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={confirmUpdateStatus}>
             Update
           </Button>
         </Modal.Footer>
