@@ -58,3 +58,12 @@ module.exports.updateRole = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+module.exports.getRoles = async (req, res) => {
+  try {
+    const role = await Role.find();
+    res.send(role);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

@@ -88,11 +88,12 @@ classSchema.pre("save", async function (next) {
     });
     if (existingClass) {
       for(var i = 0 ; i<newClass.days.length;i++){
-        
-        if(existingClass.days.includes(newClass.days[i])){
-          throw new Error(
-            "A class with the same classname and schedule already exists."
-          );
+        if(existingClass.days.includes(newClass.days[i])){//trùng ngày thì zô
+          if(existingClass.instructor_id===newClass.instructor_id){//trùng ngày trùng giáo viên thì zô
+            throw new Error(
+              `A class with the same classname and schedule already exists ${existingClass.classname}.`
+            );
+          }
         }
       }
     }
