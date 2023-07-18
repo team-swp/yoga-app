@@ -24,14 +24,15 @@ function App() {
               dispatch(setDataLogin(res.data.data));
             })
             .catch((res) => {
-              // localStorage.removeItem("token");
+              localStorage.removeItem("token");
               return <Navigate to={"/login"} replace={true}></Navigate>;
             });
         } else {
+          localStorage.removeItem("token");
           return <Navigate to={"/login"} replace={true}></Navigate>;
         }
       } catch (error) {
-        //localStorage.removeItem("token");
+        localStorage.removeItem("token");
         return <Navigate to={"/login"} replace={true} />;
       }
     };

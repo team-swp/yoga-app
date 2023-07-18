@@ -18,9 +18,14 @@ import SelfImprovementRoundedIcon from "@mui/icons-material/SelfImprovementRound
 import SportsKabaddiRoundedIcon from "@mui/icons-material/SportsKabaddiRounded";
 import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
 import VolunteerActivismTwoToneIcon from "@mui/icons-material/VolunteerActivismTwoTone";
+import ConfettieEffect from "../AnimationEffect/ConfettieEffect";
+import Realistic from "../AnimationEffect/Realistic";
+import ThrowConfettiImg from "../../../assets/confetti.png";
+import { motion } from 'framer-motion';
 function Premium() {
   const [premiums, setPremiums] = useState([]);
   const [premiumStart, setPremiumStart] = useState();
+  const [isConfetti, setIsConfetti] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
@@ -37,7 +42,7 @@ function Premium() {
           }
         });
         setPremiums(arr);
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
       })
       .catch(() => {
         toast.error("No premium option to show");
@@ -64,9 +69,19 @@ function Premium() {
         // navigate("/login");
       });
   };
+  const handelEffect = () => {
+    setTimeout(() => {
+      setIsConfetti(true);
+    }, 600);
+    setTimeout(() => {
+      setIsConfetti(false);
+    }, 4000);
+  };
+
   return (
     <>
       <Navigation />
+      <div>{isConfetti && <Realistic setIsConfetti={setIsConfetti} />}</div>
       <div
         style={{ height: "500px" }}
         className="w-full bg-stone-400 flex justify-center justify-items-center items-center gap-20"
@@ -104,7 +119,7 @@ function Premium() {
             <div onClick={handleSubmitStart} className={styles.startBtn}>
               Enroll
             </div>
-            <a href="#premium_packet">
+            <a onClick={handelEffect} href="#premium_packet">
               <div className={styles.moreBtn}>Packages</div>
             </a>
           </div>
@@ -135,8 +150,7 @@ function Premium() {
         </div>
         <div>
           <Typography className="font-bold" variant="h5">
-          Able to learn all yoga classes for just 0$
-
+            Able to learn all yoga classes for just 0$
           </Typography>
         </div>
         <div className="flex  justify-center justify-items-center items-center gap-2">
@@ -247,11 +261,44 @@ function Premium() {
             />
           </div>
         </div>
-        <div className="flex justify-between justify-items-center items-center flex-wrap gap-2">
+        <div className="flex justify-between justify-items-center items-center flex-wrap gap-2 relative">
           {premiums.map((premium, index) => (
             <PremiumOption premium={premium} />
           ))}
         </div>
+        {isConfetti&&
+        <motion.div
+         initial={{ x: 0 }}
+         animate={{
+           x: [0, -170, 0],
+         }}
+         transition={{
+           duration: 5,
+           ease: 'linear',
+           repeat: Infinity,
+           repeatDelay: 2,
+         }}
+         style={{
+           width: '100px',
+           height: '100px',
+           position: "absolute",
+           left: 0,
+           bottom: "16.5%",
+         }}
+        >
+          <Box
+            // onClick={runAnimation}
+            id="confettiGun"
+            className="gunConfetti"
+            component="img"
+            sx={{
+              height: "auto",
+              width: 150,
+            }}
+            alt="Confetti"
+            src={ThrowConfettiImg}
+          />
+        </motion.div>}
       </div>
 
       <Footer />

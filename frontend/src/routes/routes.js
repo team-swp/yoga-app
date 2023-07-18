@@ -66,7 +66,11 @@ import UpdateNews from "../pages/components/StaffManage/ManageNews/UpdateNews";
 import NewsPage from "../pages/components/NotificationNew/News";
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
+<<<<<<< HEAD
 import Contact from "../pages/components/Contact/Contact";
+=======
+import ConfettieEffect from "../pages/components/AnimationEffect/ConfettieEffect";
+>>>>>>> thienNH
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -311,7 +315,11 @@ const routers = createBrowserRouter([
     element: <UpdatePremiumPack />,
   },
   { path: "/news", element: <NewsPage /> },
+<<<<<<< HEAD
   { path: "/contact", element: <Contact /> },
+=======
+  { path: "/effect", element: <ConfettieEffect /> },
+>>>>>>> thienNH
 ]);
 
 export default routers;
