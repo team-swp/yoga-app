@@ -1,6 +1,7 @@
 import React from "react";
 import notFoundPageImage from "../../../assets/notFoundPageImage.png";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import classNames from "classnames/bind";
 function PageNotFound() {
   const navigate = useNavigate();
   return (
@@ -16,8 +17,10 @@ function PageNotFound() {
           </p>
 
           <button
-            onClick={() => navigate(-1)}
-            class="px-4 inline py-2 text-sm font-medium leading-5 shadow text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-blue bg-blue-600 active:bg-blue-600 hover:bg-blue-700"
+            onClick={(e) => {
+              navigate('/')
+            }}
+            className="px-4 inline py-2 text-sm font-medium leading-5 shadow text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-blue bg-blue-600 active:bg-blue-600 hover:bg-blue-700"
           >
             Back
           </button>
