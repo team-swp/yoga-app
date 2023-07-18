@@ -8,7 +8,7 @@ function PaymentStatus() {
   const [check, setCheck] = useState(false);
   const [dataPayment, setDataPayment] = useState({});
   const idResult = idParams.get("pmid");
-  idResult.replace("pmid", "");
+  idResult?.replace("pmid", "");
   useEffect(() => {
     const paymentPromise = getPaymentByID({ id: idResult });
     paymentPromise

@@ -66,9 +66,14 @@ import UpdateNews from "../pages/components/StaffManage/ManageNews/UpdateNews";
 import NewsPage from "../pages/components/NotificationNew/News";
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
+
 import Contact from "../pages/components/Contact/Contact";
+
 import NewsList from "../pages/components/NotificationNew/NewsList";
 import Detail from "../pages/components/NotificationNew/Detail";
+
+import ConfettieEffect from "../pages/components/AnimationEffect/ConfettieEffect";
+
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -312,6 +317,7 @@ const routers = createBrowserRouter([
     path: "/updatepremiumpack/:id",
     element: <UpdatePremiumPack />,
   },
+
   {
     element:<NewsList/>,
     path:'/news'
@@ -320,7 +326,14 @@ const routers = createBrowserRouter([
     element:<   Detail/>,
     path:'/detail'
   },
+
+
+
+
   { path: "/contact", element: <Contact /> },
+
+  { path: "/effect", element: <ConfettieEffect /> },
+
 ]);
 
 export default routers;

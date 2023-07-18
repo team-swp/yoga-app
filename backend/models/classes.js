@@ -80,23 +80,28 @@ classSchema.pre("save", async function (next) {
 
 classSchema.pre("save", async function (next) {
   try {
-    const newClass= this
+    const newClass = this
     //không thể có 2 lớp cùng lịch cùng h trong 1 phòng
-    const existingClass = await this.constructor.findOne({
+    const existingClass = await this.constructor.find({
       _id: { $ne: this._id },
       schedule_id: this.schedule_id,
     });
-    if (existingClass) {
-      for(var i = 0 ; i<newClass.days.length;i++){
-        if(existingClass.days.includes(newClass.days[i])){//trùng ngày thì zô
-          if(existingClass.instructor_id===newClass.instructor_id){//trùng ngày trùng giáo viên thì zô
-            throw new Error(
-              `A class with the same classname and schedule already exists ${existingClass.classname}.`
-            );
+    let lengthExisted  = existingClass.length
+    for(let j =0; j<lengthExisted;j++){
+      if (existingClass[j]) {
+        for(var i = 0 ; i<newClass.days.length;i++){
+          if(existingClass[j].days.includes(newClass.days[i])){//trùng ngày thì zô
+            if(existingClass[j].instructor_id.equals(newClass.instructor_id)){//trùng ngày trùng giáo viên thì zô
+              throw new Error(
+                `A class with the same classname and schedule already exists ${existingClass[j].classname}.`
+              );
+            }
           }
         }
       }
     }
+
+   
     next();
   } catch (error) {
     next(error);
@@ -105,27 +110,7 @@ classSchema.pre("save", async function (next) {
 
 // khác lớp nma cùng lịch thì không thể có cùng 1 giáo viên
 // Trigger 2: Check if newClassName != existClassName && newSchedule_id = existSchedule_id cannot have the same instructor_id
-classSchema.pre("save", async function (next) {
-  try {
-    if (this.instructor_id) {
-      const existingClass = await this.constructor.findOne({
-        _id: { $ne: this._id },
-        classname: { $ne: this.classname },
-        schedule_id: this.schedule_id,
-        instructor_id: this.instructor_id,
-      });
 
-      if (existingClass) {
-        throw new Error(
-          "A class with the same schedule and instructor already exists."
-        );
-      }
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
 
 
 
