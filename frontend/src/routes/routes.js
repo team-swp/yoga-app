@@ -67,6 +67,8 @@ import NewsPage from "../pages/components/NotificationNew/News";
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 import Contact from "../pages/components/Contact/Contact";
+import NewsList from "../pages/components/NotificationNew/NewsList";
+import Detail from "../pages/components/NotificationNew/Detail";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -310,7 +312,14 @@ const routers = createBrowserRouter([
     path: "/updatepremiumpack/:id",
     element: <UpdatePremiumPack />,
   },
-  { path: "/news", element: <NewsPage /> },
+  {
+    element:<NewsList/>,
+    path:'/news'
+  },
+  {
+    element:<   Detail/>,
+    path:'/detail'
+  },
   { path: "/contact", element: <Contact /> },
 ]);
 
