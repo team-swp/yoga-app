@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Container, TextField, Button, Typography } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../Header/Header";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -8,6 +8,7 @@ import { getPremium, updatePremium } from "../../../../helper/premiumAPI";
 import { Toaster, toast } from "react-hot-toast";
 
 const UpdatePremiumPack = () => {
+  const naviagate = useNavigate();
   const classesId = useParams();
 
   useEffect(() => {
@@ -27,11 +28,11 @@ const UpdatePremiumPack = () => {
   const validationSchema = Yup.object().shape({
     premiumname: Yup.string().required("Premium Name is required"),
     priceOriginal: Yup.number()
-    .min(-1,"Price Origin must be euqal or better than 0")
+      .min(-1, "Price Origin must be euqal or better than 0")
       .required("Price Origin is required")
       .positive("Price Origin must be a positive number"),
     priceDiscount: Yup.number()
-    .min(-1,"Price Origin must be euqal or better than 0")
+      .min(-1, "Price Origin must be euqal or better than 0")
       .positive("Price Discount must be a positive number"),
     benefit: Yup.string().required("Benefit is required"),
     rules: Yup.string().required("Rules is required"),
@@ -60,6 +61,7 @@ const UpdatePremiumPack = () => {
         });
 
         if (response) {
+          naviagate("/staffmanage");
           toast.success("Updated premium package success");
         } else {
           toast.error("Failed to update premium");
@@ -120,7 +122,6 @@ const UpdatePremiumPack = () => {
             label="Price Discount"
             type="number"
             fullWidth
-          
             {...formik.getFieldProps("priceDiscount")}
             error={formik.touched.priceDiscount && formik.errors.priceDiscount}
             helperText={

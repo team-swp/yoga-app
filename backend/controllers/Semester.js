@@ -44,7 +44,7 @@ module.exports.getSemester = async (req, res) => {
 
 module.exports.getSemestersPaging = async (req, res) => {
   try {
-    const pagingPayload = await pagingnation(Semester,'semestername',req.query)
+    const pagingPayload = await pagingnation(Semester, 'semestername', req.query)
     res.send(pagingPayload);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -78,10 +78,10 @@ module.exports.updateSemester = async (req, res) => {
 module.exports.getSemesterById = async (req, res, next) => {
   let semester;
   try {
-      semester = await Semester.findById(req.body._id);
-      if (semester === null) {
-        return res.status(404).json({ message: "Cannot Find Semester" });
-      }
+    semester = await Semester.findById(req.body._id);
+    if (semester === null) {
+      return res.status(404).json({ message: "Cannot Find Semester" });
+    }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

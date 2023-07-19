@@ -15,12 +15,17 @@ import Header from "../Header/Header";
 import DoneIcon from "@mui/icons-material/Done";
 import Recovery from "./PasswordGoogle";
 import PasswordReset from "./PasswordReset";
+import Reset from "../Login/Reset";
+import { getPaymentByIDUser } from "../../../helper/paymentAPI";
+import profileDefault from "../../../assets/profile.png";
 import PurchaseHistory from "./PurchaseHistory";
 
 function Profile() {
   const user = useSelector(userSelector);
-  const [file, setFile] = useState(user.avatar || "");
-  const [imageTemp, setImageTemp] = useState(true);
+  const [file, setFile] = useState(
+    user.avatar != "" ? user.avatar : profileDefault || user.avatar
+  );
+  const [imageTemp, setImageTemp] = useState(false);
   const [isNotPass, setIsNotPass] = useState(true);
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("information");
@@ -91,21 +96,7 @@ function Profile() {
     });
   };
 
-  // const onUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   const base64 = await convertToBase64(file);
-
-  //   // Kích thước tối đa mới cho ảnh (ví dụ: 800x600)
-  //   const maxWidth = 500;
-  //   const maxHeight = 500;
-
-  //   // Thay đổi kích thước ảnh
-  //   const resizedImage = resizeImage(base64, maxWidth, maxHeight);
-  //   resizedImage.then((resize) => {
-  //     console.log(resize);
-  //     setFile(resize);
-  //   });
-  // };
+ 
   const loadImageAgain = async (e) => {
     if (user.avatar) {
       const { url } = await getAvatarToAWS({ imageName: user._id });
@@ -187,12 +178,22 @@ function Profile() {
           <div className="flex flex-col border-r-red-400 w-full lg:w-[30%] ">
             <div className=" border-b-2 border-black">
               <div className="flex justify-center pt-14">
-                <img
-                  src={imageTemp || user.avatar || avatar}
-                  className={imgStyle}
-                  alt="avatar"
-                  onError={loadImageAgain}
-                />
+                <label htmlFor="profile">
+                  <img
+                    src={imageTemp || user.avatar || avatar || profileDefault}
+                    className={imgStyle}
+                    alt="Avatar"
+                  />
+                </label>
+                <div>
+                  <input
+                    onChange={onUpload}
+                    type="file"
+                    id="profile"
+                    name="avatar"
+                    style={{ width: 500, height: 500 }}
+                  />
+                </div>
               </div>
               <div className="flex justify-center pt-5 text-2xl mb-5">
                 <p>Hello, {user.username}</p>
@@ -279,36 +280,6 @@ function Profile() {
                   <div className="flex items-center gap-2">
                     <DoneIcon />
                     <p>Please email me about new products and promotions.</p>
-                  </div>
-
-                  <div
-                    className=" pt-3
-                  
-                "
-                  >
-                    <div className=" ml-10">
-                      <p>Avatar</p>
-                    </div>
-                    <div className="flex gap-5 items-center">
-                      <label htmlFor="profile">
-                        <img
-                          src={imageTemp || user.avatar || avatar}
-                          className={imgStyle}
-                          alt="avatar"
-                          onError={loadImageAgain}
-                        />
-                      </label>
-                      <div>
-                        <p>Click on current avatar to choose new image * </p>
-                        <input
-                          onChange={onUpload}
-                          type="file"
-                          id="profile"
-                          name="avatar"
-                          style={{ width: 500, height: 500 }}
-                        />
-                      </div>
-                    </div>
                   </div>
                   <button className={styles.btn_savechange} type="submit">
                     Save change

@@ -28,6 +28,7 @@ function App() {
               return <Navigate to={"/login"} replace={true}></Navigate>;
             });
         } else {
+          localStorage.removeItem("token");
           return <Navigate to={"/login"} replace={true}></Navigate>;
         }
       } catch (error) {

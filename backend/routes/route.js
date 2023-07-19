@@ -225,6 +225,7 @@ router.patch(
 );
 
 //Role
+router.get("/role/get", AuthAdmin, getRoles);
 router.post("/role/add", AuthAdmin, addRole);
 router.patch("/role/update", AuthAdmin, getRoleById, updateRole);
 router.patch("/admin/update", AuthAdmin, updateUserForAdmin);

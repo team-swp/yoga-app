@@ -7,7 +7,7 @@ const DEFAULT_URL = `${API_URL_APPID}/?APPID=${API_APPID}&lat=10.762622&lon=106.
 const SEARCH_BY_LOCATION = `${API_URL_APPID}?appid=${API_APPID}`; //&lat={lat}&lon={lon}
 
 const GET_NEXT_DAYS_HOURS = `https://api.openweathermap.org/data/3.0/onecall?exclude=minutely&appid=${API_APPID}`; //&lat={lat}&lon={lon}
-const DEF_N_D_H = `https://api.openweathermap.org/data/3.0/onecall?exclude=minutely&appid=${API_APPID}&lat=10.762622&lon=106.660172`;
+const DEF_N_D_H = `https://api.openweathermap.org/data/3.0/onecall?exclude=minutely&appid=${API_APPID}&lat=10.841416&lon=106.810053`;
 
 //*** UNSPLASH ****//
 const URL_UNSPLASH = "https://api.unsplash.com/search/photos";

@@ -83,3 +83,16 @@ font-weight: 700 !important;
   transform: scale(1.05) perspective(0px);
   cursor: pointer;
 }
+
+.gunConfetti{
+  transition: gun-Confetti 0.5s ease;
+}
+
+@keyframes gun-Confetti {
+  from {
+    width: 300px;
+  }
+  to {
+    width: 100px;
+  }
+}

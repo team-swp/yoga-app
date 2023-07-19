@@ -21,7 +21,6 @@ function Schedules() {
   const { checkSchedule } = useSchedule();
 
   const [totalEvents, setTotalEvents] = useState([]);
-
   useEffect(() => {
     const events = [];
 

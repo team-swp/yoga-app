@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@daypilot/daypilot-lite-react": "^3.14.0",
+    "@emailjs/browser": "^3.11.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@mui/base": "^5.0.0-beta.3",
@@ -30,6 +31,7 @@
     "bcryptjs": "^2.4.3",
     "classnames": "^2.3.2",
     "country-data": "^0.0.31",
+    "crypto-browserify": "^3.12.0",
     "dayjs": "^1.11.8",
     "dotenv": "^16.0.3",
     "firebase": "^9.22.1",
@@ -44,6 +46,8 @@
     "react-big-calendar": "^1.8.1",
     "react-bootstrap": "^2.7.4",
     "react-calendar": "^4.2.1",
+    "react-canvas-confetti": "^1.4.0",
+    "react-confetti": "^6.1.0",
     "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
     "react-google-button": "^0.7.2",
@@ -62,6 +66,8 @@
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "sass": "^1.63.6",
+    "stream": "^0.0.2",
+    "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.11",
     "swiper": "^6.5.1",
     "web-vitals": "^2.1.4",
@@ -94,5 +100,9 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.3.2"
+  },
+  "browser": {
+    "crypto": false,
+    "stream": false
   }
 }

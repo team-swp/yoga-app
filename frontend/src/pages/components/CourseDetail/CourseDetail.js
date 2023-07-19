@@ -30,8 +30,10 @@ function CourseDetail() {
     async function fetchData() {
       try {
         const response = await getCourse();
-        const course = response.data.find((obj) => obj._id === courseId);
-        setCourse(course);
+        const course = response.data.filter(
+          (obj) => obj._id === courseId && obj.status === true
+        );
+        setCourse(course[0]);
       } catch (error) {
         console.log(error);
       }
@@ -58,7 +60,7 @@ function CourseDetail() {
           </h1>
         </div>
       </div>
-      {course && (
+      {course ? (
         <Container>
           <h1 className={cx("course-header")}>{course.coursename}</h1>
           <Grid container spacing={2}>
@@ -131,6 +133,17 @@ function CourseDetail() {
             </div>
           </Grid>
         </Container>
+      ) : (
+        <div
+          style={{
+            height: "50vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          Sorry, Something Went Wrong !
+        </div>
       )}
       <Footer />
     </div>

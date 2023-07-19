@@ -132,19 +132,15 @@ export default function useSchedule() {
         });
       });
     });
-
     setTotalSchedule(newTotalSchedule);
   }, [courseList]);
 
   useEffect(() => {
     const checkedSchedule = [];
-
     totalSchedule.forEach((schedule, index) => {
       let foundDuplicate = false;
-
       for (let i = 0; i < index; i++) {
         const item = totalSchedule[i];
-
         if (
           item.scheduleName === schedule.scheduleName &&
           arraysMatch(item.days, schedule.days)
@@ -153,7 +149,6 @@ export default function useSchedule() {
           break;
         }
       }
-
       if (!foundDuplicate) {
         checkedSchedule.push(schedule);
       }
@@ -161,12 +156,38 @@ export default function useSchedule() {
 
     function arraysMatch(arr1, arr2) {
       return (
-        arr1.length === arr2.length &&
-        arr1.every((value, index) => value === arr2[index])
+        arr1.every((value) => arr2.includes(value)) &&
+        arr2.every((value) => arr1.includes(value))
       );
     }
 
-    setCheckSchedule(checkedSchedule);
+    const parentSchedules = [];
+    checkedSchedule.forEach((schedule, index) => {
+      let isParentSchedule = true;
+      for (let i = 0; i < checkedSchedule.length; i++) {
+        if (index !== i) {
+          const comparisonSchedule = checkedSchedule[i];
+          if (
+            schedule.scheduleName === comparisonSchedule.scheduleName &&
+            hasCommonDays(schedule.days, comparisonSchedule.days) &&
+            schedule.days.length < comparisonSchedule.days.length
+          ) {
+            isParentSchedule = false;
+            break;
+          }
+        }
+      }
+      if (isParentSchedule) {
+        parentSchedules.push(schedule);
+      }
+    });
+
+    function hasCommonDays(arr1, arr2) {
+      return arr1.some((value) => arr2.includes(value));
+    }
+    console.log(parentSchedules);
+
+    setCheckSchedule(parentSchedules);
   }, [totalSchedule]);
 
   return { courseList, totalSchedule, checkSchedule };

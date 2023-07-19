@@ -1,13 +1,8 @@
 import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {
-  Container,
-  TextField,
-  Button,
-  Autocomplete,
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Container, TextField, Button, Autocomplete } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../Header/Header";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -25,13 +20,12 @@ const validationSchema = Yup.object().shape({
   requirement: Yup.string().required("Requirement is required"),
   forWho: Yup.string().required("For Who is required"),
   images: Yup.string().required("Images is required"),
-
 });
 
 function AddNewCourse() {
   const [semesterList, setSemesterList] = React.useState([]);
   const [selectedSemester, setSelectedSemester] = React.useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchSemesters() {
       try {
@@ -74,11 +68,12 @@ function AddNewCourse() {
         values.price = "";
         values.willLearn = "";
         values.requirement = "";
-        values.semester_id = ""
+        values.semester_id = "";
         values.forWho = "";
         values.images = "";
-
+        navigate("/staffmanage");
         setSelectedSemester(null);
+        navigate("/staffmanage");
       } else {
         toast.error("Failed to add new class");
       }
@@ -114,7 +109,6 @@ function AddNewCourse() {
             forWho: "",
             images: "",
             videos: "",
-
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -129,7 +123,9 @@ function AddNewCourse() {
                 required
                 sx={{ marginBottom: "10px" }}
                 error={errors.coursename && touched.coursename}
-                helperText={errors.coursename && touched.coursename && errors.coursename}
+                helperText={
+                  errors.coursename && touched.coursename && errors.coursename
+                }
               />
               <Field
                 name="description"
@@ -141,7 +137,11 @@ function AddNewCourse() {
                 rows={4}
                 sx={{ marginBottom: "10px" }}
                 error={errors.description && touched.description}
-                helperText={errors.description && touched.description && errors.description}
+                helperText={
+                  errors.description &&
+                  touched.description &&
+                  errors.description
+                }
               />
               <Field
                 name="price"
@@ -163,7 +163,9 @@ function AddNewCourse() {
                 rows={4}
                 sx={{ marginBottom: "10px" }}
                 error={errors.willLearn && touched.willLearn}
-                helperText={errors.willLearn && touched.willLearn && errors.willLearn}
+                helperText={
+                  errors.willLearn && touched.willLearn && errors.willLearn
+                }
               />
               <Autocomplete
                 value={selectedSemester}
@@ -178,7 +180,11 @@ function AddNewCourse() {
                     required
                     sx={styles.textField}
                     error={errors.semester_id && touched.semester_id}
-                    helperText={errors.semester_id && touched.semester_id && errors.semester_id}
+                    helperText={
+                      errors.semester_id &&
+                      touched.semester_id &&
+                      errors.semester_id
+                    }
                   />
                 )}
               />
@@ -192,7 +198,11 @@ function AddNewCourse() {
                 rows={4}
                 sx={{ marginBottom: "10px" }}
                 error={errors.requirement && touched.requirement}
-                helperText={errors.requirement && touched.requirement && errors.requirement}
+                helperText={
+                  errors.requirement &&
+                  touched.requirement &&
+                  errors.requirement
+                }
               />
               <Field
                 name="forWho"
@@ -215,15 +225,13 @@ function AddNewCourse() {
                 helperText={errors.images && touched.images && errors.images}
               />
 
-
-
               <Button
                 color="success"
                 type="submit"
                 variant="contained"
                 sx={styles.button}
               >
-                ADD A CLASS
+                submit
               </Button>
 
               <Link
