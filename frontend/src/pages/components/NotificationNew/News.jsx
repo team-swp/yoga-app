@@ -46,7 +46,7 @@ function News({ item, items }) {
               justifyContent: "center",
               alignItems: "center",
             }}>
-            <AiFillEye style={{marginRight:'5px'}}/>  Xem chi tiết
+            <AiFillEye style={{marginRight:'5px'}}/>  View more
             </Button>
           </div>
         </Card.Body>

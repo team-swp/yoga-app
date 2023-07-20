@@ -39,6 +39,7 @@
     "framer-motion": "^10.12.17",
     "howler": "^2.2.3",
     "materialize-css": "^1.0.0",
+    "mdb-react-ui-kit": "^6.1.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
