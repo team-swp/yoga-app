@@ -1,6 +1,3 @@
-// Copyright 2017 Lovell Fuller and others.
-// SPDX-License-Identifier: Apache-2.0
-
 export const GLIBC: 'glibc';
 export const MUSL: 'musl';
 
