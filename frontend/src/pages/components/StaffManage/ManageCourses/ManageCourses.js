@@ -11,7 +11,7 @@ import {
   Button,
   Switch,
   Modal,
-  Fade
+  Fade,
 } from "@mui/material";
 import "./ManageCourses.css";
 import { Link } from "react-router-dom";
@@ -26,14 +26,14 @@ function ManageCourses() {
   const [courses, setCourses] = useState([]);
   const [updatedCourse, setUpdatedCourse] = useState({});
   const [semesteres, setSemesteres] = useState([]);
-  const [classes, setClasses] = useState([])
+  const [classes, setClasses] = useState([]);
   const [value, setValue] = useState("");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [semesterValue, setSemesterValue] = useState("");
   const [statusValue, setStatusValue] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false)
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
   const handleToggle = async (event, course) => {
     setSelectedCourse(course);
@@ -42,21 +42,30 @@ function ManageCourses() {
 
   const handleConfirm = async () => {
     try {
-      const updatedCourseData = { ...selectedCourse, status: !selectedCourse.status };
+      const updatedCourseData = {
+        ...selectedCourse,
+        status: !selectedCourse.status,
+      };
       const semesterId = selectedCourse.semester_id; // Lấy semester_id từ course
       // Kiểm tra trạng thái của semester dựa trên semesterId
       const semesterResponse = await getSemester();
       if (semesterResponse && semesterResponse.data) {
-        const semester = semesterResponse.data.find((semester) => semester._id === semesterId);
+        const semester = semesterResponse.data.find(
+          (semester) => semester._id === semesterId
+        );
         if (!semester || semester.status === true) {
           const response = await updateCourse(updatedCourseData);
           if (response && response.data) {
             console.log(response.data.data.coursename);
 
-            const classResponse = await axios.get('http://localhost:3001/api/class/get');
+            const classResponse = await axios.get(
+              "https://yoga-app-swp.onrender.com/api/class/get"
+            );
             const classData = classResponse.data;
             if (Array.isArray(classData) && classData.length > 0) {
-              const classWithCourse = classData.filter((classs) => classs.course_id === response.data.data._id);
+              const classWithCourse = classData.filter(
+                (classs) => classs.course_id === response.data.data._id
+              );
               if (classWithCourse.length > 0) {
                 classWithCourse.forEach(async (classs) => {
                   try {
@@ -68,7 +77,9 @@ function ManageCourses() {
                     if (classResponse && classResponse.data) {
                       console.log(classResponse.data.data.classname);
                       const updatedClasss = classes.map((classItem) =>
-                        classItem._id === classResponse.data._id ? classResponse.data : classItem
+                        classItem._id === classResponse.data._id
+                          ? classResponse.data
+                          : classItem
                       );
                       setClasses(updatedClasss);
                     }
@@ -77,19 +88,20 @@ function ManageCourses() {
                   }
                 });
               } else {
-                console.log('No class found with the updated course');
+                console.log("No class found with the updated course");
               }
             } else {
-              console.log('Class data is empty or invalid');
+              console.log("Class data is empty or invalid");
             }
 
-            toast.success(`${response.data.data.coursename} status updated successfully`);
+            toast.success(
+              `${response.data.data.coursename} status updated successfully`
+            );
             setUpdatedCourse(courses);
             setCourses([...courses]);
-
           }
         } else {
-          toast.error('Cannot update status. Semester status is false.');
+          toast.error("Cannot update status. Semester status is false.");
         }
         setConfirmModalOpen(false);
       }
@@ -106,7 +118,7 @@ function ManageCourses() {
     async function fecthSemester() {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/classesPaging/get?limit=${1000}`
+          `https://yoga-app-swp.onrender.com/api/classesPaging/get?limit=${1000}`
         );
         const coureseData = response.data.items;
         setClasses(coureseData);
@@ -118,7 +130,6 @@ function ManageCourses() {
   }, []);
 
   ////////////////////////////////////////////////
-  //////// địt mẹ cấm sửa dùm nha////////////////
   useEffect(() => {
     fetchCourses();
   }, [updatedCourse, page]);
@@ -127,7 +138,7 @@ function ManageCourses() {
     async function fecthSemester() {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/semestersPaging/get?limit=${1000}`
+          `https://yoga-app-swp.onrender.com/api/semestersPaging/get?limit=${1000}`
         );
         const coureseData = response.data.items;
         console.log();
@@ -141,7 +152,7 @@ function ManageCourses() {
   ////////////////////////////  chạy lại cái này để reset lại trang ////////////////////////////////////////////////
   async function fetchCourses2() {
     const response = await axios.get(
-      `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`
+      `https://yoga-app-swp.onrender.com/api/coursesPaging/get?page=${page}&limit=${4}`
     );
     const coureseData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -163,7 +174,7 @@ function ManageCourses() {
     setValue("");
     setStatusValue("");
   };
-  var url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`;
+  var url2 = `https://yoga-app-swp.onrender.com/api/coursesPaging/get?page=${page}&limit=${4}`;
 
   if (value !== "") {
     url2 += `&q=${value}`;
@@ -177,8 +188,7 @@ function ManageCourses() {
     url2 += `&status=${statusValue}`;
   }
 
-
-  var url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}`;
+  var url = `https://yoga-app-swp.onrender.com/api/coursesPaging/get?page=${1}&limit=${4}`;
 
   if (value !== "") {
     url += `&q=${value}`;
@@ -202,7 +212,7 @@ function ManageCourses() {
       setPageCount(response.data.pagination.pageCount);
       setCourses(semesterData);
     } catch (error) {
-      fetchCourses()
+      fetchCourses();
     }
   };
   /////////////////// handle việc next và prev trong page/////////////////////////
@@ -223,8 +233,6 @@ function ManageCourses() {
     });
   }
   const startIndex = (page - 1) * 4;
-
-
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -284,7 +292,8 @@ function ManageCourses() {
               Reset
             </Button>
           </div>
-          <Modal open={isOpen}
+          <Modal
+            open={isOpen}
             onClose={handleCloseModal}
             sx={{
               position: "absolute",
@@ -296,7 +305,8 @@ function ManageCourses() {
               backgroundColor: "none",
               boxShadow: "none",
               p: 4,
-            }}>
+            }}
+          >
             <form onSubmit={handleSearch}>
               <div
                 style={{
@@ -362,10 +372,9 @@ function ManageCourses() {
             </form>
           </Modal>
 
-
           <Table>
             <TableHead>
-              <TableRow >
+              <TableRow>
                 <TableCell style={{ textAlign: "center" }}>ID</TableCell>
                 <TableCell style={{ textAlign: "center" }}>
                   Course Name
@@ -485,17 +494,58 @@ function ManageCourses() {
         closeAfterTransition
       >
         <Fade in={confirmModalOpen}>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-            <Paper style={{ width: "400px", padding: "2em", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", textAlign: "center" }} elevation={3}>
-              <h3 style={{ marginBottom: "1em", fontSize: "1.5em", fontWeight: "bold" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Paper
+              style={{
+                width: "400px",
+                padding: "2em",
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                textAlign: "center",
+              }}
+              elevation={3}
+            >
+              <h3
+                style={{
+                  marginBottom: "1em",
+                  fontSize: "1.5em",
+                  fontWeight: "bold",
+                }}
+              >
                 Confirmation
               </h3>
               <p>Are you sure you want to change the status of this Course?</p>
-              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "2rem" }}>
-                <Button variant="contained" onClick={handleConfirm} style={{ marginRight: "1rem", backgroundColor: "black" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "2rem",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  onClick={handleConfirm}
+                  style={{ marginRight: "1rem", backgroundColor: "black" }}
+                >
                   Confirm
                 </Button>
-                <Button variant="outlined" onClick={handleCancel} style={{ backgroundColor: "#fff", color: "#000", border: "2px solid #000" }}>
+                <Button
+                  variant="outlined"
+                  onClick={handleCancel}
+                  style={{
+                    backgroundColor: "#fff",
+                    color: "#000",
+                    border: "2px solid #000",
+                  }}
+                >
                   Cancel
                 </Button>
               </div>

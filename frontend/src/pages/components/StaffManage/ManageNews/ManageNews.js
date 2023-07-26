@@ -73,7 +73,9 @@ function BasicExample() {
     }
     async function fetchNews() {
       try {
-        const response = await axios.get("http://localhost:3001/api/news/get");
+        const response = await axios.get(
+          "https://yoga-app-swp.onrender.com/api/news/get"
+        );
 
         setListNews(response.data.sort(compare));
       } catch (error) {
@@ -120,7 +122,7 @@ function BasicExample() {
       async function fetchNews() {
         try {
           const response = await axios.get(
-            "http://localhost:3001/api/news/get"
+            "https://yoga-app-swp.onrender.com/api/news/get"
           );
           setListNews(response.data.sort(compare));
         } catch (error) {
@@ -154,7 +156,7 @@ function BasicExample() {
       });
 
       if (response) {
-        toast.success("Added new course successfully");
+        toast.success("Added news successfully");
         values.subject = "";
         values.content = "";
         values.staff_id = "";
@@ -172,7 +174,7 @@ function BasicExample() {
         async function fetchNews() {
           try {
             const response = await axios.get(
-              "http://localhost:3001/api/news/get"
+              "https://yoga-app-swp.onrender.com/api/news/get"
             );
             setListNews(response.data.sort(compare));
           } catch (error) {

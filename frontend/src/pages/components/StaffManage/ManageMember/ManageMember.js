@@ -310,8 +310,17 @@ function ManageMember() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredPayments &&
-                filteredPayments.length > 0 &&
+              {filteredPayments.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={9}
+                    align="center"
+                    style={{ fontSize: "30px" }}
+                  >
+                    No member found!
+                  </TableCell>
+                </TableRow>
+              ) : (
                 filteredPayments
                   .slice(startIndex, endIndex)
                   .map((payment, index) => (
@@ -344,7 +353,8 @@ function ManageMember() {
                         />
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

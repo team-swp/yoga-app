@@ -110,7 +110,7 @@ function ManageClass() {
   useEffect(() => {
     async function fecthClassList() {
       try {
-        const requestUrl = "http://localhost:3001/api/class/get";
+        const requestUrl = "https://yoga-app-swp.onrender.com/api/class/get";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
         setClassList(responseJSON);
@@ -121,7 +121,7 @@ function ManageClass() {
     fecthClassList();
     async function fetchScheduleList() {
       try {
-        const requestUrl = "http://localhost:3001/api/schedule/get";
+        const requestUrl = "https://yoga-app-swp.onrender.com/api/schedule/get";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
         setScheduleList(responseJSON);
@@ -133,7 +133,7 @@ function ManageClass() {
 
     async function fetchCourseList() {
       try {
-        const requestUrl = "http://localhost:3001/api/course/get";
+        const requestUrl = "https://yoga-app-swp.onrender.com/api/course/get";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
         setCourseList(responseJSON);
@@ -145,7 +145,7 @@ function ManageClass() {
 
     async function fetchInstructorList() {
       try {
-        const requestUrl = "http://localhost:3001/api/accounts";
+        const requestUrl = "https://yoga-app-swp.onrender.com/api/accounts";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
         const FilterInstructor = responseJSON.filter(
@@ -165,7 +165,7 @@ function ManageClass() {
   }, [updatedClass, page]);
 
   //----------------------------------------------------------------------------------------------------------
-  var url2 = `http://localhost:3001/api/classesPaging/get?page=${page}&limit=${4}`;
+  var url2 = `https://yoga-app-swp.onrender.com/api/classesPaging/get?page=${page}&limit=${4}`;
   if (searchQuery !== "") {
     url2 += `&q=${searchQuery}`;
   }
@@ -187,7 +187,7 @@ function ManageClass() {
 
   async function fetchClasses3() {
     const response = await axios.get(
-      `http://localhost:3001/api/classesPaging/get?page=${page}&limit=${4}`
+      `https://yoga-app-swp.onrender.com/api/classesPaging/get?page=${page}&limit=${4}`
     );
     const classData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -203,7 +203,7 @@ function ManageClass() {
     setClasses(classData);
   }
 
-  var url = `http://localhost:3001/api/classesPaging/get?page=${1}&limit=${4}`;
+  var url = `https://yoga-app-swp.onrender.com/api/classesPaging/get?page=${1}&limit=${4}`;
 
   if (searchQuery !== "") {
     url += `&q=${searchQuery}`;
@@ -441,11 +441,11 @@ function ManageClass() {
               <TableRow>
                 <TableCell>Class Id</TableCell>
                 <TableCell>Class Name</TableCell>
-                <TableCell>Schedule</TableCell>
+                <TableCell>Slot</TableCell>
                 <TableCell>Course</TableCell>
                 <TableCell>Instructor</TableCell>
                 <TableCell>Days</TableCell>
-                <TableCell>Disable-Enable</TableCell>
+                <TableCell>Disable/Enable</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
