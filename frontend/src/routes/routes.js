@@ -63,14 +63,14 @@ import Admin from "../pages/components/Admin/AdminHome";
 import Premium from "../pages/components/MemberPacket/Premium";
 import Weather from "../pages/components/Weather/components/Weather";
 import UpdateNews from "../pages/components/StaffManage/ManageNews/UpdateNews";
-import NewsPage from "../pages/components/NotificationNew/News";
+
 import AddNewPremium from "../pages/components/StaffManage/ManagePremium/AddNewPremium";
 import UpdatePremiumPack from "../pages/components/StaffManage/ManagePremium/UpdatePremiumPack";
 
 import Contact from "../pages/components/Contact/Contact";
 
 import NewsList from "../pages/components/NotificationNew/NewsList";
-import Detail from "../pages/components/NotificationNew/Detail";
+
 
 import ConfettieEffect from "../pages/components/AnimationEffect/ConfettieEffect";
 
@@ -322,10 +322,7 @@ const routers = createBrowserRouter([
     element:<NewsList/>,
     path:'/news'
   },
-  {
-    element:<   Detail/>,
-    path:'/detail'
-  },
+  
 
 
 
