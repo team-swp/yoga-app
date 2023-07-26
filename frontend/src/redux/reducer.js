@@ -31,9 +31,9 @@ const rootReducer = (state = initState, action) => {
     case "login/setDataLogin": {
       const { _id, token, username, phone, avatar, email, meta_data, role } =
         action.payload;
-      if (!localStorage.getItem("token") && !localStorage.getItem("role")) {
+      if (!localStorage.getItem("token") && !sessionStorage.getItem("role")) {
         localStorage.setItem("token", token);
-        localStorage.setItem("role", role);
+        sessionStorage.setItem("role", role);
       }
 
       if (!sessionStorage.getItem("user.id")) {
@@ -73,7 +73,7 @@ const rootReducer = (state = initState, action) => {
     }
     case "logout": {
       localStorage.removeItem("token");
-      localStorage.removeItem("role");
+      sessionStorage.removeItem("role");
       return {
         ...state,
         user: {},
@@ -87,10 +87,11 @@ const rootReducer = (state = initState, action) => {
 
     case "payment/premiumData": {
       console.log(action.payload);
-      const { premium_id, paymentAmount, premiumname, duration } = action.payload
+      const { premium_id, paymentAmount, premiumname, duration } =
+        action.payload;
       return {
         ...state,
-        premium: { premium_id, paymentAmount, premiumname, duration: duration }
+        premium: { premium_id, paymentAmount, premiumname, duration: duration },
       };
     }
     default:

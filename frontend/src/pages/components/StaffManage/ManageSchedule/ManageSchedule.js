@@ -134,7 +134,7 @@ function ManageSchedule() {
 
   async function fetchSchedule2() {
     const response = await axios.get(
-      `http://localhost:3001/api/schedulesPaging/get?page=${page}&limit=${100}&q=${searchQuery}`
+      `https://yoga-app-swp.onrender.com/api/schedulesPaging/get?page=${page}&limit=${100}&q=${searchQuery}`
     );
     const schedulesData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -144,7 +144,7 @@ function ManageSchedule() {
 
   async function fetchSchedules() {
     const response = await axios.get(
-      `http://localhost:3001/api/schedulesPaging/get?page=${page}&limit=${3}`
+      `https://yoga-app-swp.onrender.com/api/schedulesPaging/get?page=${page}&limit=${3}`
     );
     const schedulesData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -155,7 +155,7 @@ function ManageSchedule() {
   useEffect(() => {
     async function fecthScheduleList() {
       try {
-        const requestUrl = "http://localhost:3001/api/schedule/get";
+        const requestUrl = "https://yoga-app-swp.onrender.com/api/schedule/get";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
         setScheduleList(responseJSON);
@@ -345,16 +345,14 @@ function ManageSchedule() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ textAlign: "center" }}>
-                  Slots Name
-                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>Slot Name</TableCell>
                 <TableCell style={{ textAlign: "center" }}>
                   Start Time
                 </TableCell>
                 <TableCell style={{ textAlign: "center" }}>End Time</TableCell>
                 <TableCell style={{ textAlign: "center" }}>Status</TableCell>
                 <TableCell style={{ textAlign: "center" }}>
-                  Disable-Enable
+                  Disable/Enable
                 </TableCell>
                 <TableCell style={{ textAlign: "center" }}>Action</TableCell>
               </TableRow>
@@ -371,7 +369,7 @@ function ManageSchedule() {
                   <TableCell style={{ textAlign: "center" }}>
                     {scheduleItem.endTime}
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ textAlign: "center" }}>
                     <Switch
                       checked={scheduleItem.status}
                       onChange={(event) => handleToggle(event, scheduleItem)}
@@ -381,7 +379,7 @@ function ManageSchedule() {
                   <TableCell style={{ textAlign: "center" }}>
                     <StatusButton status={scheduleItem.status} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ textAlign: "center" }}>
                     <Button
                       onClick={(event) => handleOpens(event, scheduleItem)}
                       style={{
@@ -432,7 +430,7 @@ function ManageSchedule() {
                 >
                   Confirmation
                 </h3>
-                <p>Are you sure you want to change the status of this Slots?</p>
+                <p>Are you sure you want to change the status of this Slot ?</p>
                 <div
                   style={{
                     display: "flex",
@@ -491,7 +489,7 @@ function ManageSchedule() {
                     fontWeight: "bold",
                   }}
                 >
-                  Add Slots
+                  Add Slot
                 </h3>
                 <Toaster position="top-center"></Toaster>
                 <TextField
@@ -615,7 +613,7 @@ function ManageSchedule() {
                     fontWeight: "bold",
                   }}
                 >
-                  Update Slots
+                  Update Slot
                 </h3>
                 <Toaster position="top-center"></Toaster>
                 <TextField

@@ -2,7 +2,7 @@
 import axios from "axios";
 import { addApi, getApi, updateApi } from "./easyAPI";
 // Make API req
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "https://yoga-app-swp.onrender.com";
 
 export async function getBooking() {
   return await getApi({
@@ -39,6 +39,6 @@ export async function checkBooking() {
     );
     return Promise.resolve({ data });
   } catch (error) {
-    return Promise.reject({ error});
+    return Promise.reject({ error });
   }
 }

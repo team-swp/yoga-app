@@ -75,7 +75,7 @@ function UpdateClass() {
   useEffect(() => {
     async function fecthClassList() {
       try {
-        const requestUrl = "http://localhost:3001/api/class/get";
+        const requestUrl = "https://yoga-app-swp.onrender.com/api/class/get";
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
         setClassList(responseJSON);
@@ -88,7 +88,7 @@ function UpdateClass() {
     async function fetchSchedule() {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/schedule/get"
+          "https://yoga-app-swp.onrender.com/api/schedule/get"
         );
         const scheduleData = response.data;
         setScheduleList(scheduleData);
@@ -102,7 +102,7 @@ function UpdateClass() {
     async function fetchCourse() {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/course/get"
+          "https://yoga-app-swp.onrender.com/api/course/get"
         );
         const courseData = response.data;
         setCourseList(courseData);
@@ -116,12 +116,14 @@ function UpdateClass() {
     async function fetchInstructor() {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/accounts"
+          "https://yoga-app-swp.onrender.com/api/accounts"
         );
         const allInstructors = response.data.filter(
           (ins) => ins.role === "instructor"
         );
-        setInstructorList(response.data.filter((ins) => ins.role === "instructor"));
+        setInstructorList(
+          response.data.filter((ins) => ins.role === "instructor")
+        );
         setFilteredInstructorList(response.data);
       } catch (error) {
         console.error(error);
@@ -231,7 +233,11 @@ function UpdateClass() {
         return !isConflictingInstructor;
       });
 
-      if (!filteredInstructors.some((instructor) => instructor._id === selectedInstructor?._id)) {
+      if (
+        !filteredInstructors.some(
+          (instructor) => instructor._id === selectedInstructor?._id
+        )
+      ) {
         setSelectedInstructor(filteredInstructors[0] || null);
       }
 
@@ -240,7 +246,6 @@ function UpdateClass() {
       setFilteredInstructorList(instructorList);
     }
   }, [selectedSchedule, days, instructorList, classList, selectedInstructor]);
-
 
   return (
     <>

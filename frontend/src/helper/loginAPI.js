@@ -19,6 +19,12 @@ export async function getMember() {
     errorMessage: "Cannot Get Members",
   });
 }
+export async function getRoles() {
+  return await getApi({
+    apiPath: `/api/role/get`,
+    errorMessage: "Cannot Get Roles",
+  });
+}
 
 /** get User details */
 export async function getUser({ id }) {

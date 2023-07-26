@@ -105,7 +105,12 @@ const {
 } = require("../controllers/Booking");
 const Semester = require("../models/semesters");
 const { log } = require("console");
-const { addRole, updateRole, getRoleById, getRoles } = require("../controllers/Role");
+const {
+  addRole,
+  updateRole,
+  getRoleById,
+  getRoles,
+} = require("../controllers/Role");
 const { getUserIP } = require("../middleware/blockIP");
 const {
   updatePremium,
@@ -220,7 +225,7 @@ router.patch(
 );
 
 //Role
-router.get("/role/get",AuthAdmin,getRoles)
+router.get("/role/get", AuthAdmin, getRoles);
 router.post("/role/add", AuthAdmin, addRole);
 router.patch("/role/update", AuthAdmin, getRoleById, updateRole);
 router.patch("/admin/update", AuthAdmin, updateUserForAdmin);
@@ -293,3 +298,4 @@ router.patch("/admin/update", AuthAdmin, updateUserForAdmin);
 
 //update holidat
 router.post("/update/holiday", AuthStaff, updateHolidayMember);
+router.get("/role/get", AuthAdmin, getRoles);
