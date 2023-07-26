@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styles from "./Home.module.css";
 import classNames from "classnames/bind";
 import { Container, Box, Button, Typography, Grid } from "@mui/material";
@@ -9,11 +9,43 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { getCourse } from "../../../helper/courseAPI";
 import { useDispatch } from "react-redux";
-import { setCourseId } from "../../../redux/actions";
+import { addUserLogin, setCourseId, setDataLogin } from "../../../redux/actions";
+import { getUserByToken } from "../../../helper/loginAPI";
+import { UserAuth } from "../../../context/AuthGoogleContext";
 
 const cx = classNames.bind(styles);
 
 function Home() {
+  const {logOut} = UserAuth()
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token && token !== "undefined") {
+          const getUserToken = getUserByToken();
+          getUserToken
+            .then((res) => {
+              res.data.data = Object.assign(res.data.data, { token });
+              dispatch(addUserLogin(res.data.data));
+              dispatch(setDataLogin(res.data.data));
+            })
+            .catch( async(res) => {
+              await logOut()
+              return <Navigate to={"/login"} replace={true}></Navigate>;
+            });
+        } else {
+          await logOut()
+          return <Navigate to={"/login"} replace={true}></Navigate>;
+        }
+      } catch (error) {
+        await logOut()
+        return <Navigate to={"/login"} replace={true} />;
+      }
+    };
+
+    checkToken();
+  }, []);
+
   const [courseList, setCourseList] = useState([]);
   useEffect(() => {
     async function fetchData() {

@@ -74,6 +74,8 @@ import Detail from "../pages/components/NotificationNew/Detail";
 
 import ConfettieEffect from "../pages/components/AnimationEffect/ConfettieEffect";
 
+
+
 const routers = createBrowserRouter([
   {
     path: "/",
