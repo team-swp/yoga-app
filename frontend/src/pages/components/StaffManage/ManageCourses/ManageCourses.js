@@ -55,7 +55,7 @@ function ManageCourses() {
           if (response && response.data) {
             console.log(response.data.data.coursename);
 
-            const classResponse = await axios.get('http://localhost:3001/api/class/get');
+            const classResponse = await axios.get('https://yoga-app-swp.onrender.com/api/class/get');
             const classData = classResponse.data;
             if (Array.isArray(classData) && classData.length > 0) {
               const classWithCourse = classData.filter((classs) => classs.course_id === response.data.data._id);
@@ -108,7 +108,7 @@ function ManageCourses() {
     async function fecthSemester() {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/classesPaging/get?limit=${1000}`
+          `https://yoga-app-swp.onrender.com/api/classesPaging/get?limit=${1000}`
         );
         const coureseData = response.data.items;
         setClasses(coureseData);
@@ -143,7 +143,7 @@ function ManageCourses() {
   ////////////////////////////  chạy lại cái này để reset lại trang ////////////////////////////////////////////////
   async function fetchCourses2() {
     const response = await axios.get(
-      `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`
+      `https://yoga-app-swp.onrender.com/api/coursesPaging/get?page=${page}&limit=${4}`
     );
     const coureseData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -165,7 +165,7 @@ function ManageCourses() {
     setValue("");
     setStatusValue("");
   };
-  var url2 = `http://localhost:3001/api/coursesPaging/get?page=${page}&limit=${4}`;
+  var url2 = `https://yoga-app-swp.onrender.com/api/coursesPaging/get?page=${page}&limit=${4}`;
 
   if (value !== "") {
     url2 += `&q=${value}`;
@@ -180,7 +180,7 @@ function ManageCourses() {
   }
 
 
-  var url = `http://localhost:3001/api/coursesPaging/get?page=${1}&limit=${4}`;
+  var url = `https://yoga-app-swp.onrender.com/api/coursesPaging/get?page=${1}&limit=${4}`;
 
   if (value !== "") {
     url += `&q=${value}`;

@@ -7,7 +7,7 @@ import Navigation from '../Header/Navigation/Navigation';
 import MenuForm from './MenuForm';
 import { Typography } from '@mui/material';
 import Footer from '../Footer/Footer';
-const baseUrl = 'http://localhost:3001/api/news/get'
+const baseUrl = 'https://yoga-app-swp.onrender.com/api/news/get'
 function NewsList() {
   const [list, setList] = useState([])
   const [listOrigin, setListOrigin] = useState([])

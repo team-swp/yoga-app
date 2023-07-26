@@ -57,7 +57,7 @@ function UpdateNews() {
     async function fetchData() {
       try {
         const [newsResponse, userResponse] = await Promise.all([
-          axios.get("http://localhost:3001/api/news/get"),
+          axios.get("https://yoga-app-swp.onrender.com/api/news/get"),
           getMember(),
         ]);
 

@@ -30,7 +30,7 @@ function AddNewCourse() {
     async function fetchSemesters() {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/semester/get"
+          "https://yoga-app-swp.onrender.com/api/semester/get"
         );
         const semesterData = response.data;
         // Lọc ra những semester có giá trị status là true
