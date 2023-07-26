@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@sentry/react": "^7.57.0",
+    "antd": "^5.6.4",
+    "crypto-browserify": "^3.12.0"
+  }
+}

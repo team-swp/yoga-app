@@ -29,6 +29,8 @@ function Profile() {
   const [isNotPass, setIsNotPass] = useState(true);
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("information");
+  const defaultAvatarURL =
+    "https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-1.jpg";
 
   const formik = useFormik({
     initialValues: {
@@ -101,6 +103,9 @@ function Profile() {
       setFile(url);
       e.target.src = file;
       updateUser({ avatar: url });
+    } else {
+      e.target.src = defaultAvatarURL;
+      return;
     }
   };
   const onUpload = async (e) => {
@@ -161,6 +166,7 @@ function Profile() {
   }, []);
 
   const imgStyle = `${styles.profile_img} object-cover h-44  `;
+  const avatarURL = user.avatar || defaultAvatarURL;
   return (
     <div className="">
       <div>

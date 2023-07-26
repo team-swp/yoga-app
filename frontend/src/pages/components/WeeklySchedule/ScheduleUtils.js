@@ -160,8 +160,34 @@ export default function useSchedule() {
         arr2.every((value) => arr1.includes(value))
       );
     }
-    console.log(checkedSchedule);
-    setCheckSchedule(checkedSchedule);
+
+    const parentSchedules = [];
+    checkedSchedule.forEach((schedule, index) => {
+      let isParentSchedule = true;
+      for (let i = 0; i < checkedSchedule.length; i++) {
+        if (index !== i) {
+          const comparisonSchedule = checkedSchedule[i];
+          if (
+            schedule.scheduleName === comparisonSchedule.scheduleName &&
+            hasCommonDays(schedule.days, comparisonSchedule.days) &&
+            schedule.days.length < comparisonSchedule.days.length
+          ) {
+            isParentSchedule = false;
+            break;
+          }
+        }
+      }
+      if (isParentSchedule) {
+        parentSchedules.push(schedule);
+      }
+    });
+
+    function hasCommonDays(arr1, arr2) {
+      return arr1.some((value) => arr2.includes(value));
+    }
+    console.log(parentSchedules);
+
+    setCheckSchedule(parentSchedules);
   }, [totalSchedule]);
 
   return { courseList, totalSchedule, checkSchedule };
