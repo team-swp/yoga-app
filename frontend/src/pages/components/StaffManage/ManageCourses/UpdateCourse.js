@@ -9,8 +9,6 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { updateCourse } from "../../../../helper/courseAPI";
 function UpdateCourse() {
-  const navigate = useNavigate();
-
   const [course, setCourse] = useState({});
   const courseId = useParams();
   const [coursename, setCoursename] = useState("");
@@ -50,7 +48,6 @@ function UpdateCourse() {
 
         if (response) {
           toast.success("Updated course success");
-          navigate("/staffmanage");
         } else {
           toast.error("Failed to update");
         }

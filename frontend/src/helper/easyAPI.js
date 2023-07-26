@@ -1,6 +1,6 @@
 import axios from "axios";
 // Make API req
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "https://yoga-app-swp.onrender.com";
 
 export async function getApi({ apiPath, errorMessage }) {
   try {
