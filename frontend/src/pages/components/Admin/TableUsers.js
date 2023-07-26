@@ -37,59 +37,46 @@ function BasicExample() {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [statusUserIdToUpdate, setStatusUserIdToUpdate] = useState("");
 
-  const [previousRole, setPreviousRole] = useState("");
-
   const handleRoleChange = (event, item) => {
-    const targetRole = event.target.value;
-    setSelectedRole(targetRole);
-
-    // Kiểm tra giá trị mới và giá trị trước đó
-    if (targetRole !== previousRole) {
-      Object.assign(item, { role: targetRole });
-      setIdActive(item._id);
-      setCurrentRole(targetRole);
-    }
+    setSelectedRole(event.target.value);
+    Object.assign(item, { role: event.target.value });
+    setIdActive(item._id);
+    setCurrentRole(selectedRole);
   };
-
-  useEffect(() => {
-    // Cập nhật giá trị trước đó sau khi đã cập nhật selectedRole
-    setPreviousRole(selectedRole);
-  }, [selectedRole]);
 
   const defaultAvatarURL =
     "https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-1.jpg";
 
+  async function fetchUsers() {
+    try {
+      const response = await getMember();
+      setListUsers(response.data);
+      setOriginalListUsers(response.data);
+      const avatarURLList = await Promise.all(
+        response.data.map(async (item) => {
+          const { url } = await getAvatarToAWS({ imageName: item._id });
+          return url;
+        })
+      );
+      setAvatarURLs(avatarURLList);
+    } catch {
+      console.log("Failed to fetch users");
+    }
+  }
+
+  async function fetchRoles() {
+    try {
+      const response = await getRoles();
+      const data = response.data.filter((obj) => obj.rolename !== "admin");
+      setRoles(data);
+    } catch {
+      console.log("Failed to fetch roles");
+    }
+  }
   useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await getMember();
-        setListUsers(response.data);
-        setOriginalListUsers(response.data);
-        const avatarURLList = await Promise.all(
-          response.data.map(async (item) => {
-            const { url } = await getAvatarToAWS({ imageName: item._id });
-            return url;
-          })
-        );
-        setAvatarURLs(avatarURLList);
-      } catch {
-        console.log("Failed to fetch users");
-      }
-    }
-
-    async function fetchRoles() {
-      try {
-        const response = await getRoles();
-        const data = response.data.filter((obj) => obj.rolename !== "admin");
-        setRoles(data);
-      } catch {
-        console.log("Failed to fetch roles");
-      }
-    }
-
     fetchRoles();
     fetchUsers();
-  }, [selectedRole]);
+  }, []);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -185,6 +172,7 @@ function BasicExample() {
       toast.success("Role updated successfully!", {
         position: toast.POSITION.TOP_RIGHT,
       });
+      fetchUsers();
     } catch (error) {
       console.log(error);
     }
