@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "yoga web app",
   "main": "index.js",
+  "engines": {
+    "node": ">=15.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "build": "echo \"Build script placeholder\""
   },
   "author": "thien, tai, kha, minh, tan",
   "license": "ISC",
@@ -29,7 +33,7 @@
     "jsonwebtoken": "^9.0.0",
     "mailgen": "^2.0.27",
     "moment": "^2.29.4",
-    "mongoose": "^7.1.1",
+    "mongoose": "^7.4.0",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.2",
