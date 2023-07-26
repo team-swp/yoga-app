@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getApi, updateApi } from "./easyAPI";
 // Make API req
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "https://yoga-app-swp.onrender.com";
 //authen func
 export async function authenticate(email) {
   try {
