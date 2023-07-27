@@ -86,7 +86,7 @@ function NewsList() {
         }}
       >
         {isNewsSelected && selectedNews ? (
-          <div style={{ flex: '1', maxWidth: '60rem' }}>
+          <div style={{ flex: '1', maxWidth: '60rem' ,marginLeft:"20px" }}>
             <div className="card px-3 pt-3">
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div className="bg-image hover-overlay shadow-1-strong ripple rounded-5 mb-4" data-mdb-ripple-color="light">
@@ -113,7 +113,7 @@ function NewsList() {
           </div>
         ) : null}
 
-        <div style={{ flex: '1' }}>
+        <div style={{ flex: '1', marginLeft:"50px" }}>
           {list.map((news, index) => {
             return (
               
@@ -127,7 +127,7 @@ function NewsList() {
                     />
                   </div>
 
-                  <div className="col-6">
+                  <div className="col-9">
                     <strong>{news.subject}</strong>
                     <p>
                       <u>{moment(news.createdAt).format('DD/MM/YY')}</u>
