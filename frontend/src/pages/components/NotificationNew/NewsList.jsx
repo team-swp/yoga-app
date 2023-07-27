@@ -115,42 +115,66 @@ function NewsList() {
             </div>
           </div>
         ) : null}
-
-        <div style={{ flex: '1', marginLeft: "50px" }}>
-          {getCurrentPageItems().map((news, index) => (
-            <div key={index} onClick={() => handleNewsClick(news)} style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)', cursor: 'pointer' }}>
-              <div className="row mb-4 border-bottom pb-2">
-                <div className="col-3" style={{ marginTop: '10px' }}>
-                  <img
-                    src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp"
-                    className="img-fluid shadow-1-strong rounded"
-                    alt="Hollywood Sign on The Hill"
-                  />
-                </div>
-
-                <div className="col-9">
-                  <strong>{news.subject}</strong>
-                  <p>
-                    <u>{moment(news.createdAt).format('DD/MM/YY')}</u>
-                  </p>
-                  <div>{news.content}</div>
-                </div>
-              </div>
-            </div>
-          ))}
+<div style={{ flex: '1', marginLeft: "50px" }}>
+  {getCurrentPageItems().map((news, index) => (
+    <div key={index} onClick={() => handleNewsClick(news)} >
+      <div className="row mb-4 border-bottom pb-2">
+        <div className="col-3" style={{ marginTop: '10px', position: 'relative' }}>
+          {/* Add inline CSS for hover effect */}
+          <img
+            src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp"
+            className="img-fluid shadow-1-strong rounded"
+            alt="Hollywood Sign on The Hill"
+            style={{ transition: 'opacity 0.3s', zIndex: '1' }}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = 0.8)}
+            onMouseOut={(e) => (e.currentTarget.style.opacity = 1)}
+          />
         </div>
+
+        <div className="col-9">
+          <strong>{news.subject}</strong>
+          <p>
+            <u>{moment(news.createdAt).format('DD/MM/YY')}</u>
+          </p>
+          <div>{news.content}</div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
       </div>
 
       {/* Pagination controls */}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-        <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
-          Previous Page
-        </button>
-        <span style={{ margin: '0 10px' }}>Page {currentPage} of {totalPages}</span>
-        <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
-          Next Page
-        </button>
-      </div>
+  <button
+    disabled={currentPage === 1}
+    onClick={() => handlePageChange(currentPage - 1)}
+    style={{
+    
+      cursor: 'pointer',
+      transition: 'background-color 0.3s, transform 0.2s',
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = 'none', e.currentTarget.style.transform = 'scale(1.05)')}
+    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'none', e.currentTarget.style.transform = 'scale(1)')}
+  >
+    Previous Page
+  </button>
+  <span style={{ margin: '0 10px' }}>Page {currentPage} of {totalPages}</span>
+  <button
+    disabled={currentPage === totalPages}
+    onClick={() => handlePageChange(currentPage + 1)}
+    style={{
+      
+      cursor: 'pointer',
+      transition: 'background-color 0.3s, transform 0.2s',
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = 'none', e.currentTarget.style.transform = 'scale(1.05)')}
+    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'none', e.currentTarget.style.transform = 'scale(1)')}
+  >
+    Next Page
+  </button>
+</div>
+
 
       <Footer />
     </div>
