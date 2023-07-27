@@ -74,6 +74,7 @@ import NewsList from "../pages/components/NotificationNew/NewsList";
 
 import ConfettieEffect from "../pages/components/AnimationEffect/ConfettieEffect";
 
+
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -317,14 +318,16 @@ const routers = createBrowserRouter([
     path: "/updatepremiumpack/:id",
     element: <UpdatePremiumPack />,
   },
-
   {
     element:<NewsList/>,
     path:'/news'
   },
   
 
-
+  // {
+  //   element:<Detail/>,
+  //   path:'/news'
+  // },
 
 
   { path: "/contact", element: <Contact /> },
