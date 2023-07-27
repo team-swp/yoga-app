@@ -12,6 +12,8 @@ import {
   Switch,
   Modal,
   Fade,
+  TextField,
+  IconButton
 } from "@mui/material";
 import "./ManageCourses.css";
 import { Link } from "react-router-dom";
@@ -21,7 +23,7 @@ import StatusButton from "./StatusButton2";
 import { getSemester } from "../../../../helper/semesterAPI";
 import { updateCourse } from "../../../../helper/courseAPI";
 import { updateClass } from "../../../../helper/classAPI";
-
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
   const [updatedCourse, setUpdatedCourse] = useState({});
@@ -58,9 +60,7 @@ function ManageCourses() {
           if (response && response.data) {
             console.log(response.data.data.coursename);
 
-            const classResponse = await axios.get(
-              "https://yoga-app-swp.onrender.com/api/class/get"
-            );
+            const classResponse = await axios.get('https://yoga-app-swp.onrender.com/api/class/get');
             const classData = classResponse.data;
             if (Array.isArray(classData) && classData.length > 0) {
               const classWithCourse = classData.filter(
@@ -257,7 +257,54 @@ function ManageCourses() {
               marginRight: "10px",
             }}
           >
+          
+          </div>
+
+          
+          <div
+            style={{
+              margin: "auto",
+              padding: "15px",
+              maxWidth: "1500px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <input
+            placeholder=" Course name"
+              value={value}
+              onChange={(event) =>
+                setValue(event.target.value.toLowerCase())
+              }
+              style={{ marginRight: "1rem" }}
+              className="border-solid border-1 border-black p-1"
+            />
+            <IconButton onClick={handleReset} sx={{ ml: -8 }}>
+              <RestartAltOutlinedIcon />
+            </IconButton>
+            
             <Button
+              onClick={handleSearch}
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ ml: 3 }}
+            >
+              Search
+            </Button>
+            <select
+                  value={statusValue}
+                  onClick={handleSearch}
+                  onChange={(e) => setStatusValue(e.target.value)}
+                  className="border-solid border-2 border-black p-1"
+                  style={{ marginLeft:"200px"}}
+                >
+                  <option value="">All Statuses</option>
+                  <option value="true">Enabled</option>
+                  <option value="false">Disabled</option>
+                </select>
+                <Button
+                style={{marginLeft:'300px'}}
               variant="contained"
               color="success"
               component={Link}
@@ -267,111 +314,8 @@ function ManageCourses() {
             </Button>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              marginTop: "15px",
-              marginBottom: "15px",
-              marginLeft: "10px",
-            }}
-          >
-            {" "}
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ display: "block" }}
-              onClick={handleOpenModal}
-            >
-              Search
-            </Button>
-            <Button
-              style={{ marginLeft: "1rem" }}
-              variant="outlined"
-              onClick={handleReset}
-            >
-              Reset
-            </Button>
-          </div>
-          <Modal
-            open={isOpen}
-            onClose={handleCloseModal}
-            sx={{
-              position: "absolute",
-              top: "40%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 1200,
-              height: 150,
-              backgroundColor: "none",
-              boxShadow: "none",
-              p: 4,
-            }}
-          >
-            <form onSubmit={handleSearch}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "1rem",
-                }}
-              >
-                <input
-                  autoFocus
-                  type="text"
-                  variant="outlined"
-                  placeholder="Search by course name"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  className="border-solid border-2 border-black p-1"
-                />
 
-                <select
-                  onClick={handleSearch}
-                  value={semesterValue}
-                  onChange={(e) => setSemesterValue(e.target.value)}
-                  className="border-solid border-2 border-black p-1"
-                >
-                  <option value="">All Semesters</option>
-                  {semesteres.map((semester, index) => (
-                    <option key={index} value={semester._id}>
-                      {semester.semestername}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  value={statusValue}
-                  onChange={(e) => setStatusValue(e.target.value)}
-                  onClick={handleSearch}
-                  className="border-solid border-2 border-black p-1"
-                >
-                  <option value="">All Statuses</option>
-                  <option value="true">Enabled</option>
-                  <option value="false">Disabled</option>
-                </select>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "1rem",
-                }}
-              >
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  style={{ marginRight: 10 }}
-                >
-                  Filter
-                </Button>
-                <Button variant="contained" onClick={handleCloseModal}>
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </Modal>
-
+         
           <Table>
             <TableHead>
               <TableRow>

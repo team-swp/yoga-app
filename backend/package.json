@@ -14,7 +14,7 @@
   "author": "thien, tai, kha, minh, tan",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.338.0",
+    "@aws-sdk/client-s3": "^3.378.0",
     "@aws-sdk/s3-request-presigner": "^3.338.0",
     "@sentry/node": "^7.57.0",
     "axios": "^1.4.0",
