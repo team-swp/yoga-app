@@ -129,6 +129,17 @@ export function CustomEvent({ event }) {
   );
 }
 
+export function CustomEventIns({ event }) {
+  return (
+    <div>
+      <strong style={{ fontSize: "12px" }}>{event.title}</strong>
+      <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.room}</p>
+      <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.description}</p>
+      <p style={{ marginTop: "5px", fontSize: "12px" }}>{event.instructor}</p>
+    </div>
+  );
+}
+
 export function CustomEventforModal({ event }) {
   return (
     <div>

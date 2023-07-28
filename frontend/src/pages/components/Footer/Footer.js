@@ -8,8 +8,7 @@ function Footer() {
           <div className="mb-6 md:mb-0">
             <a
               href="/"
-              className="flex items-center"
-              style={{ transform: "scale(1.6)", marginLeft: "20px" }}
+              className="flex items-center transform scale-150 sm:ml-2 lg:ml-6"
             >
               <img src={logo} alt="Logo" />
             </a>

@@ -501,7 +501,7 @@ function ManageSchedule() {
                   value={schedulename}
                   onChange={(event) => setSchedulename(event.target.value)}
                   required
-                  style={{ width: 250 }}
+                  style={{ width: 245, marginRight: '10px' }}
                 />
 
                 <div style={{ marginBottom: "10px", marginTop: "10px", marginLeft: "40px" }}>
@@ -620,7 +620,7 @@ function ManageSchedule() {
                   value={schedulenames}
                   onChange={(event) => setSchedulenames(event.target.value)}
                   required
-                  style={{ width: 260 }}
+                  style={{ width: 245, marginRight: '10px' }}
                 />
 
                 <div style={{ marginBottom: "10px", marginTop: "10px", marginLeft: "40px" }}>
