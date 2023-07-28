@@ -36,7 +36,7 @@ function Profile() {
     initialValues: {
       email: user.email,
       username: user.username,
-      phone: user.phone || "",
+      phone: "0"+user.phone || "",
     },
     validate: profileValidation,
     validateOnBlur: false,
