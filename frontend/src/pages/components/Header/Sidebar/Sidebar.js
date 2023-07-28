@@ -112,7 +112,7 @@ function Sidebar() {
       setCheckMember(checkMem.isMember);
       const duration = checkMem.MemberDuration;
       const dateOld = new Date(checkMem.startDateMember);
-      if (duration.includes("7day")) {
+      if (typeof duration!=='number' && duration?.includes("7day")) {
         dateOld.setDate(dateOld.getDate() + parseInt(duration));
         const day = dateOld.getDate();
         const month = dateOld.getMonth() + 1;

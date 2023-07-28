@@ -21,10 +21,6 @@ const PurchaseHistory = () => {
           getPremium(),
         ]);
         const PaymentUserByID = respone.data
-          .filter(
-            (paymentItem) =>
-              paymentItem.status === 10 || paymentItem.status === 4
-          )
           .map((paymentItem) => {
             const filteredPackageItems = packageRespone.data.filter(
               (packageItem) => paymentItem.premium_id === packageItem._id
@@ -79,7 +75,7 @@ const PurchaseHistory = () => {
                 <tr key={`users=${index}`}>
                   <td className="text-left">{startIndex + index + 1}</td>
 
-                  <td className="text-left">{item.paymentAmount + ""}</td>
+                  <td className="text-left">{item.paymentAmount?.toLocaleString('en') + " "}VND</td>
                   <td className="text-left">
                     {moment(item.createdAt).format("DD/MM/YY")}
                   </td>
