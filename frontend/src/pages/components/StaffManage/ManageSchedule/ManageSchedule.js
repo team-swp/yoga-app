@@ -23,9 +23,11 @@ import {
   updateSchedule,
 } from "../../../../helper/scheduleAPI";
 import { getClass, updateClass } from "../../../../helper/classAPI";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import StatusButton from "./StatusButons";
@@ -502,59 +504,54 @@ function ManageSchedule() {
                   style={{ width: 250 }}
                 />
 
-                <div style={{ marginBottom: "10px", marginTop: "10px" }}>
-                  <label
-                    style={{
-                      display: "block",
-                      fontWeight: "bold",
-                      marginRight: "10em",
-                    }}
-                  >
-                    Start Time:
-                  </label>
+                <div style={{ marginBottom: "10px", marginTop: "10px", marginLeft: "40px" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      ampm={true}
-                      value={startTime}
-                      onChange={handleStartTimeChange}
-                      inputFormat="hh:mm A"
-                      inputProps={{
-                        style: {
-                          width: "100%",
-                          padding: "5px",
-                          border: "1px solid #ccc",
-                        },
-                      }}
-                    />
+                    <DemoContainer components={['TimePicker']}>
+                      <TimePicker
+                        label="Start Time"
+                        value={startTime}
+                        onChange={handleStartTimeChange}
+                        viewRenderers={{
+                          hours: renderTimeViewClock,
+                          minutes: renderTimeViewClock,
+                          seconds: renderTimeViewClock,
+                        }}
+                        inputProps={{
+                          style: {
+                            width: "100%",
+                            padding: "5px",
+                            border: "1px solid #ccc",
+                          },
+                        }}
+                      />
+                    </DemoContainer>
                   </LocalizationProvider>
                 </div>
 
-                <div style={{ marginBottom: "10px", marginTop: "10px" }}>
-                  <label
-                    style={{
-                      display: "block",
-                      fontWeight: "bold",
-                      marginRight: "10em",
-                    }}
-                  >
-                    End Time:
-                  </label>
+                <div style={{ marginBottom: "10px", marginTop: "10px", marginLeft: "40px" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      ampm={true}
-                      value={endTime}
-                      onChange={handleEndTimeChange}
-                      inputFormat="hh:mm A"
-                      inputProps={{
-                        style: {
-                          width: "100%",
-                          padding: "5px",
-                          border: "1px solid #ccc",
-                        },
-                      }}
-                    />
+                    <DemoContainer components={['TimePicker']}>
+                      <TimePicker
+                        label="End Time"
+                        value={endTime}
+                        onChange={handleEndTimeChange}
+                        viewRenderers={{
+                          hours: renderTimeViewClock,
+                          minutes: renderTimeViewClock,
+                          seconds: renderTimeViewClock,
+                        }}
+                        inputProps={{
+                          style: {
+                            width: "100%",
+                            padding: "5px",
+                            border: "1px solid #ccc",
+                          },
+                        }}
+                      />
+                    </DemoContainer>
                   </LocalizationProvider>
                 </div>
+
                 <div
                   style={{
                     display: "flex",
@@ -626,56 +623,50 @@ function ManageSchedule() {
                   style={{ width: 260 }}
                 />
 
-                <div style={{ marginBottom: "10px", marginTop: "10px" }}>
-                  <label
-                    style={{
-                      display: "block",
-                      fontWeight: "bold",
-                      marginRight: "10em",
-                    }}
-                  >
-                    Start Time:
-                  </label>
+                <div style={{ marginBottom: "10px", marginTop: "10px", marginLeft: "40px" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      ampm={true}
-                      value={startTimes}
-                      onChange={handleStartTimeChanges}
-                      inputFormat="hh:mm A"
-                      inputProps={{
-                        style: {
-                          width: "100%",
-                          padding: "5px",
-                          border: "1px solid #ccc",
-                        },
-                      }}
-                    />
+                    <DemoContainer components={['TimePicker']}>
+                      <TimePicker
+                        label="Start Time"
+                        value={startTimes}
+                        onChange={handleStartTimeChanges}
+                        viewRenderers={{
+                          hours: renderTimeViewClock,
+                          minutes: renderTimeViewClock,
+                          seconds: renderTimeViewClock,
+                        }}
+                        inputProps={{
+                          style: {
+                            width: "100%",
+                            padding: "5px",
+                            border: "1px solid #ccc",
+                          },
+                        }}
+                      />
+                    </DemoContainer>
                   </LocalizationProvider>
                 </div>
-                <div style={{ marginBottom: "10px", marginTop: "10px" }}>
-                  <label
-                    style={{
-                      display: "block",
-                      fontWeight: "bold",
-                      marginRight: "10em",
-                    }}
-                  >
-                    End Time:
-                  </label>
+                <div style={{ marginBottom: "10px", marginTop: "10px", marginLeft: "40px" }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      ampm={true}
-                      value={endTimes}
-                      onChange={handleEndTimeChanges}
-                      inputFormat="hh:mm A"
-                      inputProps={{
-                        style: {
-                          width: "100%",
-                          padding: "5px",
-                          border: "1px solid #ccc",
-                        },
-                      }}
-                    />
+                    <DemoContainer components={['TimePicker']}>
+                      <TimePicker
+                        label="End Time"
+                        value={endTimes}
+                        onChange={handleEndTimeChanges}
+                        viewRenderers={{
+                          hours: renderTimeViewClock,
+                          minutes: renderTimeViewClock,
+                          seconds: renderTimeViewClock,
+                        }}
+                        inputProps={{
+                          style: {
+                            width: "100%",
+                            padding: "5px",
+                            border: "1px solid #ccc",
+                          },
+                        }}
+                      />
+                    </DemoContainer>
                   </LocalizationProvider>
                 </div>
                 <div

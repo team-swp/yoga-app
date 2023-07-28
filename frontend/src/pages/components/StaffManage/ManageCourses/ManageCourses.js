@@ -257,10 +257,10 @@ function ManageCourses() {
               marginRight: "10px",
             }}
           >
-          
+
           </div>
 
-          
+
           <div
             style={{
               margin: "auto",
@@ -271,7 +271,7 @@ function ManageCourses() {
             }}
           >
             <input
-            placeholder=" Course name"
+              placeholder=" Course name"
               value={value}
               onChange={(event) =>
                 setValue(event.target.value.toLowerCase())
@@ -282,7 +282,7 @@ function ManageCourses() {
             <IconButton onClick={handleReset} sx={{ ml: -8 }}>
               <RestartAltOutlinedIcon />
             </IconButton>
-            
+
             <Button
               onClick={handleSearch}
               type="submit"
@@ -293,18 +293,18 @@ function ManageCourses() {
               Search
             </Button>
             <select
-                  value={statusValue}
-                  onClick={handleSearch}
-                  onChange={(e) => setStatusValue(e.target.value)}
-                  className="border-solid border-2 border-black p-1"
-                  style={{ marginLeft:"200px"}}
-                >
-                  <option value="">All Statuses</option>
-                  <option value="true">Enabled</option>
-                  <option value="false">Disabled</option>
-                </select>
-                <Button
-                style={{marginLeft:'300px'}}
+              value={statusValue}
+              onClick={handleSearch}
+              onChange={(e) => setStatusValue(e.target.value)}
+              className="border-solid border-2 border-black p-1"
+              style={{ marginLeft: "200px" }}
+            >
+              <option value="">All Statuses</option>
+              <option value="true">Enabled</option>
+              <option value="false">Disabled</option>
+            </select>
+            <Button
+              style={{ marginLeft: '300px' }}
               variant="contained"
               color="success"
               component={Link}
@@ -315,7 +315,7 @@ function ManageCourses() {
           </div>
 
 
-         
+
           <Table>
             <TableHead>
               <TableRow>

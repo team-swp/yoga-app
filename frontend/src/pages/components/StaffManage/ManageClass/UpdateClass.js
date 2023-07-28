@@ -212,40 +212,40 @@ function UpdateClass() {
     setDays(sortedDays);
   };
 
-  useEffect(() => {
-    if (selectedSchedule && days.length > 0) {
-      const filteredInstructors = instructorList.filter((instructor) => {
-        // Tìm tất cả các lịch trình và ngày trùng nhau
-        const conflictingSchedules = classList.filter((classItem) => {
-          const hasScheduleConflict =
-            classItem.schedule_id === selectedSchedule._id;
-          const hasDaysConflict = classItem.days.some((day) =>
-            days.includes(day)
-          );
-          return hasScheduleConflict && hasDaysConflict;
-        });
+  // useEffect(() => {
+  //   if (selectedSchedule && days.length > 0) {
+  //     const filteredInstructors = instructorList.filter((instructor) => {
+  //       // Tìm tất cả các lịch trình và ngày trùng nhau
+  //       const conflictingSchedules = classList.filter((classItem) => {
+  //         const hasScheduleConflict =
+  //           classItem.schedule_id === selectedSchedule._id;
+  //         const hasDaysConflict = classItem.days.some((day) =>
+  //           days.includes(day)
+  //         );
+  //         return hasScheduleConflict && hasDaysConflict;
+  //       });
 
-        // Lọc ra các instructor không nằm trong danh sách lịch trình và ngày trùng nhau
-        const isConflictingInstructor = conflictingSchedules.some(
-          (classItem) => classItem.instructor_id === instructor._id
-        );
+  //       // Lọc ra các instructor không nằm trong danh sách lịch trình và ngày trùng nhau
+  //       const isConflictingInstructor = conflictingSchedules.some(
+  //         (classItem) => classItem.instructor_id === instructor._id
+  //       );
 
-        return !isConflictingInstructor;
-      });
+  //       return !isConflictingInstructor;
+  //     });
 
-      if (
-        !filteredInstructors.some(
-          (instructor) => instructor._id === selectedInstructor?._id
-        )
-      ) {
-        setSelectedInstructor(filteredInstructors[0] || null);
-      }
+  //     if (
+  //       !filteredInstructors.some(
+  //         (instructor) => instructor._id === selectedInstructor?._id
+  //       )
+  //     ) {
+  //       setSelectedInstructor(filteredInstructors[0] || null);
+  //     }
 
-      setFilteredInstructorList(filteredInstructors);
-    } else {
-      setFilteredInstructorList(instructorList);
-    }
-  }, [selectedSchedule, days, instructorList, classList, selectedInstructor]);
+  //     setFilteredInstructorList(filteredInstructors);
+  //   } else {
+  //     setFilteredInstructorList(instructorList);
+  //   }
+  // }, [selectedSchedule, days, instructorList, classList, selectedInstructor]);
 
   return (
     <>

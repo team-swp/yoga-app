@@ -83,7 +83,7 @@ function ManageSemester() {
         console.log(semesterResponse.data.data.semestername);
 
         const courseResponse = await axios.get(
-          "https://yoga-app-swp.onrender.com/api/course/get"
+          "http://localhost:3001/api/course/get"
         );
         const courseData = courseResponse.data;
         if (Array.isArray(courseData) && courseData.length > 0) {
@@ -103,7 +103,7 @@ function ManageSemester() {
                   console.log(response.data.data.coursename);
 
                   const classResponse = await axios.get(
-                    "https://yoga-app-swp.onrender.com/api/class/get"
+                    "http://localhost:3001/api/class/get"
                   );
                   const classData = classResponse.data;
                   if (Array.isArray(classData) && classData.length > 0) {
@@ -175,7 +175,7 @@ function ManageSemester() {
   };
 
   async function fetchSemester2() {
-    const url = `https://yoga-app-swp.onrender.com/api/semestersPaging/get?page=${1}&limit=${100}&q=${searchQuery}`;
+    const url = `http://localhost:3001/api/semestersPaging/get?page=${1}&limit=${100}&q=${searchQuery}`;
     const response = await axios.get(url);
     const semestersData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -185,7 +185,7 @@ function ManageSemester() {
 
   async function fetchSemesters() {
     const response = await axios.get(
-      `https://yoga-app-swp.onrender.com/api/semestersPaging/get?page=${page}&limit=${3}`
+      `http://localhost:3001/api/semestersPaging/get?page=${page}&limit=${3}`
     );
     const semestersData = response.data.items;
     setPage(response.data.pagination.pageNum);
@@ -400,7 +400,7 @@ function ManageSemester() {
                   <TableCell style={{ textAlign: "center" }}>
                     {new Date(semesterItem.endDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell style={{ textAlign: "center" }}>
+                  <TableCell>
                     <Switch
                       checked={semesterItem.status}
                       onChange={(event) => handleToggle(event, semesterItem)}
