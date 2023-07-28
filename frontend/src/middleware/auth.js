@@ -59,7 +59,7 @@ export const ProtectRouteCheckout = ({ children }) => {
 };
 
 export const ProtectRouteInstructor = ({ children }) => {
-  const instructor = localStorage.getItem("role");
+  const instructor = sessionStorage.getItem("role");
 
   if (!instructor || instructor !== "instructor") {
     return <Navigate to={"/*"} replace={true} />;
@@ -69,7 +69,7 @@ export const ProtectRouteInstructor = ({ children }) => {
 };
 
 export const ProtectRouteStaff = ({ children }) => {
-  const staff = localStorage.getItem("role");
+  const staff = sessionStorage.getItem("role");
 
   if (!staff || staff !== "staff") {
     return <Navigate to={"/*"} replace={true} />;
@@ -79,7 +79,7 @@ export const ProtectRouteStaff = ({ children }) => {
 };
 
 export const ProtectRouteAdmin = ({ children }) => {
-  const admin = localStorage.getItem("role");
+  const admin = sessionStorage.getItem("role");
 
   if (!admin || admin !== "admin") {
     return <Navigate to={"/*"} replace={true} />;

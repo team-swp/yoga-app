@@ -9,8 +9,6 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { updateCourse } from "../../../../helper/courseAPI";
 function UpdateCourse() {
-  const navigate = useNavigate();
-
   const [course, setCourse] = useState({});
   const courseId = useParams();
   const [coursename, setCoursename] = useState("");
@@ -50,7 +48,6 @@ function UpdateCourse() {
 
         if (response) {
           toast.success("Updated course success");
-          navigate("/staffmanage");
         } else {
           toast.error("Failed to update");
         }
@@ -64,8 +61,8 @@ function UpdateCourse() {
     async function fetchData() {
       try {
         const [courseResponse, semesterResponse] = await Promise.all([
-          axios.get("http://localhost:3001/api/course/get"),
-          axios.get("http://localhost:3001/api/semester/get"),
+          axios.get("https://yoga-app-swp.onrender.com/api/course/get"),
+          axios.get("https://yoga-app-swp.onrender.com/api/semester/get"),
         ]);
 
         const courseData = courseResponse.data;
@@ -109,7 +106,7 @@ function UpdateCourse() {
     async function fetchSemesters() {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/semester/get"
+          "https://yoga-app-swp.onrender.com/api/semester/get"
         );
         const semesterData = response.data;
         // Lọc ra những semester có giá trị status là true

@@ -2,7 +2,7 @@
 import axios from "axios";
 import { addApi, getApi, updateApi } from "./easyAPI";
 // Make API req
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "https://yoga-app-swp.onrender.com";
 
 export async function getPayment() {
   return await getApi({
@@ -70,8 +70,8 @@ export async function getPaymentByID({ id }) {
 
 export async function getPaymentByIDUser() {
   try {
-   const {data} =  await getApi({
-      apiPath:`/api/getpayment/user`,
+    const { data } = await getApi({
+      apiPath: `/api/getpayment/user`,
       errorMessage: "Cannot Get Booking",
     });
     return Promise.resolve({ data });

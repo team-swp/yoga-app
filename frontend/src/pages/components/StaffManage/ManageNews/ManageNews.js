@@ -73,7 +73,9 @@ function BasicExample() {
     }
     async function fetchNews() {
       try {
-        const response = await axios.get("http://localhost:3001/api/news/get");
+        const response = await axios.get(
+          "https://yoga-app-swp.onrender.com/api/news/get"
+        );
 
         setListNews(response.data.sort(compare));
       } catch (error) {
@@ -120,7 +122,7 @@ function BasicExample() {
       async function fetchNews() {
         try {
           const response = await axios.get(
-            "http://localhost:3001/api/news/get"
+            "https://yoga-app-swp.onrender.com/api/news/get"
           );
           setListNews(response.data.sort(compare));
         } catch (error) {
@@ -154,7 +156,7 @@ function BasicExample() {
       });
 
       if (response) {
-        toast.success("Added new course successfully");
+        toast.success("Added news successfully");
         values.subject = "";
         values.content = "";
         values.staff_id = "";
@@ -172,7 +174,7 @@ function BasicExample() {
         async function fetchNews() {
           try {
             const response = await axios.get(
-              "http://localhost:3001/api/news/get"
+              "https://yoga-app-swp.onrender.com/api/news/get"
             );
             setListNews(response.data.sort(compare));
           } catch (error) {
@@ -219,6 +221,99 @@ function BasicExample() {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedNews, setSelectedNews] = useState(null);
+
+
+    const[selectedStaff1, setSelectedStaff1] = useState(null)
+ 
+
+  const handleCloseUpdateModal = () => {
+    setSelectedNews(null);
+    setUpdateModalOpen(false);
+  };
+
+
+
+  const fetchDataForSelectedNews = async (selectedNews) => {
+    try {
+      const [newsResponse, userResponse] = await Promise.all([
+        axios.get("https://yoga-app-swp.onrender.com/api/news/get"),
+        getMember(),
+      ]);
+  
+      const newsData = newsResponse.data;
+      const userData = userResponse.data;
+  
+      const combinedData = newsData.map((news) => {
+        const user = userData.find((user) => user._id === news.staff_id);
+        const userName = user ? user.username : "";
+        return {
+          ...news,
+          username: userName,
+        };
+      });
+  
+      const news = combinedData.find((obj) => obj._id === selectedNews._id);
+      setSelectedStaff1(news.username);
+      console.log(news.username);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const handleOpenUpdateModal = (newsItem) => {
+    setSelectedNews(newsItem);
+    setUpdateModalOpen(true);
+    fetchDataForSelectedNews(newsItem);
+  };
+  const handleUpdateNews = async (values) => {
+    try {
+      const staffID = selectedStaff ? selectedStaff._id : null;
+      // Replace the following line with your API call to update the news item
+      const response = await updateNews({
+        _id: selectedNews._id,
+        subject: values.subject,
+        content: values.content,
+        staff_id: staffID,
+      });
+
+      // For demo purposes, log the updated data to the console
+     
+
+      toast.success("Updated news successfully");
+      handleCloseUpdateModal();
+      function compare(a, b) {
+        if (a.createdAt > b.createdAt) {
+          return -1;
+        }
+        if (a.createdAt < b.createdAt) {
+          return 1;
+        }
+        return 0;
+      }
+      async function fetchNews() {
+        try {
+          const response = await axios.get(
+            "https://yoga-app-swp.onrender.com/api/news/get"
+          );
+          setListNews(response.data.sort(compare));
+        } catch (error) {
+          console.log("Failed to fetch news");
+        }
+      }
+      fetchNews();
+    } catch (error) {
+      toast.error("Failed to update news");
+    }
+  };
+
+  const [staffList1, setStaffList1] = useState([]);
+ 
+
+
+
   //---------------------------------------------------------------------------------------///
   return (
     <>
@@ -398,11 +493,10 @@ function BasicExample() {
                         <Button
                           variant="contained"
                           color="warning"
-                          component={Link}
-                          to={`/updatesenews/${item._id}`}
+                          onClick={() => handleOpenUpdateModal(item)}
                           style={{ fontSize: "10px" }}
                         >
-                          Update & Detail
+                          Update
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -509,6 +603,94 @@ function BasicExample() {
             </Paper>
           </div>
         </Fade>
+      </Modal>
+
+      <Modal open={isUpdateModalOpen} onClose={handleCloseUpdateModal}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography variant="h6" component="h2" mb={2}>
+            Update News
+          </Typography>
+
+          <Formik
+            initialValues={{
+              subject: selectedNews?.subject || "",
+              content: selectedNews?.content || "",
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleUpdateNews}
+          >
+            {({ errors, touched }) => (
+              <Form>
+                <Autocomplete
+                  value={selectedStaff1}
+                  onChange={(event, newValue) => setSelectedStaff(newValue)}
+                  options={listOfStaff}
+                  getOptionLabel={(option) => option.username || selectedStaff1}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Staff"
+                      name="staff_id"
+                      required
+                      sx={{ marginBottom: "10px" }}
+                      error={errors.staff_id && touched.staff_id}
+                      helperText={
+                        errors.staff_id && touched.staff_id && errors.staff_id
+                      }
+                    />
+                  )}
+                />
+                <Field
+                  name="subject"
+                  as={TextField}
+                  label="Subject"
+                  fullWidth
+                  required
+                  multiline
+                  rows={4}
+                  sx={{ marginBottom: "10px" }}
+                  error={errors.subject && touched.subject}
+                  helperText={
+                    errors.subject && touched.subject && errors.subject
+                  }
+                />
+                <Field
+                  name="content"
+                  as={TextField}
+                  label="Content"
+                  fullWidth
+                  required
+                  sx={{ marginBottom: "10px" }}
+                  error={errors.content && touched.content}
+                  helperText={
+                    errors.content && touched.content && errors.content
+                  }
+                />
+                <Button type="submit" variant="contained" color="primary">
+                  Update
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleCloseUpdateModal}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Box>
       </Modal>
     </>
   );

@@ -112,11 +112,19 @@ function Sidebar() {
       setCheckMember(checkMem.isMember);
       const duration = checkMem.MemberDuration;
       const dateOld = new Date(checkMem.startDateMember);
-      dateOld.setMonth(dateOld.getMonth() + parseInt(duration));
-      const day = dateOld.getDate();
-      const month = dateOld.getMonth() + 1;
-      const year = dateOld.getFullYear();
-      setMemberDate(`${day}/${month}/${year}`);
+      if (typeof duration!=='number' && duration?.includes("7day")) {
+        dateOld.setDate(dateOld.getDate() + parseInt(duration));
+        const day = dateOld.getDate();
+        const month = dateOld.getMonth() + 1;
+        const year = dateOld.getFullYear();
+        setMemberDate(`${day}/${month}/${year}`);
+      } else {
+        dateOld.setMonth(dateOld.getMonth() + parseInt(duration));
+        const day = dateOld.getDate();
+        const month = dateOld.getMonth() + 1;
+        const year = dateOld.getFullYear();
+        setMemberDate(`${day}/${month}/${year}`);
+      }
     }
   }, [user]);
   return (
