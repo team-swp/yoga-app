@@ -16,9 +16,9 @@ let transporter = nodemailer.createTransport(nodeConfig);
 let MailGenerator = new Mailgen({
   theme: "default",
   product: {
-    name: "Heart Beat",
-    link: "heartbeat.com",
-    logo: "https://png.pngtree.com/template/20191108/ourmid/pngtree-yoga-logo-design-stock-meditation-in-lotus-flower-illustration-image_328924.jpg",
+    name: "Heartbeat Yoga",
+    link: "heartbeatyoga.online",
+    logo: "https://img.freepik.com/premium-vector/yoga-logo-icon-line-outline-monoline-style_7688-1317.jpg?w=2000",
   },
 });
 
