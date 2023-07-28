@@ -74,7 +74,7 @@ function NewsList() {
         }}
       >
         <Typography variant="h4" gutterTop style={{ fontFamily: 'SangBleu Sunrise' }}>
-          NOTIFICATIONS
+          NEWS
         </Typography>
       </div>
 

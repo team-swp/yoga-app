@@ -225,16 +225,12 @@ function BasicExample() {
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
 
-
-    const[selectedStaff1, setSelectedStaff1] = useState(null)
- 
+  const [selectedStaff1, setSelectedStaff1] = useState(null);
 
   const handleCloseUpdateModal = () => {
     setSelectedNews(null);
     setUpdateModalOpen(false);
   };
-
-
 
   const fetchDataForSelectedNews = async (selectedNews) => {
     try {
@@ -242,10 +238,10 @@ function BasicExample() {
         axios.get("https://yoga-app-swp.onrender.com/api/news/get"),
         getMember(),
       ]);
-  
+
       const newsData = newsResponse.data;
       const userData = userResponse.data;
-  
+
       const combinedData = newsData.map((news) => {
         const user = userData.find((user) => user._id === news.staff_id);
         const userName = user ? user.username : "";
@@ -254,7 +250,7 @@ function BasicExample() {
           username: userName,
         };
       });
-  
+
       const news = combinedData.find((obj) => obj._id === selectedNews._id);
       setSelectedStaff1(news.username);
       console.log(news.username);
@@ -262,7 +258,7 @@ function BasicExample() {
       console.error(error);
     }
   };
-  
+
   const handleOpenUpdateModal = (newsItem) => {
     setSelectedNews(newsItem);
     setUpdateModalOpen(true);
@@ -280,7 +276,6 @@ function BasicExample() {
       });
 
       // For demo purposes, log the updated data to the console
-     
 
       toast.success("Updated news successfully");
       handleCloseUpdateModal();
@@ -310,9 +305,6 @@ function BasicExample() {
   };
 
   const [staffList1, setStaffList1] = useState([]);
- 
-
-
 
   //---------------------------------------------------------------------------------------///
   return (
@@ -422,7 +414,7 @@ function BasicExample() {
               component={Link}
               onClick={handleOpenModal}
             >
-              Write a notification
+              Add News
             </Button>
           </div>
           <form
