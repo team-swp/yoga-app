@@ -10,11 +10,7 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import CheckIcon from "@mui/icons-material/Check";
 import ScrollToTopOnMount from "../../ScrollToTopOnMount";
 import { getCourse } from "../../../helper/courseAPI";
-import { getClass } from "../../../helper/classAPI";
-import { addBooking } from "../../../helper/bookingAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { setDataBooking } from "../../../redux/actions";
-import { userSelector } from "../../../redux/selectors";
+import Loading from "./Loading";
 
 const cx = classNames.bind(styles);
 
@@ -24,16 +20,28 @@ function CourseDetail() {
   const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [foundCourse, setFoundCourse] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   //fetchData
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await getCourse();
-        const course = response.data.filter(
+        const filteredCourses = response.data.filter(
           (obj) => obj._id === courseId && obj.status === true
         );
-        setCourse(course[0]);
+        if (filteredCourses.length > 0) {
+          setCourse(filteredCourses[0]);
+        } else {
+          setFoundCourse(false);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -60,7 +68,10 @@ function CourseDetail() {
           </h1>
         </div>
       </div>
-      {course ? (
+
+      {isLoading ? (
+        <Loading />
+      ) : foundCourse ? (
         <Container>
           <h1 className={cx("course-header")}>{course.coursename}</h1>
           <Grid container spacing={2}>

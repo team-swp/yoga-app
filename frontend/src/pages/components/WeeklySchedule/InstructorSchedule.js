@@ -9,7 +9,13 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import classNames from "classnames/bind";
 import styles from "./WeeklySchedule.module.css";
-import { CustomEvent, EventWrapper, minTime, parseTime } from "./TimeUtils";
+import {
+  CustomEvent,
+  CustomEventIns,
+  EventWrapper,
+  minTime,
+  parseTime,
+} from "./TimeUtils";
 import { userSelector } from "../../../redux/selectors";
 import { useSelector } from "react-redux";
 
@@ -109,7 +115,7 @@ function InsctructorSchedule() {
             defaultView={"week"}
             views={["day", "week"]}
             components={{
-              event: CustomEvent,
+              event: CustomEventIns,
               eventWrapper: EventWrapper,
             }}
             min={minTime}
