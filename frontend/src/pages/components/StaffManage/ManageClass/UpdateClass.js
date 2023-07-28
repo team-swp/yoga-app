@@ -211,41 +211,33 @@ function UpdateClass() {
 
     setDays(sortedDays);
   };
+  useEffect(() => {
+    if (selectedSchedule && days.length > 0) {
+      const filteredInstructors = instructorList.filter((instructor) => {
+        const conflictingSchedules = classList.filter((classItem) => {
+          const hasScheduleConflict = classItem.schedule_id === selectedSchedule._id;
+          const hasDaysConflict = classItem.days.some((day) => days.includes(day));
+          return hasScheduleConflict && hasDaysConflict;
+        });
+        const isConflictingInstructor = conflictingSchedules.some(
+          (classItem) => classItem.instructor_id === instructor._id
+        );
+        return !isConflictingInstructor;
+      });
+      const initialInstructor = selectedInstructor || null;
+      let updatedInstructors = [...filteredInstructors];
+      if (initialInstructor && !filteredInstructors.some((instructor) => instructor._id === initialInstructor._id)) {
+        updatedInstructors.push(initialInstructor);
+      }
+      setFilteredInstructorList(updatedInstructors);
+      if (!filteredInstructors.some((instructor) => instructor._id === selectedInstructor?._id)) {
+        setSelectedInstructor(initialInstructor);
+      }
+    } else {
+      setFilteredInstructorList(instructorList);
+    }
+  }, [selectedSchedule, days, instructorList, classList, selectedInstructor]);
 
-  // useEffect(() => {
-  //   if (selectedSchedule && days.length > 0) {
-  //     const filteredInstructors = instructorList.filter((instructor) => {
-  //       // Tìm tất cả các lịch trình và ngày trùng nhau
-  //       const conflictingSchedules = classList.filter((classItem) => {
-  //         const hasScheduleConflict =
-  //           classItem.schedule_id === selectedSchedule._id;
-  //         const hasDaysConflict = classItem.days.some((day) =>
-  //           days.includes(day)
-  //         );
-  //         return hasScheduleConflict && hasDaysConflict;
-  //       });
-
-  //       // Lọc ra các instructor không nằm trong danh sách lịch trình và ngày trùng nhau
-  //       const isConflictingInstructor = conflictingSchedules.some(
-  //         (classItem) => classItem.instructor_id === instructor._id
-  //       );
-
-  //       return !isConflictingInstructor;
-  //     });
-
-  //     if (
-  //       !filteredInstructors.some(
-  //         (instructor) => instructor._id === selectedInstructor?._id
-  //       )
-  //     ) {
-  //       setSelectedInstructor(filteredInstructors[0] || null);
-  //     }
-
-  //     setFilteredInstructorList(filteredInstructors);
-  //   } else {
-  //     setFilteredInstructorList(instructorList);
-  //   }
-  // }, [selectedSchedule, days, instructorList, classList, selectedInstructor]);
 
   return (
     <>
